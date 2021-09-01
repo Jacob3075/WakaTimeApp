@@ -7,7 +7,7 @@ import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
-import com.jacob.wakatimeapp.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.theme.WakaTimeAppTheme
 
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
