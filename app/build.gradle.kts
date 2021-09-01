@@ -62,7 +62,6 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-common-ktx:${Versions.navigation}")
     implementation("androidx.navigation:navigation-fragment-ktx:${Versions.navigation}")
     implementation("androidx.navigation:navigation-ui-ktx:${Versions.navigation}")
     implementation("androidx.navigation:navigation-testing:${Versions.navigation}")
