@@ -81,6 +81,8 @@ dependencies {
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.compose}")
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
+
+    implementation("com.jakewharton.timber:timber:4.7.1")
 }
 
 kapt {
