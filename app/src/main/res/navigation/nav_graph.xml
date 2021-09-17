@@ -2,10 +2,9 @@
 <navigation xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
-    app:startDestination="@id/newPage">
-
+    app:startDestination="@id/loginPage">
     <fragment
-        android:id="@+id/newPage"
-        android:name="com.jacob.wakatimeapp.NewPage"
-        android:label="NewPage" />
+        android:id="@+id/loginPage"
+        android:name="com.jacob.wakatimeapp.login.LoginPage"
+        android:label="login_page_fragment" />
 </navigation>
