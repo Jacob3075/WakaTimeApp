@@ -12,7 +12,7 @@ object Versions {
     const val coroutines = "1.5.0"
     const val retrofit = "2.9.0"
     const val support = "28.0.0"
-    const val compose = "1.0.1"
+    const val compose = "1.0.2"
 
     const val hilt = "2.38.1"
     const val hiltCompiler = "1.0.0"

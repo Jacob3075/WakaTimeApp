@@ -82,7 +82,7 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
 
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
 
 kapt {
