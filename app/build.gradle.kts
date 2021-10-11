@@ -74,6 +74,9 @@ dependencies {
     implementation("com.google.dagger:hilt-android:${Versions.hilt}")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
 
+    // OAuth
+    implementation("net.openid:appauth:0.10.0")
+
     // Core Testing
     testImplementation("junit:junit:${Versions.junit}")
     androidTestImplementation("androidx.test.ext:junit:${Versions.extJunit}")
