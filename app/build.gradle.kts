@@ -19,6 +19,8 @@ android {
 
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
         vectorDrawables { useSupportLibrary = true }
+
+        manifestPlaceholders["appAuthRedirectScheme"] = "wakatimeapp"
     }
 
     buildTypes {
