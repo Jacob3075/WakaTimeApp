@@ -65,7 +65,7 @@ dependencies {
     // Core Testing
     testImplementation("junit:junit:${Versions.junit}")
     androidTestImplementation("androidx.test.ext:junit:${Versions.extJunit}")
-    implementation("com.jakewharton.timber:timber:4.7.1")
+    implementation("com.jakewharton.timber:timber:5.0.1")
 }
 
 kapt {

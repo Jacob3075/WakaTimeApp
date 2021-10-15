@@ -1,7 +1,7 @@
 object Versions {
-    const val gradle = "7.0.2"
+    const val gradle = "7.0.3"
     const val kotlin = "1.5.30"
-    const val ksp = "1.5.21-1.0.0-beta07"
+    const val ksp = "1.5.30-1.0.0"
 
     const val appcompat = "1.3.0"
     const val archVersion = "2.1.0"
