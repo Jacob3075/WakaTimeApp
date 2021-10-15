@@ -17,7 +17,11 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import com.jacob.wakatimeapp.theme.WakaTimeAppTheme
 
+
+@AndroidEntryPoint
 class LoginPage : Fragment() {
+    private val viewModel by viewModels<LoginPageViewModel>()
+
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
