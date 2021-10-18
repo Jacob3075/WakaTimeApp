@@ -53,7 +53,6 @@ fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
     val authService = AuthorizationService(currentContext)
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            Timber.e("Data present")
             result.data?.let {
                 viewModel.exchangeToken(authService, it)
             } ?: run {
@@ -67,10 +66,18 @@ fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
         verticalArrangement = Arrangement.Center,
     ) {
         Text(text = "Login")
-        Button(onClick = {
-            val authIntent = authService.getAuthorizationRequestIntent(viewModel.authRequest)
-            launcher.launch(authIntent)
-        }) {
+        Button(
+            onClick = {
+                if (viewModel.isLoggedIn()) {
+                    Timber.e("Logged in: ${viewModel.authStateManager.current.accessToken}")
+                    Timber.e("Logged in: ${viewModel.authStateManager.current.accessTokenExpirationTime}")
+                } else {
+                    val authIntent =
+                        authService.getAuthorizationRequestIntent(viewModel.authRequest)
+                    launcher.launch(authIntent)
+                }
+            }
+        ) {
             Text(text = "Login")
         }
     }
@@ -79,5 +86,5 @@ fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
 @Preview(showBackground = true)
 @Composable
 fun LoginPageContentPreview() = WakaTimeAppTheme(true) {
-    LoginPageContent(LoginPageViewModel())
+//    LoginPageContent(LoginPageViewModel())
 }
