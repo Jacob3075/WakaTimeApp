@@ -1,8 +1,9 @@
 package com.jacob.wakatimeapp.login
 
+import android.app.Application
 import android.content.Intent
 import android.net.Uri
-import androidx.lifecycle.ViewModel
+import androidx.lifecycle.AndroidViewModel
 import com.jacob.data.utils.Constants
 import dagger.hilt.android.lifecycle.HiltViewModel
 import net.openid.appauth.*
@@ -10,7 +11,9 @@ import timber.log.Timber
 import javax.inject.Inject
 
 @HiltViewModel
-class LoginPageViewModel @Inject constructor() : ViewModel() {
+class LoginPageViewModel @Inject constructor(
+    application: Application,
+) : AndroidViewModel(application) {
     private val authState = AuthState()
     val authRequest: AuthorizationRequest
 
@@ -23,7 +26,7 @@ class LoginPageViewModel @Inject constructor() : ViewModel() {
         val redirectUri = Uri.parse(Constants.redirectUrl)
         authRequest = AuthorizationRequest.Builder(
             serviceConfig,
-            Constants.clientId,
+            Constants.clientId(application),
             ResponseTypeValues.CODE,
             redirectUri
         ).setScopes(Constants.scope)
@@ -34,7 +37,7 @@ class LoginPageViewModel @Inject constructor() : ViewModel() {
         AuthorizationResponse.fromIntent(intent)?.run {
             authService.performTokenRequest(
                 createTokenExchangeRequest(),
-                ClientSecretPost(Constants.clientSecret)
+                ClientSecretPost(Constants.clientSecret(getApplication()))
             ) { tokenResponse, authorizationException ->
                 tokenResponse?.let {
                     authState.update(it, authorizationException)

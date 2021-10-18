@@ -1,9 +1,13 @@
 package com.jacob.data.utils
 
+import android.content.Context
+import com.jacob.data.R
+
 object Constants {
+    fun clientId(context: Context) = context.getString(R.string.client_id)
+    fun clientSecret(context: Context) = context.getString(R.string.client_secret)
+
     const val BASE_URL = "https://wakatime.com/"
-    const val clientId = "UKQ9xvpSflsXL1dS7dgMa6h3"
-    const val clientSecret = "sec_nHtdpAOa56Pu3SULBta98QhrN09scrk2EgcZHI2CK9bmfj0TxYCfAvcxP5MzB86cbVIPg7nROpyN6UdY"
     const val authorizationUrl = "https://wakatime.com/oauth/authorize"
     const val tokenUrl = "https://wakatime.com/oauth/token"
     const val redirectUrl = "wakatimeapp://oauth2redirect"
