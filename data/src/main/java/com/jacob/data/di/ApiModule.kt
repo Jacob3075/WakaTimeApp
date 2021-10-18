@@ -3,14 +3,17 @@ package com.jacob.data.di
 import com.jacob.data.BuildConfig
 import com.jacob.data.repositories.WakaTimeAPI
 import com.jacob.data.utils.Constants
+import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
 import dagger.hilt.components.SingletonComponent
+import kotlinx.serialization.ExperimentalSerializationApi
+import kotlinx.serialization.json.Json
+import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
 import retrofit2.Retrofit
-import retrofit2.converter.moshi.MoshiConverterFactory
 import javax.inject.Singleton
 
 @Module
@@ -28,10 +31,19 @@ object ApiModule {
         OkHttpClient.Builder().build()
     }
 
+    @ExperimentalSerializationApi
+    private val json = Json {
+        ignoreUnknownKeys = true
+        explicitNulls = false
+    }
+
+    @ExperimentalSerializationApi
     @Singleton
     @Provides
     fun provideRetrofit(okHttpClient: OkHttpClient): Retrofit = Retrofit.Builder()
-        .addConverterFactory(MoshiConverterFactory.create())
+        .addConverterFactory(
+            json.asConverterFactory("application/json".toMediaType())
+        )
         .baseUrl(Constants.BASE_URL)
         .client(okHttpClient)
         .build()

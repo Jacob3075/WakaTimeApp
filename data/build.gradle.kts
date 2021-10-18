@@ -1,9 +1,10 @@
 plugins {
-    id("com.android.application")
+    id("com.android.library")
     id("kotlin-android")
     id("dagger.hilt.android.plugin")
     kotlin("kapt")
     id("com.google.devtools.ksp") version Versions.ksp
+    kotlin("plugin.serialization") version Versions.kotlin
 }
 
 android {
@@ -12,8 +13,6 @@ android {
     defaultConfig {
         minSdk = AppConfig.minSdk
         targetSdk = AppConfig.targetSdk
-        versionCode = AppConfig.versionCode
-        versionName = AppConfig.versionName
 
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
     }
@@ -55,7 +54,9 @@ dependencies {
     testImplementation("androidx.room:room-testing:${Versions.room}")
 
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    implementation("com.squareup.retrofit2:converter-moshi:2.4.0")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
+
     //    OkHTTP
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0"))
     implementation("com.squareup.okhttp3:okhttp")
