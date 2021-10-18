@@ -20,12 +20,9 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import com.jacob.wakatimeapp.theme.WakaTimeAppTheme
-import com.jacob.wakatimeapp.utils.Constants
 import dagger.hilt.android.AndroidEntryPoint
 import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
-import net.openid.appauth.ClientSecretPost
 import timber.log.Timber
 
 
@@ -36,7 +33,7 @@ class LoginPage : Fragment() {
     override fun onCreateView(
         inflater: LayoutInflater,
         container: ViewGroup?,
-        savedInstanceState: Bundle?
+        savedInstanceState: Bundle?,
     ): ComposeView {
         return ComposeView(requireContext()).apply {
             setContent {
@@ -55,24 +52,13 @@ fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
     val currentContext = LocalContext.current
     val authService = AuthorizationService(currentContext)
     val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) {
+        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             Timber.e("Data present")
-            it.data?.let { intent ->
-                val resp = AuthorizationResponse.fromIntent(intent)!!
-                authService.performTokenRequest(
-                    resp.createTokenExchangeRequest(),
-                    ClientSecretPost(Constants.clientSecret)
-                ) { tokenResponse, authorizationException ->
-                    tokenResponse?.let {
-                        Timber.e(tokenResponse.jsonSerializeString())
-                    } ?: run {
-                        Timber.e(authorizationException)
-                    }
-                }
-                resp
+            result.data?.let {
+                viewModel.exchangeToken(authService, it)
             } ?: run {
                 Timber.e("Data not present")
-                val ex = AuthorizationException.fromIntent(it.data!!)
+                val ex = AuthorizationException.fromIntent(result.data!!)
                 Timber.e(ex?.toJsonString())
             }
         }
@@ -95,20 +81,3 @@ fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
 fun LoginPageContentPreview() = WakaTimeAppTheme(true) {
     LoginPageContent(LoginPageViewModel())
 }
-/*
-*
-*
-                val tokenRequest = TokenRequest.Builder(
-                    AuthorizationServiceConfiguration(
-                        Uri.parse("https://wakatime.com/oauth/authorize"),
-                        Uri.parse("https://wakatime.com/oauth/token")
-                    ),
-                    "UKQ9xvpSflsXL1dS7dgMa6h3"
-                ).setRedirectUri(Uri.parse("wakatimeapp://oauth2redirect"))
-                    .setGrantType("authorization_code")
-                    .setAuthorizationCode(resp.authorizationCode)
-                    .build()
-*
-*
-*
-* */
