@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.jacob.wakatimeapp.theme.Gradients
 import com.jacob.wakatimeapp.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -41,19 +42,20 @@ class LoginPage : Fragment() {
         inflater: LayoutInflater,
         container: ViewGroup?,
         savedInstanceState: Bundle?,
-    ): ComposeView {
-        return ComposeView(requireContext()).apply {
-            setContent {
-                WakaTimeAppTheme {
-                    LoginPageContent(viewModel)
-                }
+    ) = ComposeView(requireContext()).apply {
+        setContent {
+            if (viewModel.isLoggedIn()) findNavController(this@LoginPage)
+                .navigate(LoginPageDirections.loginPageToHomePage())
+
+            WakaTimeAppTheme {
+                LoginPageContent(viewModel)
             }
         }
     }
 }
 
 @Composable
-fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
+private fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
     val authService = AuthorizationService(LocalContext.current)
@@ -81,14 +83,8 @@ fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
             )
         )
         LoginButton {
-            if (viewModel.isLoggedIn()) {
-                Timber.e("Logged in: ${viewModel.authStateManager.current.accessToken}")
-                Timber.e("Logged in: ${viewModel.authStateManager.current.accessTokenExpirationTime}")
-            } else {
-                val authIntent =
-                    authService.getAuthorizationRequestIntent(viewModel.authRequest)
-                launcher.launch(authIntent)
-            }
+            val authIntent = authService.getAuthorizationRequestIntent(viewModel.authRequest)
+            launcher.launch(authIntent)
         }
     }
 }
@@ -129,8 +125,8 @@ private fun LoginButton(
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun LoginButtonPreview() = WakaTimeAppTheme { LoginButton {} }
+private fun LoginButtonPreview() = WakaTimeAppTheme { LoginButton {} }
 
 @Preview(showBackground = true)
 @Composable
-fun LoginButtonPreview2() = WakaTimeAppTheme { LoginButton {} }
+private fun LoginButtonPreview2() = WakaTimeAppTheme { LoginButton {} }

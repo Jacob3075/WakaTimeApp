@@ -16,7 +16,7 @@ class LoginPageViewModel @Inject constructor(
     application: Application,
 ) : AndroidViewModel(application) {
     private val authState = AuthState()
-    val authStateManager = AuthStateManager.getInstance(getApplication())
+    private val authStateManager = AuthStateManager.getInstance(getApplication())
     val authRequest: AuthorizationRequest
 
     init {
