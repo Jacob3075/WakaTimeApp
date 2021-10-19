@@ -6,5 +6,13 @@
     <fragment
         android:id="@+id/loginPage"
         android:name="com.jacob.wakatimeapp.login.LoginPage"
-        android:label="login_page_fragment" />
+        android:label="login_page_fragment" >
+        <action
+            android:id="@+id/action_loginPage_to_homePage"
+            app:destination="@id/homePage" />
+    </fragment>
+    <fragment
+        android:id="@+id/homePage"
+        android:name="com.jacob.wakatimeapp.home.HomePage"
+        android:label="home_page_fragment" />
 </navigation>
