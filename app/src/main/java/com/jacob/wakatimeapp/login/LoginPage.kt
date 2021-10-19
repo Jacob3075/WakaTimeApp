@@ -1,30 +1,37 @@
 package com.jacob.wakatimeapp.login
 
+import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
-import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Button
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.foundation.background
+import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.*
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Brush
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontFamily
+import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.jacob.wakatimeapp.theme.Gradients
 import com.jacob.wakatimeapp.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationService
 import timber.log.Timber
-
 
 @AndroidEntryPoint
 class LoginPage : Fragment() {
@@ -49,8 +56,7 @@ class LoginPage : Fragment() {
 fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
-    val currentContext = LocalContext.current
-    val authService = AuthorizationService(currentContext)
+    val authService = AuthorizationService(LocalContext.current)
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             result.data?.let {
@@ -63,28 +69,68 @@ fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
         }
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
+        verticalArrangement = Arrangement.SpaceBetween,
     ) {
-        Text(text = "Login")
-        Button(
-            onClick = {
-                if (viewModel.isLoggedIn()) {
-                    Timber.e("Logged in: ${viewModel.authStateManager.current.accessToken}")
-                    Timber.e("Logged in: ${viewModel.authStateManager.current.accessTokenExpirationTime}")
-                } else {
-                    val authIntent =
-                        authService.getAuthorizationRequestIntent(viewModel.authRequest)
-                    launcher.launch(authIntent)
-                }
+        Text(
+            text = "Wakatime Client",
+            modifier = Modifier.padding(top = 72.dp),
+            style = TextStyle(
+                fontSize = MaterialTheme.typography.h3.fontSize,
+                fontWeight = FontWeight.SemiBold,
+                fontFamily = FontFamily.Cursive,
+            )
+        )
+        LoginButton {
+            if (viewModel.isLoggedIn()) {
+                Timber.e("Logged in: ${viewModel.authStateManager.current.accessToken}")
+                Timber.e("Logged in: ${viewModel.authStateManager.current.accessTokenExpirationTime}")
+            } else {
+                val authIntent =
+                    authService.getAuthorizationRequestIntent(viewModel.authRequest)
+                launcher.launch(authIntent)
             }
-        ) {
-            Text(text = "Login")
         }
     }
 }
 
+@Composable
+private fun LoginButton(
+    onClick: () -> Unit,
+) {
+    val loginButtonGradient =
+        Brush.horizontalGradient(listOf(Gradients.primary.startColor, Gradients.primary.endColor))
+    val buttonShape = RoundedCornerShape(45)
+    Button(
+        onClick = onClick,
+        colors = ButtonDefaults.buttonColors(Color.Transparent),
+        shape = buttonShape,
+        contentPadding = PaddingValues(),
+        modifier = Modifier
+            .padding(horizontal = 48.dp)
+            .padding(bottom = 50.dp)
+            .shadow(12.dp, shape = buttonShape)
+    ) {
+        Box(
+            contentAlignment = Alignment.Center,
+            modifier = Modifier
+                .fillMaxWidth()
+                .background(loginButtonGradient, buttonShape)
+                .padding(vertical = 8.dp)
+        ) {
+            Text(
+                text = "Login to Wakatime",
+                fontSize = 16.sp,
+                fontWeight = FontWeight.SemiBold,
+                modifier = Modifier.padding(14.dp)
+            )
+        }
+    }
+}
+
+@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Composable
+fun LoginButtonPreview() = WakaTimeAppTheme { LoginButton {} }
+
 @Preview(showBackground = true)
 @Composable
-fun LoginPageContentPreview() = WakaTimeAppTheme(true) {
-//    LoginPageContent(LoginPageViewModel())
-}
+fun LoginButtonPreview2() = WakaTimeAppTheme { LoginButton {} }
