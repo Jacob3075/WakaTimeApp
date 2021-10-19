@@ -6,7 +6,7 @@ import android.view.ViewGroup
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.jacob.wakatimeapp.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.common.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
