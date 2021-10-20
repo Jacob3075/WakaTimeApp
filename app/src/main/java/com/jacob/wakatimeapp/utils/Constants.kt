@@ -1,7 +1,7 @@
-package com.jacob.data.utils
+package com.jacob.wakatimeapp.utils
 
 import android.content.Context
-import com.jacob.data.R
+import com.jacob.wakatimeapp.R
 
 object Constants {
     fun clientId(context: Context) = context.getString(R.string.client_id)

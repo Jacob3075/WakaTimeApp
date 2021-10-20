@@ -1,8 +1,8 @@
-package com.jacob.data.di
+package com.jacob.wakatimeapp.di
 
-import com.jacob.data.BuildConfig
-import com.jacob.data.repositories.WakaTimeAPI
-import com.jacob.data.utils.Constants
+import com.jacob.wakatimeapp.BuildConfig
+import com.jacob.wakatimeapp.repositories.WakaTimeAPI
+import com.jacob.wakatimeapp.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides

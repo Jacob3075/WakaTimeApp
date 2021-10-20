@@ -1,7 +1,7 @@
-package com.jacob.data.repositories
+package com.jacob.wakatimeapp.repositories
 
-import com.jacob.data.dtos.AllTimeDataDTO
-import com.jacob.data.dtos.GetUserDetailsResDTO
+import com.jacob.wakatimeapp.dtos.AllTimeDataDTO
+import com.jacob.wakatimeapp.dtos.GetUserDetailsResDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

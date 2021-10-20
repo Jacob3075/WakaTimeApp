@@ -1,4 +1,4 @@
-package com.jacob.data.models
+package com.jacob.wakatimeapp.models
 
 data class UserDetails(
     val bio: String,

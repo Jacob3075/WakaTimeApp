@@ -89,4 +89,4 @@ lint/tmp/
 # Android Profiling
 *.hprof
 
-data/src/main/res/values/secrets.xml
+/app/src/main/res/values/secrets.xml

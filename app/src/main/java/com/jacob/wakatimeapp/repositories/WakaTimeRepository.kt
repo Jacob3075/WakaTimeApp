@@ -1,4 +1,4 @@
-package com.jacob.data.repositories
+package com.jacob.wakatimeapp.repositories
 
 import timber.log.Timber
 

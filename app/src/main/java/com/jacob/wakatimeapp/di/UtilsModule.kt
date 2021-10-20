@@ -1,6 +1,6 @@
-package com.jacob.data.di
+package com.jacob.wakatimeapp.di
 
-import com.jacob.data.models.UserSession
+import com.jacob.wakatimeapp.models.UserSession
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
