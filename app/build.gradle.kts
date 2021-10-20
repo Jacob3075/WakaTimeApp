@@ -81,6 +81,9 @@ dependencies {
     // OAuth
     implementation("net.openid:appauth:0.10.0")
 
+    // Image Loading
+    implementation("io.coil-kt:coil-compose:1.4.0")
+
     // Core Testing
     testImplementation("junit:junit:${Versions.junit}")
     androidTestImplementation("androidx.test.ext:junit:${Versions.extJunit}")
@@ -91,7 +94,6 @@ dependencies {
 
     implementation("com.jakewharton.timber:timber:5.0.1")
 
-    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
 }
 
 kapt {
