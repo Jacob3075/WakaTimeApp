@@ -1,7 +1,8 @@
-package com.jacob.wakatimeapp.mappers
+package com.jacob.wakatimeapp.home.data
 
-import com.jacob.wakatimeapp.dtos.GetUserDetailsResDTO
-import com.jacob.wakatimeapp.models.UserDetails
+import com.jacob.wakatimeapp.common.data.DtoMapper
+import com.jacob.wakatimeapp.common.models.UserDetails
+import com.jacob.wakatimeapp.home.data.dtos.GetUserDetailsResDTO
 
 class UserDetailsMapper : DtoMapper<GetUserDetailsResDTO, UserDetails> {
     override fun fromDtoToModel(dto: GetUserDetailsResDTO) = UserDetails(

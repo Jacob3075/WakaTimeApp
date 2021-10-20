@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.utils
+package com.jacob.wakatimeapp.common.utils
 
 import android.content.Context
 import com.jacob.wakatimeapp.R

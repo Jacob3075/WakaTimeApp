@@ -4,7 +4,7 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
-import com.jacob.wakatimeapp.utils.Constants
+import com.jacob.wakatimeapp.common.utils.Constants
 import com.jacob.wakatimeapp.common.utils.AuthStateManager
 import dagger.hilt.android.lifecycle.HiltViewModel
 import net.openid.appauth.*

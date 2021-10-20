@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home
+package com.jacob.wakatimeapp.home.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
@@ -21,7 +21,7 @@ import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.R
-import com.jacob.wakatimeapp.common.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.common.ui.TimeSpentCard
 import dagger.hilt.android.AndroidEntryPoint
 

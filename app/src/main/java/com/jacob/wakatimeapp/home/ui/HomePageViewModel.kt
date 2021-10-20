@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home
+package com.jacob.wakatimeapp.home.ui
 
 import androidx.lifecycle.ViewModel
 import dagger.hilt.android.lifecycle.HiltViewModel

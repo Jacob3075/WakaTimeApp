@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.models
+package com.jacob.wakatimeapp.common.models
 
 class UserSession {
     var loggedInUser: UserDetails? = null

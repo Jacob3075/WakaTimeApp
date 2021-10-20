@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.theme
+package com.jacob.wakatimeapp.common.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
 import androidx.compose.material.MaterialTheme

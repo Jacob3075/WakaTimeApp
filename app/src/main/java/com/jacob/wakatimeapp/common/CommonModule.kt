@@ -1,8 +1,8 @@
-package com.jacob.wakatimeapp.di
+package com.jacob.wakatimeapp.common
 
 import com.jacob.wakatimeapp.BuildConfig
-import com.jacob.wakatimeapp.repositories.WakaTimeAPI
-import com.jacob.wakatimeapp.utils.Constants
+import com.jacob.wakatimeapp.common.models.UserSession
+import com.jacob.wakatimeapp.common.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -18,7 +18,7 @@ import javax.inject.Singleton
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ApiModule {
+object CommonModule {
     @Singleton
     @Provides
     fun provideOkHttpClient(): OkHttpClient = if (BuildConfig.DEBUG) {
@@ -50,6 +50,5 @@ object ApiModule {
 
     @Singleton
     @Provides
-    fun provideApiService(retrofit: Retrofit): WakaTimeAPI =
-        retrofit.create(WakaTimeAPI::class.java)
+    fun provideUserSession() = UserSession()
 }
