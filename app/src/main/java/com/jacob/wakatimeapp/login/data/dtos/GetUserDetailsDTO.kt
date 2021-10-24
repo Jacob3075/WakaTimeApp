@@ -1,10 +1,13 @@
-package com.jacob.wakatimeapp.home.data.dtos
+package com.jacob.wakatimeapp.login.data.dtos
 
 import kotlinx.serialization.SerialName
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class GetUserDetailsResDTO(
     val data: Data,
 ) {
+    @Serializable
     data class Data(
         val bio: String,
         val email: String,

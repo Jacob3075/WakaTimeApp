@@ -9,7 +9,7 @@ object Versions {
     const val room = "2.3.0"
     const val navigation = "2.3.5"
     const val lifecycleVersion = "2.3.1"
-    const val coroutines = "1.5.0"
+    const val coroutines = "1.5.2-native-mt"
     const val retrofit = "2.9.0"
     const val support = "28.0.0"
     const val compose = "1.0.3"

@@ -85,6 +85,7 @@ dependencies {
     implementation("androidx.room:room-ktx:${Versions.room}")
     testImplementation("androidx.room:room-testing:${Versions.room}")
 
+    // Retrofit
     implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
