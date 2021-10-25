@@ -11,7 +11,7 @@ class UpdateUserDetailsUC @Inject constructor(
     private val userDetailsMapper: UserDetailsMapper,
 ) {
     suspend operator fun invoke(token: String) {
-        val userDetailsResponse = loginPageAPI.getUserDetails(token)
+        val userDetailsResponse = loginPageAPI.getUserDetails("Bearer $token")
         if (userDetailsResponse.isSuccessful) {
             val userDetails = userDetailsMapper.fromDtoToModel(userDetailsResponse.body()!!)
             userSession.logInUser(userDetails)
