@@ -7,9 +7,9 @@
     <application
         android:name="com.jacob.wakatimeapp.WakaTimeApp"
         android:allowBackup="true"
-        android:icon="@mipmap/ic_launcher"
+        android:icon="@mipmap/ic_launcher_waka"
         android:label="@string/app_name"
-        android:roundIcon="@mipmap/ic_launcher_round"
+        android:roundIcon="@mipmap/ic_launcher_waka_round"
         android:supportsRtl="true"
         android:theme="@style/Theme.WakaTimeApp">
         <activity
@@ -29,8 +29,7 @@
 
                 <data
                     android:host="oauth2"
-                    android:scheme="wakatimeapp"
-                    />
+                    android:scheme="wakatimeapp" />
             </intent-filter>
         </activity>
     </application>
