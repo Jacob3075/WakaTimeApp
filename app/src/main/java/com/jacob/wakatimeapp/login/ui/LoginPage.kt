@@ -45,13 +45,17 @@ class LoginPage : Fragment() {
         savedInstanceState: Bundle?,
     ) = ComposeView(requireContext()).apply {
         setContent {
-            if (viewModel.isLoggedIn()) findNavController(this@LoginPage)
-                .navigate(LoginPageDirections.loginPageToHomePage())
+            val authService = AuthorizationService(LocalContext.current)
+            if (viewModel.isLoggedIn()) {
+                viewModel.updateUserDetails(authService)
+                findNavController(this@LoginPage).navigate(LoginPageDirections.loginPageToHomePage())
+            }
 
             WakaTimeAppTheme {
                 LoginPageContent(
                     viewModel,
-                    findNavController(this@LoginPage)
+                    findNavController(this@LoginPage),
+                    authService
                 )
             }
         }
@@ -62,10 +66,10 @@ class LoginPage : Fragment() {
 private fun LoginPageContent(
     viewModel: LoginPageViewModel,
     navController: NavController,
+    authService: AuthorizationService,
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
-    val authService = AuthorizationService(LocalContext.current)
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             result.data?.let {
