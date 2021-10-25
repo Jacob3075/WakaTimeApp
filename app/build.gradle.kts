@@ -56,6 +56,7 @@ dependencies {
 
     // Compose
     implementation("androidx.compose.ui:ui:${Versions.compose}")
+    implementation("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
     implementation("androidx.compose.material:material:${Versions.compose}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
     implementation("androidx.activity:activity-compose:1.3.1")

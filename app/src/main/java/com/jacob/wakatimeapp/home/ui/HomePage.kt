@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.home.ui
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
 import android.view.LayoutInflater
 import android.view.ViewGroup
@@ -9,11 +8,13 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -21,8 +22,9 @@ import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.R
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.common.models.UserDetails
 import com.jacob.wakatimeapp.common.ui.TimeSpentCard
+import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -36,19 +38,19 @@ class HomePage : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setContent {
             WakaTimeAppTheme {
-                HomePageContent()
+                HomePageContent(viewModel)
             }
         }
     }
 }
 
 @Composable
-private fun HomePageContent() {
+private fun HomePageContent(viewModel: HomePageViewModel) {
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(modifier = Modifier
             .padding(all = 20.dp)
             .padding(top = 24.dp)) {
-            UserDetails()
+            UserDetailsSection(viewModel.userDetails.observeAsState())
             TimeSpentCard()
             RecentProjects()
             WeeklyReport()
@@ -58,7 +60,8 @@ private fun HomePageContent() {
 }
 
 @Composable
-private fun UserDetails() {
+private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
+    val userDetails by userDetailsState
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -66,7 +69,7 @@ private fun UserDetails() {
     ) {
         Image(
             painter = rememberImagePainter(
-                data = "https://picsum.photos/200",
+                data = userDetails?.photoUrl ?: "",
                 builder = {
                     transformations(CircleCropTransformation())
                     placeholder(R.drawable.place_holder)
@@ -78,7 +81,7 @@ private fun UserDetails() {
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(
-            text = "Jacob Bosco",
+            text = userDetails?.displayName ?: "",
             fontSize = 22.sp,
             fontWeight = FontWeight.SemiBold
         )
@@ -98,6 +101,6 @@ private fun RecentProjects() {
 }
 
 
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun UserDetailsPreview() = WakaTimeAppTheme { UserDetails() }
+//@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+//@Composable
+//fun UserDetailsPreview() = WakaTimeAppTheme { UserDetailsSection() }

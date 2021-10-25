@@ -1,10 +1,13 @@
 package com.jacob.wakatimeapp.common.models
 
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.StateFlow
+
 class UserSession {
-    var loggedInUser: UserDetails? = null
-        private set
+    private var _loggedInUser = MutableStateFlow<UserDetails?>(null)
+    val loggedInUser: StateFlow<UserDetails?> = _loggedInUser
 
     fun logInUser(userDetails: UserDetails) {
-        loggedInUser = userDetails
+        _loggedInUser.value = userDetails
     }
 }
