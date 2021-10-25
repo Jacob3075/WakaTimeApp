@@ -5,7 +5,7 @@ import com.jacob.wakatimeapp.login.data.LoginPageAPI
 import com.jacob.wakatimeapp.login.data.mappers.UserDetailsMapper
 import javax.inject.Inject
 
-class GetUserDetails @Inject constructor(
+class UpdateUserDetailsUC @Inject constructor(
     private val loginPageAPI: LoginPageAPI,
     private val userSession: UserSession,
     private val userDetailsMapper: UserDetailsMapper,

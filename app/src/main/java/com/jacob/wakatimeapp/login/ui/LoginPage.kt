@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.login
+package com.jacob.wakatimeapp.login.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import android.os.Bundle
@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.jacob.wakatimeapp.common.ui.theme.Gradients
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
@@ -48,14 +49,20 @@ class LoginPage : Fragment() {
                 .navigate(LoginPageDirections.loginPageToHomePage())
 
             WakaTimeAppTheme {
-                LoginPageContent(viewModel)
+                LoginPageContent(
+                    viewModel,
+                    findNavController(this@LoginPage)
+                )
             }
         }
     }
 }
 
 @Composable
-private fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
+private fun LoginPageContent(
+    viewModel: LoginPageViewModel,
+    navController: NavController,
+) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
     val authService = AuthorizationService(LocalContext.current)
@@ -63,6 +70,8 @@ private fun LoginPageContent(viewModel: LoginPageViewModel) = Surface(
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             result.data?.let {
                 viewModel.exchangeToken(authService, it)
+                viewModel.updateUserDetails(authService)
+                navController.navigate(LoginPageDirections.loginPageToHomePage())
             } ?: run {
                 Timber.e("Data not present")
                 val ex = AuthorizationException.fromIntent(result.data!!)

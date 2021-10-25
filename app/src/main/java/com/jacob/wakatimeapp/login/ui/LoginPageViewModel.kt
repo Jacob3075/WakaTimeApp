@@ -1,21 +1,26 @@
-package com.jacob.wakatimeapp.login
+package com.jacob.wakatimeapp.login.ui
 
 import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
-import com.jacob.wakatimeapp.common.utils.Constants
+import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.common.utils.AuthStateManager
+import com.jacob.wakatimeapp.common.utils.Constants
+import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
+import kotlinx.coroutines.launch
 import net.openid.appauth.*
 import timber.log.Timber
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class LoginPageViewModel @Inject constructor(
     application: Application,
+    private val updateUserDetailsUC: UpdateUserDetailsUC,
+    private val ioDispatcher: CoroutineContext,
 ) : AndroidViewModel(application) {
-    private val authState = AuthState()
     private val authStateManager = AuthStateManager.getInstance(getApplication())
     val authRequest: AuthorizationRequest
 
@@ -48,6 +53,18 @@ class LoginPageViewModel @Inject constructor(
                 } ?: run {
                     Timber.e(authorizationException)
                     authStateManager.updateAfterTokenResponse(null, authorizationException)
+                }
+            }
+        }
+    }
+
+    fun updateUserDetails(authorizationService: AuthorizationService) {
+        authStateManager.current.performActionWithFreshTokens(authorizationService) { accessToken, _, authorizationException ->
+            if (authorizationException == null) {
+                viewModelScope.launch(ioDispatcher) {
+                    accessToken?.let {
+                        updateUserDetailsUC(it)
+                    }
                 }
             }
         }

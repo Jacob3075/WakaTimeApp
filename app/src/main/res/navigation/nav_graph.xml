@@ -5,7 +5,7 @@
     app:startDestination="@id/loginPage">
     <fragment
         android:id="@+id/loginPage"
-        android:name="com.jacob.wakatimeapp.login.LoginPage"
+        android:name="com.jacob.wakatimeapp.login.ui.LoginPage"
         android:label="login_page_fragment" >
         <action
             android:id="@+id/loginPage_to_homePage"
