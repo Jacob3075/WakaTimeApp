@@ -65,6 +65,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}")
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:${Versions.navigation}")
@@ -80,7 +81,6 @@ dependencies {
     // Room
     implementation("com.google.devtools.ksp:symbol-processing-api:${Versions.ksp}")
     implementation("androidx.room:room-runtime:${Versions.room}")
-    annotationProcessor("androidx.room:room-compiler:${Versions.room}")
     ksp("androidx.room:room-compiler:${Versions.room}")
     implementation("androidx.room:room-ktx:${Versions.room}")
     testImplementation("androidx.room:room-testing:${Versions.room}")
