@@ -1,5 +1,8 @@
 package com.jacob.wakatimeapp.common.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class UserDetails(
     val bio: String,
     val email: String,
