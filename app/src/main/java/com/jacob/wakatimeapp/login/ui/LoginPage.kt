@@ -31,10 +31,12 @@ import androidx.navigation.fragment.NavHostFragment.findNavController
 import com.jacob.wakatimeapp.common.ui.theme.Gradients
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationService
 import timber.log.Timber
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class LoginPage : Fragment() {
     private val viewModel by viewModels<LoginPageViewModel>()

@@ -9,6 +9,7 @@ import com.jacob.wakatimeapp.common.utils.Constants
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import net.openid.appauth.*
 import timber.log.Timber
@@ -58,12 +59,13 @@ class LoginPageViewModel @Inject constructor(
         }
     }
 
+    @ExperimentalCoroutinesApi
     fun updateUserDetails(authorizationService: AuthorizationService) {
         authStateManager.current.performActionWithFreshTokens(authorizationService) { accessToken, _, authorizationException ->
             if (authorizationException == null) {
                 CoroutineScope(ioDispatcher).launch {
                     accessToken?.let {
-                        updateUserDetailsUC(it)
+                        updateUserDetailsUC(it, getApplication())
                     }
                 }
             }
