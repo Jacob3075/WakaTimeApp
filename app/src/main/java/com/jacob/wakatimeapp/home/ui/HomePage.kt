@@ -25,8 +25,10 @@ import com.jacob.wakatimeapp.common.models.UserDetails
 import com.jacob.wakatimeapp.common.ui.TimeSpentCard
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.flow.StateFlow
+import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.flow.Flow
 
+@ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class HomePage : Fragment() {
     private val viewModel by viewModels<HomePageViewModel>()
@@ -44,6 +46,7 @@ class HomePage : Fragment() {
     }
 }
 
+@ExperimentalCoroutinesApi
 @Composable
 private fun HomePageContent(viewModel: HomePageViewModel) {
     Scaffold(modifier = Modifier.fillMaxSize()) {
@@ -60,8 +63,8 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
 }
 
 @Composable
-private fun UserDetailsSection(userDetailsState: StateFlow<UserDetails?>) {
-    val userDetails by userDetailsState.collectAsState()
+private fun UserDetailsSection(userDetailsState: Flow<UserDetails?>) {
+    val userDetails by userDetailsState.collectAsState(null)
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
