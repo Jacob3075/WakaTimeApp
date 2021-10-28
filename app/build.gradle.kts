@@ -1,8 +1,3 @@
-import com.google.protobuf.gradle.generateProtoTasks
-import com.google.protobuf.gradle.plugins
-import com.google.protobuf.gradle.protobuf
-import com.google.protobuf.gradle.protoc
-
 plugins {
     id("com.android.application")
     id("kotlin-android")
@@ -11,7 +6,6 @@ plugins {
     kotlin("kapt")
     id("com.google.devtools.ksp") version Versions.ksp
     kotlin("plugin.serialization") version Versions.kotlin
-    id("com.google.protobuf") version "0.8.17"
 }
 
 android {
@@ -73,7 +67,7 @@ dependencies {
     implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
     implementation("androidx.core:core-splashscreen:1.0.0-alpha02")
-    implementation("androidx.datastore:datastore:1.0.0")
+    implementation("androidx.datastore:datastore-preferences:1.0.0")
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:${Versions.navigation}")
@@ -109,9 +103,6 @@ dependencies {
     // Image Loading
     implementation("io.coil-kt:coil-compose:1.4.0")
 
-    // For Proto DataStore
-    implementation("com.google.protobuf:protobuf-javalite:3.19.0")
-
     // Logging
     implementation("com.jakewharton.timber:timber:5.0.1")
 
@@ -123,24 +114,6 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
 
-}
-
-// https://gist.github.com/florina-muntenescu/30e37930867d9fb4c102aa0f5db510c5
-protobuf {
-    protoc {
-        // find latest version number here:
-        // https://mvnrepository.com/artifact/com.google.protobuf/protoc
-        artifact = "com.google.protobuf:protoc:3.19.0"
-    }
-    generateProtoTasks {
-        all().forEach { task ->
-            task.plugins {
-                create("java") {
-                    option("lite")
-                }
-            }
-        }
-    }
 }
 
 kapt {
