@@ -8,9 +8,8 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.livedata.observeAsState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -26,6 +25,7 @@ import com.jacob.wakatimeapp.common.models.UserDetails
 import com.jacob.wakatimeapp.common.ui.TimeSpentCard
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
+import kotlinx.coroutines.flow.StateFlow
 
 @AndroidEntryPoint
 class HomePage : Fragment() {
@@ -50,7 +50,7 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
         Column(modifier = Modifier
             .padding(all = 20.dp)
             .padding(top = 24.dp)) {
-            UserDetailsSection(viewModel.userDetails.observeAsState())
+            UserDetailsSection(viewModel.userDetails)
             TimeSpentCard()
             RecentProjects()
             WeeklyReport()
@@ -60,8 +60,8 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
 }
 
 @Composable
-private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
-    val userDetails by userDetailsState
+private fun UserDetailsSection(userDetailsState: StateFlow<UserDetails?>) {
+    val userDetails by userDetailsState.collectAsState()
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -69,10 +69,11 @@ private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
     ) {
         Image(
             painter = rememberImagePainter(
-                data = userDetails?.photoUrl ?: "",
+                data = userDetails?.photoUrl,
                 builder = {
                     transformations(CircleCropTransformation())
                     placeholder(R.drawable.place_holder)
+                    fallback(R.drawable.place_holder)
 
                 }
             ),
@@ -81,8 +82,8 @@ private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(
-            text = userDetails?.displayName ?: "",
-            fontSize = 22.sp,
+            text = userDetails?.fullName ?: "",
+            fontSize = 26.sp,
             fontWeight = FontWeight.SemiBold
         )
     }

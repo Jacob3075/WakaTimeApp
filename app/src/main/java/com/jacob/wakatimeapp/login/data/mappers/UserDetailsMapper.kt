@@ -19,7 +19,7 @@ class UserDetailsMapper @Inject constructor() : DtoMapper<GetUserDetailsResDTO, 
         durationsSliceBy = dto.data.durationsSliceBy,
         createdAt = dto.data.createdAt,
         dateFormat = dto.data.dateFormat,
-        photoUrl = dto.data.photoUrl,
+        photoUrl = "${dto.data.photoUrl}?s=420"
     )
 
     override fun fromModelToDto(model: UserDetails): GetUserDetailsResDTO {
