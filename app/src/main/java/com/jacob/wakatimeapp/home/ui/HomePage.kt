@@ -14,6 +14,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
@@ -23,6 +24,7 @@ import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.R
 import com.jacob.wakatimeapp.common.models.UserDetails
 import com.jacob.wakatimeapp.common.ui.TimeSpentCard
+import com.jacob.wakatimeapp.common.ui.theme.Gradients
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -50,11 +52,20 @@ class HomePage : Fragment() {
 @Composable
 private fun HomePageContent(viewModel: HomePageViewModel) {
     Scaffold(modifier = Modifier.fillMaxSize()) {
-        Column(modifier = Modifier
-            .padding(all = 20.dp)
-            .padding(top = 24.dp)) {
+        Column(
+            modifier = Modifier
+                .padding(all = 20.dp)
+                .padding(top = 24.dp)
+        ) {
             UserDetailsSection(viewModel.userDetails)
-            TimeSpentCard()
+            Spacer(modifier = Modifier.height(22.dp))
+            TimeSpentCard(
+                Gradients.primary,
+                25,
+                R.drawable.ic_time,
+                "Total Time Spent Today",
+                "42H, 22M"
+            )
             RecentProjects()
             WeeklyReport()
             OtherDailyStats()
@@ -87,7 +98,9 @@ private fun UserDetailsSection(userDetailsState: Flow<UserDetails?>) {
         Text(
             text = userDetails?.fullName ?: "",
             fontSize = 26.sp,
-            fontWeight = FontWeight.SemiBold
+            fontWeight = FontWeight.SemiBold,
+            maxLines = 1,
+            overflow = TextOverflow.Ellipsis,
         )
     }
 }

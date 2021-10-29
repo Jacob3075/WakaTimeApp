@@ -18,7 +18,7 @@ object Colors {
 }
 
 object Gradients {
-    val primary = Gradient(Color(0xFF3F55E0), Color(0xFF5EC2D2))
+    val primary = Gradient(Color(0xFF3F67E0), Color(0xFF65D1E2))
     val secondary = Gradient(Color(0xFF3F55E0), Color(0xFF5EC2D2), 85)
     val purpleCyanLight = Gradient(Color(0xFFCC1FBB), Color(0xFF6FEBFF))
     val purpleCyanDark = Gradient(Color(0xFF921FC9), Color(0xFF5EC2D2))
