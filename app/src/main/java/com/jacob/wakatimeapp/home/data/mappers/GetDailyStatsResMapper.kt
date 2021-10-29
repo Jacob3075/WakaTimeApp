@@ -4,8 +4,9 @@ import com.jacob.wakatimeapp.common.data.DtoMapper
 import com.jacob.wakatimeapp.common.models.Time
 import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
+import javax.inject.Inject
 
-class GetDailyStatsResMapper : DtoMapper<GetDailyStatsResDTO, DailyStats> {
+class GetDailyStatsResMapper @Inject constructor() : DtoMapper<GetDailyStatsResDTO, DailyStats> {
     override fun fromDtoToModel(dto: GetDailyStatsResDTO) = DailyStats(
         timeSpent = Time.createFromDigitalStringFormat(dto.cumulativeTotal.digital),
         recentProjects = "",
