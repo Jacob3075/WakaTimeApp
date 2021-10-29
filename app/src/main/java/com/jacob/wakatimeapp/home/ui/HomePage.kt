@@ -76,8 +76,7 @@ private fun TimeSpentSection(dailyStatsFlow: StateFlow<Result<DailyStats>>) {
     val dailyStats by dailyStatsFlow.collectAsState()
 
     when (dailyStats) {
-        is Result.Failure -> return
-        is Result.Empty -> {
+        is Result.Failure, is Result.Empty -> {
             TimeSpentCard(
                 Gradients.primary,
                 25,

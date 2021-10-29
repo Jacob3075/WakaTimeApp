@@ -12,15 +12,20 @@ class GetDailyStatsUC @Inject constructor(
     private val getDailyStatsResMapper: GetDailyStatsResMapper,
 ) {
     suspend operator fun invoke(token: String): Result<DailyStats> {
-        val statsForTodayResponse = homePageAPI.getStatsForToday("Bearer $token")
-        if (!statsForTodayResponse.isSuccessful) return Result.Failure(
-            ErrorTypes.NetworkError(
-                Exception(statsForTodayResponse.message())
+        try {
+            val statsForTodayResponse = homePageAPI.getStatsForToday("Bearer $token")
+            if (!statsForTodayResponse.isSuccessful) return Result.Failure(
+                ErrorTypes.NetworkError(
+                    Exception(statsForTodayResponse.message())
+                )
             )
-        )
 
-        val dailyStats = statsForTodayResponse.body()!!.run(getDailyStatsResMapper::fromDtoToModel)
+            val dailyStats =
+                statsForTodayResponse.body()!!.run(getDailyStatsResMapper::fromDtoToModel)
 
-        return Result.Success(dailyStats)
+            return Result.Success(dailyStats)
+        } catch (exception: Exception) {
+            return Result.Failure(ErrorTypes.NetworkError(exception))
+        }
     }
 }
