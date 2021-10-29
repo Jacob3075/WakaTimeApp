@@ -22,13 +22,17 @@ import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.R
+import com.jacob.wakatimeapp.common.models.Result
+import com.jacob.wakatimeapp.common.models.Time
 import com.jacob.wakatimeapp.common.models.UserDetails
 import com.jacob.wakatimeapp.common.ui.TimeSpentCard
 import com.jacob.wakatimeapp.common.ui.theme.Gradients
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.StateFlow
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -59,17 +63,36 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
         ) {
             UserDetailsSection(viewModel.userDetails)
             Spacer(modifier = Modifier.height(22.dp))
+            TimeSpentSection(viewModel.dailyStats)
+            RecentProjects()
+            WeeklyReport()
+            OtherDailyStats()
+        }
+    }
+}
+
+@Composable
+private fun TimeSpentSection(dailyStatsFlow: StateFlow<Result<DailyStats>>) {
+    val dailyStats by dailyStatsFlow.collectAsState()
+
+    when (dailyStats) {
+        is Result.Failure -> return
+        is Result.Empty -> {
             TimeSpentCard(
                 Gradients.primary,
                 25,
                 R.drawable.ic_time,
                 "Total Time Spent Today",
-                "42H, 22M"
+                Time(0, 0)
             )
-            RecentProjects()
-            WeeklyReport()
-            OtherDailyStats()
         }
+        is Result.Success -> TimeSpentCard(
+            Gradients.primary,
+            25,
+            R.drawable.ic_time,
+            "Total Time Spent Today",
+            (dailyStats as Result.Success<DailyStats>).value.timeSpent
+        )
     }
 }
 

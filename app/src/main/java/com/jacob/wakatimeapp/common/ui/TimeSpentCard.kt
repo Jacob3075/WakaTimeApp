@@ -21,6 +21,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.R
+import com.jacob.wakatimeapp.common.models.Time
 import com.jacob.wakatimeapp.common.ui.theme.Gradient
 import com.jacob.wakatimeapp.common.ui.theme.Gradients
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
@@ -31,7 +32,7 @@ fun TimeSpentCard(
     roundedCornerPercent: Int,
     @DrawableRes iconId: Int,
     mainText: String,
-    statsText: String,
+    time: Time,
 ) {
     val cardGradient =
         Brush.horizontalGradient(listOf(gradient.startColor, gradient.endColor))
@@ -64,7 +65,7 @@ fun TimeSpentCard(
                 ),
             )
             Text(
-                text = statsText,
+                text = "${time.hour}H, ${time.minutes}M",
                 modifier = Modifier.weight(1f, true),
                 textAlign = TextAlign.End,
                 style = TextStyle(
@@ -89,6 +90,6 @@ fun TimeSpentCardPreview() = WakaTimeAppTheme(darkTheme = true) {
         25,
         R.drawable.ic_time,
         "Total Time Spent Today",
-        "42H, 22M"
+        Time(42, 22)
     )
 }
