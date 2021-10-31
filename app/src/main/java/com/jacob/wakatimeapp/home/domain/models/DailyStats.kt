@@ -4,7 +4,7 @@ import com.jacob.wakatimeapp.common.models.Time
 
 data class DailyStats(
     val timeSpent: Time,
-    val recentProjects: String,
+    val recentProjects: List<Project>,
     val mostUsedLanguage: String,
     val mostUsedEditor: String,
     val mostUsedOs: String,
