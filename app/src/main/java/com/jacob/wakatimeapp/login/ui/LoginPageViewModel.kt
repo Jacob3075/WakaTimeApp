@@ -6,6 +6,7 @@ import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import com.jacob.wakatimeapp.common.utils.AuthStateManager
 import com.jacob.wakatimeapp.common.utils.Constants
+import com.jacob.wakatimeapp.common.utils.Utils
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -21,9 +22,11 @@ class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
+    private val utils: Utils,
 ) : AndroidViewModel(application) {
     private val authStateManager = AuthStateManager.getInstance(getApplication())
-    val authRequest: AuthorizationRequest
+    private val authRequest: AuthorizationRequest
+    private val authService = AuthorizationService(getApplication())
 
     init {
         val serviceConfig = AuthorizationServiceConfiguration(
@@ -43,7 +46,9 @@ class LoginPageViewModel @Inject constructor(
 
     fun isLoggedIn() = authStateManager.current.isAuthorized
 
-    fun exchangeToken(authService: AuthorizationService, intent: Intent) {
+    fun getAuthIntent(): Intent? = authService.getAuthorizationRequestIntent(authRequest)
+
+    fun exchangeToken(intent: Intent) {
         AuthorizationResponse.fromIntent(intent)?.run {
             authService.performTokenRequest(
                 createTokenExchangeRequest(),
@@ -60,14 +65,10 @@ class LoginPageViewModel @Inject constructor(
     }
 
     @ExperimentalCoroutinesApi
-    fun updateUserDetails(authorizationService: AuthorizationService) {
-        authStateManager.current.performActionWithFreshTokens(authorizationService) { accessToken, _, authorizationException ->
-            if (authorizationException == null) {
-                CoroutineScope(ioDispatcher).launch {
-                    accessToken?.let {
-                        updateUserDetailsUC(it, getApplication())
-                    }
-                }
+    fun updateUserDetails() {
+        CoroutineScope(ioDispatcher).launch {
+            utils.getFreshToken(getApplication())?.let {
+                updateUserDetailsUC(it, getApplication())
             }
         }
     }

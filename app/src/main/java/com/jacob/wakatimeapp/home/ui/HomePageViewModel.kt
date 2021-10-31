@@ -5,7 +5,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.common.data.OfflineDataStore
 import com.jacob.wakatimeapp.common.models.Result
-import com.jacob.wakatimeapp.common.utils.getFreshToken
+import com.jacob.wakatimeapp.common.utils.Utils
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.domain.usecases.GetDailyStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -20,6 +20,7 @@ import kotlin.coroutines.CoroutineContext
 class HomePageViewModel @Inject constructor(
     application: Application,
     offlineDataStore: OfflineDataStore,
+    utils: Utils,
     private val ioDispatcher: CoroutineContext,
     private val getDailyStatsUC: GetDailyStatsUC,
 ) : AndroidViewModel(application) {
@@ -30,8 +31,7 @@ class HomePageViewModel @Inject constructor(
     val dailyStats: StateFlow<Result<DailyStats>> = _dailyStats
 
     init {
-        val accessToken = getFreshToken(getApplication())
-        accessToken?.let {
+        utils.getFreshToken(getApplication())?.let {
             viewModelScope.launch(ioDispatcher) {
                 _dailyStats.value = getDailyStatsUC(it)
             }

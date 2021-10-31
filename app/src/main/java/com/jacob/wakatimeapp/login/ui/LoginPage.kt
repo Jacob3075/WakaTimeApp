@@ -17,7 +17,6 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.ComposeView
-import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
@@ -33,7 +32,6 @@ import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationService
 import timber.log.Timber
 
 @ExperimentalCoroutinesApi
@@ -47,9 +45,8 @@ class LoginPage : Fragment() {
         savedInstanceState: Bundle?,
     ) = ComposeView(requireContext()).apply {
         setContent {
-            val authService = AuthorizationService(LocalContext.current)
             if (viewModel.isLoggedIn()) {
-                viewModel.updateUserDetails(authService)
+                viewModel.updateUserDetails()
                 findNavController(this@LoginPage).navigate(LoginPageDirections.loginPageToHomePage())
             }
 
@@ -57,26 +54,25 @@ class LoginPage : Fragment() {
                 LoginPageContent(
                     viewModel,
                     findNavController(this@LoginPage),
-                    authService
                 )
             }
         }
     }
 }
 
+@ExperimentalCoroutinesApi
 @Composable
 private fun LoginPageContent(
     viewModel: LoginPageViewModel,
     navController: NavController,
-    authService: AuthorizationService,
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
             result.data?.let {
-                viewModel.exchangeToken(authService, it)
-                viewModel.updateUserDetails(authService)
+                viewModel.exchangeToken(it)
+                viewModel.updateUserDetails()
                 navController.navigate(LoginPageDirections.loginPageToHomePage())
             } ?: run {
                 Timber.e("Data not present")
@@ -98,8 +94,7 @@ private fun LoginPageContent(
             )
         )
         LoginButton {
-            val authIntent = authService.getAuthorizationRequestIntent(viewModel.authRequest)
-            launcher.launch(authIntent)
+            launcher.launch(viewModel.getAuthIntent())
         }
     }
 }

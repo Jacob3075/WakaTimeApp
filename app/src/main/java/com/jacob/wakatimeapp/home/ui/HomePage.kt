@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -31,8 +32,6 @@ import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.StateFlow
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -61,9 +60,9 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
                 .padding(all = 20.dp)
                 .padding(top = 24.dp)
         ) {
-            UserDetailsSection(viewModel.userDetails)
+            UserDetailsSection(viewModel.userDetails.collectAsState(null))
             Spacer(modifier = Modifier.height(22.dp))
-            TimeSpentSection(viewModel.dailyStats)
+            TimeSpentSection(viewModel.dailyStats.collectAsState())
             RecentProjects()
             WeeklyReport()
             OtherDailyStats()
@@ -72,8 +71,8 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
 }
 
 @Composable
-private fun TimeSpentSection(dailyStatsFlow: StateFlow<Result<DailyStats>>) {
-    val dailyStats by dailyStatsFlow.collectAsState()
+private fun TimeSpentSection(dailyStatsFlow: State<Result<DailyStats>>) {
+    val dailyStats by dailyStatsFlow
 
     when (dailyStats) {
         is Result.Failure, is Result.Empty -> {
@@ -96,8 +95,8 @@ private fun TimeSpentSection(dailyStatsFlow: StateFlow<Result<DailyStats>>) {
 }
 
 @Composable
-private fun UserDetailsSection(userDetailsState: Flow<UserDetails?>) {
-    val userDetails by userDetailsState.collectAsState(null)
+private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
+    val userDetails by userDetailsState
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
