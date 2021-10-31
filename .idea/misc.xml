@@ -37,6 +37,10 @@
         <entry key="../../../../../layout/compose-model-1635522857003.xml" value="0.29907407407407405" />
         <entry key="../../../../../layout/compose-model-1635524318678.xml" value="0.4027777777777778" />
         <entry key="../../../../../layout/compose-model-1635667366049.xml" value="0.29907407407407405" />
+        <entry key="../../../../../layout/compose-model-1635673317844.xml" value="0.33" />
+        <entry key="../../../../../layout/compose-model-1635673587621.xml" value="0.33" />
+        <entry key="../../../../../layout/compose-model-1635695603669.xml" value="0.2825040128410915" />
+        <entry key="../../../../../layout/compose-model-1635695874805.xml" value="0.2748629600626468" />
         <entry key="app/src/main/res/drawable/ic_launcher_background.xml" value="0.22962962962962963" />
         <entry key="app/src/main/res/drawable/ic_launcher_waka_background.xml" value="0.22962962962962963" />
         <entry key="app/src/main/res/drawable/ic_launcher_waka_foreground.xml" value="0.22962962962962963" />
@@ -46,6 +50,7 @@
         <entry key="app/src/main/res/drawable/wave_1.xml" value="0.2082051282051282" />
         <entry key="app/src/main/res/layout/activity_main.xml" value="0.3619791666666667" />
         <entry key="app/src/main/res/layout/login_page_fragment.xml" value="0.19583333333333333" />
+        <entry key="app/src/main/res/layout/project_card_item.xml" value="0.35260416666666666" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher.xml" value="0.22962962962962963" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_waka.xml" value="0.22962962962962963" />
         <entry key="app/src/main/res/mipmap-anydpi-v26/ic_launcher_waka_round.xml" value="0.22962962962962963" />
