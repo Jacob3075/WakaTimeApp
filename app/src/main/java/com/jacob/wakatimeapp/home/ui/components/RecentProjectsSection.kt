@@ -43,17 +43,19 @@ fun RecentProjects(dailyStatsState: State<DailyStats?>) {
             Text(text = "Recent Projects", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
             Text(text = "See All", color = Colors.AccentText, fontSize = 14.sp)
         }
-
-        RecentProjectList(modifier = Modifier.padding(horizontal = 12.dp))
+        RecentProjectList(
+            modifier = Modifier.padding(horizontal = 12.dp),
+            projects = dailyStats?.recentProjects ?: emptyList()
+        )
     }
 }
 
 @Composable
-private fun RecentProjectList(modifier: Modifier = Modifier) {
-    LazyColumn {
-        items(count = 3) {
-            ProjectCardItem(project = "")
-        }
+private fun RecentProjectList(modifier: Modifier = Modifier, projects: List<Project>) {
+    LazyColumn(
+        modifier = modifier
+    ) {
+        items(items = projects) { ProjectCardItem(it) }
         item {
             Spacer(modifier = Modifier.height(10.dp))
         }
@@ -61,14 +63,15 @@ private fun RecentProjectList(modifier: Modifier = Modifier) {
 }
 
 @Composable
-private fun ProjectCardItem(project: String) {
+private fun ProjectCardItem(project: Project) {
+    val cardShape = RoundedCornerShape(25)
     Box(
         modifier = Modifier
-            .shadow(elevation = 8.dp, shape = RoundedCornerShape(25))
+            .shadow(elevation = 8.dp, shape = cardShape)
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 2.dp)
-            .background(color = Colors.CardBGPrimary, shape = RoundedCornerShape(25))
-            .clickable {  }
+            .background(color = Colors.CardBGPrimary, shape = cardShape)
+            .clickable { }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -80,9 +83,13 @@ private fun ProjectCardItem(project: String) {
                 Modifier
                     .weight(1f, fill = true)
             ) {
-                Text(text = "Arm Simulator", fontSize = 22.sp)
+                Text(text = project.name, fontSize = 22.sp)
                 Spacer(modifier = Modifier.height(2.dp))
-                Text(text = "103 Hours, 47 Mins", fontSize = 14.sp, fontWeight = FontWeight.Light)
+                Text(
+                    text = "${project.hours} Hours, ${project.minutes} Mins",
+                    fontSize = 14.sp,
+                    fontWeight = FontWeight.Light
+                )
             }
             Image(painter = painterResource(id = R.drawable.ic_arrow), contentDescription = "")
         }
