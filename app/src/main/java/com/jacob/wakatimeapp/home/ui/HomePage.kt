@@ -21,7 +21,6 @@ import androidx.fragment.app.viewModels
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.R
-import com.jacob.wakatimeapp.common.models.Result
 import com.jacob.wakatimeapp.common.models.Time
 import com.jacob.wakatimeapp.common.models.UserDetails
 import com.jacob.wakatimeapp.common.ui.TimeSpentCard
@@ -60,11 +59,11 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
                 .padding(all = 20.dp)
                 .padding(top = 24.dp)
         ) {
-            UserDetailsSection(viewModel.userDetails.collectAsState(null))
+            UserDetailsSection(viewModel.userDetails.collectAsState(initial = null))
             Spacer(modifier = Modifier.height(22.dp))
             TimeSpentSection(viewModel.dailyStats.collectAsState())
             Spacer(modifier = Modifier.height(22.dp))
-            RecentProjects()
+            RecentProjects(viewModel.dailyStats.collectAsState())
             WeeklyReport()
             OtherDailyStats()
         }
@@ -104,27 +103,16 @@ private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
 }
 
 @Composable
-private fun TimeSpentSection(dailyStatsFlow: State<Result<DailyStats>>) {
+private fun TimeSpentSection(dailyStatsFlow: State<DailyStats?>) {
     val dailyStats by dailyStatsFlow
 
-    when (dailyStats) {
-        is Result.Failure, is Result.Empty -> {
-            TimeSpentCard(
-                Gradients.primary,
-                25,
-                R.drawable.ic_time,
-                "Total Time Spent Today",
-                Time(0, 0)
-            )
-        }
-        is Result.Success -> TimeSpentCard(
-            Gradients.primary,
-            25,
-            R.drawable.ic_time,
-            "Total Time Spent Today",
-            (dailyStats as Result.Success<DailyStats>).value.timeSpent
-        )
-    }
+    TimeSpentCard(
+        Gradients.primary,
+        25,
+        R.drawable.ic_time,
+        "Total Time Spent Today",
+        dailyStats?.timeSpent ?: Time(0, 0)
+    )
 }
 
 @Composable
