@@ -48,7 +48,7 @@ android {
 }
 
 dependencies {
-    implementation("androidx.core:core-ktx:1.6.0")
+    implementation("androidx.core:core-ktx:1.7.0")
     implementation("androidx.appcompat:appcompat:1.3.1")
     implementation("com.google.android.material:material:1.4.0")
 
@@ -59,7 +59,7 @@ dependencies {
     implementation("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
     implementation("androidx.compose.material:material:${Versions.compose}")
     implementation("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
-    implementation("androidx.activity:activity-compose:1.3.1")
+    implementation("androidx.activity:activity-compose:1.4.0")
 
     // Androidx Core
     implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}")
@@ -105,6 +105,9 @@ dependencies {
 
     // Logging
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    // Charts/Graphs
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Core Testing
     testImplementation("junit:junit:${Versions.junit}")
