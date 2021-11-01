@@ -52,23 +52,24 @@ class HomePage : Fragment() {
 
 @ExperimentalCoroutinesApi
 @Composable
-private fun HomePageContent(viewModel: HomePageViewModel) {
+private fun HomePageContent(viewModel: HomePageViewModel) =
     Scaffold(modifier = Modifier.fillMaxSize()) {
         Column(
             modifier = Modifier
                 .padding(all = 20.dp)
                 .padding(top = 24.dp)
         ) {
-            UserDetailsSection(viewModel.userDetails.collectAsState(initial = null))
+            val userDetailsState = viewModel.userDetails.collectAsState(initial = null)
+            val dailyStatsFlow = viewModel.dailyStats.collectAsState()
+            UserDetailsSection(userDetailsState)
             Spacer(modifier = Modifier.height(22.dp))
-            TimeSpentSection(viewModel.dailyStats.collectAsState())
+            TimeSpentSection(dailyStatsFlow.value)
             Spacer(modifier = Modifier.height(22.dp))
-            RecentProjects(viewModel.dailyStats.collectAsState())
+            RecentProjects(dailyStatsFlow.value)
             WeeklyReport()
             OtherDailyStats()
         }
     }
-}
 
 @Composable
 private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
@@ -103,9 +104,7 @@ private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
 }
 
 @Composable
-private fun TimeSpentSection(dailyStatsFlow: State<DailyStats?>) {
-    val dailyStats by dailyStatsFlow
-
+private fun TimeSpentSection(dailyStats: DailyStats?) {
     TimeSpentCard(
         Gradients.primary,
         25,

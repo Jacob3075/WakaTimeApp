@@ -11,9 +11,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.produceState
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -30,8 +27,7 @@ import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.domain.models.Project
 
 @Composable
-fun RecentProjects(dailyStatsState: State<DailyStats?>) {
-    val dailyStats by dailyStatsState
+fun RecentProjects(dailyStats: DailyStats?) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -86,7 +82,7 @@ private fun ProjectCardItem(project: Project) {
                 Text(text = project.name, fontSize = 22.sp)
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
-                    text = "${project.hours} Hours, ${project.minutes} Mins",
+                    text = "${project.time.hours} Hours, ${project.time.minutes} Mins",
                     fontSize = 14.sp,
                     fontWeight = FontWeight.Light
                 )
@@ -101,16 +97,17 @@ private fun ProjectCardItem(project: Project) {
 fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         RecentProjects(
-            produceState(
-                initialValue = DailyStats(
-                    timeSpent = Time(0, 0),
-                    recentProjects = emptyList(),
-                    mostUsedLanguage = "",
-                    mostUsedEditor = "",
-                    mostUsedOs = ""
+            DailyStats(
+                timeSpent = Time(0, 0),
+                recentProjects = listOf(
+                    Project(Time(10, 9), "Project 1", 75.0),
+                    Project(Time(100, 26), "Project 2", 20.0),
+                    Project(Time(5, 15), "Project 3", 10.0),
                 ),
-                producer = {}
-            ),
+                mostUsedLanguage = "",
+                mostUsedEditor = "",
+                mostUsedOs = ""
+            )
         )
     }
 }
@@ -119,6 +116,6 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
 @Composable
 fun ProjectCardItemPreview() = WakaTimeAppTheme {
     Surface {
-        ProjectCardItem(Project(0, 0, "", 0.0))
+        ProjectCardItem(Project(Time(0, 0), "Project 1", 0.0))
     }
 }

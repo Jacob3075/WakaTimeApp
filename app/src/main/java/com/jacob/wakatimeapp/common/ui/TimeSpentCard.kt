@@ -65,7 +65,7 @@ fun TimeSpentCard(
                 ),
             )
             Text(
-                text = "${time.hour}H, ${time.minutes}M",
+                text = "${time.hours}H, ${time.minutes}M",
                 modifier = Modifier.weight(1f, true),
                 textAlign = TextAlign.End,
                 style = TextStyle(
