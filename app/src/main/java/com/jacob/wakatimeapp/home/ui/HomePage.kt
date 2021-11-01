@@ -29,6 +29,7 @@ import com.jacob.wakatimeapp.common.ui.theme.Typography
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
+import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
@@ -66,6 +67,7 @@ private fun HomePageContent(viewModel: HomePageViewModel) =
             TimeSpentSection(dailyStatsFlow.value)
             Spacer(modifier = Modifier.height(22.dp))
             RecentProjects(dailyStatsFlow.value)
+            Spacer(modifier = Modifier.height(12.dp))
             WeeklyReport()
             OtherDailyStats()
         }
@@ -115,13 +117,8 @@ private fun TimeSpentSection(dailyStats: DailyStats?) {
 }
 
 @Composable
-private fun WeeklyReport() {
-}
-
-@Composable
 private fun OtherDailyStats() {
 }
-
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
