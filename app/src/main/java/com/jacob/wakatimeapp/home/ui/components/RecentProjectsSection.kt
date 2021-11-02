@@ -25,6 +25,7 @@ import com.jacob.wakatimeapp.common.ui.theme.Colors
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.domain.models.Project
+import java.time.LocalDate
 
 @Composable
 fun RecentProjects(dailyStats: DailyStats?) {
@@ -106,7 +107,8 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
                 ),
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
-                mostUsedOs = ""
+                mostUsedOs = "",
+                date = LocalDate.now()
             )
         )
     }

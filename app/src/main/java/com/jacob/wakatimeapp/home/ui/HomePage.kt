@@ -32,6 +32,8 @@ import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import timber.log.Timber
+import timber.log.Timber.Forest
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -61,12 +63,12 @@ private fun HomePageContent(viewModel: HomePageViewModel) =
                 .padding(top = 24.dp)
         ) {
             val userDetailsState = viewModel.userDetails.collectAsState(initial = null)
-            val dailyStatsFlow = viewModel.dailyStats.collectAsState()
+            val weeklyStatsFlow = viewModel.last7DaysStats.collectAsState()
             UserDetailsSection(userDetailsState)
             Spacer(modifier = Modifier.height(22.dp))
-            TimeSpentSection(dailyStatsFlow.value)
+            TimeSpentSection(weeklyStatsFlow.value?.todaysStats)
             Spacer(modifier = Modifier.height(22.dp))
-            RecentProjects(dailyStatsFlow.value)
+            RecentProjects(weeklyStatsFlow.value?.todaysStats)
             Spacer(modifier = Modifier.height(12.dp))
             WeeklyReport()
             OtherDailyStats()
