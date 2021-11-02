@@ -8,8 +8,9 @@ import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.domain.models.Project
 import com.jacob.wakatimeapp.home.domain.models.StatsRange
 import com.jacob.wakatimeapp.home.domain.models.WeeklyStats
+import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import java.util.*
 import javax.inject.Inject
 
 class GetWeeklyStatsResMapper @Inject constructor() :
@@ -18,8 +19,8 @@ class GetWeeklyStatsResMapper @Inject constructor() :
         totalTime = Time.createFromDigitalStringFormat(dto.cumulativeTotal.digital),
         dailyStats = getDailyStatsFromDto(dto.data),
         range = StatsRange(
-            LocalDate.parse(dto.start, DateTimeFormatter.ISO_DATE),
-            LocalDate.parse(dto.end, DateTimeFormatter.ISO_DATE)
+            startDate = parseDate(dto.start),
+            endDate = parseDate(dto.end)
         )
     )
 
@@ -41,6 +42,12 @@ class GetWeeklyStatsResMapper @Inject constructor() :
                 )
             }
         )
+    }
+
+    private fun parseDate(dateTimeString: String): Date {
+        val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
+        sdf.timeZone = TimeZone.getTimeZone("GMT")
+        return sdf.parse(dateTimeString)!!
     }
 
     override fun fromModelToDto(model: WeeklyStats): GetLast7DaysStatsResDTO = TODO()

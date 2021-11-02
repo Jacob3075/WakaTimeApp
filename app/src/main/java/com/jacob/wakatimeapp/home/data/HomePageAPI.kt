@@ -14,6 +14,6 @@ interface HomePageAPI {
     @GET("/api/v1/users/current/summaries?range=today")
     suspend fun getStatsForToday(@Header("Authorization") token: String): Response<GetDailyStatsResDTO>
 
-    @GET("/api/v1/users/current/summaries?range=today")
+    @GET("/api/v1/users/current/summaries?range=last_7_days")
     suspend fun getLast7DaysStats(@Header("Authorization") token: String): Response<GetLast7DaysStatsResDTO>
 }

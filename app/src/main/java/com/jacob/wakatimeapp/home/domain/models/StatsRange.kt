@@ -1,8 +1,8 @@
 package com.jacob.wakatimeapp.home.domain.models
 
-import java.time.LocalDate
+import java.util.*
 
 data class StatsRange(
-    val startDate: LocalDate,
-    val endDate: LocalDate,
+    val startDate: Date,
+    val endDate: Date,
 )
