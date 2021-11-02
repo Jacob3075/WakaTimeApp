@@ -8,7 +8,9 @@ import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Scaffold
 import androidx.compose.material.Text
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.ComposeView
@@ -33,7 +35,6 @@ import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import timber.log.Timber
-import timber.log.Timber.Forest
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -62,22 +63,22 @@ private fun HomePageContent(viewModel: HomePageViewModel) =
                 .padding(all = 20.dp)
                 .padding(top = 24.dp)
         ) {
-            val userDetailsState = viewModel.userDetails.collectAsState(initial = null)
-            val weeklyStatsFlow = viewModel.last7DaysStats.collectAsState()
+            val userDetailsState by viewModel.userDetails.collectAsState(initial = null)
+            val weeklyStatsFlow by viewModel.last7DaysStats.collectAsState()
+
             UserDetailsSection(userDetailsState)
             Spacer(modifier = Modifier.height(22.dp))
-            TimeSpentSection(weeklyStatsFlow.value?.todaysStats)
+            TimeSpentSection(weeklyStatsFlow?.todaysStats)
             Spacer(modifier = Modifier.height(22.dp))
-            RecentProjects(weeklyStatsFlow.value?.todaysStats)
+            RecentProjects(weeklyStatsFlow?.todaysStats)
             Spacer(modifier = Modifier.height(12.dp))
-            WeeklyReport()
+            WeeklyReport(weeklyStatsFlow?.dailyStats)
             OtherDailyStats()
         }
     }
 
 @Composable
-private fun UserDetailsSection(userDetailsState: State<UserDetails?>) {
-    val userDetails by userDetailsState
+private fun UserDetailsSection(userDetails: UserDetails?) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -126,23 +127,20 @@ private fun OtherDailyStats() {
 @Composable
 fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
-        produceState(
-            initialValue = UserDetails(
-                bio = "",
-                email = "",
-                id = "",
-                timeout = 0,
-                timezone = "",
-                username = "",
-                displayName = "",
-                lastProject = "",
-                fullName = "Jacob Bosco",
-                durationsSliceBy = "",
-                createdAt = "",
-                dateFormat = "",
-                photoUrl = ""
-            ),
-            producer = {}
+        UserDetails(
+            bio = "",
+            email = "",
+            id = "",
+            timeout = 0,
+            timezone = "",
+            username = "",
+            displayName = "",
+            lastProject = "",
+            fullName = "Jacob Bosco",
+            durationsSliceBy = "",
+            createdAt = "",
+            dateFormat = "",
+            photoUrl = ""
         )
     )
 }

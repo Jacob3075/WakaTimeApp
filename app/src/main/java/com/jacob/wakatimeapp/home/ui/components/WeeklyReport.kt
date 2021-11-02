@@ -19,17 +19,22 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.jacob.wakatimeapp.common.models.Time
 import com.jacob.wakatimeapp.common.ui.theme.Colors
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.home.domain.models.DailyStats
+import timber.log.Timber
+import java.time.format.TextStyle.SHORT
+import java.util.*
+
 
 @Composable
-fun WeeklyReport() {
+fun WeeklyReport(dailyStats: List<DailyStats>?) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -41,13 +46,30 @@ fun WeeklyReport() {
             Text(text = "Weekly Report", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
             Text(text = "Details", color = Colors.AccentText, fontSize = 14.sp)
         }
-        WeeklyReportChart()
+        WeeklyReportChart(dailyStats ?: emptyList())
     }
 }
 
 @Composable
-private fun WeeklyReportChart() {
+private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
     val cardShape = RoundedCornerShape(10)
+
+    val labels = mutableMapOf<Int, String>()
+    val entries = dailyStats.mapIndexed { index, value ->
+        labels[index] = value.date.dayOfWeek.getDisplayName(SHORT, Locale.getDefault())
+        BarEntry(
+            index.toFloat(),
+            value.timeSpent.toMinutes().toFloat(),
+            value
+        )
+    }
+
+    val dataSet = BarDataSet(entries, "Label").also {
+        it.setDrawValues(true)
+        it.valueTextColor = Color.WHITE
+    }
+    val barData = BarData(dataSet).also { it.barWidth = 0.3f }
+
     Box(
         modifier = Modifier
             .shadow(elevation = 8.dp, shape = cardShape)
@@ -57,20 +79,8 @@ private fun WeeklyReportChart() {
     ) {
         AndroidView(
             modifier = Modifier.padding(8.dp),
-            factory = { context ->
-                val entries = listOf(
-                    BarEntry(1f, 1f),
-                    BarEntry(2f, 2f),
-                    BarEntry(3f, 3f),
-                    BarEntry(4f, 4f),
-                    BarEntry(5f, 5f),
-                    BarEntry(6f, 6f),
-                    BarEntry(7f, 7f),
-                )
-                val dataSet = BarDataSet(entries, "Label").also { it.setDrawValues(false) }
-                val barData = BarData(dataSet).also { it.barWidth = 0.3f }
-
-                BarChart(context).apply {
+            factory = {
+                BarChart(it).apply {
                     setScaleEnabled(false)
                     setPinchZoom(false)
                     isDoubleTapToZoomEnabled = false
@@ -80,10 +90,14 @@ private fun WeeklyReportChart() {
                         setDrawGridLines(false)
                         textColor = Color.WHITE
                         position = BOTTOM
-                        valueFormatter = XAxisDayFormatter()
+                        valueFormatter = XAxisDayFormatter(labels)
                     }
-                    axisLeft.setDrawGridLines(false)
-                    axisLeft.isEnabled = false
+                    axisLeft.apply {
+                        setDrawGridLines(true)
+                        isEnabled = true
+                        spaceBottom = 0f
+                        labelCount = 3
+                    }
                     axisRight.setDrawGridLines(false)
                     axisRight.isEnabled = false
 
@@ -93,6 +107,11 @@ private fun WeeklyReportChart() {
                     data = barData
                     invalidate()
                 }
+            },
+            update = {
+                it.data = barData
+                it.xAxis.valueFormatter = XAxisDayFormatter(labels)
+                it.invalidate()
             }
         )
     }
@@ -102,18 +121,17 @@ private fun WeeklyReportChart() {
 @Composable
 fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
-        WeeklyReport()
+        WeeklyReport(emptyList())
     }
 }
 
-private class XAxisDayFormatter() : ValueFormatter() {
+private class XAxisDayFormatter(private val labels: MutableMap<Int, String>) : ValueFormatter() {
     /**
-     * Used to draw bar labels, calls [.getFormattedValue] by default.
+     * Used to draw axis labels, calls [.getFormattedValue] by default.
      *
-     * @param barEntry bar being labeled
+     * @param value float to be formatted
+     * @param axis  axis being labeled
      * @return formatted string label
      */
-    override fun getBarLabel(barEntry: BarEntry): String {
-        return super.getBarLabel(barEntry)
-    }
+    override fun getAxisLabel(value: Float, axis: AxisBase?) = labels[value.toInt()] ?: "Nan"
 }
