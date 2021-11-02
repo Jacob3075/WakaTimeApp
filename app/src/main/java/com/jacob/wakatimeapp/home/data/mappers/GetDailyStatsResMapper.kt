@@ -6,23 +6,27 @@ import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO.Data
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.domain.models.Project
+import java.time.LocalDate
+import java.time.format.DateTimeFormatter
 import javax.inject.Inject
 
 class GetDailyStatsResMapper @Inject constructor() : DtoMapper<GetDailyStatsResDTO, DailyStats> {
     override fun fromDtoToModel(dto: GetDailyStatsResDTO) = DailyStats(
         timeSpent = Time.createFromDigitalStringFormat(dto.cumulativeTotal.digital),
-        recentProjects = getProjectsFromDto(dto.data),
+        projectsWorkedOn = getProjectsFromDto(dto.data.first()),
         mostUsedLanguage = "",
         mostUsedEditor = "",
-        mostUsedOs = ""
+        mostUsedOs = "",
+        date = LocalDate.parse(dto.data.first().range.date, DateTimeFormatter.ISO_DATE)
+
     )
 
     override fun fromModelToDto(model: DailyStats): GetDailyStatsResDTO {
         TODO("Not yet implemented")
     }
 
-    private fun getProjectsFromDto(data: List<Data>) = data.flatMap {
-        it.projects.map { project ->
+    private fun getProjectsFromDto(data: Data) = data.run {
+        projects.map { project ->
             Project(
                 Time(
                     project.hours,

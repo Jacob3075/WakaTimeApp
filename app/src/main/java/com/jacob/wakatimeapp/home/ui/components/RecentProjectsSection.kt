@@ -41,7 +41,7 @@ fun RecentProjects(dailyStats: DailyStats?) {
         }
         RecentProjectList(
             modifier = Modifier.padding(horizontal = 12.dp),
-            projects = dailyStats?.recentProjects ?: emptyList()
+            projects = dailyStats?.projectsWorkedOn ?: emptyList()
         )
     }
 }
@@ -99,7 +99,7 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
         RecentProjects(
             DailyStats(
                 timeSpent = Time(0, 0),
-                recentProjects = listOf(
+                projectsWorkedOn = listOf(
                     Project(Time(10, 9), "Project 1", 75.0),
                     Project(Time(100, 26), "Project 2", 20.0),
                     Project(Time(5, 15), "Project 3", 10.0),
