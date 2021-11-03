@@ -27,9 +27,9 @@ class GetWeeklyStatsResMapper @Inject constructor() :
     private fun getDailyStatsFromDto(data: List<Data>) = data.map {
         DailyStats(
             timeSpent = Time.createFrom(it.grandTotal.digital, it.grandTotal.decimal),
-            mostUsedEditor = "",
-            mostUsedLanguage = "",
-            mostUsedOs = "",
+            mostUsedEditor = it.editors.maxByOrNull { editor -> editor.percent }?.name ?: "NA",
+            mostUsedLanguage = it.languages.maxByOrNull { editor -> editor.percent }?.name ?: "NA",
+            mostUsedOs = it.operatingSystems.maxByOrNull { editor -> editor.percent }?.name ?: "NA",
             date = LocalDate.parse(it.range.date),
             projectsWorkedOn = it.projects.filterNot { project -> project.name == "Unknown Project" }
                 .map { project ->

@@ -80,7 +80,7 @@ private fun HomePageContent(viewModel: HomePageViewModel) =
             Spacer(modifier = Modifier.height(10.dp))
             WeeklyReport(weeklyStatsFlow?.dailyStats)
             Spacer(modifier = Modifier.height(25.dp))
-            OtherDailyStats()
+            OtherDailyStats(weeklyStatsFlow?.todaysStats)
             Spacer(modifier = Modifier.height(25.dp))
         }
     }
@@ -126,7 +126,7 @@ private fun TimeSpentSection(dailyStats: DailyStats?) = TimeSpentCard(
 )
 
 @Composable
-private fun OtherDailyStats() {
+private fun OtherDailyStats(dailyStats: DailyStats?) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -144,7 +144,7 @@ private fun OtherDailyStats() {
             roundedCornerPercent = 25,
             iconId = R.drawable.ic_code_file,
             mainText = "Most Language Used",
-            language = "Kotlin"
+            language = dailyStats?.mostUsedLanguage ?: ""
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
@@ -152,7 +152,7 @@ private fun OtherDailyStats() {
             roundedCornerPercent = 25,
             iconId = R.drawable.ic_laptop,
             mainText = "Most OS Used",
-            language = "Linux"
+            language = dailyStats?.mostUsedOs ?: ""
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
@@ -160,7 +160,7 @@ private fun OtherDailyStats() {
             roundedCornerPercent = 25,
             iconId = R.drawable.ic_code,
             mainText = "Most Editor Used",
-            language = "Android Studio"
+            language = dailyStats?.mostUsedEditor ?: ""
         )
     }
 }
