@@ -99,11 +99,11 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         RecentProjects(
             DailyStats(
-                timeSpent = Time(0, 0),
+                timeSpent = Time(0, 0, 0f),
                 projectsWorkedOn = listOf(
-                    Project(Time(10, 9), "Project 1", 75.0),
-                    Project(Time(100, 26), "Project 2", 20.0),
-                    Project(Time(5, 15), "Project 3", 10.0),
+                    Project(Time(10, 9, 0f), "Project 1", 75.0),
+                    Project(Time(100, 26, 0f), "Project 2", 20.0),
+                    Project(Time(5, 15, 0f), "Project 3", 10.0),
                 ),
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
@@ -118,6 +118,6 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
 @Composable
 fun ProjectCardItemPreview() = WakaTimeAppTheme {
     Surface {
-        ProjectCardItem(Project(Time(0, 0), "Project 1", 0.0))
+        ProjectCardItem(Project(Time(0, 0, 0f), "Project 1", 0.0))
     }
 }

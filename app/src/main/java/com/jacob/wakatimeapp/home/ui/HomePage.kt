@@ -34,7 +34,6 @@ import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -115,7 +114,7 @@ private fun TimeSpentSection(dailyStats: DailyStats?) {
         25,
         R.drawable.ic_time,
         "Total Time Spent Today",
-        dailyStats?.timeSpent ?: Time(0, 0)
+        dailyStats?.timeSpent ?: Time(0, 0, 0f)
     )
 }
 

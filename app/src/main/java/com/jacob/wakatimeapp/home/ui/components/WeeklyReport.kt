@@ -28,7 +28,6 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jacob.wakatimeapp.common.ui.theme.Colors
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
-import timber.log.Timber
 import java.time.format.TextStyle.SHORT
 import java.util.*
 
@@ -46,6 +45,7 @@ fun WeeklyReport(dailyStats: List<DailyStats>?) {
             Text(text = "Weekly Report", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
             Text(text = "Details", color = Colors.AccentText, fontSize = 14.sp)
         }
+        Spacer(modifier = Modifier.height(10.dp))
         WeeklyReportChart(dailyStats ?: emptyList())
     }
 }
@@ -59,13 +59,13 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
         labels[index] = value.date.dayOfWeek.getDisplayName(SHORT, Locale.getDefault())
         BarEntry(
             index.toFloat(),
-            value.timeSpent.toMinutes().toFloat(),
+            value.timeSpent.decimal,
             value
         )
     }
 
     val dataSet = BarDataSet(entries, "Label").also {
-        it.setDrawValues(true)
+        it.setDrawValues(false)
         it.valueTextColor = Color.WHITE
     }
     val barData = BarData(dataSet).also { it.barWidth = 0.3f }
@@ -74,7 +74,6 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
         modifier = Modifier
             .shadow(elevation = 8.dp, shape = cardShape)
             .aspectRatio(1.4f)
-            .padding(10.dp)
             .background(Colors.CardBGPrimary, shape = cardShape)
     ) {
         AndroidView(
@@ -97,6 +96,9 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
                         isEnabled = true
                         spaceBottom = 0f
                         labelCount = 3
+                        textColor = Color.WHITE
+                        textSize = 8f
+                        valueFormatter = YAxisHourFormatter()
                     }
                     axisRight.setDrawGridLines(false)
                     axisRight.isEnabled = false
@@ -125,7 +127,7 @@ fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     }
 }
 
-private class XAxisDayFormatter(private val labels: MutableMap<Int, String>) : ValueFormatter() {
+private class XAxisDayFormatter(private val labels: Map<Int, String>) : ValueFormatter() {
     /**
      * Used to draw axis labels, calls [.getFormattedValue] by default.
      *
@@ -133,5 +135,24 @@ private class XAxisDayFormatter(private val labels: MutableMap<Int, String>) : V
      * @param axis  axis being labeled
      * @return formatted string label
      */
-    override fun getAxisLabel(value: Float, axis: AxisBase?) = labels[value.toInt()] ?: "Nan"
+    override fun getAxisLabel(value: Float, axis: AxisBase) = labels[value.toInt()] ?: "Nan"
+
+    /**
+     * Called when drawing any label, used to change numbers into formatted strings.
+     *
+     * @param value float to be formatted
+     * @return formatted string label
+     */
+    override fun getFormattedValue(value: Float) = "%.1f".format(value)
+}
+
+private class YAxisHourFormatter : ValueFormatter() {
+    /**
+     * Used to draw axis labels, calls [.getFormattedValue] by default.
+     *
+     * @param value float to be formatted
+     * @param axis  axis being labeled
+     * @return formatted string label
+     */
+    override fun getAxisLabel(value: Float, axis: AxisBase) = "${value.toInt()}H"
 }

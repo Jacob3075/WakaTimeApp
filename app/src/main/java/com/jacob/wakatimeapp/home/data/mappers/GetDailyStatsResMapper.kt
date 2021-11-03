@@ -12,7 +12,7 @@ import javax.inject.Inject
 
 class GetDailyStatsResMapper @Inject constructor() : DtoMapper<GetDailyStatsResDTO, DailyStats> {
     override fun fromDtoToModel(dto: GetDailyStatsResDTO) = DailyStats(
-        timeSpent = Time.createFromDigitalStringFormat(dto.cumulativeTotal.digital),
+        timeSpent = Time.createFrom(dto.cumulativeTotal.digital, dto.cumulativeTotal.decimal),
         projectsWorkedOn = getProjectsFromDto(dto.data.first()),
         mostUsedLanguage = "",
         mostUsedEditor = "",
@@ -30,7 +30,8 @@ class GetDailyStatsResMapper @Inject constructor() : DtoMapper<GetDailyStatsResD
             Project(
                 Time(
                     project.hours,
-                    project.minutes
+                    project.minutes,
+                    project.decimal.toFloat()
                 ),
                 project.name,
                 project.percent

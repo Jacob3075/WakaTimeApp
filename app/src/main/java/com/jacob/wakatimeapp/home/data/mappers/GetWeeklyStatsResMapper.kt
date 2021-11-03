@@ -16,7 +16,7 @@ import javax.inject.Inject
 class GetWeeklyStatsResMapper @Inject constructor() :
     DtoMapper<GetLast7DaysStatsResDTO, WeeklyStats> {
     override fun fromDtoToModel(dto: GetLast7DaysStatsResDTO) = WeeklyStats(
-        totalTime = Time.createFromDigitalStringFormat(dto.cumulativeTotal.digital),
+        totalTime = Time.createFrom(dto.cumulativeTotal.digital, dto.cumulativeTotal.decimal),
         dailyStats = getDailyStatsFromDto(dto.data),
         range = StatsRange(
             startDate = parseDate(dto.start),
@@ -26,21 +26,23 @@ class GetWeeklyStatsResMapper @Inject constructor() :
 
     private fun getDailyStatsFromDto(data: List<Data>) = data.map {
         DailyStats(
-            Time.createFromDigitalStringFormat(it.grandTotal.digital),
+            timeSpent = Time.createFrom(it.grandTotal.digital, it.grandTotal.decimal),
             mostUsedEditor = "",
             mostUsedLanguage = "",
             mostUsedOs = "",
             date = LocalDate.parse(it.range.date),
-            projectsWorkedOn = it.projects.map { project ->
-                Project(
-                    Time(
-                        project.hours,
-                        project.minutes
-                    ),
-                    project.name,
-                    project.percent
-                )
-            }
+            projectsWorkedOn = it.projects.filterNot { project -> project.name == "Unknown Project" }
+                .map { project ->
+                    Project(
+                        Time(
+                            project.hours,
+                            project.minutes,
+                            project.decimal.toFloat()
+                        ),
+                        project.name,
+                        project.percent
+                    )
+                }
         )
     }
 

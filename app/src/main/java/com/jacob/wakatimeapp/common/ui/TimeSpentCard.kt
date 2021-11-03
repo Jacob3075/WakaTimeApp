@@ -90,6 +90,6 @@ fun TimeSpentCardPreview() = WakaTimeAppTheme(darkTheme = true) {
         25,
         R.drawable.ic_time,
         "Total Time Spent Today",
-        Time(42, 22)
+        Time(42, 22, 0f)
     )
 }
