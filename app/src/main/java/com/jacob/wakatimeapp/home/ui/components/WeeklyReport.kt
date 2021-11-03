@@ -64,11 +64,11 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
         )
     }
 
-    val dataSet = BarDataSet(entries, "Label").also {
-        it.setDrawValues(false)
-        it.valueTextColor = Color.WHITE
+    val dataSet = BarDataSet(entries, "Label").apply {
+        setDrawValues(false)
+        valueTextColor = Color.WHITE
     }
-    val barData = BarData(dataSet).also { it.barWidth = 0.3f }
+    val barData = BarData(dataSet).apply { barWidth = 0.3f }
 
     Box(
         modifier = Modifier
@@ -79,7 +79,9 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
         AndroidView(
             modifier = Modifier.padding(8.dp),
             factory = {
-                BarChart(it).apply {
+                RoundedBarChart(it).apply {
+                    setRadius(10)
+
                     setScaleEnabled(false)
                     setPinchZoom(false)
                     isDoubleTapToZoomEnabled = false
