@@ -33,14 +33,16 @@ class HomePageViewModel @Inject constructor(
     val errors = _errors.asSharedFlow()
 
     init {
-        val userDetailsFlow = offlineDataStore.getUserDetails(getApplication())
         utils.getFreshToken(getApplication())?.let {
             viewModelScope.launch(ioDispatcher) {
+                val userDetailsFlow =
+                    offlineDataStore.getUserDetails(getApplication()).stateIn(viewModelScope)
+
                 when (val last7DaysStatsResult = getLast7DaysStatsUC(it)) {
                     is Result.Success -> {
                         _homePageState.value = HomePageViewState.Loaded(
                             last7DaysStatsResult.value,
-                            userDetailsFlow.last()
+                            userDetailsFlow.value
                         )
                     }
                     is Result.Failure -> {
@@ -48,7 +50,7 @@ class HomePageViewModel @Inject constructor(
                         _homePageState.value = error
                         _errors.emit(error)
                     }
-                    is Result.Empty -> Unit
+                    is Result.Empty -> Timber.e("EMPTY")
                 }
             }
         }
