@@ -18,7 +18,6 @@ import androidx.compose.ui.layout.ContentScale
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.font.FontWeight.Companion
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -37,17 +36,17 @@ fun StatsCard(
     mainText: String,
     text: String,
     weights: Pair<Float, Float> = Pair(1f, 1f),
-    iconOffset: Int = 100,
-    iconSize:Int = 80
+    iconOffset: Int = 50,
+    iconSize: Int = 80,
 ) {
     val cardGradient =
         Brush.horizontalGradient(listOf(gradient.startColor, gradient.endColor))
     val cardShape = RoundedCornerShape(roundedCornerPercent)
     Box(
-        contentAlignment = Alignment.CenterStart,
+        contentAlignment = Alignment.Center,
         modifier = Modifier
             .shadow(elevation = 10.dp, shape = cardShape)
-            .clickable {  }
+            .clickable { }
             .fillMaxWidth()
             .background(cardGradient, cardShape)
             .padding(horizontal = 22.dp)
@@ -120,7 +119,7 @@ fun OtherStatsCard(
     mainText = mainText,
     text = language,
     weights = Pair(1f, 0.5f),
-    iconOffset = 130,
+    iconOffset = 90,
     iconSize = 70
 )
 

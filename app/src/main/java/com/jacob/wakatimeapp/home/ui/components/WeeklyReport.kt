@@ -18,7 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.compose.ui.viewinterop.AndroidView
-import com.github.mikephil.charting.charts.BarChart
+import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
 import com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
 import com.github.mikephil.charting.data.BarData
@@ -72,6 +72,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
 
     Box(
         modifier = Modifier
+            .padding(horizontal = 10.dp)
             .shadow(elevation = 8.dp, shape = cardShape)
             .aspectRatio(1.4f)
             .background(Colors.CardBGPrimary, shape = cardShape)
@@ -86,6 +87,8 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
                     setPinchZoom(false)
                     isDoubleTapToZoomEnabled = false
                     description.isEnabled = false
+
+                    animateY(3000, Easing.EaseInOutBack)
 
                     xAxis.apply {
                         setDrawGridLines(false)
