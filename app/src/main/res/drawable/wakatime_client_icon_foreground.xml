@@ -3,10 +3,10 @@
     android:height="52dp"
     android:viewportWidth="52"
     android:viewportHeight="52">
-  <path
-      android:strokeWidth="1"
-      android:pathData="M15,24.5L20.1849,32.0417C20.3532,32.2865 20.6967,32.3314 20.9223,32.138L23.6746,29.7789C23.8618,29.6184 24.1382,29.6184 24.3254,29.7789L27.0823,32.142C27.3063,32.3339 27.6469,32.2913 27.8166,32.0501L37,19"
-      android:fillColor="#00000000"
-      android:strokeColor="#ffffff"
-      android:strokeLineCap="round"/>
+    <path
+        android:fillColor="#00000000"
+        android:pathData="M15,24.5L20.1849,32.0417C20.3532,32.2865 20.6967,32.3314 20.9223,32.138L23.6746,29.7789C23.8618,29.6184 24.1382,29.6184 24.3254,29.7789L27.0823,32.142C27.3063,32.3339 27.6469,32.2913 27.8166,32.0501L37,19"
+        android:strokeWidth="1"
+        android:strokeColor="#ffffff"
+        android:strokeLineCap="round" />
 </vector>
