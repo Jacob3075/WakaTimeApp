@@ -20,6 +20,11 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import com.airbnb.lottie.compose.LottieAnimation
+import com.airbnb.lottie.compose.LottieCompositionSpec
+import com.airbnb.lottie.compose.LottieConstants
+import com.airbnb.lottie.compose.rememberLottieComposition
+import com.jacob.wakatimeapp.R
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.common.utils.observeInLifecycle
 import com.jacob.wakatimeapp.home.ui.components.*
@@ -72,41 +77,52 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
         scaffoldState = scaffoldState,
         modifier = Modifier.fillMaxSize()
     ) {
-        val scrollState = rememberScrollState()
-        Column(
-            modifier = Modifier
-                .padding(horizontal = 20.dp)
-                .padding(top = 30.dp)
-                .verticalScroll(scrollState)
-        ) {
-            when (viewState) {
-                is HomePageViewState.Loading -> HomePageContentLoading()
-                is HomePageViewState.Loaded -> HomePageLoaded(viewState as HomePageViewState.Loaded)
-                is HomePageViewState.Error -> HomePageError()
-            }
+        when (viewState) {
+            is HomePageViewState.Loading -> HomePageContentLoading()
+            is HomePageViewState.Loaded -> HomePageLoaded(viewState as HomePageViewState.Loaded)
+            is HomePageViewState.Error -> HomePageError()
         }
     }
 }
 
 @Composable
-private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) = Column(
-    modifier = Modifier.fillMaxSize()
-) {
-    UserDetailsSection(homePageViewState.userDetails)
-    Spacer(modifier = Modifier.height(25.dp))
-    TimeSpentSection(homePageViewState.contentData.todaysStats)
-    Spacer(modifier = Modifier.height(25.dp))
-    RecentProjects(homePageViewState.contentData.todaysStats)
-    Spacer(modifier = Modifier.height(10.dp))
-    WeeklyReport(homePageViewState.contentData.dailyStats)
-    Spacer(modifier = Modifier.height(25.dp))
-    OtherDailyStats(homePageViewState.contentData.todaysStats)
-    Spacer(modifier = Modifier.height(25.dp))
+private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) {
+    val scrollState = rememberScrollState()
+    Column(
+        modifier = Modifier
+            .padding(horizontal = 20.dp)
+            .padding(top = 30.dp)
+            .verticalScroll(scrollState)
+    ) {
+        UserDetailsSection(homePageViewState.userDetails)
+        Spacer(modifier = Modifier.height(25.dp))
+        TimeSpentSection(homePageViewState.contentData.todaysStats)
+        Spacer(modifier = Modifier.height(25.dp))
+        RecentProjects(homePageViewState.contentData.todaysStats)
+        Spacer(modifier = Modifier.height(10.dp))
+        WeeklyReport(homePageViewState.contentData.dailyStats)
+        Spacer(modifier = Modifier.height(25.dp))
+        OtherDailyStats(homePageViewState.contentData.todaysStats)
+        Spacer(modifier = Modifier.height(25.dp))
+    }
 }
 
 @Composable
 private fun HomePageContentLoading() {
-    Text(text = "LOADING")
+    val illustrations = listOf(
+        R.raw.loading_1,
+        R.raw.loading_2,
+        R.raw.loading_animation,
+        R.raw.loading_bloob,
+        R.raw.loading_paperplane_1,
+        R.raw.loading_paperplane_2,
+    )
+    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(illustrations.random()))
+    LottieAnimation(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        modifier = Modifier.fillMaxSize()
+    )
 }
 
 @Composable

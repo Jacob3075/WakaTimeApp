@@ -109,6 +109,9 @@ dependencies {
     // Charts/Graphs
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
+    // Lottie Animations
+    implementation("com.airbnb.android:lottie-compose:4.2.0")
+
     // Core Testing
     testImplementation("junit:junit:${Versions.junit}")
     androidTestImplementation("androidx.test.ext:junit:${Versions.extJunit}")
