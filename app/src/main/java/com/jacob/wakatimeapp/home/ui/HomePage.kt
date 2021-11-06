@@ -20,11 +20,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.airbnb.lottie.compose.LottieAnimation
-import com.airbnb.lottie.compose.LottieCompositionSpec
-import com.airbnb.lottie.compose.LottieConstants
-import com.airbnb.lottie.compose.rememberLottieComposition
-import com.jacob.wakatimeapp.R
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.common.utils.observeInLifecycle
 import com.jacob.wakatimeapp.home.ui.components.*
@@ -78,7 +73,7 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
         modifier = Modifier.fillMaxSize()
     ) {
         when (viewState) {
-            is HomePageViewState.Loading -> HomePageContentLoading()
+            is HomePageViewState.Loading -> HomePageLoading()
             is HomePageViewState.Loaded -> HomePageLoaded(viewState as HomePageViewState.Loaded)
             is HomePageViewState.Error -> HomePageError()
         }
@@ -105,24 +100,6 @@ private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) {
         OtherDailyStats(homePageViewState.contentData.todaysStats)
         Spacer(modifier = Modifier.height(25.dp))
     }
-}
-
-@Composable
-private fun HomePageContentLoading() {
-    val illustrations = listOf(
-        R.raw.loading_1,
-        R.raw.loading_2,
-        R.raw.loading_animation,
-        R.raw.loading_bloob,
-        R.raw.loading_paperplane_1,
-        R.raw.loading_paperplane_2,
-    )
-    val composition by rememberLottieComposition(LottieCompositionSpec.RawRes(illustrations.random()))
-    LottieAnimation(
-        composition = composition,
-        iterations = LottieConstants.IterateForever,
-        modifier = Modifier.fillMaxSize()
-    )
 }
 
 @Composable
