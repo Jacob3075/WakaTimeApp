@@ -88,8 +88,6 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
                     isDoubleTapToZoomEnabled = false
                     description.isEnabled = false
 
-                    animateY(3000, Easing.EaseInOutBack)
-
                     xAxis.apply {
                         setDrawGridLines(false)
                         textColor = Color.WHITE
@@ -113,6 +111,8 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
                     data = barData
                     invalidate()
+
+                    animateY(3000, Easing.EaseInOutBack)
                 }
             },
             update = {

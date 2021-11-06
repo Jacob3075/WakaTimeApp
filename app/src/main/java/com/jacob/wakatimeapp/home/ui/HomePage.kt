@@ -8,7 +8,6 @@ import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.Scaffold
 import androidx.compose.material.SnackbarDuration.Long
-import androidx.compose.material.Text
 import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -27,7 +26,6 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
@@ -52,15 +50,13 @@ class HomePage : Fragment() {
 private fun HomePageContent(viewModel: HomePageViewModel) {
     val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
-
     val viewState by viewModel.homePageState.collectAsState()
-    Timber.e(viewState.javaClass.name)
 
     viewModel.errors
         .onEach {
             snackBarCoroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
-                    message = "Message",
+                    message = it.errorMessage,
                     actionLabel = "Action",
                     duration = Long
                 )
@@ -75,7 +71,7 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
         when (viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
             is HomePageViewState.Loaded -> HomePageLoaded(viewState as HomePageViewState.Loaded)
-            is HomePageViewState.Error -> HomePageError()
+            is HomePageViewState.Error -> HomePageError(viewState as HomePageViewState.Error)
         }
     }
 }
@@ -100,9 +96,4 @@ private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) {
         OtherDailyStats(homePageViewState.contentData.todaysStats)
         Spacer(modifier = Modifier.height(25.dp))
     }
-}
-
-@Composable
-private fun HomePageError() {
-    Text(text = "ERROR")
 }
