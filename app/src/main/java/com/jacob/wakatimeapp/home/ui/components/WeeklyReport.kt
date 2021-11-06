@@ -102,6 +102,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
                         textColor = Color.WHITE
                         textSize = 8f
                         valueFormatter = YAxisHourFormatter()
+                        axisMinimum = 0.1f // Can't be zero because of RoundedBarChart
                     }
                     axisRight.setDrawGridLines(false)
                     axisRight.isEnabled = false
