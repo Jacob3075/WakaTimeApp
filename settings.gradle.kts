@@ -8,3 +8,4 @@ dependencyResolutionManagement {
 }
 rootProject.name = "Waka Time App"
 include(":app")
+include(":details")
