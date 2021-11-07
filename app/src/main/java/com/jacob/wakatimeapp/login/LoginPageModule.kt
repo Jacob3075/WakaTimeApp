@@ -18,7 +18,4 @@ object LoginPageModule {
     fun provideLoginPageService(retrofit: Retrofit): LoginPageAPI =
         retrofit.create(LoginPageAPI::class.java)
 
-    @Singleton
-    @Provides
-    fun provideCoroutineContext(): CoroutineContext = Dispatchers.IO
 }
