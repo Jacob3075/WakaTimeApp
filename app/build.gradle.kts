@@ -45,6 +45,15 @@ android {
             resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
         }
     }
+
+    // https://github.com/mockk/mockk/issues/297#issuecomment-901924678
+    testOptions {
+        packagingOptions {
+            jniLibs {
+                useLegacyPackaging = true
+            }
+        }
+    }
 }
 
 dependencies {
@@ -93,7 +102,7 @@ dependencies {
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     //    OkHTTP
-    implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.0"))
+    implementation(platform("com.squareup.okhttp3:okhttp-bom:${Versions.okhttp3}"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 
@@ -114,12 +123,24 @@ dependencies {
 
     // Core Testing
     testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("androidx.test.ext:junit-ktx:${Versions.extJunit}")
     androidTestImplementation("androidx.test.ext:junit:${Versions.extJunit}")
+    androidTestImplementation("androidx.test:core-ktx:1.4.0")
+    androidTestImplementation("androidx.test:runner:1.4.0")
+    androidTestImplementation("androidx.arch.core:core-testing:${Versions.archVersion}")
     androidTestImplementation("androidx.test.espresso:espresso-core:${Versions.espresso}")
     androidTestImplementation("androidx.compose.ui:ui-test-junit4:${Versions.compose}")
+    androidTestImplementation("androidx.test.espresso:espresso-intents:${Versions.espresso}")
+
+    androidTestImplementation("com.google.dagger:hilt-android-testing:${Versions.hilt}")
+    kaptAndroidTest("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
+    androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}")
+    androidTestImplementation("com.google.truth:truth:1.1.3")
+    androidTestImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp3}")
+    androidTestImplementation("io.mockk:mockk-android:1.12.0")
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
-
+    debugImplementation("androidx.compose.ui:ui-test-manifest:${Versions.compose}")
 }
 
 kapt {
