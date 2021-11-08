@@ -19,6 +19,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.NavController
+import androidx.navigation.findNavController
 import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.common.utils.observeInLifecycle
 import com.jacob.wakatimeapp.home.ui.components.*
@@ -39,7 +41,7 @@ class HomePage : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setContent {
             WakaTimeAppTheme {
-                HomePageContent(viewModel)
+                HomePageContent(viewModel, findNavController())
             }
         }
     }
@@ -47,7 +49,7 @@ class HomePage : Fragment() {
 
 @ExperimentalCoroutinesApi
 @Composable
-private fun HomePageContent(viewModel: HomePageViewModel) {
+private fun HomePageContent(viewModel: HomePageViewModel, navController: NavController) {
     val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.homePageState.collectAsState()
@@ -70,14 +72,19 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
     ) {
         when (viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
-            is HomePageViewState.Loaded -> HomePageLoaded(viewState as HomePageViewState.Loaded)
+            is HomePageViewState.Loaded -> HomePageLoaded(viewState as HomePageViewState.Loaded) {
+                navController.navigate(HomePageDirections.homePageToDetailsPage())
+            }
             is HomePageViewState.Error -> HomePageError(viewState as HomePageViewState.Error)
         }
     }
 }
 
 @Composable
-private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) {
+private fun HomePageLoaded(
+    homePageViewState: HomePageViewState.Loaded,
+    onDailyTimeSpentCardClick: () -> Unit,
+) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -87,7 +94,10 @@ private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) {
     ) {
         UserDetailsSection(homePageViewState.userDetails)
         Spacer(modifier = Modifier.height(25.dp))
-        TimeSpentSection(homePageViewState.contentData.todaysStats)
+        TimeSpentSection(
+            homePageViewState.contentData.todaysStats,
+            onDailyTimeSpentCardClick = onDailyTimeSpentCardClick
+        )
         Spacer(modifier = Modifier.height(25.dp))
         RecentProjects(homePageViewState.contentData.todaysStats)
         Spacer(modifier = Modifier.height(10.dp))

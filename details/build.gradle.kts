@@ -1,9 +1,8 @@
-
 plugins {
     id("kotlin-android")
     id("com.android.dynamic-feature")
     id("androidx.navigation.safeargs.kotlin")
-//    id("dagger.hilt.android.plugin") // TODO
+    id("dagger.hilt.android.plugin")
     kotlin("kapt")
     id("com.google.devtools.ksp") version Versions.ksp
     kotlin("plugin.serialization") version Versions.kotlin
@@ -40,5 +39,10 @@ android {
 dependencies {
     implementation(project(":app"))
 
-//    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
+    // Hilt
+    api("com.google.dagger:hilt-android:${Versions.hilt}")
+    implementation("androidx.legacy:legacy-support-v4:1.0.0")
+    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
+    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
+    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
 }

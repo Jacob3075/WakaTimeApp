@@ -38,6 +38,7 @@ fun StatsCard(
     weights: Pair<Float, Float> = Pair(1f, 1f),
     iconOffset: Int = 50,
     iconSize: Int = 80,
+    onClick: () -> Unit,
 ) {
     val cardGradient =
         Brush.horizontalGradient(listOf(gradient.startColor, gradient.endColor))
@@ -46,7 +47,7 @@ fun StatsCard(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .shadow(elevation = 10.dp, shape = cardShape)
-            .clickable { }
+            .clickable { onClick() }
             .fillMaxWidth()
             .background(cardGradient, cardShape)
             .padding(horizontal = 22.dp)
@@ -93,12 +94,14 @@ fun TimeSpentCard(
     @DrawableRes iconId: Int,
     mainText: String,
     time: Time,
+    onClick: () -> Unit,
 ) = StatsCard(
     gradient = gradient,
     roundedCornerPercent = roundedCornerPercent,
     iconId = iconId,
     mainText = mainText,
-    text = "${time.hours}H, ${time.minutes}M"
+    text = "${time.hours}H, ${time.minutes}M",
+    onClick = onClick
 )
 
 @Composable
@@ -120,8 +123,8 @@ fun OtherStatsCard(
     text = language,
     weights = Pair(1f, 0.5f),
     iconOffset = 90,
-    iconSize = 70
-)
+    iconSize = 70,
+) {}
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
@@ -132,5 +135,5 @@ fun TimeSpentCardPreview() = WakaTimeAppTheme(darkTheme = true) {
         R.drawable.ic_time,
         "Total Time Spent Today",
         Time(42, 22, 0f)
-    )
+    ) {}
 }

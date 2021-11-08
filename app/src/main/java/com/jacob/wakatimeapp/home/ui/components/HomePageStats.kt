@@ -17,12 +17,13 @@ import com.jacob.wakatimeapp.common.ui.theme.Gradients
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 
 @Composable
-fun TimeSpentSection(dailyStats: DailyStats?) = TimeSpentCard(
-    Gradients.primary,
-    25,
-    drawable.ic_time,
-    "Total Time Spent Today",
-    dailyStats?.timeSpent ?: Time(0, 0, 0f)
+fun TimeSpentSection(dailyStats: DailyStats?, onDailyTimeSpentCardClick: () -> Unit) = TimeSpentCard(
+    gradient = Gradients.primary,
+    roundedCornerPercent = 25,
+    iconId = drawable.ic_time,
+    mainText = "Total Time Spent Today",
+    time = dailyStats?.timeSpent ?: Time(0, 0, 0f),
+    onClick = onDailyTimeSpentCardClick
 )
 
 @Composable

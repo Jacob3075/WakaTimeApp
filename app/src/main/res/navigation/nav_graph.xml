@@ -6,7 +6,7 @@
     <fragment
         android:id="@+id/loginPage"
         android:name="com.jacob.wakatimeapp.login.ui.LoginPage"
-        android:label="login_page_fragment" >
+        android:label="login_page_fragment">
         <action
             android:id="@+id/loginPage_to_homePage"
             app:destination="@id/homePage"
@@ -16,5 +16,15 @@
     <fragment
         android:id="@+id/homePage"
         android:name="com.jacob.wakatimeapp.home.ui.HomePage"
-        android:label="home_page_fragment" />
+        android:label="home_page_fragment" >
+        <action
+            android:id="@+id/homePage_to_detailsPage"
+            app:destination="@id/detailsPage" />
+    </fragment>
+
+    <include-dynamic
+        android:id="@+id/detailsPage"
+        app:graphPackage="com.jacob.wakatimeapp.details"
+        app:graphResName="details_nav_graph"
+        app:moduleName="details" />
 </navigation>
