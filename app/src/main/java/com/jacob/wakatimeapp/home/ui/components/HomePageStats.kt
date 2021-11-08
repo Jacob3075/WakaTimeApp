@@ -9,11 +9,11 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.R.drawable
-import com.jacob.wakatimeapp.common.models.Time
-import com.jacob.wakatimeapp.common.ui.OtherStatsCard
-import com.jacob.wakatimeapp.common.ui.TimeSpentCard
-import com.jacob.wakatimeapp.common.ui.theme.Colors
-import com.jacob.wakatimeapp.common.ui.theme.Gradients
+import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.ui.OtherStatsCard
+import com.jacob.wakatimeapp.core.ui.TimeSpentCard
+import com.jacob.wakatimeapp.core.ui.theme.Colors
+import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 
 @Composable

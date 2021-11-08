@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.ui.theme
+package com.jacob.wakatimeapp.core.ui.theme
 
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Shapes

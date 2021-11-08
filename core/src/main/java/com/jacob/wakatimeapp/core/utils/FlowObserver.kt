@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.utils
+package com.jacob.wakatimeapp.core.utils
 
 import androidx.lifecycle.Lifecycle
 import androidx.lifecycle.LifecycleEventObserver

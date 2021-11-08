@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.ui.theme
+package com.jacob.wakatimeapp.core.ui.theme
 
 import androidx.compose.material.Typography
 import androidx.compose.ui.text.TextStyle

@@ -7,7 +7,6 @@ import androidx.navigation.Navigation.findNavController
 import androidx.test.platform.app.InstrumentationRegistry
 import com.jacob.wakatimeapp.MainActivity
 import com.jacob.wakatimeapp.R
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.HomePageModule
 import dagger.hilt.android.testing.HiltAndroidRule
 import dagger.hilt.android.testing.HiltAndroidTest

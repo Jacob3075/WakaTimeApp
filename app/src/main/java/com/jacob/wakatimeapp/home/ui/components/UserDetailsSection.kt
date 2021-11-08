@@ -14,9 +14,9 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.R.drawable
-import com.jacob.wakatimeapp.common.models.UserDetails
-import com.jacob.wakatimeapp.common.ui.theme.Typography
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.models.UserDetails
+import com.jacob.wakatimeapp.core.ui.theme.Typography
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 
 @Composable
 fun UserDetailsSection(userDetails: UserDetails?) {

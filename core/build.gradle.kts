@@ -1,6 +1,11 @@
 plugins {
     id("com.android.library")
     id("kotlin-android")
+    id("androidx.navigation.safeargs.kotlin")
+    id("dagger.hilt.android.plugin")
+    kotlin("kapt")
+    id("com.google.devtools.ksp") version Versions.ksp
+    kotlin("plugin.serialization") version Versions.kotlin
 }
 
 android {
@@ -11,14 +16,15 @@ android {
         targetSdk = AppConfig.targetSdk
 
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
+        vectorDrawables { useSupportLibrary = true }
     }
 
     buildTypes {
         getByName("release") {
             isMinifyEnabled = false
             proguardFiles(
-                    getDefaultProguardFile("proguard-android-optimize.txt"),
-                    "proguard-rules.pro"
+                getDefaultProguardFile("proguard-android-optimize.txt"),
+                "proguard-rules.pro"
             )
         }
     }
@@ -27,6 +33,8 @@ android {
         targetCompatibility = JavaVersion.VERSION_11
     }
     kotlinOptions { jvmTarget = "11" }
+    buildFeatures { compose = true }
+    composeOptions { kotlinCompilerExtensionVersion = Versions.compose }
     packagingOptions {
         resources {
             resources.excludes.add("/META-INF/{AL2.0,LGPL2.1}")
@@ -63,6 +71,10 @@ dependencies {
 
     api("androidx.hilt:hilt-navigation-fragment:1.0.0")
 
+    // Hilt
+    api("com.google.dagger:hilt-android:${Versions.hilt}")
+    kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
+
     // Room
     api("com.google.devtools.ksp:symbol-processing-api:${Versions.ksp}")
     api("androidx.room:room-runtime:${Versions.room}")
@@ -95,4 +107,8 @@ dependencies {
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${Versions.compose}")
+}
+
+kapt {
+    correctErrorTypes = true
 }

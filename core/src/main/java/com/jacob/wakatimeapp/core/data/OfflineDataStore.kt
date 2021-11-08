@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.data
+package com.jacob.wakatimeapp.core.data
 
 import android.content.Context
 import androidx.datastore.core.DataStore
@@ -6,7 +6,7 @@ import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
 import androidx.datastore.preferences.preferencesDataStore
-import com.jacob.wakatimeapp.common.models.UserDetails
+import com.jacob.wakatimeapp.core.models.UserDetails
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.mapLatest

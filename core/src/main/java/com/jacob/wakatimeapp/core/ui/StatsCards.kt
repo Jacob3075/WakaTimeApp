@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.ui
+package com.jacob.wakatimeapp.core.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
@@ -22,11 +22,11 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jacob.wakatimeapp.R
-import com.jacob.wakatimeapp.common.models.Time
-import com.jacob.wakatimeapp.common.ui.theme.Gradient
-import com.jacob.wakatimeapp.common.ui.theme.Gradients
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.ui.theme.Gradient
+import com.jacob.wakatimeapp.core.ui.theme.Gradients
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.R
 
 @Composable
 fun StatsCard(

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.utils
+package com.jacob.wakatimeapp.core.utils
 
 import android.content.Context
 import net.openid.appauth.AuthorizationService

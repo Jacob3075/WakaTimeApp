@@ -19,8 +19,8 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
-import com.jacob.wakatimeapp.common.utils.observeInLifecycle
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.utils.observeInLifecycle
 import com.jacob.wakatimeapp.home.ui.components.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi

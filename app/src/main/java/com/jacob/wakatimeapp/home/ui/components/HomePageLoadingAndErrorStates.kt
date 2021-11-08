@@ -21,7 +21,9 @@ import com.airbnb.lottie.compose.LottieCompositionSpec.RawRes
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
 import com.jacob.wakatimeapp.R
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.R.drawable
+import com.jacob.wakatimeapp.R.raw
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.ERROR_ANIMATION_ILLUSTRATION
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.ERROR_TEXT
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
@@ -133,10 +135,10 @@ fun IllustrationPreview() = WakaTimeAppTheme {
     Surface {
         ShowIllustration(
             illustrations = listOf(
-                R.drawable.il_loading_1,
-                R.drawable.il_loading_2,
-                R.drawable.il_loading_3,
-                R.drawable.il_loading_3a,
+                drawable.il_loading_1,
+                drawable.il_loading_2,
+                drawable.il_loading_3,
+                drawable.il_loading_3a,
             ),
             text = "Loading...",
             illustrationTestTag = "",
@@ -150,12 +152,12 @@ fun IllustrationPreview() = WakaTimeAppTheme {
 fun AnimationPreview() = WakaTimeAppTheme {
     ShowAnimation(
         animations = listOf(
-            R.raw.loading_1,
-            R.raw.loading_2,
-            R.raw.loading_animation,
-            R.raw.loading_bloob,
-            R.raw.loading_paperplane_1,
-            R.raw.loading_paperplane_2,
+            raw.loading_1,
+            raw.loading_2,
+            raw.loading_animation,
+            raw.loading_bloob,
+            raw.loading_paperplane_1,
+            raw.loading_paperplane_2,
         ),
         text = "Loading...",
         animationTestTag = "",
