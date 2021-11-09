@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.models
+package com.jacob.wakatimeapp.core.models
 
 sealed class Result<out T : Any> {
     object Empty : Result<Nothing>()

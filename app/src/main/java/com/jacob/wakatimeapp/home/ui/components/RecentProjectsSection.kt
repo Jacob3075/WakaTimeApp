@@ -18,15 +18,15 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.R
-import com.jacob.wakatimeapp.common.models.Time
-import com.jacob.wakatimeapp.common.ui.theme.Colors
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.ui.theme.Colors
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.domain.models.Project
 import java.time.LocalDate
 
 @Composable
-fun RecentProjects(dailyStats: DailyStats?) {
+fun RecentProjects(parameters: RecentProjectsParameters) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -40,7 +40,7 @@ fun RecentProjects(dailyStats: DailyStats?) {
         }
         RecentProjectList(
             modifier = Modifier.padding(horizontal = 12.dp),
-            projects = dailyStats?.projectsWorkedOn ?: emptyList()
+            projects = parameters.dailyStats?.projectsWorkedOn ?: emptyList()
         )
     }
 }
@@ -94,18 +94,20 @@ private fun ProjectCardItem(project: Project) {
 fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         RecentProjects(
-            DailyStats(
-                timeSpent = Time(0, 0, 0f),
-                projectsWorkedOn = listOf(
-                    Project(Time(10, 9, 0f), "Project 1", 75.0),
-                    Project(Time(100, 26, 0f), "Project 2", 20.0),
-                    Project(Time(5, 15, 0f), "Project 3", 10.0),
-                ),
-                mostUsedLanguage = "",
-                mostUsedEditor = "",
-                mostUsedOs = "",
-                date = LocalDate.now()
-            )
+            parameters = RecentProjectsParameters(
+                DailyStats(
+                    timeSpent = Time(0, 0, 0f),
+                    projectsWorkedOn = listOf(
+                        Project(Time(10, 9, 0f), "Project 1", 75.0),
+                        Project(Time(100, 26, 0f), "Project 2", 20.0),
+                        Project(Time(5, 15, 0f), "Project 3", 10.0),
+                    ),
+                    mostUsedLanguage = "",
+                    mostUsedEditor = "",
+                    mostUsedOs = "",
+                    date = LocalDate.now()
+                )
+            ),
         )
     }
 }

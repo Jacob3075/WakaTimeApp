@@ -1,8 +1,7 @@
-package com.jacob.wakatimeapp.common
+package com.jacob.wakatimeapp.core
 
-import com.jacob.wakatimeapp.BuildConfig
-import com.jacob.wakatimeapp.common.models.UserSession
-import com.jacob.wakatimeapp.common.utils.Constants
+import com.jacob.wakatimeapp.core.models.UserSession
+import com.jacob.wakatimeapp.core.utils.Constants
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -23,14 +22,12 @@ import kotlin.coroutines.CoroutineContext
 object CommonModule {
     @Singleton
     @Provides
-    fun provideOkHttpClient(): OkHttpClient = if (BuildConfig.DEBUG) {
+    fun provideOkHttpClient(): OkHttpClient {
         val builder = OkHttpClient.Builder()
         val loggingInterceptor = HttpLoggingInterceptor()
             .setLevel(HttpLoggingInterceptor.Level.BODY)
         builder.networkInterceptors().add(loggingInterceptor)
-        builder.build()
-    } else {
-        OkHttpClient.Builder().build()
+        return builder.build()
     }
 
     @ExperimentalSerializationApi

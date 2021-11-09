@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.login.data.mappers
 
-import com.jacob.wakatimeapp.common.data.DtoMapper
-import com.jacob.wakatimeapp.common.models.UserDetails
+import com.jacob.wakatimeapp.core.data.DtoMapper
+import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.login.data.dtos.GetUserDetailsResDTO
 import javax.inject.Inject
 

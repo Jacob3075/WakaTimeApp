@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.models
+package com.jacob.wakatimeapp.core.models
 
 import kotlinx.serialization.Serializable
 

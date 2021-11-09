@@ -25,15 +25,15 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.jacob.wakatimeapp.common.ui.theme.Colors
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.Colors
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import java.time.format.TextStyle.SHORT
 import java.util.*
 
 
 @Composable
-fun WeeklyReport(dailyStats: List<DailyStats>?) {
+fun WeeklyReport(parameters: WeeklyReportParameters) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -46,7 +46,7 @@ fun WeeklyReport(dailyStats: List<DailyStats>?) {
             Text(text = "Details", color = Colors.AccentText, fontSize = 14.sp)
         }
         Spacer(modifier = Modifier.height(10.dp))
-        WeeklyReportChart(dailyStats ?: emptyList())
+        WeeklyReportChart(parameters.dailyStats ?: emptyList())
     }
 }
 
@@ -129,7 +129,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
 @Composable
 fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
-        WeeklyReport(emptyList())
+        WeeklyReport(WeeklyReportParameters(emptyList()))
     }
 }
 

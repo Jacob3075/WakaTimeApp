@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.models
+package com.jacob.wakatimeapp.core.models
 
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow

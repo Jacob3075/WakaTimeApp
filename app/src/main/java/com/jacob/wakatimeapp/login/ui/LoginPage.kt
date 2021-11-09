@@ -27,8 +27,8 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
 import androidx.navigation.fragment.NavHostFragment.findNavController
-import com.jacob.wakatimeapp.common.ui.theme.Gradients
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.Gradients
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.openid.appauth.AuthorizationException

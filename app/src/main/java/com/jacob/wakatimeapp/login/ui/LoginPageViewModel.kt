@@ -4,9 +4,9 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
-import com.jacob.wakatimeapp.common.utils.AuthStateManager
-import com.jacob.wakatimeapp.common.utils.Constants
-import com.jacob.wakatimeapp.common.utils.Utils
+import com.jacob.wakatimeapp.core.utils.AuthStateManager
+import com.jacob.wakatimeapp.core.utils.Constants
+import com.jacob.wakatimeapp.core.utils.Utils
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope

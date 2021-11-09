@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.data.mappers
 
-import com.jacob.wakatimeapp.common.data.DtoMapper
-import com.jacob.wakatimeapp.common.models.Time
+import com.jacob.wakatimeapp.core.data.DtoMapper
+import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO.Data
 import com.jacob.wakatimeapp.home.domain.models.DailyStats

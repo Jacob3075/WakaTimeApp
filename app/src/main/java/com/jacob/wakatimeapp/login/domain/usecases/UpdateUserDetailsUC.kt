@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.login.domain.usecases
 
 import android.content.Context
-import com.jacob.wakatimeapp.common.data.OfflineDataStore
+import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import com.jacob.wakatimeapp.login.data.LoginPageAPI
 import com.jacob.wakatimeapp.login.data.mappers.UserDetailsMapper
 import kotlinx.coroutines.ExperimentalCoroutinesApi

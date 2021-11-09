@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
-import com.jacob.wakatimeapp.common.models.ErrorTypes
-import com.jacob.wakatimeapp.common.models.Result
+import com.jacob.wakatimeapp.core.models.ErrorTypes
+import com.jacob.wakatimeapp.core.models.Result
 import com.jacob.wakatimeapp.home.data.HomePageAPI
 import com.jacob.wakatimeapp.home.data.mappers.GetWeeklyStatsResMapper
 import com.jacob.wakatimeapp.home.domain.models.WeeklyStats

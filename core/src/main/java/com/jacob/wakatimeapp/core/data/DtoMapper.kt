@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.common.data
+package com.jacob.wakatimeapp.core.data
 
 interface DtoMapper<DTO, Model> {
     fun fromDtoToModel(dto: DTO): Model

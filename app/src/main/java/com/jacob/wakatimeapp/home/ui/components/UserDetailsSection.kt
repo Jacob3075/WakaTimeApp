@@ -13,13 +13,13 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import coil.compose.rememberImagePainter
 import coil.transform.CircleCropTransformation
-import com.jacob.wakatimeapp.R.drawable
-import com.jacob.wakatimeapp.common.models.UserDetails
-import com.jacob.wakatimeapp.common.ui.theme.Typography
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.R
+import com.jacob.wakatimeapp.core.models.UserDetails
+import com.jacob.wakatimeapp.core.ui.theme.Typography
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 
 @Composable
-fun UserDetailsSection(userDetails: UserDetails?) {
+fun UserDetailsSection(userDetailsSectionParameters: UserDetailsSectionParameters) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -27,11 +27,11 @@ fun UserDetailsSection(userDetails: UserDetails?) {
     ) {
         Image(
             painter = rememberImagePainter(
-                data = userDetails?.photoUrl,
+                data = userDetailsSectionParameters.userDetails?.photoUrl,
                 builder = {
                     transformations(CircleCropTransformation())
-                    placeholder(drawable.place_holder)
-                    fallback(drawable.place_holder)
+                    placeholder(R.drawable.place_holder)
+                    fallback(R.drawable.place_holder)
 
                 }
             ),
@@ -40,7 +40,7 @@ fun UserDetailsSection(userDetails: UserDetails?) {
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(
-            text = userDetails?.fullName ?: "",
+            text = userDetailsSectionParameters.userDetails?.fullName ?: "",
             fontSize = Typography.h4.fontSize,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
@@ -53,20 +53,22 @@ fun UserDetailsSection(userDetails: UserDetails?) {
 @Composable
 fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
-        UserDetails(
-            bio = "",
-            email = "",
-            id = "",
-            timeout = 0,
-            timezone = "",
-            username = "",
-            displayName = "",
-            lastProject = "",
-            fullName = "Jacob Bosco",
-            durationsSliceBy = "",
-            createdAt = "",
-            dateFormat = "",
-            photoUrl = ""
-        )
+        userDetailsSectionParameters = UserDetailsSectionParameters(
+            UserDetails(
+                bio = "",
+                email = "",
+                id = "",
+                timeout = 0,
+                timezone = "",
+                username = "",
+                displayName = "",
+                lastProject = "",
+                fullName = "Jacob Bosco",
+                durationsSliceBy = "",
+                createdAt = "",
+                dateFormat = "",
+                photoUrl = ""
+            )
+        ),
     )
 }

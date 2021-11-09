@@ -3,10 +3,10 @@ package com.jacob.wakatimeapp.home.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.jacob.wakatimeapp.common.data.OfflineDataStore
-import com.jacob.wakatimeapp.common.models.ErrorTypes
-import com.jacob.wakatimeapp.common.models.Result
-import com.jacob.wakatimeapp.common.utils.Utils
+import com.jacob.wakatimeapp.core.data.OfflineDataStore
+import com.jacob.wakatimeapp.core.models.ErrorTypes
+import com.jacob.wakatimeapp.core.models.Result
+import com.jacob.wakatimeapp.core.utils.Utils
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi

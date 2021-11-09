@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.home.ui
 
-import com.jacob.wakatimeapp.common.models.UserDetails
+import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.domain.models.WeeklyStats
 
 sealed class HomePageViewState {

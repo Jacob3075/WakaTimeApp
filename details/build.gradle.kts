@@ -1,6 +1,6 @@
 plugins {
+    id("com.android.library")
     id("kotlin-android")
-    id("com.android.dynamic-feature")
     id("androidx.navigation.safeargs.kotlin")
     id("dagger.hilt.android.plugin")
     kotlin("kapt")
@@ -13,21 +13,28 @@ android {
 
     defaultConfig {
         minSdk = AppConfig.minSdk
+        targetSdk = AppConfig.targetSdk
 
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
         vectorDrawables { useSupportLibrary = true }
+
+        manifestPlaceholders["appAuthRedirectScheme"] = "wakatimeapp"
     }
 
     buildTypes {
         getByName("release") {
+            isMinifyEnabled = false
             proguardFiles(
-                getDefaultProguardFile("proguard-android-optimize.txt"),
-                "proguard-rules.pro"
+                    getDefaultProguardFile("proguard-android-optimize.txt"),
+                    "proguard-rules.pro"
             )
         }
     }
-
-    buildFeatures { compose = true }
+    compileOptions {
+        sourceCompatibility = JavaVersion.VERSION_11
+        targetCompatibility = JavaVersion.VERSION_11
+    }
+    kotlinOptions { jvmTarget = "11" }
     composeOptions { kotlinCompilerExtensionVersion = Versions.compose }
     packagingOptions {
         resources {
@@ -37,12 +44,8 @@ android {
 }
 
 dependencies {
-    implementation(project(":app"))
+    implementation(project(":core"))
 
-    // Hilt
     api("com.google.dagger:hilt-android:${Versions.hilt}")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("androidx.lifecycle:lifecycle-livedata-ktx:2.3.1")
-    implementation("androidx.lifecycle:lifecycle-viewmodel-ktx:2.3.1")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
 }
