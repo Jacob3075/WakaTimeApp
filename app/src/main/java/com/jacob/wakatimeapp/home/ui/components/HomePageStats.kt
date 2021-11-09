@@ -16,21 +16,20 @@ import com.jacob.wakatimeapp.core.ui.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
 import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
-import com.jacob.wakatimeapp.home.domain.models.DailyStats
 
 @Composable
-fun TimeSpentSection(dailyStats: DailyStats?) = TimeSpentCard(
+fun TimeSpentSection(parameters: TimeSpentSectionParameters) = TimeSpentCard(
     timeSpentCardParameters = TimeSpentCardParameters(
         gradient = Gradients.primary,
         roundedCornerPercent = 25,
         iconId = drawable.ic_time,
         mainText = "Total Time Spent Today",
-        time = dailyStats?.timeSpent ?: Time(0, 0, 0f)
+        time = parameters.dailyStats?.timeSpent ?: Time(0, 0, 0f)
     ),
 )
 
 @Composable
-fun OtherDailyStats(dailyStats: DailyStats?) {
+fun OtherDailyStatsSection(parameters: OtherDailyStatsSectionParameters) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -49,7 +48,7 @@ fun OtherDailyStats(dailyStats: DailyStats?) {
                 roundedCornerPercent = 25,
                 iconId = drawable.ic_code_file,
                 mainText = "Most Language Used",
-                language = dailyStats?.mostUsedLanguage ?: ""
+                language = parameters.dailyStats?.mostUsedLanguage ?: ""
             ),
         )
         Spacer(modifier = Modifier.height(15.dp))
@@ -59,7 +58,7 @@ fun OtherDailyStats(dailyStats: DailyStats?) {
                 roundedCornerPercent = 25,
                 iconId = drawable.ic_laptop,
                 mainText = "Most OS Used",
-                language = dailyStats?.mostUsedOs ?: ""
+                language = parameters.dailyStats?.mostUsedOs ?: ""
             ),
         )
         Spacer(modifier = Modifier.height(15.dp))
@@ -69,7 +68,7 @@ fun OtherDailyStats(dailyStats: DailyStats?) {
                 roundedCornerPercent = 25,
                 iconId = drawable.ic_laptop,
                 mainText = "Most OS Used",
-                language = dailyStats?.mostUsedOs ?: ""
+                language = parameters.dailyStats?.mostUsedOs ?: ""
             ),
         )
     }

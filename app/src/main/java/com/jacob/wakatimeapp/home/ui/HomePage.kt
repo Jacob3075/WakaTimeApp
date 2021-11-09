@@ -39,7 +39,7 @@ class HomePage : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setContent {
             WakaTimeAppTheme {
-                HomePageContent(viewModel)
+                HomePageContent(HomePageParameter(viewModel))
             }
         }
     }
@@ -47,12 +47,12 @@ class HomePage : Fragment() {
 
 @ExperimentalCoroutinesApi
 @Composable
-private fun HomePageContent(viewModel: HomePageViewModel) {
+private fun HomePageContent(parameter: HomePageParameter) {
     val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
-    val viewState by viewModel.homePageState.collectAsState()
+    val viewState by parameter.viewModel.homePageState.collectAsState()
 
-    viewModel.errors
+    parameter.viewModel.errors
         .onEach {
             snackBarCoroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
@@ -70,14 +70,14 @@ private fun HomePageContent(viewModel: HomePageViewModel) {
     ) {
         when (viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
-            is HomePageViewState.Loaded -> HomePageLoaded(viewState as HomePageViewState.Loaded)
-            is HomePageViewState.Error -> HomePageError(viewState as HomePageViewState.Error)
+            is HomePageViewState.Loaded -> HomePageLoaded(HomePageLoadedParameters(viewState as HomePageViewState.Loaded))
+            is HomePageViewState.Error -> HomePageError(HomePageErrorParameters(viewState as HomePageViewState.Error))
         }
     }
 }
 
 @Composable
-private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) {
+private fun HomePageLoaded(parameter: HomePageLoadedParameters) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -85,15 +85,15 @@ private fun HomePageLoaded(homePageViewState: HomePageViewState.Loaded) {
             .padding(top = 30.dp)
             .verticalScroll(scrollState)
     ) {
-        UserDetailsSection(homePageViewState.userDetails)
+        UserDetailsSection(UserDetailsSectionParameters(parameter.homePageViewState.userDetails))
         Spacer(modifier = Modifier.height(25.dp))
-        TimeSpentSection(homePageViewState.contentData.todaysStats)
+        TimeSpentSection(TimeSpentSectionParameters(parameter.homePageViewState.contentData.todaysStats))
         Spacer(modifier = Modifier.height(25.dp))
-        RecentProjects(homePageViewState.contentData.todaysStats)
+        RecentProjects(RecentProjectsParameters(parameter.homePageViewState.contentData.todaysStats))
         Spacer(modifier = Modifier.height(10.dp))
-        WeeklyReport(homePageViewState.contentData.dailyStats)
+        WeeklyReport(WeeklyReportParameters(parameter.homePageViewState.contentData.dailyStats))
         Spacer(modifier = Modifier.height(25.dp))
-        OtherDailyStats(homePageViewState.contentData.todaysStats)
+        OtherDailyStatsSection(OtherDailyStatsSectionParameters(parameter.homePageViewState.contentData.todaysStats))
         Spacer(modifier = Modifier.height(25.dp))
     }
 }

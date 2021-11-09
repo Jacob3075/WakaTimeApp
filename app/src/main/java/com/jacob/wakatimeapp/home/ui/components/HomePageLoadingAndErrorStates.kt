@@ -60,7 +60,7 @@ fun HomePageLoading() =
     )
 
 @Composable
-fun HomePageError(errorMessage: Error) {
+fun HomePageError(parameters: HomePageErrorParameters) {
     ShowAnimation(
         showAnimationParameters = ShowAnimationParameters(
             animations = listOf(
@@ -68,7 +68,7 @@ fun HomePageError(errorMessage: Error) {
                 R.raw.error_2,
                 R.raw.error_animation,
             ),
-            text = errorMessage.errorMessage,
+            text = parameters.errorMessage.errorMessage,
             animationTestTag = ERROR_ANIMATION_ILLUSTRATION,
             textTestTag = ERROR_TEXT
         ),
