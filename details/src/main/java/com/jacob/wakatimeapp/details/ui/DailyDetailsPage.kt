@@ -6,12 +6,13 @@ import android.view.ViewGroup
 import androidx.compose.material.Text
 import androidx.compose.ui.platform.ComposeView
 import androidx.fragment.app.Fragment
-import com.jacob.wakatimeapp.common.ui.theme.WakaTimeAppTheme
+import androidx.fragment.app.viewModels
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
 class DailyDetailsPage : Fragment() {
-//    private val viewModel by viewModels<DailyDetailsPageViewModel>()
+    private val viewModel by viewModels<DailyDetailsPageViewModel>()
 
     override fun onCreateView(
         inflater: LayoutInflater,
