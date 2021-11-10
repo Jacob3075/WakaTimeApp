@@ -20,6 +20,10 @@ import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
+import com.jacob.wakatimeapp.R.drawable
+import com.jacob.wakatimeapp.core.ui.TimeSpentCard
+import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
+import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.utils.observeInLifecycle
 import com.jacob.wakatimeapp.home.ui.components.*
@@ -94,17 +98,27 @@ private fun HomePageLoaded(parameters: HomePageLoadedParameters) {
     ) {
         UserDetailsSection(UserDetailsSectionParameters(parameters.homePageViewState.userDetails))
         Spacer(modifier = Modifier.height(25.dp))
-        TimeSpentSection(TimeSpentSectionParameters(
-            dailyStats = parameters.homePageViewState.contentData.todaysStats,
-            onClick = {
-                parameters.navController.navigate(HomePageDirections.homePageToDetailsPage())
-            }
-        ))
+
+        TimeSpentCard(
+            parameters = TimeSpentCardParameters(
+                gradient = Gradients.primary,
+                roundedCornerPercent = 25,
+                iconId = drawable.ic_time,
+                mainText = "Total Time Spent Today",
+                time = parameters.homePageViewState.contentData.todaysStats.timeSpent,
+                onClick = {
+                    parameters.navController.navigate(HomePageDirections.homePageToDetailsPage())
+                }
+            )
+        )
         Spacer(modifier = Modifier.height(25.dp))
+
         RecentProjects(RecentProjectsParameters(parameters.homePageViewState.contentData.todaysStats))
         Spacer(modifier = Modifier.height(10.dp))
+
         WeeklyReport(WeeklyReportParameters(parameters.homePageViewState.contentData.dailyStats))
         Spacer(modifier = Modifier.height(25.dp))
+
         OtherDailyStatsSection(OtherDailyStatsSectionParameters(
             parameters.homePageViewState.contentData.todaysStats,
             onClick = {}

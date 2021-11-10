@@ -9,25 +9,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.R.drawable
-import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.OtherStatsCard
 import com.jacob.wakatimeapp.core.ui.OtherStatsCardParameters
-import com.jacob.wakatimeapp.core.ui.TimeSpentCard
-import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
 import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
-
-@Composable
-fun TimeSpentSection(parameters: TimeSpentSectionParameters) = TimeSpentCard(
-    parameters = TimeSpentCardParameters(
-        gradient = Gradients.primary,
-        roundedCornerPercent = 25,
-        iconId = drawable.ic_time,
-        mainText = "Total Time Spent Today",
-        time = parameters.dailyStats?.timeSpent ?: Time(0, 0, 0f),
-        onClick = parameters.onClick
-    ),
-)
 
 @Composable
 fun OtherDailyStatsSection(parameters: OtherDailyStatsSectionParameters) {

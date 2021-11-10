@@ -40,11 +40,6 @@ data class UserDetailsSectionParameters(
     val userDetails: UserDetails?,
 )
 
-data class TimeSpentSectionParameters(
-    val dailyStats: DailyStats?,
-    val onClick: () -> Unit,
-)
-
 data class OtherDailyStatsSectionParameters(
     val dailyStats: DailyStats?,
     val onClick: () -> Unit,
