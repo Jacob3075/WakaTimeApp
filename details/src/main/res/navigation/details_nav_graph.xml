@@ -6,6 +6,6 @@
 
     <fragment
         android:id="@+id/dailyDetailsPage"
-        android:name="com.jacob.wakatimeapp.details.ui.DailyDetailsPage"
+        android:name="com.jacob.wakatimeapp.details.ui.DetailedStatsPage"
         android:label="daily_details_page_fragment" />
 </navigation>
