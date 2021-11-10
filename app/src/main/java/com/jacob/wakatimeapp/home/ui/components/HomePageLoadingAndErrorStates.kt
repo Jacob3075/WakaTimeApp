@@ -26,13 +26,12 @@ import com.jacob.wakatimeapp.home.ui.HomePageTestTags.ERROR_ANIMATION_ILLUSTRATI
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.ERROR_TEXT
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.LOADING_TEXT
-import com.jacob.wakatimeapp.home.ui.HomePageViewState.Error
 import kotlin.random.Random
 
 @Composable
 fun HomePageLoading() =
     if (Random.nextBoolean()) ShowAnimation(
-        showAnimationParameters = ShowAnimationParameters(
+        parameters = ShowAnimationParameters(
             animations = listOf(
                 R.raw.loading_1,
                 R.raw.loading_2,
@@ -62,7 +61,7 @@ fun HomePageLoading() =
 @Composable
 fun HomePageError(parameters: HomePageErrorParameters) {
     ShowAnimation(
-        showAnimationParameters = ShowAnimationParameters(
+        parameters = ShowAnimationParameters(
             animations = listOf(
                 R.raw.error_1,
                 R.raw.error_2,
@@ -102,9 +101,9 @@ private fun ShowIllustration(
 
 @Composable
 fun ShowAnimation(
-    showAnimationParameters: ShowAnimationParameters,
+    parameters: ShowAnimationParameters,
 ) {
-    val composition by rememberLottieComposition(RawRes(showAnimationParameters.animations.random()))
+    val composition by rememberLottieComposition(RawRes(parameters.animations.random()))
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -114,14 +113,14 @@ fun ShowAnimation(
         LottieAnimation(
             composition = composition,
             iterations = LottieConstants.IterateForever,
-            modifier = Modifier.testTag(showAnimationParameters.animationTestTag)
+            modifier = Modifier.testTag(parameters.animationTestTag)
         )
         Spacer(modifier = Modifier.height(25.dp))
         Text(
-            text = showAnimationParameters.text,
+            text = parameters.text,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
-            modifier = Modifier.testTag(showAnimationParameters.textTestTag)
+            modifier = Modifier.testTag(parameters.textTestTag)
         )
     }
 }
@@ -150,7 +149,7 @@ fun IllustrationPreview() = WakaTimeAppTheme {
 @Composable
 fun AnimationPreview() = WakaTimeAppTheme {
     ShowAnimation(
-        showAnimationParameters = ShowAnimationParameters(
+        parameters = ShowAnimationParameters(
             animations = listOf(
                 R.raw.loading_1,
                 R.raw.loading_2,

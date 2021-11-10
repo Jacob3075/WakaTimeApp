@@ -10,6 +10,7 @@ data class TimeSpentCardParameters(
     @DrawableRes val iconId: Int,
     val mainText: String,
     val time: Time,
+    val onClick: () -> Unit,
 )
 
 data class OtherStatsCardParameters(
@@ -18,6 +19,7 @@ data class OtherStatsCardParameters(
     @DrawableRes val iconId: Int,
     val mainText: String,
     val language: String,
+    val onClick: () -> Unit,
 )
 
 data class StatsCardParameters(
@@ -29,4 +31,5 @@ data class StatsCardParameters(
     val weights: Pair<Float, Float> = Pair(1f, 1f),
     val iconOffset: Int = 50,
     val iconSize: Int = 80,
+    val onClick: () -> Unit,
 )

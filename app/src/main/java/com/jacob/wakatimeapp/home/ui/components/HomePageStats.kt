@@ -19,12 +19,13 @@ import com.jacob.wakatimeapp.core.ui.theme.Gradients
 
 @Composable
 fun TimeSpentSection(parameters: TimeSpentSectionParameters) = TimeSpentCard(
-    timeSpentCardParameters = TimeSpentCardParameters(
+    parameters = TimeSpentCardParameters(
         gradient = Gradients.primary,
         roundedCornerPercent = 25,
         iconId = drawable.ic_time,
         mainText = "Total Time Spent Today",
-        time = parameters.dailyStats?.timeSpent ?: Time(0, 0, 0f)
+        time = parameters.dailyStats?.timeSpent ?: Time(0, 0, 0f),
+        onClick = parameters.onClick
     ),
 )
 
@@ -43,32 +44,35 @@ fun OtherDailyStatsSection(parameters: OtherDailyStatsSectionParameters) {
         }
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
-            otherStatsCardParameters = OtherStatsCardParameters(
+            parameters = OtherStatsCardParameters(
                 gradient = Gradients.greenCyan,
                 roundedCornerPercent = 25,
                 iconId = drawable.ic_code_file,
                 mainText = "Most Language Used",
-                language = parameters.dailyStats?.mostUsedLanguage ?: ""
+                language = parameters.dailyStats?.mostUsedLanguage ?: "",
+                onClick = parameters.onClick
             ),
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
-            otherStatsCardParameters = OtherStatsCardParameters(
+            parameters = OtherStatsCardParameters(
                 gradient = Gradients.purpleCyanLight,
                 roundedCornerPercent = 25,
                 iconId = drawable.ic_laptop,
                 mainText = "Most OS Used",
-                language = parameters.dailyStats?.mostUsedOs ?: ""
+                language = parameters.dailyStats?.mostUsedOs ?: "",
+                onClick = parameters.onClick
             ),
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
-            otherStatsCardParameters = OtherStatsCardParameters(
+            parameters = OtherStatsCardParameters(
                 gradient = Gradients.purpleCyanLight,
                 roundedCornerPercent = 25,
                 iconId = drawable.ic_laptop,
                 mainText = "Most OS Used",
-                language = parameters.dailyStats?.mostUsedOs ?: ""
+                language = parameters.dailyStats?.mostUsedOs ?: "",
+                onClick = parameters.onClick
             ),
         )
     }

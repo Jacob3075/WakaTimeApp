@@ -19,7 +19,7 @@ import com.jacob.wakatimeapp.core.ui.theme.Typography
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 
 @Composable
-fun UserDetailsSection(userDetailsSectionParameters: UserDetailsSectionParameters) {
+fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -27,7 +27,7 @@ fun UserDetailsSection(userDetailsSectionParameters: UserDetailsSectionParameter
     ) {
         Image(
             painter = rememberImagePainter(
-                data = userDetailsSectionParameters.userDetails?.photoUrl,
+                data = parameters.userDetails?.photoUrl,
                 builder = {
                     transformations(CircleCropTransformation())
                     placeholder(R.drawable.place_holder)
@@ -40,7 +40,7 @@ fun UserDetailsSection(userDetailsSectionParameters: UserDetailsSectionParameter
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(
-            text = userDetailsSectionParameters.userDetails?.fullName ?: "",
+            text = parameters.userDetails?.fullName ?: "",
             fontSize = Typography.h4.fontSize,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
@@ -53,7 +53,7 @@ fun UserDetailsSection(userDetailsSectionParameters: UserDetailsSectionParameter
 @Composable
 fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
-        userDetailsSectionParameters = UserDetailsSectionParameters(
+        parameters = UserDetailsSectionParameters(
             UserDetails(
                 bio = "",
                 email = "",

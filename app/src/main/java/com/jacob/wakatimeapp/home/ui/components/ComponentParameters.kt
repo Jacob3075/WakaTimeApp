@@ -1,13 +1,16 @@
 package com.jacob.wakatimeapp.home.ui.components
 
+import androidx.navigation.NavController
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import com.jacob.wakatimeapp.home.ui.HomePageViewModel
 import com.jacob.wakatimeapp.home.ui.HomePageViewState
+import com.jacob.wakatimeapp.home.ui.HomePageViewState.Loaded
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 
-data class HomePageParameter @ExperimentalCoroutinesApi constructor(
+data class HomePageParameters @ExperimentalCoroutinesApi constructor(
     val viewModel: HomePageViewModel,
+    val navController: NavController,
 )
 
 data class HomePageErrorParameters(
@@ -15,7 +18,8 @@ data class HomePageErrorParameters(
 )
 
 data class HomePageLoadedParameters(
-    val homePageViewState: HomePageViewState.Loaded,
+    val homePageViewState: Loaded,
+    val navController: NavController,
 )
 
 data class ShowIllustrationParameters(
@@ -38,10 +42,12 @@ data class UserDetailsSectionParameters(
 
 data class TimeSpentSectionParameters(
     val dailyStats: DailyStats?,
+    val onClick: () -> Unit,
 )
 
 data class OtherDailyStatsSectionParameters(
     val dailyStats: DailyStats?,
+    val onClick: () -> Unit,
 )
 
 data class RecentProjectsParameters(

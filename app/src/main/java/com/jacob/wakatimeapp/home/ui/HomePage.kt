@@ -19,6 +19,7 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
+import androidx.navigation.findNavController
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.utils.observeInLifecycle
 import com.jacob.wakatimeapp.home.ui.components.*
@@ -39,7 +40,10 @@ class HomePage : Fragment() {
     ) = ComposeView(requireContext()).apply {
         setContent {
             WakaTimeAppTheme {
-                HomePageContent(HomePageParameter(viewModel))
+                HomePageContent(HomePageParameters(
+                    viewModel = viewModel,
+                    navController = findNavController()
+                ))
             }
         }
     }
@@ -47,12 +51,12 @@ class HomePage : Fragment() {
 
 @ExperimentalCoroutinesApi
 @Composable
-private fun HomePageContent(parameter: HomePageParameter) {
+private fun HomePageContent(parameters: HomePageParameters) {
     val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
-    val viewState by parameter.viewModel.homePageState.collectAsState()
+    val viewState by parameters.viewModel.homePageState.collectAsState()
 
-    parameter.viewModel.errors
+    parameters.viewModel.errors
         .onEach {
             snackBarCoroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
@@ -70,14 +74,17 @@ private fun HomePageContent(parameter: HomePageParameter) {
     ) {
         when (viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
-            is HomePageViewState.Loaded -> HomePageLoaded(HomePageLoadedParameters(viewState as HomePageViewState.Loaded))
+            is HomePageViewState.Loaded -> HomePageLoaded(HomePageLoadedParameters(
+                homePageViewState = viewState as HomePageViewState.Loaded,
+                navController = parameters.navController
+            ))
             is HomePageViewState.Error -> HomePageError(HomePageErrorParameters(viewState as HomePageViewState.Error))
         }
     }
 }
 
 @Composable
-private fun HomePageLoaded(parameter: HomePageLoadedParameters) {
+private fun HomePageLoaded(parameters: HomePageLoadedParameters) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier
@@ -85,15 +92,23 @@ private fun HomePageLoaded(parameter: HomePageLoadedParameters) {
             .padding(top = 30.dp)
             .verticalScroll(scrollState)
     ) {
-        UserDetailsSection(UserDetailsSectionParameters(parameter.homePageViewState.userDetails))
+        UserDetailsSection(UserDetailsSectionParameters(parameters.homePageViewState.userDetails))
         Spacer(modifier = Modifier.height(25.dp))
-        TimeSpentSection(TimeSpentSectionParameters(parameter.homePageViewState.contentData.todaysStats))
+        TimeSpentSection(TimeSpentSectionParameters(
+            dailyStats = parameters.homePageViewState.contentData.todaysStats,
+            onClick = {
+                parameters.navController.navigate(HomePageDirections.homePageToDetailsPage())
+            }
+        ))
         Spacer(modifier = Modifier.height(25.dp))
-        RecentProjects(RecentProjectsParameters(parameter.homePageViewState.contentData.todaysStats))
+        RecentProjects(RecentProjectsParameters(parameters.homePageViewState.contentData.todaysStats))
         Spacer(modifier = Modifier.height(10.dp))
-        WeeklyReport(WeeklyReportParameters(parameter.homePageViewState.contentData.dailyStats))
+        WeeklyReport(WeeklyReportParameters(parameters.homePageViewState.contentData.dailyStats))
         Spacer(modifier = Modifier.height(25.dp))
-        OtherDailyStatsSection(OtherDailyStatsSectionParameters(parameter.homePageViewState.contentData.todaysStats))
+        OtherDailyStatsSection(OtherDailyStatsSectionParameters(
+            parameters.homePageViewState.contentData.todaysStats,
+            onClick = {}
+        ))
         Spacer(modifier = Modifier.height(25.dp))
     }
 }
