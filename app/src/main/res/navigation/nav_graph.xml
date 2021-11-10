@@ -3,6 +3,7 @@
     xmlns:app="http://schemas.android.com/apk/res-auto"
     android:id="@+id/nav_graph"
     app:startDestination="@id/loginPage">
+
     <fragment
         android:id="@+id/loginPage"
         android:name="com.jacob.wakatimeapp.login.ui.LoginPage"
@@ -13,18 +14,15 @@
             app:popUpTo="@id/nav_graph"
             app:popUpToInclusive="true" />
     </fragment>
+
     <fragment
         android:id="@+id/homePage"
         android:name="com.jacob.wakatimeapp.home.ui.HomePage"
-        android:label="home_page_fragment" >
+        android:label="home_page_fragment">
         <action
             android:id="@+id/homePage_to_detailsPage"
-            app:destination="@id/detailsPage" />
+            app:destination="@id/details_nav_graph" />
     </fragment>
 
-    <include-dynamic
-        android:id="@+id/detailsPage"
-        app:graphPackage="com.jacob.wakatimeapp.details"
-        app:graphResName="details_nav_graph"
-        app:moduleName="details" />
+    <include app:graph="@navigation/details_nav_graph" />
 </navigation>
