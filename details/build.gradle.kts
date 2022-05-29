@@ -50,3 +50,7 @@ dependencies {
     api("com.google.dagger:hilt-android:${Versions.hilt}")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
 }
+
+kapt {
+    correctErrorTypes = true
+}

@@ -26,7 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.NavController
-import androidx.navigation.fragment.NavHostFragment.findNavController
+import androidx.navigation.fragment.findNavController
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -47,13 +47,13 @@ class LoginPage : Fragment() {
         setContent {
             if (viewModel.isLoggedIn()) {
                 viewModel.updateUserDetails()
-                findNavController(this@LoginPage).navigate(LoginPageDirections.loginPageToHomePage())
+                findNavController().navigate(LoginPageDirections.loginPageToHomePage())
             }
 
             WakaTimeAppTheme {
                 LoginPageContent(
                     viewModel,
-                    findNavController(this@LoginPage),
+                    findNavController(),
                 )
             }
         }

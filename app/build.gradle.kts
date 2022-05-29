@@ -84,7 +84,7 @@ dependencies {
     androidTestImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:${Versions.coroutines}")
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:${Versions.okhttp3}")
-    androidTestImplementation("io.mockk:mockk-android:1.12.0")
+    androidTestImplementation("io.mockk:mockk-android:${Versions.mockk}")
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${Versions.compose}")

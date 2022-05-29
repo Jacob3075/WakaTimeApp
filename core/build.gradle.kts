@@ -44,8 +44,8 @@ android {
 
 dependencies {
     api("androidx.core:core-ktx:1.7.0")
-    api("androidx.appcompat:appcompat:1.3.1")
-    api("com.google.android.material:material:1.4.0")
+    api("androidx.appcompat:appcompat:${Versions.appcompat}")
+    api("com.google.android.material:material:${Versions.material}")
 
     api("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
 
@@ -61,7 +61,7 @@ dependencies {
     api("androidx.lifecycle:lifecycle-livedata-ktx:${Versions.lifecycleVersion}")
     api("androidx.lifecycle:lifecycle-viewmodel-ktx:${Versions.lifecycleVersion}")
     api("androidx.legacy:legacy-support-v4:1.0.0")
-    api("androidx.core:core-splashscreen:1.0.0-alpha02")
+    api("androidx.core:core-splashscreen:1.0.0-rc01")
     api("androidx.datastore:datastore-preferences:1.0.0")
 
     // Navigation
@@ -82,7 +82,7 @@ dependencies {
 
     // Retrofit
     api("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
-    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.0")
+    api("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
     api("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
     //    OkHTTP
@@ -91,10 +91,10 @@ dependencies {
     api("com.squareup.okhttp3:logging-interceptor")
 
     // OAuth
-    api("net.openid:appauth:0.10.0")
+    api("net.openid:appauth:0.11.1")
 
     // Image Loading
-    api("io.coil-kt:coil-compose:1.4.0")
+    api("io.coil-kt:coil-compose:2.1.0")
 
     // Logging
     api("com.jakewharton.timber:timber:5.0.1")
@@ -103,7 +103,7 @@ dependencies {
     api("com.github.PhilJay:MPAndroidChart:v3.1.0")
 
     // Lottie Animations
-    api("com.airbnb.android:lottie-compose:4.2.0")
+    api("com.airbnb.android:lottie-compose:5.0.3")
 
     debugImplementation("androidx.compose.ui:ui-tooling:${Versions.compose}")
     debugImplementation("androidx.compose.ui:ui-test-manifest:${Versions.compose}")
