@@ -4,13 +4,11 @@ import android.app.Application
 import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
-import com.jacob.wakatimeapp.core.utils.AuthStateManager
-import com.jacob.wakatimeapp.core.utils.Constants
-import com.jacob.wakatimeapp.core.utils.Utils
+import com.jacob.wakatimeapp.WakaTimeApp
+import com.jacob.wakatimeapp.core.utils.*
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.launch
 import net.openid.appauth.*
 import timber.log.Timber
@@ -37,7 +35,7 @@ class LoginPageViewModel @Inject constructor(
         val redirectUri = Uri.parse(Constants.redirectUrl)
         authRequest = AuthorizationRequest.Builder(
             serviceConfig,
-            Constants.clientId(application),
+            application.clientId(),
             ResponseTypeValues.CODE,
             redirectUri
         ).setScopes(Constants.scope)
@@ -52,7 +50,7 @@ class LoginPageViewModel @Inject constructor(
         AuthorizationResponse.fromIntent(intent)?.run {
             authService.performTokenRequest(
                 createTokenExchangeRequest(),
-                ClientSecretPost(Constants.clientSecret(getApplication()))
+                ClientSecretPost(getApplication<WakaTimeApp>().clientSecret())
             ) { tokenResponse, authorizationException ->
                 tokenResponse?.let {
                     authStateManager.updateAfterTokenResponse(it, authorizationException)
@@ -64,7 +62,6 @@ class LoginPageViewModel @Inject constructor(
         }
     }
 
-    @ExperimentalCoroutinesApi
     fun updateUserDetails() {
         CoroutineScope(ioDispatcher).launch {
             utils.getFreshToken(getApplication())?.let {

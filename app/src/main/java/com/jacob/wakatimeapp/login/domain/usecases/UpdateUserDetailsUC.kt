@@ -13,7 +13,6 @@ class UpdateUserDetailsUC @Inject constructor(
     private val offlineDataStore: OfflineDataStore,
     private val userDetailsMapper: UserDetailsMapper,
 ) {
-    @ExperimentalCoroutinesApi
     suspend operator fun invoke(token: String, context: Context) {
         try {
             val userDetailsResponse = loginPageAPI.getUserDetails("Bearer $token")

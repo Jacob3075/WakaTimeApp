@@ -25,7 +25,6 @@ class OfflineDataStore @Inject constructor() {
             preferences[KEY_USER_DETAILS]?.let(Default::decodeFromString)
         }
 
-    @ExperimentalCoroutinesApi
     suspend fun updateUserDetails(context: Context, userDetails: UserDetails) {
         context.dataStore.edit {
             it[KEY_USER_DETAILS] = Json.encodeToString(userDetails)
