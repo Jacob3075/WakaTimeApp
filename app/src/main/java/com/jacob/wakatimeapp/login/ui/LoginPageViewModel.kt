@@ -2,7 +2,9 @@ package com.jacob.wakatimeapp.login.ui
 
 import android.app.Application
 import android.content.Intent
-import android.net.Uri
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableStateOf
+import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import com.jacob.wakatimeapp.core.utils.Utils
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
@@ -21,23 +23,8 @@ class LoginPageViewModel @Inject constructor(
 ) : AndroidViewModel(application) {
     val authManager: AuthManager = AuthManager(getApplication())
 
-    fun getAuthIntent(): Intent? = authService.getAuthorizationRequestIntent(authRequest)
-
-    fun exchangeToken(intent: Intent) {
-        AuthorizationResponse.fromIntent(intent)?.run {
-            authService.performTokenRequest(
-                createTokenExchangeRequest(),
-                ClientSecretPost(getApplication<WakaTimeApp>().clientSecret())
-            ) { tokenResponse, authorizationException ->
-                tokenResponse?.let {
-                    authStateManager.updateAfterTokenResponse(it, authorizationException)
-                } ?: run {
-                    Timber.e(authorizationException)
-                    authStateManager.updateAfterTokenResponse(null, authorizationException)
-                }
-            }
-        }
-    }
+    var authStatus by mutableStateOf(authManager.isLoggedIn())
+        private set
 
     fun updateUserDetails() {
         CoroutineScope(ioDispatcher).launch {

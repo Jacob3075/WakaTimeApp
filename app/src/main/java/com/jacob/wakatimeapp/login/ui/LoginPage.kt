@@ -45,11 +45,6 @@ class LoginPage : Fragment() {
         savedInstanceState: Bundle?,
     ) = ComposeView(requireContext()).apply {
         setContent {
-            if (viewModel.isLoggedIn()) {
-                viewModel.updateUserDetails()
-                findNavController().navigate(LoginPageDirections.loginPageToHomePage())
-            }
-
             WakaTimeAppTheme {
                 LoginPageContent(
                     viewModel,
@@ -68,13 +63,14 @@ private fun LoginPageContent(
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
+    if (viewModel.authStatus) {
+        viewModel.updateUserDetails()
+        navController.navigate(LoginPageDirections.loginPageToHomePage())
+    }
+
     val launcher =
         rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            result.data?.let {
-                viewModel.exchangeToken(it)
-                viewModel.updateUserDetails()
-                navController.navigate(LoginPageDirections.loginPageToHomePage())
-            } ?: run {
+            result.data?.let(viewModel::exchangeToken) ?: run {
                 Timber.e("Data not present")
                 val ex = AuthorizationException.fromIntent(result.data!!)
                 Timber.e(ex?.toJsonString())
@@ -94,7 +90,7 @@ private fun LoginPageContent(
             )
         )
         LoginButton {
-            launcher.launch(viewModel.getAuthIntent())
+            launcher.launch(viewModel.authManager.getAuthIntent())
         }
     }
 }
