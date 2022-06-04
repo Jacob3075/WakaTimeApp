@@ -14,6 +14,8 @@ import java.util.concurrent.locks.ReentrantLock
  * An example persistence mechanism for an [AuthState] instance.
  * This stores the instance in a shared preferences file, and provides thread-safe access and
  * mutation.
+ *
+ * [Source](https://github.com/openid/AppAuth-Android/blob/master/app/java/net/openid/appauthdemo/AuthStateManager.java)
  */
 class AuthStateManager private constructor(context: Context) {
     private val mPrefs: SharedPreferences =
