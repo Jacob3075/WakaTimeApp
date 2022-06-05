@@ -6,7 +6,7 @@ import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import com.jacob.wakatimeapp.core.models.ErrorTypes
 import com.jacob.wakatimeapp.core.models.Result
-import com.jacob.wakatimeapp.core.utils.Utils
+import com.jacob.wakatimeapp.core.utils.AuthStateManager
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -21,9 +21,9 @@ import kotlin.coroutines.CoroutineContext
 class HomePageViewModel @Inject constructor(
     application: Application,
     offlineDataStore: OfflineDataStore,
-    utils: Utils,
     private val ioDispatcher: CoroutineContext,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
+    private val authStateManager: AuthStateManager,
 ) : AndroidViewModel(application) {
     private val _homePageState =
         MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
@@ -33,25 +33,27 @@ class HomePageViewModel @Inject constructor(
     val errors = _errors.asSharedFlow()
 
     init {
-        utils.getFreshToken(getApplication())?.let {
-            viewModelScope.launch(ioDispatcher) {
-                val userDetailsFlow =
-                    offlineDataStore.getUserDetails(getApplication()).stateIn(viewModelScope)
+        viewModelScope.launch(ioDispatcher) {
+            val token = authStateManager.getFreshToken(getApplication())
+                .filterNotNull()
+                .first()
 
-                when (val last7DaysStatsResult = getLast7DaysStatsUC(it)) {
-                    is Result.Success -> {
-                        _homePageState.value = HomePageViewState.Loaded(
-                            last7DaysStatsResult.value,
-                            userDetailsFlow.value
-                        )
-                    }
-                    is Result.Failure -> {
-                        val error = getErrorMessage(last7DaysStatsResult)
-                        _homePageState.value = error
-                        _errors.emit(error)
-                    }
-                    is Result.Empty -> Timber.e("EMPTY")
+            val userDetailsFlow =
+                offlineDataStore.getUserDetails().stateIn(viewModelScope)
+
+            when (val last7DaysStatsResult = getLast7DaysStatsUC(token)) {
+                is Result.Success -> {
+                    _homePageState.value = HomePageViewState.Loaded(
+                        last7DaysStatsResult.value,
+                        userDetailsFlow.value
+                    )
                 }
+                is Result.Failure -> {
+                    val error = getErrorMessage(last7DaysStatsResult)
+                    _homePageState.value = error
+                    _errors.emit(error)
+                }
+                is Result.Empty -> Timber.e("EMPTY")
             }
         }
     }

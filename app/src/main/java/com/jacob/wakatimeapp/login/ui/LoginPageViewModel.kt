@@ -7,11 +7,17 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.WakaTimeApp
-import com.jacob.wakatimeapp.core.utils.*
+import com.jacob.wakatimeapp.core.utils.AuthStateManager
+import com.jacob.wakatimeapp.core.utils.Constants
+import com.jacob.wakatimeapp.core.utils.clientId
+import com.jacob.wakatimeapp.core.utils.clientSecret
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.openid.appauth.*
 import net.openid.appauth.AuthorizationRequest.Builder
@@ -24,9 +30,8 @@ class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
-    private val utils: Utils,
+    private val authStateManager: AuthStateManager,
 ) : AndroidViewModel(application) {
-    private val authState = AuthStateManager.getInstance(getApplication())
     private val authService = AuthorizationService(getApplication())
 
     private val serviceConfig = AuthorizationServiceConfiguration(
@@ -43,22 +48,17 @@ class LoginPageViewModel @Inject constructor(
         .build()
 
 
-    var authStatus by mutableStateOf(isLoggedIn())
+    var authStatus by mutableStateOf(false)
         private set
 
     fun updateUserDetails() {
         CoroutineScope(ioDispatcher).launch {
-            utils.getFreshToken(getApplication())?.let {
-                updateUserDetailsUC(it, getApplication())
-            }
+            authStateManager.getFreshToken(authService)
+                .filterNotNull()
+                .first()
+                .let { updateUserDetailsUC.invoke(it) }
         }
     }
-
-//    fun exchangeToken(intent: Intent) {
-//        authManager.exchangeToken(intent)
-//        authStatus = authManager.isLoggedIn()
-//        Timber.d(authStatus.toString())
-//    }
 
     fun getAuthIntent(): Intent? = authService.getAuthorizationRequestIntent(authRequest)
 
@@ -69,14 +69,22 @@ class LoginPageViewModel @Inject constructor(
                 ClientSecretPost(getApplication<WakaTimeApp>().clientSecret())
             ) { tokenResponse, authorizationException ->
                 tokenResponse?.let {
-                    authState.updateAfterTokenResponse(it, authorizationException)
+                    updateAfterTokenResponse(it, authorizationException)
                 } ?: run {
                     Timber.e(authorizationException)
-                    authState.updateAfterTokenResponse(null, authorizationException)
+                    updateAfterTokenResponse(null, authorizationException)
                 }
             }
         }
     }
 
-    fun isLoggedIn() = authState.current.isAuthorized
+    private fun updateAfterTokenResponse(
+        tokenResponse: TokenResponse?,
+        authorizationException: AuthorizationException?,
+    ) {
+        viewModelScope.launch {
+            authStateManager.updateAfterTokenResponse(tokenResponse, authorizationException)
+            authStatus = authStateManager.current().isAuthorized
+        }
+    }
 }

@@ -1,11 +1,8 @@
 package com.jacob.wakatimeapp.login.domain.usecases
 
-import android.content.Context
 import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import com.jacob.wakatimeapp.login.data.LoginPageAPI
 import com.jacob.wakatimeapp.login.data.mappers.UserDetailsMapper
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import timber.log.Timber
 import javax.inject.Inject
 
 class UpdateUserDetailsUC @Inject constructor(
@@ -13,15 +10,11 @@ class UpdateUserDetailsUC @Inject constructor(
     private val offlineDataStore: OfflineDataStore,
     private val userDetailsMapper: UserDetailsMapper,
 ) {
-    suspend operator fun invoke(token: String, context: Context) {
-        try {
-            val userDetailsResponse = loginPageAPI.getUserDetails("Bearer $token")
-            if (userDetailsResponse.isSuccessful) {
-                val userDetails = userDetailsMapper.fromDtoToModel(userDetailsResponse.body()!!)
-                offlineDataStore.updateUserDetails(context, userDetails)
-            }
-        } catch (e: Exception) {
-            Timber.e(e.message)
+    suspend operator fun invoke(token: String) {
+        val userDetailsResponse = loginPageAPI.getUserDetails("Bearer $token")
+        if (userDetailsResponse.isSuccessful) {
+            val userDetails = userDetailsMapper.fromDtoToModel(userDetailsResponse.body()!!)
+            offlineDataStore.updateUserDetails(userDetails)
         }
     }
 }

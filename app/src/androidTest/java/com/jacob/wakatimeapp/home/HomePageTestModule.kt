@@ -4,7 +4,6 @@ import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import com.jacob.wakatimeapp.core.models.ErrorTypes
 import com.jacob.wakatimeapp.core.models.Result
 import com.jacob.wakatimeapp.core.models.UserDetails
-import com.jacob.wakatimeapp.core.utils.Utils
 import com.jacob.wakatimeapp.home.data.HomePageAPI
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import com.jacob.wakatimeapp.home.ui.HomePageViewModel
@@ -39,7 +38,7 @@ object HomePageTestModule {
     fun provideMockOfflineDataStore(): OfflineDataStore {
         val mockOfflineDataStore = mockk<OfflineDataStore>()
 
-        every { mockOfflineDataStore.getUserDetails(any()) } returns flowOf(UserDetails(
+        every { mockOfflineDataStore.getUserDetails() } returns flowOf(UserDetails(
             bio = "",
             email = "",
             id = "",
@@ -58,15 +57,15 @@ object HomePageTestModule {
         return mockOfflineDataStore
     }
 
-    @Singleton
-    @Provides
-    fun provideMockUtils(): Utils {
-        val mockUtils = mockk<Utils>()
-
-        every { mockUtils.getFreshToken(any()) } returns ""
-
-        return mockUtils
-    }
+//    @Singleton
+//    @Provides
+//    fun provideMockUtils(): Utils {
+//        val mockUtils = mockk<Utils>()
+//
+//        every { mockUtils.getFreshToken(any(), ) } returns ""
+//
+//        return mockUtils
+//    }
 
     @Singleton
     @Provides
