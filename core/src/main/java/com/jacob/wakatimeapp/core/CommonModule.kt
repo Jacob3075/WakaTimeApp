@@ -19,6 +19,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.SupervisorJob
 import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
+import net.openid.appauth.AuthorizationService
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
 import okhttp3.logging.HttpLoggingInterceptor
@@ -66,10 +67,14 @@ object CommonModule {
 
     @Singleton
     @Provides
-    fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> {
-        return PreferenceDataStoreFactory.create(
+    fun providePreferencesDataStore(@ApplicationContext appContext: Context): DataStore<Preferences> =
+        PreferenceDataStoreFactory.create(
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
             produceFile = { appContext.preferencesDataStoreFile(STORE_NAME) }
         )
-    }
+
+    @Singleton
+    @Provides
+    fun provideAuthorizationService(@ApplicationContext context: Context) =
+        AuthorizationService(context)
 }

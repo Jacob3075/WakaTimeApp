@@ -35,25 +35,23 @@ class HomePageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            authStateManager.getFreshToken(authService)
-                .map(getLast7DaysStatsUC::invoke)
-                .combine(offlineDataStore.getUserDetails().filterNotNull()) { result, userDetails ->
-                    when (result) {
-                        is Result.Success -> {
-                            _homePageState.value = HomePageViewState.Loaded(
-                                result.value,
-                                userDetails,
-                            )
-                        }
-                        is Result.Failure -> {
-                            val error = getErrorMessage(result)
-                            _homePageState.value = error
-                            _errors.emit(error)
-                        }
-                        is Result.Empty -> Timber.e("EMPTY")
-                    }
+            val result = getLast7DaysStatsUC.invoke()
+            val userDetails = offlineDataStore.getUserDetails().filterNotNull().first()
+
+            when (result) {
+                is Result.Success -> {
+                    _homePageState.value = HomePageViewState.Loaded(
+                        result.value,
+                        userDetails,
+                    )
                 }
-                .collect()
+                is Result.Failure -> {
+                    val error = getErrorMessage(result)
+                    _homePageState.value = error
+                    _errors.emit(error)
+                }
+                is Result.Empty -> Timber.e("EMPTY")
+            }
         }
     }
 

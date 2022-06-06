@@ -2,18 +2,18 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import com.jacob.wakatimeapp.core.models.ErrorTypes
 import com.jacob.wakatimeapp.core.models.Result
-import com.jacob.wakatimeapp.home.data.HomePageAPI
+import com.jacob.wakatimeapp.home.data.HomePageNetworkData
 import com.jacob.wakatimeapp.home.data.mappers.GetDailyStatsResMapper
 import com.jacob.wakatimeapp.home.domain.models.DailyStats
 import javax.inject.Inject
 
 class GetDailyStatsUC @Inject constructor(
-    private val homePageAPI: HomePageAPI,
+    private val homePageNetworkData: HomePageNetworkData,
     private val getDailyStatsResMapper: GetDailyStatsResMapper,
 ) {
-    suspend operator fun invoke(token: String): Result<DailyStats> {
+    suspend operator fun invoke(): Result<DailyStats> {
         try {
-            val statsForTodayResponse = homePageAPI.getStatsForToday("Bearer $token")
+            val statsForTodayResponse = homePageNetworkData.getStatsForToday()
             if (!statsForTodayResponse.isSuccessful) return Result.Failure(
                 ErrorTypes.NetworkError(
                     Exception(statsForTodayResponse.message())
