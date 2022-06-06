@@ -63,28 +63,20 @@ class LoginPageViewModel @Inject constructor(
     fun getAuthIntent(): Intent? = authService.getAuthorizationRequestIntent(authRequest)
 
     fun exchangeToken(intent: Intent) {
-        AuthorizationResponse.fromIntent(intent)?.run {
-            authService.performTokenRequest(
-                createTokenExchangeRequest(),
-                ClientSecretPost(getApplication<WakaTimeApp>().clientSecret())
-            ) { tokenResponse, authorizationException ->
-                tokenResponse?.let {
-                    updateAfterTokenResponse(it, authorizationException)
-                } ?: run {
-                    Timber.e(authorizationException)
-                    updateAfterTokenResponse(null, authorizationException)
-                }
-            }
+        val authorizationResponse = AuthorizationResponse.fromIntent(intent) ?: run {
+            Timber.e("Empty auth intent")
+            return
         }
-    }
 
-    private fun updateAfterTokenResponse(
-        tokenResponse: TokenResponse?,
-        authorizationException: AuthorizationException?,
-    ) {
-        viewModelScope.launch {
-            authStateManager.updateAfterTokenResponse(tokenResponse, authorizationException)
-            authStatus = authStateManager.current().isAuthorized
+        authService.performTokenRequest(
+            authorizationResponse.createTokenExchangeRequest(),
+            ClientSecretPost(getApplication<WakaTimeApp>().clientSecret())
+        ) { tokenResponse, authorizationException ->
+            authorizationException?.let(Timber::e)
+            viewModelScope.launch {
+                authStateManager.updateAfterTokenResponse(tokenResponse, authorizationException)
+                authStatus = authStateManager.current().isAuthorized
+            }
         }
     }
 }
