@@ -12,6 +12,7 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
+import net.openid.appauth.AuthorizationService
 import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -25,6 +26,8 @@ class HomePageViewModel @Inject constructor(
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
     private val authStateManager: AuthStateManager,
 ) : AndroidViewModel(application) {
+    private val authService = AuthorizationService(getApplication())
+
     private val _homePageState =
         MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
     val homePageState = _homePageState.asStateFlow()
@@ -34,7 +37,7 @@ class HomePageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            val token = authStateManager.getFreshToken(getApplication())
+            val token = authStateManager.getFreshToken(authService)
                 .filterNotNull()
                 .first()
 

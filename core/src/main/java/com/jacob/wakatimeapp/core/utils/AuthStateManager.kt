@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.core.utils
 
 import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import kotlinx.coroutines.flow.callbackFlow
-import kotlinx.coroutines.flow.lastOrNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.runBlocking
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationException
@@ -22,7 +22,8 @@ class AuthStateManager @Inject constructor(
 ) {
     private val authStateFlow = offlineDataStore.getAuthState()
 
-    suspend fun current(): AuthState = authStateFlow.lastOrNull() ?: AuthState()
+    val current
+        get() = runBlocking { authStateFlow.firstOrNull() ?: AuthState() }
 
     private suspend fun update(state: AuthState) = offlineDataStore.updateAuthState(state)
 
@@ -30,14 +31,14 @@ class AuthStateManager @Inject constructor(
         response: TokenResponse?,
         ex: AuthorizationException?,
     ): AuthState {
-        val current = current()
+        val current = current
         current.update(response, ex)
         update(current)
         return current
     }
 
     fun getFreshToken(authService: AuthorizationService) = callbackFlow {
-        val current = current()
+        val current = current
 
         if (!current.needsTokenRefresh) {
             send(current.accessToken)

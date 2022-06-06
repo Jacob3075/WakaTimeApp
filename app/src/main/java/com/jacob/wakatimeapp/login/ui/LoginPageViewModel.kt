@@ -37,8 +37,8 @@ class LoginPageViewModel @Inject constructor(
     private val serviceConfig = AuthorizationServiceConfiguration(
         Uri.parse(Constants.authorizationUrl),
         Uri.parse(Constants.tokenUrl)
-
     )
+
     private val authRequest: AuthorizationRequest = Builder(
         serviceConfig,
         getApplication<WakaTimeApp>().clientId(),
@@ -48,7 +48,7 @@ class LoginPageViewModel @Inject constructor(
         .build()
 
 
-    var authStatus by mutableStateOf(false)
+    var authStatus by mutableStateOf(authStateManager.current.isAuthorized)
         private set
 
     fun updateUserDetails() {
@@ -75,7 +75,7 @@ class LoginPageViewModel @Inject constructor(
             authorizationException?.let(Timber::e)
             viewModelScope.launch {
                 authStateManager.updateAfterTokenResponse(tokenResponse, authorizationException)
-                authStatus = authStateManager.current().isAuthorized
+                authStatus = authStateManager.current.isAuthorized
             }
         }
     }

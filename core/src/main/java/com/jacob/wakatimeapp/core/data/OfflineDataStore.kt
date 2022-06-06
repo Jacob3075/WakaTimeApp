@@ -19,7 +19,6 @@ import javax.inject.Inject
 class OfflineDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>
 ) {
-
     @ExperimentalCoroutinesApi
     fun getUserDetails(): Flow<UserDetails?> =
         dataStore.data.mapLatest { preferences ->
