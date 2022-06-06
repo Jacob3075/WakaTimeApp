@@ -1,8 +1,7 @@
 package com.jacob.wakatimeapp.core.utils
 
 import com.jacob.wakatimeapp.core.data.OfflineDataStore
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.lastOrNull
 import kotlinx.coroutines.runBlocking
 import net.openid.appauth.AuthState
@@ -23,12 +22,9 @@ class AuthStateManager @Inject constructor(
 ) {
     private val authStateFlow = offlineDataStore.getAuthState()
 
-    suspend fun current(): AuthState =  authStateFlow.lastOrNull() ?: AuthState()
+    suspend fun current(): AuthState = authStateFlow.lastOrNull() ?: AuthState()
 
-    private suspend fun update(state: AuthState): AuthState {
-        offlineDataStore.updateAuthState(state)
-        return state
-    }
+    private suspend fun update(state: AuthState) = offlineDataStore.updateAuthState(state)
 
     suspend fun updateAfterTokenResponse(
         response: TokenResponse?,
@@ -36,21 +32,25 @@ class AuthStateManager @Inject constructor(
     ): AuthState {
         val current = current()
         current.update(response, ex)
-        return update(current)
+        update(current)
+        return current
     }
 
-    fun getFreshToken(authService: AuthorizationService): Flow<String?> = flow {
+    fun getFreshToken(authService: AuthorizationService) = callbackFlow {
         val current = current()
 
-        if (current.needsTokenRefresh) {
-            current.performActionWithFreshTokens(authService) { _, _, _ ->
-                runBlocking {
-                    update(current).accessToken
-                    emit(current.accessToken)
-                }
+        if (!current.needsTokenRefresh) {
+            send(current.accessToken)
+            channel.close()
+            return@callbackFlow
+        }
+
+        current.performActionWithFreshTokens(authService) { _, _, _ ->
+            runBlocking {
+                update(current)
+                send(current.accessToken)
+                channel.close()
             }
-        } else {
-            emit(current.accessToken)
         }
     }
 }
