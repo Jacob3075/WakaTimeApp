@@ -2,7 +2,9 @@ package com.jacob.wakatimeapp.core.utils
 
 import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import kotlinx.coroutines.flow.callbackFlow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.take
 import kotlinx.coroutines.runBlocking
 import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationException
@@ -15,7 +17,7 @@ import javax.inject.Inject
  * This stores the instance in a shared preferences file, and provides thread-safe access and
  * mutation.
  *
- * [Source](https://github.com/openid/AppAuth-Android/blob/master/app/java/net/openid/appauthdemo/AuthStateManager.java)
+ * [Initial Reference](https://github.com/openid/AppAuth-Android/blob/master/app/java/net/openid/appauthdemo/AuthStateManager.java)
  */
 class AuthStateManager @Inject constructor(
     private val offlineDataStore: OfflineDataStore,
@@ -54,4 +56,6 @@ class AuthStateManager @Inject constructor(
             }
         }
     }
+        .filterNotNull()
+        .take(1)
 }

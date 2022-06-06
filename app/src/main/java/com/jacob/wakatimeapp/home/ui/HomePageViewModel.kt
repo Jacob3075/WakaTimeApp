@@ -9,7 +9,6 @@ import com.jacob.wakatimeapp.core.models.Result
 import com.jacob.wakatimeapp.core.utils.AuthStateManager
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.*
 import kotlinx.coroutines.launch
 import net.openid.appauth.AuthorizationService
@@ -17,7 +16,6 @@ import timber.log.Timber
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
-@ExperimentalCoroutinesApi
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     application: Application,
@@ -37,27 +35,25 @@ class HomePageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            val token = authStateManager.getFreshToken(authService)
-                .filterNotNull()
-                .first()
-
-            val userDetailsFlow =
-                offlineDataStore.getUserDetails().stateIn(viewModelScope)
-
-            when (val last7DaysStatsResult = getLast7DaysStatsUC(token)) {
-                is Result.Success -> {
-                    _homePageState.value = HomePageViewState.Loaded(
-                        last7DaysStatsResult.value,
-                        userDetailsFlow.value
-                    )
+            authStateManager.getFreshToken(authService)
+                .map(getLast7DaysStatsUC::invoke)
+                .combine(offlineDataStore.getUserDetails().filterNotNull()) { result, userDetails ->
+                    when (result) {
+                        is Result.Success -> {
+                            _homePageState.value = HomePageViewState.Loaded(
+                                result.value,
+                                userDetails,
+                            )
+                        }
+                        is Result.Failure -> {
+                            val error = getErrorMessage(result)
+                            _homePageState.value = error
+                            _errors.emit(error)
+                        }
+                        is Result.Empty -> Timber.e("EMPTY")
+                    }
                 }
-                is Result.Failure -> {
-                    val error = getErrorMessage(last7DaysStatsResult)
-                    _homePageState.value = error
-                    _errors.emit(error)
-                }
-                is Result.Empty -> Timber.e("EMPTY")
-            }
+                .collect()
         }
     }
 
