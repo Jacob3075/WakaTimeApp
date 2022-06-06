@@ -1,14 +1,10 @@
 package com.jacob.wakatimeapp.core.data
 
-import android.content.Context
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
-import androidx.datastore.preferences.preferencesDataStore
-import com.jacob.wakatimeapp.core.data.OfflineDataStore.Companion.STORE_NAME
 import com.jacob.wakatimeapp.core.models.UserDetails
-import dagger.hilt.android.qualifiers.ApplicationContext
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.map
@@ -20,12 +16,9 @@ import kotlinx.serialization.json.Json.Default
 import net.openid.appauth.AuthState
 import javax.inject.Inject
 
-val Context.dataStore: DataStore<Preferences> by preferencesDataStore(name = STORE_NAME)
-
 class OfflineDataStore @Inject constructor(
-    @ApplicationContext context: Context,
+    private val dataStore: DataStore<Preferences>
 ) {
-    private val dataStore = context.dataStore
 
     @ExperimentalCoroutinesApi
     fun getUserDetails(): Flow<UserDetails?> =
@@ -40,9 +33,9 @@ class OfflineDataStore @Inject constructor(
     }
 
     fun getAuthState(): Flow<AuthState> = dataStore.data.map {
-        val authStateString = it[KEY_AUTH_STATE]
+        val authStateString = it[KEY_AUTH_STATE] ?: ""
         when {
-            authStateString.isNullOrEmpty() -> AuthState()
+            authStateString.isEmpty() -> AuthState()
             else -> authStateString.let(AuthState::jsonDeserialize)
         }
     }
