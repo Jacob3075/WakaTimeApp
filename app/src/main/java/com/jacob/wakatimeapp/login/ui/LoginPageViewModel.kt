@@ -9,10 +9,10 @@ import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.WakaTimeApp
-import com.jacob.wakatimeapp.core.utils.AuthStateManager
-import com.jacob.wakatimeapp.core.utils.Constants
-import com.jacob.wakatimeapp.core.utils.clientId
-import com.jacob.wakatimeapp.core.utils.clientSecret
+import com.jacob.wakatimeapp.core.common.AuthStateManager
+import com.jacob.wakatimeapp.core.common.Constants
+import com.jacob.wakatimeapp.core.common.clientId
+import com.jacob.wakatimeapp.core.common.clientSecret
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -30,21 +30,21 @@ class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
-    private val authStateManager: AuthStateManager,
+    private val authStateManager: com.jacob.wakatimeapp.core.common.AuthStateManager,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
 
     private val serviceConfig = AuthorizationServiceConfiguration(
-        Uri.parse(Constants.authorizationUrl),
-        Uri.parse(Constants.tokenUrl)
+        Uri.parse(com.jacob.wakatimeapp.core.common.Constants.authorizationUrl),
+        Uri.parse(com.jacob.wakatimeapp.core.common.Constants.tokenUrl)
     )
 
     private val authRequest: AuthorizationRequest = Builder(
         serviceConfig,
         getApplication<WakaTimeApp>().clientId(),
         ResponseTypeValues.CODE,
-        Uri.parse(Constants.redirectUrl)
-    ).setScopes(Constants.scope)
+        Uri.parse(com.jacob.wakatimeapp.core.common.Constants.redirectUrl)
+    ).setScopes(com.jacob.wakatimeapp.core.common.Constants.scope)
         .build()
 
 

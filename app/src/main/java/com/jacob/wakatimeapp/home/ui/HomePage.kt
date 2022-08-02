@@ -25,7 +25,7 @@ import com.jacob.wakatimeapp.core.ui.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import com.jacob.wakatimeapp.core.utils.observeInLifecycle
+import com.jacob.wakatimeapp.core.common.observeInLifecycle
 import com.jacob.wakatimeapp.home.ui.components.*
 import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi

@@ -21,8 +21,8 @@ import com.jacob.wakatimeapp.R
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import com.jacob.wakatimeapp.home.domain.models.DailyStats
-import com.jacob.wakatimeapp.home.domain.models.Project
+import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.Project
 import java.time.LocalDate
 
 @Composable
@@ -46,7 +46,7 @@ fun RecentProjects(parameters: RecentProjectsParameters) {
 }
 
 @Composable
-private fun RecentProjectList(modifier: Modifier = Modifier, projects: List<Project>) {
+private fun RecentProjectList(modifier: Modifier = Modifier, projects: List<com.jacob.wakatimeapp.core.models.Project>) {
     Column(
         modifier = modifier
     ) {
@@ -56,7 +56,7 @@ private fun RecentProjectList(modifier: Modifier = Modifier, projects: List<Proj
 }
 
 @Composable
-private fun ProjectCardItem(project: Project) {
+private fun ProjectCardItem(project: com.jacob.wakatimeapp.core.models.Project) {
     val cardShape = RoundedCornerShape(25)
     Box(
         modifier = Modifier
@@ -95,12 +95,21 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         RecentProjects(
             parameters = RecentProjectsParameters(
-                DailyStats(
-                    timeSpent = Time(0, 0, 0f),
+                com.jacob.wakatimeapp.core.models.DailyStats(
+                    timeSpent = com.jacob.wakatimeapp.core.models.Time(0, 0, 0f),
                     projectsWorkedOn = listOf(
-                        Project(Time(10, 9, 0f), "Project 1", 75.0),
-                        Project(Time(100, 26, 0f), "Project 2", 20.0),
-                        Project(Time(5, 15, 0f), "Project 3", 10.0),
+                        com.jacob.wakatimeapp.core.models.Project(com.jacob.wakatimeapp.core.models.Time(
+                            10,
+                            9,
+                            0f), "Project 1", 75.0),
+                        com.jacob.wakatimeapp.core.models.Project(com.jacob.wakatimeapp.core.models.Time(
+                            100,
+                            26,
+                            0f), "Project 2", 20.0),
+                        com.jacob.wakatimeapp.core.models.Project(com.jacob.wakatimeapp.core.models.Time(
+                            5,
+                            15,
+                            0f), "Project 3", 10.0),
                     ),
                     mostUsedLanguage = "",
                     mostUsedEditor = "",
@@ -116,6 +125,9 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
 @Composable
 fun ProjectCardItemPreview() = WakaTimeAppTheme {
     Surface {
-        ProjectCardItem(Project(Time(0, 0, 0f), "Project 1", 0.0))
+        ProjectCardItem(com.jacob.wakatimeapp.core.models.Project(com.jacob.wakatimeapp.core.models.Time(
+            0,
+            0,
+            0f), "Project 1", 0.0))
     }
 }

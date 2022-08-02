@@ -54,7 +54,7 @@ fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
 fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
         parameters = UserDetailsSectionParameters(
-            UserDetails(
+            com.jacob.wakatimeapp.core.models.UserDetails(
                 bio = "",
                 email = "",
                 id = "",

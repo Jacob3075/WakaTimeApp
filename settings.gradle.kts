@@ -10,3 +10,8 @@ rootProject.name = "Waka Time App"
 include(":app")
 include(":details")
 include(":core")
+include(":core:network")
+include(":core:models")
+include(":core:common")
+include(":core:ui")
+include(":core:database")

@@ -27,7 +27,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import com.jacob.wakatimeapp.home.domain.models.DailyStats
+import com.jacob.wakatimeapp.core.models.DailyStats
 import java.time.format.TextStyle.SHORT
 import java.util.*
 
@@ -51,7 +51,7 @@ fun WeeklyReport(parameters: WeeklyReportParameters) {
 }
 
 @Composable
-private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
+private fun WeeklyReportChart(dailyStats: List<com.jacob.wakatimeapp.core.models.DailyStats>) {
     val cardShape = RoundedCornerShape(10)
 
     val labels = mutableMapOf<Int, String>()
