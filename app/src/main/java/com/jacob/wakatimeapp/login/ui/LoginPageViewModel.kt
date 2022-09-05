@@ -30,21 +30,21 @@ class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
-    private val authStateManager: com.jacob.wakatimeapp.core.common.AuthStateManager,
+    private val authStateManager: AuthStateManager,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
 
     private val serviceConfig = AuthorizationServiceConfiguration(
-        Uri.parse(com.jacob.wakatimeapp.core.common.Constants.authorizationUrl),
-        Uri.parse(com.jacob.wakatimeapp.core.common.Constants.tokenUrl)
+        Uri.parse(Constants.authorizationUrl),
+        Uri.parse(Constants.tokenUrl)
     )
 
     private val authRequest: AuthorizationRequest = Builder(
         serviceConfig,
         getApplication<WakaTimeApp>().clientId(),
         ResponseTypeValues.CODE,
-        Uri.parse(com.jacob.wakatimeapp.core.common.Constants.redirectUrl)
-    ).setScopes(com.jacob.wakatimeapp.core.common.Constants.scope)
+        Uri.parse(Constants.redirectUrl)
+    ).setScopes(Constants.scope)
         .build()
 
 

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.database
+package com.jacob.wakatimeapp.details
 
 import androidx.test.platform.app.InstrumentationRegistry
 import androidx.test.ext.junit.runners.AndroidJUnit4
@@ -19,6 +19,6 @@ class ExampleInstrumentedTest {
     fun useAppContext() {
         // Context of the app under test.
         val appContext = InstrumentationRegistry.getInstrumentation().targetContext
-        assertEquals("com.jacob.wakatimeapp.core.database.test", appContext.packageName)
+        assertEquals("com.jacob.wakatimeapp.details.test", appContext.packageName)
     }
 }

@@ -1,11 +1,10 @@
 package com.jacob.wakatimeapp.core.network.mappers
 
-import com.jacob.wakatimeapp.core.data.DtoMapper
+import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.network.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.core.network.dtos.GetDailyStatsResDTO.Data
-import com.jacob.wakatimeapp.home.domain.models.DailyStats
-import com.jacob.wakatimeapp.home.domain.models.Project
 import java.time.LocalDate
 import java.time.format.DateTimeFormatter
 import javax.inject.Inject

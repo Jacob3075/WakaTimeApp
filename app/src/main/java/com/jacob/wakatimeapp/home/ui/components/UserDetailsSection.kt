@@ -7,11 +7,13 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.platform.LocalContext
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import coil.compose.rememberImagePainter
+import coil.compose.rememberAsyncImagePainter
+import coil.request.ImageRequest.Builder
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.R
 import com.jacob.wakatimeapp.core.models.UserDetails
@@ -26,14 +28,13 @@ fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
         modifier = Modifier.fillMaxWidth(),
     ) {
         Image(
-            painter = rememberImagePainter(
-                data = parameters.userDetails?.photoUrl,
-                builder = {
-                    transformations(CircleCropTransformation())
-                    placeholder(R.drawable.place_holder)
-                    fallback(R.drawable.place_holder)
-
-                }
+            painter = rememberAsyncImagePainter(
+                Builder(LocalContext.current).data(data = parameters.userDetails?.photoUrl)
+                    .apply {
+                        transformations(CircleCropTransformation())
+                        placeholder(R.drawable.place_holder)
+                        fallback(R.drawable.place_holder)
+                    }.build()
             ),
             contentDescription = "Profile image",
             modifier = Modifier.size(58.dp),
@@ -54,7 +55,7 @@ fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
 fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
         parameters = UserDetailsSectionParameters(
-            com.jacob.wakatimeapp.core.models.UserDetails(
+            UserDetails(
                 bio = "",
                 email = "",
                 id = "",

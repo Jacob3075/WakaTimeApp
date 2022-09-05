@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.core.common
 
 import android.content.Context
-import com.jacob.wakatimeapp.core.R.string
+import com.jacob.wakatimeapp.core.common.R.string
 
 object Constants {
     const val BASE_URL = "https://wakatime.com/"

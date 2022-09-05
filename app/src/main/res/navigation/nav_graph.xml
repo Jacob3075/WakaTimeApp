@@ -21,8 +21,6 @@
         android:label="home_page_fragment">
         <action
             android:id="@+id/homePage_to_detailsPage"
-            app:destination="@id/details_nav_graph" />
+            app:destination="@id/homePage" />
     </fragment>
-
-    <include app:graph="@navigation/details_nav_graph" />
 </navigation>

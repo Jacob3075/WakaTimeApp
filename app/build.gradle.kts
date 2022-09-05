@@ -57,15 +57,49 @@ android {
 }
 
 dependencies {
-    implementation(project(":core"))
+    implementation(project(":core:models"))
+    implementation(project(":core:common"))
+    implementation(project(":core:network"))
+    implementation(project(":core:database"))
+    implementation(project(":core:ui"))
     implementation(project(":details"))
 
+    // Navigation
+    implementation("androidx.navigation:navigation-fragment-ktx:${Versions.navigation}")
+    implementation("androidx.navigation:navigation-ui-ktx:${Versions.navigation}")
+    implementation("androidx.navigation:navigation-testing:${Versions.navigation}")
+
     // Hilt
-    api("com.google.dagger:hilt-android:${Versions.hilt}")
+    implementation("com.google.dagger:hilt-android:${Versions.hilt}")
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
 
     // Room
     ksp("androidx.room:room-compiler:${Versions.room}")
+
+    implementation("androidx.appcompat:appcompat:${Versions.appcompat}")
+    implementation("androidx.core:core-splashscreen:1.0.0")
+
+    // Compose
+    implementation("androidx.compose.ui:ui:${Versions.compose}")
+    implementation("androidx.compose.runtime:runtime-livedata:${Versions.compose}")
+    implementation("androidx.compose.material:material:${Versions.compose}")
+    implementation("androidx.compose.ui:ui-tooling-preview:${Versions.compose}")
+    implementation("androidx.activity:activity-compose:1.4.0")
+
+    // Image Loading
+    implementation("io.coil-kt:coil-compose:2.1.0")
+
+    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    // Lottie Animations
+    implementation("com.airbnb.android:lottie-compose:5.0.3")
+
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+
+    // OAuth
+    implementation("net.openid:appauth:0.11.1")
+
+    // Logging
+    implementation("com.jakewharton.timber:timber:5.0.1")
 
     // Core Testing
     testImplementation("junit:junit:${Versions.junit}")

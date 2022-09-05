@@ -16,6 +16,8 @@ android {
 
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
         vectorDrawables { useSupportLibrary = true }
+
+        manifestPlaceholders["appAuthRedirectScheme"] = "wakatimeapp"
     }
 
     buildTypes {
@@ -38,6 +40,7 @@ dependencies {
     implementation(project(":core:models"))
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
     // OAuth TODO: REMOVE
     implementation("net.openid:appauth:0.11.1")
@@ -52,6 +55,9 @@ dependencies {
     implementation("com.google.devtools.ksp:symbol-processing-api:${Versions.ksp}")
     implementation("androidx.room:room-runtime:${Versions.room}")
     implementation("androidx.room:room-ktx:${Versions.room}")
+
+    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("androidx.test.ext:junit-ktx:${Versions.extJunit}")
 }
 
 kapt {

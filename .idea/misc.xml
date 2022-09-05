@@ -100,6 +100,8 @@
         <entry key="../../../../../layout/compose-model-1636526548173.xml" value="0.2962962962962963" />
         <entry key="../../../../../layout/compose-model-1653838585885.xml" value="0.15294609277058085" />
         <entry key="../../../../../layout/compose-model-1654514402621.xml" value="0.6680216802168022" />
+        <entry key="../../../../../layout/compose-model-1662100785145.xml" value="0.1" />
+        <entry key="../../../../../layout/compose-model-1662102769629.xml" value="0.16131756756756757" />
         <entry key="../../../../../layout/custom_preview.xml" value="0.36102564102564105" />
         <entry key="app/src/main/res/drawable/ic_arrow.xml" value="0.2953703703703704" />
         <entry key="app/src/main/res/drawable/ic_laptop.xml" value="0.3630769230769231" />
@@ -121,6 +123,9 @@
     </option>
   </component>
   <component name="ExternalStorageConfigurationManager" enabled="true" />
+  <component name="FrameworkDetectionExcludesConfiguration">
+    <file type="web" url="file://$PROJECT_DIR$" />
+  </component>
   <component name="ProjectRootManager" version="2" languageLevel="JDK_11" default="true" project-jdk-name="11" project-jdk-type="JavaSDK">
     <output url="file://$PROJECT_DIR$/build/classes" />
   </component>

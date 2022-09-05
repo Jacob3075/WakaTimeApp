@@ -7,7 +7,7 @@ import javax.inject.Inject
 
 class UpdateUserDetailsUC @Inject constructor(
     private val loginPageAPI: LoginPageAPI,
-    private val offlineDataStore: com.jacob.wakatimeapp.core.database.OfflineDataStore,
+    private val offlineDataStore: OfflineDataStore,
     private val userDetailsMapper: UserDetailsMapper,
 ) {
     suspend operator fun invoke(token: String) {

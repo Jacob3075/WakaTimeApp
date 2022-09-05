@@ -14,6 +14,8 @@ android {
 
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
         vectorDrawables { useSupportLibrary = true }
+
+        manifestPlaceholders["appAuthRedirectScheme"] = "wakatimeapp"
     }
 
     buildTypes {
@@ -34,7 +36,10 @@ android {
 
 dependencies {
     implementation(project(":core:models"))
+    implementation(project(":core:database"))
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
+
+    implementation("androidx.lifecycle:lifecycle-runtime-ktx:${Versions.lifecycleVersion}")
 
     // Hilt
     implementation("com.google.dagger:hilt-android:${Versions.hilt}")
@@ -43,4 +48,6 @@ dependencies {
     // OAuth
     implementation("net.openid:appauth:0.11.1")
 
+    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("androidx.test.ext:junit-ktx:${Versions.extJunit}")
 }

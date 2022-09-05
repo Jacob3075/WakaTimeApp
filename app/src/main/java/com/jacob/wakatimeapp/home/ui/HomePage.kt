@@ -21,6 +21,7 @@ import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
 import androidx.navigation.findNavController
 import com.jacob.wakatimeapp.R.drawable
+import com.jacob.wakatimeapp.core.common.observeInLifecycle
 import com.jacob.wakatimeapp.core.ui.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
 import com.jacob.wakatimeapp.core.ui.theme.Gradients

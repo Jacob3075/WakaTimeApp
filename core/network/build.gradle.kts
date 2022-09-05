@@ -15,6 +15,8 @@ android {
 
         testInstrumentationRunner = AppConfig.androidTestInstrumentation
         vectorDrawables { useSupportLibrary = true }
+
+        manifestPlaceholders["appAuthRedirectScheme"] = "wakatimeapp"
     }
 
     buildTypes {
@@ -44,7 +46,7 @@ dependencies {
     kapt("com.google.dagger:hilt-android-compiler:${Versions.hilt}")
 
     // Retrofit
-    implementation("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
+    api("com.squareup.retrofit2:retrofit:${Versions.retrofit}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
     implementation("com.jakewharton.retrofit:retrofit2-kotlinx-serialization-converter:0.8.0")
 
@@ -55,6 +57,9 @@ dependencies {
 
     // Logging
     implementation("com.jakewharton.timber:timber:5.0.1")
+
+    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("androidx.test.ext:junit-ktx:${Versions.extJunit}")
 
     // OAuth
     implementation("net.openid:appauth:0.11.1")

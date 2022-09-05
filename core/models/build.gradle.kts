@@ -33,4 +33,8 @@ android {
 
 dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+
+    testImplementation("junit:junit:${Versions.junit}")
+    testImplementation("androidx.test.ext:junit-ktx:${Versions.extJunit}")
 }

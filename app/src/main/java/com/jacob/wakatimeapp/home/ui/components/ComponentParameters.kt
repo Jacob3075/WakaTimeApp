@@ -37,18 +37,18 @@ data class ShowAnimationParameters(
 )
 
 data class UserDetailsSectionParameters(
-    val userDetails: com.jacob.wakatimeapp.core.models.UserDetails?,
+    val userDetails: UserDetails?,
 )
 
 data class OtherDailyStatsSectionParameters(
-    val dailyStats: com.jacob.wakatimeapp.core.models.DailyStats?,
+    val dailyStats: DailyStats?,
     val onClick: () -> Unit,
 )
 
 data class RecentProjectsParameters(
-    val dailyStats: com.jacob.wakatimeapp.core.models.DailyStats?,
+    val dailyStats: DailyStats?,
 )
 
 data class WeeklyReportParameters(
-    val dailyStats: List<com.jacob.wakatimeapp.core.models.DailyStats>?,
+    val dailyStats: List<DailyStats>?,
 )
