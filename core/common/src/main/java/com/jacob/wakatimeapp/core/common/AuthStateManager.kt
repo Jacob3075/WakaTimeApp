@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.core.common
 
-import com.jacob.wakatimeapp.core.database.OfflineDataStore
+import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull

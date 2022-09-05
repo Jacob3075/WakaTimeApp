@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.login.domain.usecases
 
-import com.jacob.wakatimeapp.core.database.OfflineDataStore
+import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import com.jacob.wakatimeapp.login.data.LoginPageAPI
 import com.jacob.wakatimeapp.login.data.mappers.UserDetailsMapper
 import javax.inject.Inject

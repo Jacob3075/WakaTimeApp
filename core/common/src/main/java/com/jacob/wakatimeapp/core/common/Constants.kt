@@ -4,7 +4,6 @@ import android.content.Context
 import com.jacob.wakatimeapp.core.common.R.string
 
 object Constants {
-    const val BASE_URL = "https://wakatime.com/"
     const val authorizationUrl = "https://wakatime.com/oauth/authorize"
     const val tokenUrl = "https://wakatime.com/oauth/token"
     const val redirectUrl = "wakatimeapp://oauth2redirect"

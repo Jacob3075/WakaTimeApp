@@ -1,12 +1,12 @@
 package com.jacob.wakatimeapp.login.data.mappers
 
-import com.jacob.wakatimeapp.core.network.mappers.DtoMapper
+import com.jacob.wakatimeapp.core.data.mappers.DtoMapper
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.login.data.dtos.GetUserDetailsResDTO
 import javax.inject.Inject
 
 class UserDetailsMapper @Inject constructor() :
-    com.jacob.wakatimeapp.core.network.mappers.DtoMapper<GetUserDetailsResDTO, com.jacob.wakatimeapp.core.models.UserDetails> {
+    DtoMapper<GetUserDetailsResDTO, UserDetails> {
     override fun fromDtoToModel(dto: GetUserDetailsResDTO) =
         com.jacob.wakatimeapp.core.models.UserDetails(
             bio = dto.data.bio,

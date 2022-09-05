@@ -3,8 +3,8 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.ErrorTypes
 import com.jacob.wakatimeapp.core.models.Result
-import com.jacob.wakatimeapp.core.network.HomePageNetworkData
-import com.jacob.wakatimeapp.core.network.mappers.GetDailyStatsResMapper
+import com.jacob.wakatimeapp.home.data.HomePageNetworkData
+import com.jacob.wakatimeapp.core.data.mappers.GetDailyStatsResMapper
 import javax.inject.Inject
 
 class GetDailyStatsUC @Inject constructor(

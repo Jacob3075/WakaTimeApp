@@ -3,9 +3,7 @@ package com.jacob.wakatimeapp.home.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.jacob.wakatimeapp.core.database.OfflineDataStore
-import com.jacob.wakatimeapp.core.models.ErrorTypes
-import com.jacob.wakatimeapp.core.models.Result
+import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import com.jacob.wakatimeapp.core.common.AuthStateManager
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -19,10 +17,10 @@ import kotlin.coroutines.CoroutineContext
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     application: Application,
-    offlineDataStore: com.jacob.wakatimeapp.core.database.OfflineDataStore,
+    offlineDataStore: OfflineDataStore,
     private val ioDispatcher: CoroutineContext,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
-    private val authStateManager: com.jacob.wakatimeapp.core.common.AuthStateManager,
+    private val authStateManager: AuthStateManager,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
 

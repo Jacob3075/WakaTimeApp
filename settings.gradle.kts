@@ -6,12 +6,11 @@ dependencyResolutionManagement {
         maven(url = "https://jitpack.io")
     }
 }
-rootProject.name = "Waka Time App"
+rootProject.name = "WakatimeApp.Compose"
 include(":app")
 include(":core")
-include(":core:network")
 include(":core:models")
 include(":core:common")
 include(":core:ui")
-include(":core:database")
+include(":core:data")
 include(":details")
