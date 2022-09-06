@@ -1,3 +1,5 @@
+import java.util.*
+
 plugins {
     id("com.android.library")
     id("org.jetbrains.kotlin.android")
@@ -24,7 +26,15 @@ android {
             isMinifyEnabled = false
             proguardFiles(getDefaultProguardFile("proguard-android-optimize.txt"), "proguard-rules.pro")
         }
+
+        buildTypes.forEach {
+            val properties = loadPropertiesFile()
+
+            it.buildConfigField("String", "CLIENT_ID", "\"${properties.getProperty("CLIENT_ID")}\"")
+            it.buildConfigField("String", "CLIENT_SECRET", "\"${properties.getProperty("CLIENT_SECRET")}\"")
+        }
     }
+
     compileOptions {
         sourceCompatibility = JavaVersion.VERSION_11
         targetCompatibility = JavaVersion.VERSION_11
@@ -74,4 +84,9 @@ dependencies {
     testImplementation("junit:junit:4.13.2")
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
+}
+
+fun loadPropertiesFile(): Properties {
+    val propertiesFile = file("../local.properties")
+    return Properties().apply { load(propertiesFile.inputStream()) }
 }

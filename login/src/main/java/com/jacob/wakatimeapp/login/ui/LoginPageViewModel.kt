@@ -10,8 +10,7 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.core.common.AuthStateManager
 import com.jacob.wakatimeapp.core.common.Constants
-import com.jacob.wakatimeapp.core.common.clientId
-import com.jacob.wakatimeapp.core.common.clientSecret
+import com.jacob.wakatimeapp.login.BuildConfig
 import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
@@ -41,7 +40,7 @@ class LoginPageViewModel @Inject constructor(
 
     private val authRequest: AuthorizationRequest = Builder(
         serviceConfig,
-        getApplication<Application>().clientId(),
+        BuildConfig.CLIENT_ID,
         ResponseTypeValues.CODE,
         Uri.parse(Constants.redirectUrl)
     ).setScopes(Constants.scope)
@@ -70,7 +69,7 @@ class LoginPageViewModel @Inject constructor(
 
         authService.performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
-            ClientSecretPost(getApplication<Application>().clientSecret())
+            ClientSecretPost(BuildConfig.CLIENT_SECRET)
         ) { tokenResponse, authorizationException ->
             authorizationException?.let(Forest::e)
             viewModelScope.launch {

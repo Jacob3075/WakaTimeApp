@@ -14,6 +14,16 @@ jobs:
         with:
           java-version: 1.11
 
+      - name: Update CLIENT_ID
+        env:
+          CLIENT_ID: ${{ secrets.CLIENT_ID }}
+        run: echo CLIENT_ID="$CLIENT_ID" > ./local.properties
+
+      - name: Update CLIENT_SECRET
+        env:
+          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
+        run: echo CLIENT_SECRET="$CLIENT_SECRET" >> ./local.properties
+
       - name: Build Project
         run: ./gradlew assemble
 
