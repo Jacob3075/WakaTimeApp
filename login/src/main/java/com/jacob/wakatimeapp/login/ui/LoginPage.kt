@@ -33,11 +33,15 @@ import dagger.hilt.android.AndroidEntryPoint
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
+import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
 @AndroidEntryPoint
 class LoginPage : Fragment() {
     private val viewModel by viewModels<LoginPageViewModel>()
+
+    @Inject
+    lateinit var loginPageNavigations: LoginPageNavigations
 
     override fun onCreateView(
         inflater: LayoutInflater,
@@ -49,6 +53,7 @@ class LoginPage : Fragment() {
                 LoginPageContent(
                     viewModel,
                     findNavController(),
+                    loginPageNavigations,
                 )
             }
         }
@@ -60,12 +65,13 @@ class LoginPage : Fragment() {
 private fun LoginPageContent(
     viewModel: LoginPageViewModel,
     navController: NavController,
+    loginPageNavigations: LoginPageNavigations,
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
     if (viewModel.authStatus) {
         viewModel.updateUserDetails()
-        navController.navigate(LoginPageDirections.loginPageToHomePage())
+        navController.navigate(loginPageNavigations.toHomePage())
     }
 
     val launcher =

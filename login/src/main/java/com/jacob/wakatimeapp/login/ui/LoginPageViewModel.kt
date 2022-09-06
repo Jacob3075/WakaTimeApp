@@ -8,12 +8,11 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.jacob.wakatimeapp.WakaTimeApp
 import com.jacob.wakatimeapp.core.common.AuthStateManager
 import com.jacob.wakatimeapp.core.common.Constants
 import com.jacob.wakatimeapp.core.common.clientId
 import com.jacob.wakatimeapp.core.common.clientSecret
-import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
+import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
@@ -22,6 +21,7 @@ import kotlinx.coroutines.launch
 import net.openid.appauth.*
 import net.openid.appauth.AuthorizationRequest.Builder
 import timber.log.Timber
+import timber.log.Timber.Forest
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 
@@ -41,7 +41,7 @@ class LoginPageViewModel @Inject constructor(
 
     private val authRequest: AuthorizationRequest = Builder(
         serviceConfig,
-        getApplication<WakaTimeApp>().clientId(),
+        getApplication<Application>().clientId(),
         ResponseTypeValues.CODE,
         Uri.parse(Constants.redirectUrl)
     ).setScopes(Constants.scope)
@@ -70,9 +70,9 @@ class LoginPageViewModel @Inject constructor(
 
         authService.performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
-            ClientSecretPost(getApplication<WakaTimeApp>().clientSecret())
+            ClientSecretPost(getApplication<Application>().clientSecret())
         ) { tokenResponse, authorizationException ->
-            authorizationException?.let(Timber::e)
+            authorizationException?.let(Forest::e)
             viewModelScope.launch {
                 authStateManager.updateAfterTokenResponse(tokenResponse, authorizationException)
                 authStatus = authStateManager.current.isAuthorized

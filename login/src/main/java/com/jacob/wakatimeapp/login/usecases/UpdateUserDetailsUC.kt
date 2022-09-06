@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.login.domain.usecases
+package com.jacob.wakatimeapp.login.usecases
 
 import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import com.jacob.wakatimeapp.login.data.LoginPageAPI

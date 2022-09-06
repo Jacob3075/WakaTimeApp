@@ -64,6 +64,7 @@ dependencies {
 
     implementation(project(":details"))
     implementation(project(":home"))
+    implementation(project(":login"))
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:${Versions.navigation}")

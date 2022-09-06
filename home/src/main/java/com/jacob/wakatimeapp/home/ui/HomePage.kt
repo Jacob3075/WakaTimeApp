@@ -19,7 +19,6 @@ import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
 import androidx.fragment.app.Fragment
 import androidx.fragment.app.viewModels
-import androidx.navigation.NavDirections
 import androidx.navigation.findNavController
 import com.jacob.wakatimeapp.core.common.observeInLifecycle
 import com.jacob.wakatimeapp.core.ui.R.drawable
@@ -119,7 +118,6 @@ private fun HomePageLoaded(parameters: HomePageLoadedParameters, homePageNavigat
                 mainText = "Total Time Spent Today",
                 time = parameters.homePageViewState.contentData.todaysStats.timeSpent,
                 onClick = {
-//                    parameters.navController.navigate(HomePageDirections.homePageToDetailsPage())
                     parameters.navController.navigate(homePageNavigations.toDetailsPage())
                 }
             )
@@ -138,8 +136,4 @@ private fun HomePageLoaded(parameters: HomePageLoadedParameters, homePageNavigat
         ))
         Spacer(modifier = Modifier.height(25.dp))
     }
-}
-
-interface HomePageNavigations {
-    fun toDetailsPage(): NavDirections
 }
