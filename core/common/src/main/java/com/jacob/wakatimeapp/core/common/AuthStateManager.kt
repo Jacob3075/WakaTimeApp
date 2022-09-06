@@ -21,6 +21,7 @@ import javax.inject.Inject
  */
 class AuthStateManager @Inject constructor(
     private val offlineDataStore: OfflineDataStore,
+    private val authService: AuthorizationService,
 ) {
     private val authStateFlow = offlineDataStore.getAuthState()
 
@@ -39,7 +40,7 @@ class AuthStateManager @Inject constructor(
         return current
     }
 
-    fun getFreshToken(authService: AuthorizationService) = callbackFlow {
+    fun getFreshToken() = callbackFlow {
         val current = current
 
         if (!current.needsTokenRefresh) {

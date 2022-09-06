@@ -42,7 +42,6 @@ dependencies {
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:${Versions.coroutines}")
     implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
 
-    // OAuth TODO: REMOVE
     implementation("net.openid:appauth:0.11.1")
 
     // Hilt

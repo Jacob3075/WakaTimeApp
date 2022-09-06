@@ -53,7 +53,7 @@ class LoginPageViewModel @Inject constructor(
 
     fun updateUserDetails() {
         CoroutineScope(ioDispatcher).launch {
-            authStateManager.getFreshToken(authService)
+            authStateManager.getFreshToken()
                 .filterNotNull()
                 .first()
                 .let { updateUserDetailsUC.invoke(it) }

@@ -61,7 +61,9 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:data"))
     implementation(project(":core:ui"))
+
     implementation(project(":details"))
+    implementation(project(":home"))
 
     // Navigation
     implementation("androidx.navigation:navigation-fragment-ktx:${Versions.navigation}")
