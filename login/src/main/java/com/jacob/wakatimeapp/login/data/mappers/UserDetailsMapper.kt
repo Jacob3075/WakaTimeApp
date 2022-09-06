@@ -8,7 +8,7 @@ import javax.inject.Inject
 class UserDetailsMapper @Inject constructor() :
     DtoMapper<GetUserDetailsResDTO, UserDetails> {
     override fun fromDtoToModel(dto: GetUserDetailsResDTO) =
-        com.jacob.wakatimeapp.core.models.UserDetails(
+        UserDetails(
             bio = dto.data.bio,
             email = dto.data.email,
             id = dto.data.id,
@@ -24,7 +24,7 @@ class UserDetailsMapper @Inject constructor() :
             photoUrl = "${dto.data.photoUrl}?s=420"
         )
 
-    override fun fromModelToDto(model: com.jacob.wakatimeapp.core.models.UserDetails): GetUserDetailsResDTO {
+    override fun fromModelToDto(model: UserDetails): GetUserDetailsResDTO {
         TODO("Not yet implemented")
     }
 }

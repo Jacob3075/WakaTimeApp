@@ -1,13 +1,12 @@
 package com.jacob.wakatimeapp.home.data
 
 import com.jacob.wakatimeapp.core.common.AuthStateManager
-import com.jacob.wakatimeapp.core.network.dtos.AllTimeDataDTO
-import com.jacob.wakatimeapp.core.network.dtos.GetDailyStatsResDTO
-import com.jacob.wakatimeapp.core.network.dtos.GetLast7DaysStatsResDTO
+import com.jacob.wakatimeapp.home.data.dtos.AllTimeDataDTO
+import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
+import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
-import retrofit2.Retrofit
 import retrofit2.http.GET
 import retrofit2.http.Header
 import javax.inject.Inject
@@ -26,11 +25,9 @@ interface HomePageAPI {
 
 @Singleton
 class HomePageNetworkData @Inject constructor(
-    retrofit: Retrofit,
     private val authStateManager: AuthStateManager,
+    private val homePageAPI: HomePageAPI,
 ) {
-    private val homePageAPI = retrofit.create(HomePageAPI::class.java)
-
     private val token: String
         get() = runBlocking { authStateManager.getFreshToken().first() }
 

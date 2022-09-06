@@ -6,7 +6,7 @@ import com.jacob.wakatimeapp.core.models.Result.Failure
 import com.jacob.wakatimeapp.core.models.Result.Success
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.HomePageNetworkData
-import com.jacob.wakatimeapp.core.data.mappers.GetWeeklyStatsResMapper
+import com.jacob.wakatimeapp.home.data.mappers.GetWeeklyStatsResMapper
 import timber.log.Timber
 import javax.inject.Inject
 

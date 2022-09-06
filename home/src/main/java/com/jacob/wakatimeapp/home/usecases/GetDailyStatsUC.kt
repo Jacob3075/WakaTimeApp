@@ -3,7 +3,7 @@ package com.jacob.wakatimeapp.home.usecases
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.ErrorTypes
 import com.jacob.wakatimeapp.home.data.HomePageNetworkData
-import com.jacob.wakatimeapp.core.data.mappers.GetDailyStatsResMapper
+import com.jacob.wakatimeapp.home.data.mappers.GetDailyStatsResMapper
 import com.jacob.wakatimeapp.core.models.Result
 import javax.inject.Inject
 
