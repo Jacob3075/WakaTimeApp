@@ -8,7 +8,7 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.jacob.wakatimeapp.core.common.AuthStateManager
+import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.core.common.Constants
 import com.jacob.wakatimeapp.login.BuildConfig
 import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
@@ -29,7 +29,7 @@ class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
-    private val authStateManager: AuthStateManager,
+    private val authTokenProvider: AuthTokenProvider,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
 
@@ -47,12 +47,12 @@ class LoginPageViewModel @Inject constructor(
         .build()
 
 
-    var authStatus by mutableStateOf(authStateManager.current.isAuthorized)
+    var authStatus by mutableStateOf(authTokenProvider.current.isAuthorized)
         private set
 
     fun updateUserDetails() {
         CoroutineScope(ioDispatcher).launch {
-            authStateManager.getFreshToken()
+            authTokenProvider.getFreshToken()
                 .filterNotNull()
                 .first()
                 .let { updateUserDetailsUC.invoke(it) }
@@ -73,8 +73,8 @@ class LoginPageViewModel @Inject constructor(
         ) { tokenResponse, authorizationException ->
             authorizationException?.let(Forest::e)
             viewModelScope.launch {
-                authStateManager.updateAfterTokenResponse(tokenResponse, authorizationException)
-                authStatus = authStateManager.current.isAuthorized
+                authTokenProvider.updateAfterTokenResponse(tokenResponse, authorizationException)
+                authStatus = authTokenProvider.current.isAuthorized
             }
         }
     }

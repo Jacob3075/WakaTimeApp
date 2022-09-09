@@ -1,6 +1,5 @@
-package com.jacob.wakatimeapp.core.common
+package com.jacob.wakatimeapp.core.common.auth
 
-import com.jacob.wakatimeapp.core.data.OfflineDataStore
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
@@ -19,16 +18,16 @@ import javax.inject.Inject
  *
  * [Initial Reference](https://github.com/openid/AppAuth-Android/blob/master/app/java/net/openid/appauthdemo/AuthStateManager.java)
  */
-class AuthStateManager @Inject constructor(
-    private val offlineDataStore: OfflineDataStore,
+class AuthTokenProvider @Inject constructor(
+    private val authDataStore: AuthDataStore,
     private val authService: AuthorizationService,
 ) {
-    private val authStateFlow = offlineDataStore.getAuthState()
+    private val authStateFlow = authDataStore.getAuthState()
 
     val current
         get() = runBlocking { authStateFlow.firstOrNull() ?: AuthState() }
 
-    private suspend fun update(state: AuthState) = offlineDataStore.updateAuthState(state)
+    private suspend fun update(state: AuthState) = authDataStore.updateAuthState(state)
 
     suspend fun updateAfterTokenResponse(
         response: TokenResponse?,
