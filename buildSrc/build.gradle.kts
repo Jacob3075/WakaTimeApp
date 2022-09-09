@@ -23,5 +23,5 @@ buildscript {
 }
 
 dependencies {
-    implementation("org.jetbrains.kotlin:kotlin-serialization:1.6.10")
+    implementation("org.jetbrains.kotlin:kotlin-serialization:1.7.10")
 }

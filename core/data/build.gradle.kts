@@ -1,6 +1,7 @@
 // TODO: REMOVE MODULE
 plugins {
     id("wakatimeapp.android.library")
+    id("com.google.devtools.ksp") version "1.7.10-1.0.6"
 }
 
 dependencies {
@@ -10,9 +11,9 @@ dependencies {
     implementation("net.openid:appauth:0.11.1")
 
     // Room
-    implementation("com.google.devtools.ksp:symbol-processing-api:1.6.10-1.0.2")
-    implementation("androidx.room:room-runtime:2.4.2")
-    implementation("androidx.room:room-ktx:2.4.2")
+    implementation("com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.6")
+    implementation("androidx.room:room-runtime:2.4.3")
+    implementation("androidx.room:room-ktx:2.4.3")
 
     implementation("androidx.datastore:datastore-preferences:1.0.0")
 
