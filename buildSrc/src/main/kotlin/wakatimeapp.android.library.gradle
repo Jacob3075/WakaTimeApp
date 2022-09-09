@@ -11,6 +11,8 @@ android {
 
     defaultConfig {
         minSdk = 26
+
+        manifestPlaceholders["appAuthRedirectScheme"] = "wakatimeapp"
     }
 
     compileOptions {
