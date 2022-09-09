@@ -14,6 +14,7 @@ import kotlinx.serialization.json.Json.Default
 import net.openid.appauth.AuthState
 import javax.inject.Inject
 
+// TODO: RENAME TO AUTH DATA STORE
 class OfflineDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>,
 ) {
