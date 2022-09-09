@@ -6,12 +6,12 @@ import com.jacob.wakatimeapp.core.models.Result.Failure
 import com.jacob.wakatimeapp.core.models.Result.Success
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.HomePageNetworkData
-import com.jacob.wakatimeapp.home.data.mappers.GetWeeklyStatsResMapper
+import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
+import com.jacob.wakatimeapp.home.data.mappers.toModel
 import timber.log.Timber
 import javax.inject.Inject
 
 class GetLast7DaysStatsUC @Inject constructor(
-    private val getWeeklyStatsResMapper: GetWeeklyStatsResMapper,
     private val homePageNetworkData: HomePageNetworkData,
 ) {
     suspend operator fun invoke(): Result<WeeklyStats> {
@@ -22,7 +22,7 @@ class GetLast7DaysStatsUC @Inject constructor(
             )
 
             val weeklyStats =
-                statsForTodayResponse.body()!!.run(getWeeklyStatsResMapper::fromDtoToModel)
+                statsForTodayResponse.body()!!.run(GetLast7DaysStatsResDTO::toModel)
 
             return Success(weeklyStats)
         } catch (exception: Exception) {

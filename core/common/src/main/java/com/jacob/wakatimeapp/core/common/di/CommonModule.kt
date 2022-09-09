@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.common
+package com.jacob.wakatimeapp.core.common.di
 
 import android.content.Context
 import dagger.Module
@@ -14,6 +14,7 @@ import kotlin.coroutines.CoroutineContext
 @Module
 @InstallIn(SingletonComponent::class)
 object CommonModule {
+    //TODO
 //    @Singleton
 //    @Provides
 //    fun provideUserSession() = UserSession()

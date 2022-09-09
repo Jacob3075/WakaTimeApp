@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.data
+package com.jacob.wakatimeapp.core.common.auth
 
 import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
@@ -14,9 +14,9 @@ import kotlinx.serialization.json.Json.Default
 import net.openid.appauth.AuthState
 import javax.inject.Inject
 
-// TODO: RENAME TO AUTH DATA STORE
-class OfflineDataStore @Inject constructor(
+class AuthDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>,
+    private val json: Json,
 ) {
     fun getUserDetails(): Flow<UserDetails> =
         dataStore.data.map { preferences ->
@@ -26,7 +26,7 @@ class OfflineDataStore @Inject constructor(
 
     suspend fun updateUserDetails(userDetails: UserDetails) {
         dataStore.edit {
-            it[KEY_USER_DETAILS] = Json.encodeToString(userDetails)
+            it[KEY_USER_DETAILS] = json.encodeToString(userDetails)
         }
     }
 

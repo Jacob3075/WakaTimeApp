@@ -1,30 +1,20 @@
 package com.jacob.wakatimeapp.login.data.mappers
 
-import com.jacob.wakatimeapp.core.data.mappers.DtoMapper
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.login.data.dtos.GetUserDetailsResDTO
-import javax.inject.Inject
 
-class UserDetailsMapper @Inject constructor() :
-    DtoMapper<GetUserDetailsResDTO, UserDetails> {
-    override fun fromDtoToModel(dto: GetUserDetailsResDTO) =
-        UserDetails(
-            bio = dto.data.bio,
-            email = dto.data.email,
-            id = dto.data.id,
-            timeout = dto.data.timeout,
-            timezone = dto.data.timezone,
-            username = dto.data.username,
-            displayName = dto.data.displayName,
-            lastProject = dto.data.lastProject,
-            fullName = dto.data.fullName,
-            durationsSliceBy = dto.data.durationsSliceBy,
-            createdAt = dto.data.createdAt,
-            dateFormat = dto.data.dateFormat,
-            photoUrl = "${dto.data.photoUrl}?s=420"
-        )
-
-    override fun fromModelToDto(model: UserDetails): GetUserDetailsResDTO {
-        TODO("Not yet implemented")
-    }
-}
+fun GetUserDetailsResDTO.toModel() = UserDetails(
+    bio = data.bio,
+    email = data.email,
+    id = data.id,
+    timeout = data.timeout,
+    timezone = data.timezone,
+    username = data.username,
+    displayName = data.displayName,
+    lastProject = data.lastProject,
+    fullName = data.fullName,
+    durationsSliceBy = data.durationsSliceBy,
+    createdAt = data.createdAt,
+    dateFormat = data.dateFormat,
+    photoUrl = "${data.photoUrl}?s=420"
+)

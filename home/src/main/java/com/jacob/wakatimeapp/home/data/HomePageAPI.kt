@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.home.data
 
-import com.jacob.wakatimeapp.core.common.AuthStateManager
+import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.home.data.dtos.AllTimeDataDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
@@ -25,11 +25,11 @@ interface HomePageAPI {
 
 @Singleton
 class HomePageNetworkData @Inject constructor(
-    private val authStateManager: AuthStateManager,
+    private val authTokenProvider: AuthTokenProvider,
     private val homePageAPI: HomePageAPI,
 ) {
     private val token: String
-        get() = runBlocking { authStateManager.getFreshToken().first() }
+        get() = runBlocking { authTokenProvider.getFreshToken().first() }
 
     suspend fun getLast7DaysStats(): Response<GetLast7DaysStatsResDTO> =
         homePageAPI.getLast7DaysStats("Bearer $token")

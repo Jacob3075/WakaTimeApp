@@ -3,13 +3,13 @@ package com.jacob.wakatimeapp.home.usecases
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.ErrorTypes
 import com.jacob.wakatimeapp.home.data.HomePageNetworkData
-import com.jacob.wakatimeapp.home.data.mappers.GetDailyStatsResMapper
 import com.jacob.wakatimeapp.core.models.Result
+import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
+import com.jacob.wakatimeapp.home.data.mappers.toModel
 import javax.inject.Inject
 
 class GetDailyStatsUC @Inject constructor(
     private val homePageNetworkData: HomePageNetworkData,
-    private val getDailyStatsResMapper: GetDailyStatsResMapper,
 ) {
     suspend operator fun invoke(): Result<DailyStats> {
         try {
@@ -20,8 +20,7 @@ class GetDailyStatsUC @Inject constructor(
                 )
             )
 
-            val dailyStats =
-                statsForTodayResponse.body()!!.run(getDailyStatsResMapper::fromDtoToModel)
+            val dailyStats = statsForTodayResponse.body()!!.run(GetDailyStatsResDTO::toModel)
 
             return Result.Success(dailyStats)
         } catch (exception: Exception) {

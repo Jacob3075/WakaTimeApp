@@ -3,8 +3,8 @@ package com.jacob.wakatimeapp.home.ui
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.jacob.wakatimeapp.core.data.OfflineDataStore
-import com.jacob.wakatimeapp.core.common.AuthStateManager
+import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
+import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.home.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -16,10 +16,10 @@ import kotlin.coroutines.CoroutineContext
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     application: Application,
-    offlineDataStore: OfflineDataStore,
+    authDataStore: AuthDataStore,
     private val ioDispatcher: CoroutineContext,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
-    private val authStateManager: AuthStateManager,
+    private val authTokenProvider: AuthTokenProvider,
 ) : AndroidViewModel(application) {
 
     private val _homePageState =
@@ -32,7 +32,7 @@ class HomePageViewModel @Inject constructor(
     init {
         viewModelScope.launch(ioDispatcher) {
             val result = getLast7DaysStatsUC.invoke()
-            val userDetails = offlineDataStore.getUserDetails().filterNotNull().first()
+            val userDetails = authDataStore.getUserDetails().filterNotNull().first()
 
             when (result) {
                 is com.jacob.wakatimeapp.core.models.Result.Success -> {
