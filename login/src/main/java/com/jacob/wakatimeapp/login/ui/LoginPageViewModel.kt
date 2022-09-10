@@ -8,8 +8,8 @@ import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.setValue
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
-import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.core.common.Constants
+import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.login.BuildConfig
 import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -30,6 +30,7 @@ class LoginPageViewModel @Inject constructor(
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
     private val authTokenProvider: AuthTokenProvider,
+    val loginPageNavigations: LoginPageNavigations,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
 

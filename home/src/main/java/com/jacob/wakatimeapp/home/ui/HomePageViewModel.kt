@@ -20,6 +20,7 @@ class HomePageViewModel @Inject constructor(
     private val ioDispatcher: CoroutineContext,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
     private val authTokenProvider: AuthTokenProvider,
+    val homePageNavigations: HomePageNavigations,
 ) : AndroidViewModel(application) {
 
     private val _homePageState =

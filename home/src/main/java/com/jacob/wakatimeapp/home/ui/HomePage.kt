@@ -1,8 +1,5 @@
 package com.jacob.wakatimeapp.home.ui
 
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
@@ -14,60 +11,33 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.findNavController
 import com.jacob.wakatimeapp.core.common.observeInLifecycle
 import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
-import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.home.ui.components.*
-import dagger.hilt.android.AndroidEntryPoint
+import com.ramcosta.composedestinations.annotation.Destination
+import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
-import javax.inject.Inject
 
 @ExperimentalCoroutinesApi
-@AndroidEntryPoint
-class HomePage : Fragment() {
-    private val viewModel by viewModels<HomePageViewModel>()
-
-    @Inject
-    lateinit var homePageNavigations: HomePageNavigations
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ) = ComposeView(requireContext()).apply {
-        setContent {
-            WakaTimeAppTheme {
-                HomePageContent(
-                    HomePageParameters(
-                        viewModel = viewModel,
-                        navController = findNavController()
-                    ),
-                    homePageNavigations = homePageNavigations
-                )
-            }
-        }
-    }
-}
-
-@ExperimentalCoroutinesApi
+@Destination
 @Composable
-private fun HomePageContent(parameters: HomePageParameters, homePageNavigations: HomePageNavigations) {
+private fun HomePageContent(
+    navigator: DestinationsNavigator,
+    parameters: HomePageParameters,
+) {
     val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
-    val viewState by parameters.viewModel.homePageState.collectAsState()
+    val viewModel = parameters.viewModel
+    val viewState by viewModel.homePageState.collectAsState()
 
-    parameters.viewModel.errors
+    viewModel.errors
         .onEach {
             snackBarCoroutineScope.launch {
                 scaffoldState.snackbarHostState.showSnackbar(
@@ -90,7 +60,7 @@ private fun HomePageContent(parameters: HomePageParameters, homePageNavigations:
                     homePageViewState = viewState as HomePageViewState.Loaded,
                     navController = parameters.navController
                 ),
-                homePageNavigations = homePageNavigations,
+                homePageNavigations = viewModel.homePageNavigations,
             )
 
             is HomePageViewState.Error -> HomePageError(HomePageErrorParameters(viewState as HomePageViewState.Error))
@@ -99,7 +69,10 @@ private fun HomePageContent(parameters: HomePageParameters, homePageNavigations:
 }
 
 @Composable
-private fun HomePageLoaded(parameters: HomePageLoadedParameters, homePageNavigations: HomePageNavigations) {
+private fun HomePageLoaded(
+    parameters: HomePageLoadedParameters,
+    homePageNavigations: HomePageNavigations,
+) {
     val scrollState = rememberScrollState()
     Column(
         modifier = Modifier

@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.login.ui
 
-import androidx.navigation.NavDirections
+import com.ramcosta.composedestinations.spec.Direction
 
 interface LoginPageNavigations {
-    fun toHomePage(): NavDirections
+    fun toHomePage(): Direction
 }
