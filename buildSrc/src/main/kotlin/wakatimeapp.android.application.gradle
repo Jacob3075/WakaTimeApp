@@ -39,6 +39,15 @@ android {
     }
 
     kotlinOptions { jvmTarget = "11" }
+
+    // Compose Destination config
+    applicationVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -48,9 +57,8 @@ dependencies {
     implementation("androidx.legacy:legacy-support-v4:1.0.0")
 
     // Navigation
-    implementation("androidx.navigation:navigation-fragment-ktx:2.5.1")
-    implementation("androidx.navigation:navigation-ui-ktx:2.5.1")
-    implementation("androidx.navigation:navigation-testing:2.5.1")
+    implementation("io.github.raamcosta.compose-destinations:core:1.6.19-beta")
+    ksp("io.github.raamcosta.compose-destinations:ksp:1.6.19-beta")
 
     implementation("androidx.hilt:hilt-navigation-fragment:1.0.0")
 
