@@ -30,7 +30,6 @@ class LoginPageViewModel @Inject constructor(
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
     private val authTokenProvider: AuthTokenProvider,
-    val loginPageNavigations: LoginPageNavigations,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
 

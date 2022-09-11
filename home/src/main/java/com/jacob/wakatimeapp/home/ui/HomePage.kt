@@ -13,28 +13,25 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalLifecycleOwner
 import androidx.compose.ui.unit.dp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.common.observeInLifecycle
 import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.home.ui.components.*
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.onEach
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
-@ExperimentalCoroutinesApi
-@Destination
 @Composable
-private fun HomePageContent(
-    navigator: DestinationsNavigator,
-    parameters: HomePageParameters,
+fun HomePageContent(
+    viewModel: HomePageViewModel = hiltViewModel(),
+    homePageNavigator: HomePageNavigator,
 ) {
+    Timber.e("Loaded")
     val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
-    val viewModel = parameters.viewModel
     val viewState by viewModel.homePageState.collectAsState()
 
     viewModel.errors
@@ -58,9 +55,9 @@ private fun HomePageContent(
             is HomePageViewState.Loaded -> HomePageLoaded(
                 HomePageLoadedParameters(
                     homePageViewState = viewState as HomePageViewState.Loaded,
-                    navController = parameters.navController
+                    navigator = homePageNavigator
                 ),
-                homePageNavigations = viewModel.homePageNavigations,
+                homePageNavigator = homePageNavigator,
             )
 
             is HomePageViewState.Error -> HomePageError(HomePageErrorParameters(viewState as HomePageViewState.Error))
@@ -71,7 +68,7 @@ private fun HomePageContent(
 @Composable
 private fun HomePageLoaded(
     parameters: HomePageLoadedParameters,
-    homePageNavigations: HomePageNavigations,
+    homePageNavigator: HomePageNavigator,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -90,9 +87,7 @@ private fun HomePageLoaded(
                 iconId = drawable.ic_time,
                 mainText = "Total Time Spent Today",
                 time = parameters.homePageViewState.contentData.todaysStats.timeSpent,
-                onClick = {
-                    parameters.navController.navigate(homePageNavigations.toDetailsPage())
-                }
+                onClick = homePageNavigator::toDetailsPage
             )
         )
         Spacer(modifier = Modifier.height(25.dp))

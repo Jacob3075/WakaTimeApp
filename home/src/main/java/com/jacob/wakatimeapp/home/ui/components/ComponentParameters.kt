@@ -1,8 +1,9 @@
 package com.jacob.wakatimeapp.home.ui.components
 
 import androidx.navigation.NavController
-import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.UserDetails
+import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.home.ui.HomePageViewModel
 import com.jacob.wakatimeapp.home.ui.HomePageViewState
 import com.jacob.wakatimeapp.home.ui.HomePageViewState.Loaded
@@ -19,7 +20,7 @@ data class HomePageErrorParameters(
 
 data class HomePageLoadedParameters(
     val homePageViewState: Loaded,
-    val navController: NavController,
+    val navigator: HomePageNavigator,
 )
 
 data class ShowIllustrationParameters(

@@ -19,24 +19,22 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import com.ramcosta.composedestinations.annotation.Destination
-import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
 
-@Destination
 @Composable
 fun LoginPageContent(
-    viewModel: LoginPageViewModel,
-    navigator: DestinationsNavigator,
+    viewModel: LoginPageViewModel = hiltViewModel(),
+    loginPageNavigator: LoginPageNavigator,
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
     if (viewModel.authStatus) {
         viewModel.updateUserDetails()
-        navigator.navigate(viewModel.loginPageNavigations.toHomePage())
+        loginPageNavigator.toHomePage()
     }
 
     val launcher =

@@ -5,6 +5,9 @@ import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.navigation.ApplicationNavigator
+import com.ramcosta.composedestinations.DestinationsNavHost
+import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
@@ -15,6 +18,12 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         setContent {
             WakaTimeAppTheme {
+                DestinationsNavHost(
+                    navGraph = NavGraphs.root,
+                    dependenciesContainerBuilder = {
+                        dependency(ApplicationNavigator(navController))
+                    }
+                )
             }
         }
     }
