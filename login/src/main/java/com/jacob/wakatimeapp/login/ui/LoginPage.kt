@@ -1,9 +1,6 @@
 package com.jacob.wakatimeapp.login.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import android.os.Bundle
-import android.view.LayoutInflater
-import android.view.ViewGroup
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
@@ -16,62 +13,28 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.platform.ComposeView
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import androidx.fragment.app.Fragment
-import androidx.fragment.app.viewModels
-import androidx.navigation.NavController
-import androidx.navigation.fragment.findNavController
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import dagger.hilt.android.AndroidEntryPoint
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
-import javax.inject.Inject
 
-@ExperimentalCoroutinesApi
-@AndroidEntryPoint
-class LoginPage : Fragment() {
-    private val viewModel by viewModels<LoginPageViewModel>()
-
-    @Inject
-    lateinit var loginPageNavigations: LoginPageNavigations
-
-    override fun onCreateView(
-        inflater: LayoutInflater,
-        container: ViewGroup?,
-        savedInstanceState: Bundle?,
-    ) = ComposeView(requireContext()).apply {
-        setContent {
-            WakaTimeAppTheme {
-                LoginPageContent(
-                    viewModel,
-                    findNavController(),
-                    loginPageNavigations,
-                )
-            }
-        }
-    }
-}
-
-@ExperimentalCoroutinesApi
 @Composable
-private fun LoginPageContent(
-    viewModel: LoginPageViewModel,
-    navController: NavController,
-    loginPageNavigations: LoginPageNavigations,
+fun LoginPageContent(
+    viewModel: LoginPageViewModel = hiltViewModel(),
+    loginPageNavigator: LoginPageNavigator,
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
     if (viewModel.authStatus) {
         viewModel.updateUserDetails()
-        navController.navigate(loginPageNavigations.toHomePage())
+        loginPageNavigator.toHomePage()
     }
 
     val launcher =
