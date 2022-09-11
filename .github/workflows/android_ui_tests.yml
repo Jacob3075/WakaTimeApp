@@ -3,9 +3,8 @@ name: Android UI Tests
 on: pull_request
 
 # creates device snapshot for faster startup
-
 jobs:
-  test:
+  ui_test:
     runs-on: macos-latest # performance improvements
     steps:
       - name: checkout
