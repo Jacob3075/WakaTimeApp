@@ -6,6 +6,7 @@ import androidx.appcompat.app.AppCompatActivity
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.navigation.ApplicationNavigator
+import com.jacob.wakatimeapp.navigation.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint

@@ -1,9 +1,9 @@
 package com.jacob.wakatimeapp.navigation
 
 import androidx.navigation.NavController
-import com.jacob.wakatimeapp.destinations.HomePageDestination
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
+import com.jacob.wakatimeapp.navigation.destinations.HomePageDestination
 import com.ramcosta.composedestinations.navigation.navigate
 
 class ApplicationNavigator(private val navController: NavController) :
