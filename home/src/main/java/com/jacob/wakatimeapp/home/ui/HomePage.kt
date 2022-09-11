@@ -12,19 +12,20 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.TimeSpentCard
-import com.jacob.wakatimeapp.core.ui.TimeSpentCardParameters
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.home.ui.components.*
 import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
-import timber.log.Timber
+
+interface HomePageNavigator {
+    fun toDetailsPage()
+}
 
 @Composable
 fun HomePageContent(
     viewModel: HomePageViewModel = hiltViewModel(),
-    homePageNavigator: HomePageNavigator,
+    navigator: HomePageNavigator,
 ) {
-    Timber.e("Loaded")
     val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.homePageState.collectAsState()
@@ -49,22 +50,19 @@ fun HomePageContent(
         when (viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
             is HomePageViewState.Loaded -> HomePageLoaded(
-                HomePageLoadedParameters(
-                    homePageViewState = viewState as HomePageViewState.Loaded,
-                    navigator = homePageNavigator
-                ),
-                homePageNavigator = homePageNavigator,
+                homePageViewState = viewState as HomePageViewState.Loaded,
+                navigator = navigator,
             )
 
-            is HomePageViewState.Error -> HomePageError(HomePageErrorParameters(viewState as HomePageViewState.Error))
+            is HomePageViewState.Error -> HomePageError(viewState as HomePageViewState.Error)
         }
     }
 }
 
 @Composable
 private fun HomePageLoaded(
-    parameters: HomePageLoadedParameters,
-    homePageNavigator: HomePageNavigator,
+    homePageViewState: HomePageViewState.Loaded,
+    navigator: HomePageNavigator,
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -73,31 +71,29 @@ private fun HomePageLoaded(
             .padding(top = 30.dp)
             .verticalScroll(scrollState)
     ) {
-        UserDetailsSection(UserDetailsSectionParameters(parameters.homePageViewState.userDetails))
+        UserDetailsSection(homePageViewState.userDetails)
         Spacer(modifier = Modifier.height(25.dp))
 
         TimeSpentCard(
-            parameters = TimeSpentCardParameters(
-                gradient = Gradients.primary,
-                roundedCornerPercent = 25,
-                iconId = drawable.ic_time,
-                mainText = "Total Time Spent Today",
-                time = parameters.homePageViewState.contentData.todaysStats.timeSpent,
-                onClick = homePageNavigator::toDetailsPage
-            )
+            gradient = Gradients.primary,
+            roundedCornerPercent = 25,
+            iconId = drawable.ic_time,
+            mainText = "Total Time Spent Today",
+            time = homePageViewState.contentData.todaysStats.timeSpent,
+            onClick = navigator::toDetailsPage,
         )
         Spacer(modifier = Modifier.height(25.dp))
 
-        RecentProjects(RecentProjectsParameters(parameters.homePageViewState.contentData.todaysStats))
+        RecentProjects(homePageViewState.contentData.todaysStats)
         Spacer(modifier = Modifier.height(10.dp))
 
-        WeeklyReport(WeeklyReportParameters(parameters.homePageViewState.contentData.dailyStats))
+        WeeklyReport(homePageViewState.contentData.dailyStats)
         Spacer(modifier = Modifier.height(25.dp))
 
-        OtherDailyStatsSection(OtherDailyStatsSectionParameters(
-            parameters.homePageViewState.contentData.todaysStats,
+        OtherDailyStatsSection(
+            homePageViewState.contentData.todaysStats,
             onClick = {}
-        ))
+        )
         Spacer(modifier = Modifier.height(25.dp))
     }
 }

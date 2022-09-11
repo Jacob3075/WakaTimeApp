@@ -17,4 +17,4 @@ fun LoginPage(loginPageNavigator: LoginPageNavigator) =
 @Composable
 @Destination
 fun HomePage(homePageNavigator: HomePageNavigator) =
-    HomePageContent(homePageNavigator = homePageNavigator)
+    HomePageContent(navigator = homePageNavigator)

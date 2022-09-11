@@ -33,7 +33,9 @@ import java.util.*
 
 
 @Composable
-fun WeeklyReport(parameters: WeeklyReportParameters) {
+fun WeeklyReport(
+    dailyStats: List<DailyStats>?,
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -46,7 +48,7 @@ fun WeeklyReport(parameters: WeeklyReportParameters) {
             Text(text = "Details", color = Colors.AccentText, fontSize = 14.sp)
         }
         Spacer(modifier = Modifier.height(10.dp))
-        WeeklyReportChart(parameters.dailyStats ?: emptyList())
+        WeeklyReportChart(dailyStats ?: emptyList())
     }
 }
 
@@ -129,7 +131,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
 @Composable
 fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
-        WeeklyReport(WeeklyReportParameters(emptyList()))
+        WeeklyReport(emptyList())
     }
 }
 

@@ -26,57 +26,55 @@ import com.jacob.wakatimeapp.home.ui.HomePageTestTags.ERROR_ANIMATION_ILLUSTRATI
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.ERROR_TEXT
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
 import com.jacob.wakatimeapp.home.ui.HomePageTestTags.LOADING_TEXT
+import com.jacob.wakatimeapp.home.ui.HomePageViewState
 import kotlin.random.Random
 
 @Composable
 fun HomePageLoading() =
     if (Random.nextBoolean()) ShowAnimation(
-        parameters = ShowAnimationParameters(
-            animations = listOf(
-                R.raw.loading_1,
-                R.raw.loading_2,
-                R.raw.loading_animation,
-                R.raw.loading_bloob,
-                R.raw.loading_paperplane_1,
-                R.raw.loading_paperplane_2,
-            ),
-            text = "Loading..",
-            animationTestTag = LOADING_ANIMATION_ILLUSTRATION,
-            textTestTag = LOADING_TEXT
+        animations = listOf(
+            R.raw.loading_1,
+            R.raw.loading_2,
+            R.raw.loading_animation,
+            R.raw.loading_bloob,
+            R.raw.loading_paperplane_1,
+            R.raw.loading_paperplane_2,
         ),
+        text = "Loading..",
+        animationTestTag = LOADING_ANIMATION_ILLUSTRATION,
+        textTestTag = LOADING_TEXT,
     ) else ShowIllustration(
-        showIllustrationParameters = ShowIllustrationParameters(
-            illustrations = listOf(
-                R.drawable.il_loading_1,
-                R.drawable.il_loading_2,
-                R.drawable.il_loading_3,
-                R.drawable.il_loading_3a,
-            ),
-            text = "Loading..",
-            illustrationTestTag = LOADING_ANIMATION_ILLUSTRATION,
-            textTestTag = LOADING_TEXT
+        illustrations = listOf(
+            R.drawable.il_loading_1,
+            R.drawable.il_loading_2,
+            R.drawable.il_loading_3,
+            R.drawable.il_loading_3a,
         ),
+        text = "Loading..",
+        illustrationTestTag = LOADING_ANIMATION_ILLUSTRATION,
+        textTestTag = LOADING_TEXT
     )
 
 @Composable
-fun HomePageError(parameters: HomePageErrorParameters) {
+fun HomePageError(errorMessage: HomePageViewState.Error) {
     ShowAnimation(
-        parameters = ShowAnimationParameters(
-            animations = listOf(
-                R.raw.error_1,
-                R.raw.error_2,
-                R.raw.error_animation,
-            ),
-            text = parameters.errorMessage.errorMessage,
-            animationTestTag = ERROR_ANIMATION_ILLUSTRATION,
-            textTestTag = ERROR_TEXT
+        animations = listOf(
+            R.raw.error_1,
+            R.raw.error_2,
+            R.raw.error_animation,
         ),
+        text = errorMessage.errorMessage,
+        animationTestTag = ERROR_ANIMATION_ILLUSTRATION,
+        textTestTag = ERROR_TEXT,
     )
 }
 
 @Composable
 private fun ShowIllustration(
-    showIllustrationParameters: ShowIllustrationParameters,
+    illustrations: List<Int>,
+    text: String,
+    illustrationTestTag: String,
+    textTestTag: String,
 ) {
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -84,26 +82,29 @@ private fun ShowIllustration(
         modifier = Modifier.fillMaxSize()
     ) {
         Image(
-            painter = painterResource(id = showIllustrationParameters.illustrations.random()),
+            painter = painterResource(id = illustrations.random()),
             contentDescription = "",
             contentScale = ContentScale.Fit,
-            modifier = Modifier.testTag(showIllustrationParameters.illustrationTestTag)
+            modifier = Modifier.testTag(illustrationTestTag)
         )
         Spacer(modifier = Modifier.height(25.dp))
         Text(
-            text = showIllustrationParameters.text,
+            text = text,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
-            modifier = Modifier.testTag(showIllustrationParameters.textTestTag)
+            modifier = Modifier.testTag(textTestTag)
         )
     }
 }
 
 @Composable
 fun ShowAnimation(
-    parameters: ShowAnimationParameters,
+    animations: List<Int>,
+    text: String,
+    animationTestTag: String,
+    textTestTag: String,
 ) {
-    val composition by rememberLottieComposition(RawRes(parameters.animations.random()))
+    val composition by rememberLottieComposition(RawRes(animations.random()))
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -113,14 +114,14 @@ fun ShowAnimation(
         LottieAnimation(
             composition = composition,
             iterations = LottieConstants.IterateForever,
-            modifier = Modifier.testTag(parameters.animationTestTag)
+            modifier = Modifier.testTag(animationTestTag)
         )
         Spacer(modifier = Modifier.height(25.dp))
         Text(
-            text = parameters.text,
+            text = text,
             fontWeight = FontWeight.SemiBold,
             fontSize = 18.sp,
-            modifier = Modifier.testTag(parameters.textTestTag)
+            modifier = Modifier.testTag(textTestTag)
         )
     }
 }
@@ -130,17 +131,15 @@ fun ShowAnimation(
 fun IllustrationPreview() = WakaTimeAppTheme {
     Surface {
         ShowIllustration(
-            showIllustrationParameters = ShowIllustrationParameters(
-                illustrations = listOf(
-                    R.drawable.il_loading_1,
-                    R.drawable.il_loading_2,
-                    R.drawable.il_loading_3,
-                    R.drawable.il_loading_3a,
-                ),
-                text = "Loading...",
-                illustrationTestTag = "",
-                textTestTag = ""
+            illustrations = listOf(
+                R.drawable.il_loading_1,
+                R.drawable.il_loading_2,
+                R.drawable.il_loading_3,
+                R.drawable.il_loading_3a,
             ),
+            text = "Loading...",
+            illustrationTestTag = "",
+            textTestTag = "",
         )
     }
 }
@@ -149,18 +148,16 @@ fun IllustrationPreview() = WakaTimeAppTheme {
 @Composable
 fun AnimationPreview() = WakaTimeAppTheme {
     ShowAnimation(
-        parameters = ShowAnimationParameters(
-            animations = listOf(
-                R.raw.loading_1,
-                R.raw.loading_2,
-                R.raw.loading_animation,
-                R.raw.loading_bloob,
-                R.raw.loading_paperplane_1,
-                R.raw.loading_paperplane_2,
-            ),
-            text = "Loading...",
-            animationTestTag = "",
-            textTestTag = ""
-        )
+        animations = listOf(
+            R.raw.loading_1,
+            R.raw.loading_2,
+            R.raw.loading_animation,
+            R.raw.loading_bloob,
+            R.raw.loading_paperplane_1,
+            R.raw.loading_paperplane_2,
+        ),
+        text = "Loading...",
+        animationTestTag = "",
+        textTestTag = ""
     )
 }
