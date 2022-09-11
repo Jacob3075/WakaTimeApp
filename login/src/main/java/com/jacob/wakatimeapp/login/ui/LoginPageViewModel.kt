@@ -50,12 +50,18 @@ class LoginPageViewModel @Inject constructor(
     var authStatus by mutableStateOf(authTokenProvider.current.isAuthorized)
         private set
 
+    /**
+     * Gets fresh auth token if needed and stores updates the stored user details
+     *
+     * Must be called from UI before navigating to the next screen so that a fresh
+     * token is available
+     */
     fun updateUserDetails() {
         CoroutineScope(ioDispatcher).launch {
             authTokenProvider.getFreshToken()
                 .filterNotNull()
                 .first()
-                .let { updateUserDetailsUC.invoke(it) }
+                .let { updateUserDetailsUC(it) }
         }
     }
 

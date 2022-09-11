@@ -37,7 +37,7 @@ fun LoginPageContent(
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
-    LaunchedEffect(Unit) {
+    LaunchedEffect(viewModel.authStatus) {
         if (viewModel.authStatus) {
             viewModel.updateUserDetails()
             loginPageNavigator.toHomePage()
