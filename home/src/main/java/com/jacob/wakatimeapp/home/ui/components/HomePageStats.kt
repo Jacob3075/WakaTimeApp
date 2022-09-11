@@ -8,14 +8,17 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jacob.wakatimeapp.core.ui.R.drawable
+import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.ui.OtherStatsCard
-import com.jacob.wakatimeapp.core.ui.OtherStatsCardParameters
+import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 
 @Composable
-fun OtherDailyStatsSection(parameters: OtherDailyStatsSectionParameters) {
+fun OtherDailyStatsSection(
+    dailyStats: DailyStats?,
+    onClick: () -> Unit,
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -29,36 +32,30 @@ fun OtherDailyStatsSection(parameters: OtherDailyStatsSectionParameters) {
         }
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
-            parameters = OtherStatsCardParameters(
-                gradient = Gradients.greenCyan,
-                roundedCornerPercent = 25,
-                iconId = drawable.ic_code_file,
-                mainText = "Most Language Used",
-                language = parameters.dailyStats?.mostUsedLanguage ?: "",
-                onClick = parameters.onClick
-            ),
+            gradient = Gradients.greenCyan,
+            roundedCornerPercent = 25,
+            iconId = drawable.ic_code_file,
+            mainText = "Most Language Used",
+            language = dailyStats?.mostUsedLanguage ?: "",
+            onClick = onClick,
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
-            parameters = OtherStatsCardParameters(
-                gradient = Gradients.purpleCyanLight,
-                roundedCornerPercent = 25,
-                iconId = drawable.ic_laptop,
-                mainText = "Most OS Used",
-                language = parameters.dailyStats?.mostUsedOs ?: "",
-                onClick = parameters.onClick
-            ),
+            gradient = Gradients.purpleCyanLight,
+            roundedCornerPercent = 25,
+            iconId = drawable.ic_laptop,
+            mainText = "Most OS Used",
+            language = dailyStats?.mostUsedOs ?: "",
+            onClick = onClick,
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
-            parameters = OtherStatsCardParameters(
-                gradient = Gradients.purpleCyanLight,
-                roundedCornerPercent = 25,
-                iconId = drawable.ic_laptop,
-                mainText = "Most OS Used",
-                language = parameters.dailyStats?.mostUsedOs ?: "",
-                onClick = parameters.onClick
-            ),
+            gradient = Gradients.purpleCyanLight,
+            roundedCornerPercent = 25,
+            iconId = drawable.ic_laptop,
+            mainText = "Most OS Used",
+            language = dailyStats?.mostUsedOs ?: "",
+            onClick = onClick,
         )
     }
 }

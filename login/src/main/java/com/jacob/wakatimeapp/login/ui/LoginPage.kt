@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.*
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -25,6 +26,10 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
 
+interface LoginPageNavigator {
+    fun toHomePage()
+}
+
 @Composable
 fun LoginPageContent(
     viewModel: LoginPageViewModel = hiltViewModel(),
@@ -32,9 +37,11 @@ fun LoginPageContent(
 ) = Surface(
     modifier = Modifier.fillMaxSize(),
 ) {
-    if (viewModel.authStatus) {
-        viewModel.updateUserDetails()
-        loginPageNavigator.toHomePage()
+    LaunchedEffect(Unit) {
+        if (viewModel.authStatus) {
+            viewModel.updateUserDetails()
+            loginPageNavigator.toHomePage()
+        }
     }
 
     val launcher =

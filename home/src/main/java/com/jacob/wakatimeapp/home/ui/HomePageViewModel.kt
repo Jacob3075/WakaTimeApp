@@ -5,6 +5,8 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
+import com.jacob.wakatimeapp.core.models.ErrorTypes
+import com.jacob.wakatimeapp.core.models.Result
 import com.jacob.wakatimeapp.home.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.flow.*
@@ -35,24 +37,24 @@ class HomePageViewModel @Inject constructor(
             val userDetails = authDataStore.getUserDetails().filterNotNull().first()
 
             when (result) {
-                is com.jacob.wakatimeapp.core.models.Result.Success -> {
+                is Result.Success -> {
                     _homePageState.value = HomePageViewState.Loaded(
                         result.value,
                         userDetails,
                     )
                 }
-                is com.jacob.wakatimeapp.core.models.Result.Failure -> {
+                is Result.Failure -> {
                     val error = getErrorMessage(result)
                     _homePageState.value = error
                     _errors.emit(error)
                 }
-                is com.jacob.wakatimeapp.core.models.Result.Empty -> Timber.e("EMPTY")
+                is Result.Empty -> Timber.e("EMPTY")
             }
         }
     }
 
-    private fun getErrorMessage(last7DaysStatsResult: com.jacob.wakatimeapp.core.models.Result.Failure): HomePageViewState.Error =
+    private fun getErrorMessage(last7DaysStatsResult: Result.Failure): HomePageViewState.Error =
         when (val errorType = last7DaysStatsResult.errorHolder) {
-            is com.jacob.wakatimeapp.core.models.ErrorTypes.NetworkError -> HomePageViewState.Error(errorType.throwable.message ?: "")
+            is ErrorTypes.NetworkError -> HomePageViewState.Error(errorType.throwable.message ?: "")
         }
 }

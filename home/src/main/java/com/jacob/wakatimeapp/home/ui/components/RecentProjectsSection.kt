@@ -26,7 +26,9 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import java.time.LocalDate
 
 @Composable
-fun RecentProjects(parameters: RecentProjectsParameters) {
+fun RecentProjects(
+    dailyStats: DailyStats?,
+) {
     Column(
         modifier = Modifier.fillMaxWidth()
     ) {
@@ -40,7 +42,7 @@ fun RecentProjects(parameters: RecentProjectsParameters) {
         }
         RecentProjectList(
             modifier = Modifier.padding(horizontal = 12.dp),
-            projects = parameters.dailyStats?.projectsWorkedOn ?: emptyList()
+            projects = dailyStats?.projectsWorkedOn ?: emptyList()
         )
     }
 }
@@ -94,19 +96,17 @@ private fun ProjectCardItem(project: Project) {
 fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         RecentProjects(
-            parameters = RecentProjectsParameters(
-                DailyStats(
-                    timeSpent = Time(0, 0, 0f),
-                    projectsWorkedOn = listOf(
-                        Project(Time(10, 9, 0f), "Project 1", 75.0),
-                        Project(Time(100, 26, 0f), "Project 2", 20.0),
-                        Project(Time(5, 15, 0f), "Project 3", 10.0),
-                    ),
-                    mostUsedLanguage = "",
-                    mostUsedEditor = "",
-                    mostUsedOs = "",
-                    date = LocalDate.now()
-                )
+            DailyStats(
+                timeSpent = Time(0, 0, 0f),
+                projectsWorkedOn = listOf(
+                    Project(Time(10, 9, 0f), "Project 1", 75.0),
+                    Project(Time(100, 26, 0f), "Project 2", 20.0),
+                    Project(Time(5, 15, 0f), "Project 3", 10.0),
+                ),
+                mostUsedLanguage = "",
+                mostUsedEditor = "",
+                mostUsedOs = "",
+                date = LocalDate.now()
             ),
         )
     }

@@ -1,6 +1,7 @@
 package com.jacob.wakatimeapp.core.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -22,41 +23,50 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.ui.theme.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 
 @Composable
-fun StatsCard(
-    parameters: StatsCardParameters,
+private fun StatsCard(
+    gradient: Gradient,
+    roundedCornerPercent: Int = 25,
+    @DrawableRes iconId: Int,
+    mainText: String,
+    text: String,
+    weights: Pair<Float, Float> = Pair(1f, 1f),
+    iconOffset: Int = 50,
+    iconSize: Int = 80,
+    onClick: () -> Unit,
 ) {
     val cardGradient =
-        Brush.horizontalGradient(listOf(parameters.gradient.startColor,
-            parameters.gradient.endColor))
-    val cardShape = RoundedCornerShape(parameters.roundedCornerPercent)
+        Brush.horizontalGradient(listOf(gradient.startColor,
+            gradient.endColor))
+    val cardShape = RoundedCornerShape(roundedCornerPercent)
     Box(
         contentAlignment = Alignment.Center,
         modifier = Modifier
             .shadow(elevation = 10.dp, shape = cardShape)
-            .clickable { parameters.onClick() }
+            .clickable { onClick() }
             .fillMaxWidth()
             .background(cardGradient, cardShape)
             .padding(horizontal = 22.dp)
     ) {
         Image(
-            painter = painterResource(id = parameters.iconId),
+            painter = painterResource(id = iconId),
             contentDescription = "",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .padding(start = parameters.iconOffset.dp)
-                .size(parameters.iconSize.dp)
+                .padding(start = iconOffset.dp)
+                .size(iconSize.dp)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = parameters.mainText,
+                text = mainText,
                 maxLines = 2,
-                modifier = Modifier.weight(parameters.weights.first, true),
+                modifier = Modifier.weight(weights.first, true),
                 style = TextStyle(
                     fontSize = 18.sp,
                     color = Color.White,
@@ -64,8 +74,8 @@ fun StatsCard(
                 ),
             )
             Text(
-                text = parameters.text,
-                modifier = Modifier.weight(parameters.weights.second, true),
+                text = text,
+                modifier = Modifier.weight(weights.second, true),
                 textAlign = TextAlign.End,
                 style = TextStyle(
                     color = Color.White,
@@ -79,16 +89,19 @@ fun StatsCard(
 
 @Composable
 fun TimeSpentCard(
-    parameters: TimeSpentCardParameters,
+    gradient: Gradient,
+    roundedCornerPercent: Int,
+    @DrawableRes iconId: Int,
+    mainText: String,
+    time: Time,
+    onClick: () -> Unit,
 ) = StatsCard(
-    parameters = StatsCardParameters(
-        gradient = parameters.gradient,
-        roundedCornerPercent = parameters.roundedCornerPercent,
-        iconId = parameters.iconId,
-        mainText = parameters.mainText,
-        text = "${parameters.time.hours}H, ${parameters.time.minutes}M",
-        onClick = parameters.onClick
-    ),
+    gradient = gradient,
+    roundedCornerPercent = roundedCornerPercent,
+    iconId = iconId,
+    mainText = mainText,
+    text = "${time.hours}H, ${time.minutes}M",
+    onClick = onClick,
 )
 
 @Composable
@@ -97,32 +110,33 @@ fun TimeSpentChip() {
 
 @Composable
 fun OtherStatsCard(
-    parameters: OtherStatsCardParameters,
+    gradient: Gradient,
+    roundedCornerPercent: Int,
+    @DrawableRes iconId: Int,
+    mainText: String,
+    language: String,
+    onClick: () -> Unit,
 ) = StatsCard(
-    parameters = StatsCardParameters(
-        gradient = parameters.gradient,
-        roundedCornerPercent = parameters.roundedCornerPercent,
-        iconId = parameters.iconId,
-        mainText = parameters.mainText,
-        text = parameters.language,
-        weights = Pair(1f, 0.5f),
-        iconOffset = 90,
-        iconSize = 70,
-        onClick = parameters.onClick
-    ),
+    gradient = gradient,
+    roundedCornerPercent = roundedCornerPercent,
+    iconId = iconId,
+    mainText = mainText,
+    text = language,
+    weights = Pair(1f, 0.5f),
+    iconOffset = 90,
+    iconSize = 70,
+    onClick = onClick,
 )
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
 fun TimeSpentCardPreview() = WakaTimeAppTheme(darkTheme = true) {
     TimeSpentCard(
-        parameters = TimeSpentCardParameters(
-            Gradients.primary,
-            25,
-            R.drawable.ic_time,
-            "Total Time Spent Today",
-            Time(42, 22, 0f),
-            onClick = {}
-        )
+        gradient = Gradients.primary,
+        roundedCornerPercent = 25,
+        iconId = R.drawable.ic_time,
+        mainText = "Total Time Spent Today",
+        time = Time(42, 22, 0f),
+        onClick = {}
     )
 }

@@ -15,13 +15,15 @@ import androidx.compose.ui.unit.dp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest.Builder
 import coil.transform.CircleCropTransformation
-import com.jacob.wakatimeapp.core.ui.R
 import com.jacob.wakatimeapp.core.models.UserDetails
+import com.jacob.wakatimeapp.core.ui.R
 import com.jacob.wakatimeapp.core.ui.theme.Typography
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 
 @Composable
-fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
+fun UserDetailsSection(
+    userDetails: UserDetails?,
+) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
@@ -29,7 +31,7 @@ fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
     ) {
         Image(
             painter = rememberAsyncImagePainter(
-                Builder(LocalContext.current).data(data = parameters.userDetails?.photoUrl)
+                Builder(LocalContext.current).data(data = userDetails?.photoUrl)
                     .apply {
                         transformations(CircleCropTransformation())
                         placeholder(R.drawable.place_holder)
@@ -41,7 +43,7 @@ fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(
-            text = parameters.userDetails?.fullName ?: "",
+            text = userDetails?.fullName ?: "",
             fontSize = Typography.h4.fontSize,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
@@ -54,22 +56,20 @@ fun UserDetailsSection(parameters: UserDetailsSectionParameters) {
 @Composable
 fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
-        parameters = UserDetailsSectionParameters(
-            UserDetails(
-                bio = "",
-                email = "",
-                id = "",
-                timeout = 0,
-                timezone = "",
-                username = "",
-                displayName = "",
-                lastProject = "",
-                fullName = "Jacob Bosco",
-                durationsSliceBy = "",
-                createdAt = "",
-                dateFormat = "",
-                photoUrl = ""
-            )
+        UserDetails(
+            bio = "",
+            email = "",
+            id = "",
+            timeout = 0,
+            timezone = "",
+            username = "",
+            displayName = "",
+            lastProject = "",
+            fullName = "Jacob Bosco",
+            durationsSliceBy = "",
+            createdAt = "",
+            dateFormat = "",
+            photoUrl = ""
         ),
     )
 }
