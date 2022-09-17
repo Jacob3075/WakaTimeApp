@@ -3,9 +3,8 @@ package com.jacob.wakatimeapp.home.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.Scaffold
+import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration.Long
-import androidx.compose.material.rememberScaffoldState
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
@@ -22,10 +21,11 @@ interface HomePageNavigator {
 
 @Composable
 fun HomePageContent(
+    modifier: Modifier = Modifier,
     viewModel: HomePageViewModel = hiltViewModel(),
     navigator: HomePageNavigator,
+    scaffoldState: ScaffoldState,
 ) {
-    val scaffoldState = rememberScaffoldState()
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.homePageState.collectAsState()
 
@@ -41,10 +41,7 @@ fun HomePageContent(
         }
     }
 
-    Scaffold(
-        scaffoldState = scaffoldState,
-        modifier = Modifier.fillMaxSize()
-    ) {
+    Column(modifier = modifier.statusBarsPadding()) {
         when (viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
             is HomePageViewState.Loaded -> HomePageLoaded(
@@ -66,7 +63,6 @@ private fun HomePageLoaded(
     Column(
         modifier = Modifier
             .padding(horizontal = 20.dp)
-            .padding(top = 30.dp)
             .verticalScroll(scrollState)
     ) {
         UserDetailsSection(homePageViewState.userDetails)

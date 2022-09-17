@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.navigation
 
+import androidx.compose.material.ScaffoldState
 import androidx.compose.runtime.Composable
 import com.jacob.wakatimeapp.home.ui.HomePageContent
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
@@ -16,5 +17,10 @@ fun LoginPage(loginPageNavigator: LoginPageNavigator) =
 
 @Composable
 @Destination
-fun HomePage(homePageNavigator: HomePageNavigator) =
-    HomePageContent(navigator = homePageNavigator)
+fun HomePage(
+    homePageNavigator: HomePageNavigator,
+    scaffoldState: ScaffoldState,
+) = HomePageContent(
+    navigator = homePageNavigator,
+    scaffoldState = scaffoldState
+)

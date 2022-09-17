@@ -6,7 +6,10 @@ import androidx.activity.result.contract.ActivityResultContracts
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.*
+import androidx.compose.material.Button
+import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.MaterialTheme
+import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
@@ -34,8 +37,6 @@ interface LoginPageNavigator {
 fun LoginPageContent(
     viewModel: LoginPageViewModel = hiltViewModel(),
     loginPageNavigator: LoginPageNavigator,
-) = Surface(
-    modifier = Modifier.fillMaxSize(),
 ) {
     LaunchedEffect(viewModel.authStatus) {
         if (viewModel.authStatus) {
@@ -55,10 +56,13 @@ fun LoginPageContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
+        modifier = Modifier
+            .fillMaxSize()
+            .statusBarsPadding()
     ) {
         Text(
             text = "Wakatime Client",
-            modifier = Modifier.padding(top = 72.dp),
+            modifier = Modifier.padding(top = 2.dp),
             style = TextStyle(
                 fontSize = MaterialTheme.typography.h3.fontSize,
                 fontWeight = FontWeight.SemiBold,

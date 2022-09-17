@@ -3,6 +3,10 @@ package com.jacob.wakatimeapp
 import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.material.Scaffold
+import androidx.compose.material.rememberScaffoldState
+import androidx.compose.ui.Modifier
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.navigation.ApplicationNavigator
@@ -19,12 +23,19 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         setContent {
             WakaTimeAppTheme {
-                DestinationsNavHost(
-                    navGraph = NavGraphs.root,
-                    dependenciesContainerBuilder = {
-                        dependency(ApplicationNavigator(navController))
-                    }
-                )
+                val scaffoldState = rememberScaffoldState()
+                Scaffold(
+                    scaffoldState = scaffoldState,
+                    modifier = Modifier.fillMaxSize()
+                ) {
+                    DestinationsNavHost(
+                        navGraph = NavGraphs.root,
+                        dependenciesContainerBuilder = {
+                            dependency(ApplicationNavigator(navController))
+                            dependency(scaffoldState)
+                        }
+                    )
+                }
             }
         }
     }
