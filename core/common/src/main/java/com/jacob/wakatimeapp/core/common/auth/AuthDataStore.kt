@@ -21,7 +21,7 @@ class AuthDataStore @Inject constructor(
     fun getUserDetails(): Flow<UserDetails> =
         dataStore.data.map { preferences ->
             preferences[KEY_USER_DETAILS]?.let(Default::decodeFromString)
-                ?: error("SHOULD NOT HAPPEN") // TODO: BUT IT DID 😕⁉
+                ?: error("SHOULD NOT HAPPEN")
         }
 
     suspend fun updateUserDetails(userDetails: UserDetails) {

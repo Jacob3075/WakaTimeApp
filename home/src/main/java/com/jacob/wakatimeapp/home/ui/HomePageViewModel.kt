@@ -5,11 +5,12 @@ import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
-import com.jacob.wakatimeapp.core.models.ErrorTypes
 import com.jacob.wakatimeapp.core.models.Result
 import com.jacob.wakatimeapp.home.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
-import kotlinx.coroutines.flow.*
+import kotlinx.coroutines.flow.MutableStateFlow
+import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 import timber.log.Timber
 import javax.inject.Inject
@@ -28,33 +29,23 @@ class HomePageViewModel @Inject constructor(
         MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
     val homePageState = _homePageState.asStateFlow()
 
-    private val _errors = MutableSharedFlow<HomePageViewState.Error>()
-    val errors = _errors.asSharedFlow()
-
     init {
         viewModelScope.launch(ioDispatcher) {
-            val result = getLast7DaysStatsUC.invoke()
-            val userDetails = authDataStore.getUserDetails().filterNotNull().first()
+            val result = getLast7DaysStatsUC()
 
-            when (result) {
-                is Result.Success -> {
-                    _homePageState.value = HomePageViewState.Loaded(
-                        result.value,
-                        userDetails,
-                    )
+            authDataStore.getUserDetails()
+                .distinctUntilChanged()
+                .collect { userDetails ->
+                    when (result) {
+                        is Result.Success -> _homePageState.value = HomePageViewState.Loaded(
+                            result.value,
+                            userDetails,
+                        )
+                        is Result.Failure -> _homePageState.value = result.getErrorMessage()
+                            .let(HomePageViewState::Error)
+                        is Result.Empty -> Timber.e("EMPTY")
+                    }
                 }
-                is Result.Failure -> {
-                    val error = getErrorMessage(result)
-                    _homePageState.value = error
-                    _errors.emit(error)
-                }
-                is Result.Empty -> Timber.e("EMPTY")
-            }
         }
     }
-
-    private fun getErrorMessage(last7DaysStatsResult: Result.Failure): HomePageViewState.Error =
-        when (val errorType = last7DaysStatsResult.errorHolder) {
-            is ErrorTypes.NetworkError -> HomePageViewState.Error(errorType.throwable.message ?: "")
-        }
 }

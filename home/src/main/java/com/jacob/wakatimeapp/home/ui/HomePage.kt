@@ -14,7 +14,6 @@ import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.home.ui.components.*
-import kotlinx.coroutines.flow.collectLatest
 import kotlinx.coroutines.launch
 
 interface HomePageNavigator {
@@ -30,17 +29,16 @@ fun HomePageContent(
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.homePageState.collectAsState()
 
-    LaunchedEffect(Unit) {
-        viewModel.errors
-            .collectLatest {
-                snackBarCoroutineScope.launch {
-                    scaffoldState.snackbarHostState.showSnackbar(
-                        message = it.errorMessage,
-                        actionLabel = "Action",
-                        duration = Long
-                    )
-                }
-            }
+    LaunchedEffect(viewState) {
+        if (viewState !is HomePageViewState.Error) return@LaunchedEffect
+
+        snackBarCoroutineScope.launch {
+            scaffoldState.snackbarHostState.showSnackbar(
+                message = (viewState as HomePageViewState.Error).errorMessage,
+                actionLabel = "Action",
+                duration = Long
+            )
+        }
     }
 
     Scaffold(
