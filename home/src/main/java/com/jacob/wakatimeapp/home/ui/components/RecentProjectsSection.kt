@@ -26,7 +26,7 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import java.time.LocalDate
 
 @Composable
-fun RecentProjects(
+internal fun RecentProjects(
     dailyStats: DailyStats?,
 ) {
     Column(

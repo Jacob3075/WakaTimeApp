@@ -1,6 +1,5 @@
-package com.jacob.wakatimeapp.core.ui
+package com.jacob.wakatimeapp.core.ui.components.cards
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -19,16 +18,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.theme.Gradient
-import com.jacob.wakatimeapp.core.ui.theme.Gradients
-import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 
 @Composable
-private fun StatsCard(
+internal fun StatsCard(
     gradient: Gradient,
     roundedCornerPercent: Int = 25,
     @DrawableRes iconId: Int,
@@ -85,58 +80,4 @@ private fun StatsCard(
             )
         }
     }
-}
-
-@Composable
-fun TimeSpentCard(
-    gradient: Gradient,
-    roundedCornerPercent: Int,
-    @DrawableRes iconId: Int,
-    mainText: String,
-    time: Time,
-    onClick: () -> Unit,
-) = StatsCard(
-    gradient = gradient,
-    roundedCornerPercent = roundedCornerPercent,
-    iconId = iconId,
-    mainText = mainText,
-    text = "${time.hours}H, ${time.minutes}M",
-    onClick = onClick,
-)
-
-@Composable
-fun TimeSpentChip() {
-}
-
-@Composable
-fun OtherStatsCard(
-    gradient: Gradient,
-    roundedCornerPercent: Int,
-    @DrawableRes iconId: Int,
-    mainText: String,
-    language: String,
-    onClick: () -> Unit,
-) = StatsCard(
-    gradient = gradient,
-    roundedCornerPercent = roundedCornerPercent,
-    iconId = iconId,
-    mainText = mainText,
-    text = language,
-    weights = Pair(1f, 0.5f),
-    iconOffset = 90,
-    iconSize = 70,
-    onClick = onClick,
-)
-
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
-@Composable
-fun TimeSpentCardPreview() = WakaTimeAppTheme(darkTheme = true) {
-    TimeSpentCard(
-        gradient = Gradients.primary,
-        roundedCornerPercent = 25,
-        iconId = R.drawable.ic_time,
-        mainText = "Total Time Spent Today",
-        time = Time(42, 22, 0f),
-        onClick = {}
-    )
 }
