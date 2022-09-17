@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.login.ui
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -45,14 +45,8 @@ fun LoginPageContent(
         }
     }
 
-    val launcher =
-        rememberLauncherForActivityResult(ActivityResultContracts.StartActivityForResult()) { result ->
-            result.data?.let(viewModel::exchangeToken) ?: run {
-                Timber.e("Data not present")
-                val ex = AuthorizationException.fromIntent(result.data!!)
-                Timber.e(ex?.toJsonString())
-            }
-        }
+    val launcher = authActivityResultLauncher(viewModel)
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
@@ -60,20 +54,33 @@ fun LoginPageContent(
             .fillMaxSize()
             .statusBarsPadding()
     ) {
-        Text(
-            text = "Wakatime Client",
-            modifier = Modifier.padding(top = 2.dp),
-            style = TextStyle(
-                fontSize = MaterialTheme.typography.h3.fontSize,
-                fontWeight = FontWeight.SemiBold,
-                fontFamily = FontFamily.Cursive,
-            )
-        )
-        LoginButton {
-            launcher.launch(viewModel.getAuthIntent())
-        }
+        AppTitle()
+        LoginButton(onClick = { launcher.launch(viewModel.getAuthIntent()) })
     }
 }
+
+@Composable
+private fun AppTitle() {
+    Text(
+        text = "Wakatime Client",
+        modifier = Modifier.padding(top = 2.dp),
+        style = TextStyle(
+            fontSize = MaterialTheme.typography.h3.fontSize,
+            fontWeight = FontWeight.SemiBold,
+            fontFamily = FontFamily.Cursive,
+        )
+    )
+}
+
+@Composable
+private fun authActivityResultLauncher(viewModel: LoginPageViewModel) =
+    rememberLauncherForActivityResult(StartActivityForResult()) { result ->
+        result.data?.let(viewModel::exchangeToken) ?: run {
+            Timber.e("Data not present")
+            val ex = AuthorizationException.fromIntent(result.data!!)
+            Timber.e(ex?.toJsonString())
+        }
+    }
 
 @Composable
 private fun LoginButton(
