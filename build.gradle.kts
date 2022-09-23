@@ -29,31 +29,18 @@ subprojects {
     }
 
     detekt {
-        // Builds the AST in parallel. Rules are always executed in parallel.
-        // Can lead to speedups in larger projects. `false` by default.
         parallel = true
-
-        // Define the detekt configuration(s) you want to use.
-        // Defaults to the default detekt configuration.
-        config = files("${project.rootDir}/tools/detekt-config.yml")
-
-        // Applies the config files on top of detekt's default config file. `false` by default.
+        config = files("${rootProject.rootDir}/tools/detekt-config.yml")
         buildUponDefaultConfig = true
-
-        // Turns on all the rules. `false` by default.
-        allRules = false
     }
-}
 
-tasks.detekt.configure {
-    reports {
-        // Enable/Disable HTML report (default: true)
-        html.required.set(true)
-        html.outputLocation.set(file("tools/reports/detekt.html"))
-
-        // Enable/Disable MD report (default: false)
-        md.required.set(true)
-        md.outputLocation.set(file("tools/reports/detekt.md"))
+    tasks.detekt.configure {
+        reports {
+            md.required.set(true)
+            md.outputLocation.set(
+                file("${rootProject.rootDir}/tools/reports/${this@subprojects.name}-detekt.md")
+            )
+        }
+        jvmTarget = "11"
     }
-    jvmTarget = "11"
 }
