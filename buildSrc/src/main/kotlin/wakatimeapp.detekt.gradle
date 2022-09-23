@@ -1,0 +1,18 @@
+plugins {
+    id("io.gitlab.arturbosch.detekt")
+}
+
+detekt {
+    parallel = true
+    config = files("${rootProject.rootDir}/tools/detekt-config.yml")
+    buildUponDefaultConfig = true
+}
+
+tasks.detekt.configure {
+    reports {
+        html.required.set(false)
+        md.required.set(true)
+        md.outputLocation.set(file("${rootProject.rootDir}/tools/reports/${project.name}-detekt.md"))
+    }
+    jvmTarget = "11"
+}
