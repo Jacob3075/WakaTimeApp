@@ -25,18 +25,22 @@ import com.jacob.wakatimeapp.core.ui.theme.Gradient
 @Composable
 internal fun StatsCard(
     gradient: Gradient,
-    roundedCornerPercent: Int = 25,
     @DrawableRes iconId: Int,
     mainText: String,
     text: String,
+    onClick: () -> Unit,
+    roundedCornerPercent: Int = 25,
     weights: Pair<Float, Float> = Pair(1f, 1f),
     iconOffset: Int = 50,
-    iconSize: Int = 80,
-    onClick: () -> Unit,
+    iconSize: Int = 80
 ) {
     val cardGradient =
-        Brush.horizontalGradient(listOf(gradient.startColor,
-            gradient.endColor))
+        Brush.horizontalGradient(
+            listOf(
+                gradient.startColor,
+                gradient.endColor
+            )
+        )
     val cardShape = RoundedCornerShape(roundedCornerPercent)
     Box(
         contentAlignment = Alignment.Center,
@@ -66,7 +70,7 @@ internal fun StatsCard(
                     fontSize = 18.sp,
                     color = Color.White,
                     fontWeight = FontWeight.SemiBold
-                ),
+                )
             )
             Text(
                 text = text,
@@ -75,7 +79,7 @@ internal fun StatsCard(
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold,
+                    fontWeight = FontWeight.Bold
                 )
             )
         }

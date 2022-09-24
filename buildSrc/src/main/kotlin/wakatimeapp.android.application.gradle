@@ -79,9 +79,6 @@ dependencies {
 
     // Logging
     implementation("com.jakewharton.timber:timber:5.0.1")
-
-    detektPlugins("ru.kode:detekt-rules-compose:1.2.1")
-    detektPlugins("com.twitter.compose.rules:detekt:0.0.14")
 }
 
 kapt {

@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.core.common.auth
 
+import javax.inject.Inject
 import kotlinx.coroutines.flow.callbackFlow
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.firstOrNull
@@ -9,7 +10,6 @@ import net.openid.appauth.AuthState
 import net.openid.appauth.AuthorizationException
 import net.openid.appauth.AuthorizationService
 import net.openid.appauth.TokenResponse
-import javax.inject.Inject
 
 /**
  * An example persistence mechanism for an [AuthState] instance.
@@ -20,7 +20,7 @@ import javax.inject.Inject
  */
 class AuthTokenProvider @Inject constructor(
     private val authDataStore: AuthDataStore,
-    private val authService: AuthorizationService,
+    private val authService: AuthorizationService
 ) {
     private val authStateFlow = authDataStore.getAuthState()
 
@@ -31,7 +31,7 @@ class AuthTokenProvider @Inject constructor(
 
     suspend fun updateAfterTokenResponse(
         response: TokenResponse?,
-        ex: AuthorizationException?,
+        ex: AuthorizationException?
     ): AuthState {
         val current = current
         current.update(response, ex)

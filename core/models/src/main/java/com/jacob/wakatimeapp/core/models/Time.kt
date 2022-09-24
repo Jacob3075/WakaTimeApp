@@ -1,6 +1,7 @@
 package com.jacob.wakatimeapp.core.models
 
 data class Time(val hours: Int, val minutes: Int, val decimal: Float) {
+    @Suppress("MagicNumber")
     fun toMinutes(): Int = (hours * 60) + minutes
 
     companion object {
