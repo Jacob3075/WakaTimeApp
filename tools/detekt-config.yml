@@ -730,6 +730,6 @@ style:
     active: true
     ignoreLateinitVar: false
   WildcardImport:
-    active: true
+    active: false
     excludeImports:
       - 'java.util.*'
