@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber", "ComplexMethod", "LongMethod", "LoopWithTooManyJumpStatements")
+
 package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.Context
@@ -14,10 +16,12 @@ import com.github.mikephil.charting.interfaces.datasets.IBarDataSet
 import com.github.mikephil.charting.renderer.BarChartRenderer
 import com.github.mikephil.charting.utils.Utils
 import com.github.mikephil.charting.utils.ViewPortHandler
+import kotlin.math.ceil
+import kotlin.math.min
 
 /**
-* [Source](https://gist.github.com/xanscale/e971cc4f2f0712a8a3bcc35e85325c27)
-* */
+ * [Source](https://gist.github.com/xanscale/e971cc4f2f0712a8a3bcc35e85325c27)
+ * */
 class RoundedBarChart : BarChart {
     constructor(context: Context) : super(context)
     constructor(context: Context, attrs: AttributeSet) : super(context, attrs) {
@@ -40,7 +44,7 @@ class RoundedBarChart : BarChart {
         chart: BarDataProvider?,
         animator: ChartAnimator?,
         viewPortHandler: ViewPortHandler?,
-        private val mRadius: Int,
+        private val mRadius: Int
     ) : BarChartRenderer(chart, animator, viewPortHandler) {
         private val mBarShadowRectBuffer = RectF()
         override fun drawHighlighted(c: Canvas, indices: Array<Highlight>) {
@@ -92,9 +96,11 @@ class RoundedBarChart : BarChart {
                 val barWidthHalf = barWidth / 2.0f
                 var x: Float
                 var i = 0
-                val count = Math.min(
-                    Math.ceil((dataSet.entryCount * phaseX).toDouble()).toInt(),
-                    dataSet.entryCount)
+                val count = min(
+                    ceil((dataSet.entryCount * phaseX).toDouble())
+                        .toInt(),
+                    dataSet.entryCount
+                )
                 while (i < count) {
                     val e = dataSet.getEntryForIndex(i)
                     x = e.x
@@ -108,10 +114,12 @@ class RoundedBarChart : BarChart {
                     if (!mViewPortHandler.isInBoundsRight(mBarShadowRectBuffer.left)) break
                     mBarShadowRectBuffer.top = mViewPortHandler.contentTop()
                     mBarShadowRectBuffer.bottom = mViewPortHandler.contentBottom()
-                    c.drawRoundRect(mBarShadowRectBuffer,
+                    c.drawRoundRect(
+                        mBarShadowRectBuffer,
                         mRadius.toFloat(),
                         mRadius.toFloat(),
-                        mShadowPaint)
+                        mShadowPaint
+                    )
                     i++
                 }
             }
