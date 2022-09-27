@@ -27,7 +27,7 @@ import java.time.LocalDate
 
 @Composable
 internal fun RecentProjects(
-    dailyStats: DailyStats?,
+    dailyStats: DailyStats?
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()
@@ -41,25 +41,26 @@ internal fun RecentProjects(
             Text(text = "See All", color = Colors.AccentText, fontSize = 14.sp)
         }
         RecentProjectList(
-            modifier = Modifier.padding(horizontal = 12.dp),
-            projects = dailyStats?.projectsWorkedOn ?: emptyList()
+            projects = dailyStats?.projectsWorkedOn ?: emptyList(),
+            modifier = Modifier.padding(horizontal = 12.dp)
         )
     }
 }
 
 @Composable
-private fun RecentProjectList(modifier: Modifier = Modifier, projects: List<Project>) {
+private fun RecentProjectList(projects: List<Project>, modifier: Modifier = Modifier) {
     Column(
         modifier = modifier
     ) {
-        projects.take(3).map { ProjectCardItem(it) }
+        projects.take(n = 3)
+            .map { ProjectCardItem(it) }
         Spacer(modifier = Modifier.height(10.dp))
     }
 }
 
 @Composable
 private fun ProjectCardItem(project: Project) {
-    val cardShape = RoundedCornerShape(25)
+    val cardShape = RoundedCornerShape(percent = 25)
     Box(
         modifier = Modifier
             .shadow(elevation = 8.dp, shape = cardShape)
@@ -93,7 +94,7 @@ private fun ProjectCardItem(project: Project) {
 
 @Preview(showBackground = true, showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
+private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         RecentProjects(
             DailyStats(
@@ -101,20 +102,20 @@ fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
                 projectsWorkedOn = listOf(
                     Project(Time(10, 9, 0f), "Project 1", 75.0),
                     Project(Time(100, 26, 0f), "Project 2", 20.0),
-                    Project(Time(5, 15, 0f), "Project 3", 10.0),
+                    Project(Time(5, 15, 0f), "Project 3", 10.0)
                 ),
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
                 mostUsedOs = "",
                 date = LocalDate.now()
-            ),
+            )
         )
     }
 }
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-fun ProjectCardItemPreview() = WakaTimeAppTheme {
+private fun ProjectCardItemPreview() = WakaTimeAppTheme {
     Surface {
         ProjectCardItem(
             Project(
@@ -122,7 +123,9 @@ fun ProjectCardItemPreview() = WakaTimeAppTheme {
                     0,
                     0,
                     0f
-                ), "Project 1", 0.0
+                ),
+                "Project 1",
+                0.0
             )
         )
     }

@@ -588,7 +588,8 @@ style:
     ignoreLocalVariableDeclaration: false
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
-    ignoreAnnotation: false
+    ignoreAnnotation: true
+    ignoreAnnotated: [ 'Preview' ]
     ignoreNamedArgument: true
     ignoreEnums: false
     ignoreRanges: false

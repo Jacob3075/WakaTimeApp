@@ -18,7 +18,7 @@ import com.jacob.wakatimeapp.home.ui.HomePageViewState.Loaded
 @Composable
 internal fun HomePageLoaded(
     homePageViewState: Loaded,
-    navigator: HomePageNavigator,
+    navigator: HomePageNavigator
 ) {
     val scrollState = rememberScrollState()
     Column(
@@ -35,7 +35,7 @@ internal fun HomePageLoaded(
             iconId = drawable.ic_time,
             mainText = "Total Time Spent Today",
             time = homePageViewState.contentData.todaysStats.timeSpent,
-            onClick = navigator::toDetailsPage,
+            onClick = navigator::toDetailsPage
         )
         Spacer(modifier = Modifier.height(25.dp))
 

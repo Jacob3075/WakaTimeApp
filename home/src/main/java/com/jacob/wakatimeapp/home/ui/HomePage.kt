@@ -1,3 +1,5 @@
+@file:Suppress("MatchingDeclarationName")
+
 package com.jacob.wakatimeapp.home.ui
 
 import androidx.compose.foundation.layout.Column
@@ -18,10 +20,10 @@ interface HomePageNavigator {
 
 @Composable
 fun HomePageContent(
-    modifier: Modifier = Modifier,
-    viewModel: HomePageViewModel = hiltViewModel(),
     navigator: HomePageNavigator,
     scaffoldState: ScaffoldState,
+    modifier: Modifier = Modifier,
+    viewModel: HomePageViewModel = hiltViewModel()
 ) {
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.homePageState.collectAsState()
@@ -43,7 +45,7 @@ fun HomePageContent(
             is HomePageViewState.Loading -> HomePageLoading()
             is HomePageViewState.Loaded -> HomePageLoaded(
                 homePageViewState = viewState as HomePageViewState.Loaded,
-                navigator = navigator,
+                navigator = navigator
             )
             is HomePageViewState.Error -> HomePageError(viewState as HomePageViewState.Error)
         }
