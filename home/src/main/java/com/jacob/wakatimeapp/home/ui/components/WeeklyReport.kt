@@ -10,6 +10,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -31,13 +34,13 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import java.time.format.TextStyle.SHORT
 import java.util.*
 
-
 @Composable
 fun WeeklyReport(
     dailyStats: List<DailyStats>?,
+    modifier: Modifier = Modifier
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -56,21 +59,36 @@ fun WeeklyReport(
 private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
     val cardShape = RoundedCornerShape(10)
 
-    val labels = mutableMapOf<Int, String>()
-    val entries = dailyStats.mapIndexed { index, value ->
-        labels[index] = value.date.dayOfWeek.getDisplayName(SHORT, Locale.getDefault())
-        BarEntry(
-            index.toFloat(),
-            value.timeSpent.decimal,
-            value
-        )
+    val pairList by remember {
+        derivedStateOf {
+            dailyStats.mapIndexed { index, value -> index to value }
+        }
     }
 
-    val dataSet = BarDataSet(entries, "Label").apply {
-        setDrawValues(false)
-        valueTextColor = Color.WHITE
+    val labels by remember {
+        derivedStateOf {
+            pairList.associate { (index, value) ->
+                index to value.date.dayOfWeek.getDisplayName(SHORT, Locale.getDefault())
+            }
+        }
     }
-    val barData = BarData(dataSet).apply { barWidth = 0.3f }
+
+    val barData by remember {
+        derivedStateOf {
+            val entries = pairList.map { (index, value) ->
+                BarEntry(
+                    index.toFloat(),
+                    value.timeSpent.decimal,
+                    value
+                )
+            }
+            val barDataSet = BarDataSet(entries, "Label").apply {
+                setDrawValues(false)
+                valueTextColor = Color.WHITE
+            }
+            BarData(barDataSet).apply { barWidth = 0.3f }
+        }
+    }
 
     Box(
         modifier = Modifier
@@ -129,7 +147,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
 
 @Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
+private fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         WeeklyReport(emptyList())
     }
