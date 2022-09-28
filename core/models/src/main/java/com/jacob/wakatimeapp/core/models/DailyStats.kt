@@ -8,5 +8,5 @@ data class DailyStats(
     val mostUsedLanguage: String,
     val mostUsedEditor: String,
     val mostUsedOs: String,
-    val date: LocalDate
+    val date: LocalDate,
 )

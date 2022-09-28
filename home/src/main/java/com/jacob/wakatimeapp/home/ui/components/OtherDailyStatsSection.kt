@@ -18,7 +18,7 @@ import com.jacob.wakatimeapp.core.ui.theme.Gradients
 fun OtherDailyStatsSection(
     dailyStats: DailyStats?,
     onClick: () -> Unit,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()

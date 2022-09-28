@@ -28,7 +28,7 @@ fun HomePageContent(
     navigator: HomePageNavigator,
     scaffoldState: ScaffoldState,
     modifier: Modifier = Modifier,
-    viewModel: HomePageViewModel = hiltViewModel()
+    viewModel: HomePageViewModel = hiltViewModel(),
 ) {
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.homePageState.collectAsState()
@@ -60,7 +60,7 @@ fun HomePageContent(
 @Composable
 private fun HomePageLoaded(
     homePageViewState: HomePageViewState.Loaded,
-    navigator: HomePageNavigator
+    navigator: HomePageNavigator,
 ) {
     val scrollState = rememberScrollState()
     Column(

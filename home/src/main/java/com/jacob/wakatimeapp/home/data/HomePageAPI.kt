@@ -26,7 +26,7 @@ interface HomePageAPI {
 @Singleton
 class HomePageNetworkData @Inject constructor(
     private val authTokenProvider: AuthTokenProvider,
-    private val homePageAPI: HomePageAPI
+    private val homePageAPI: HomePageAPI,
 ) {
     private val token: String
         get() = runBlocking {

@@ -38,7 +38,7 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 @Composable
 fun WeeklyReport(
     dailyStats: List<DailyStats>?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Column(
         modifier = modifier.fillMaxWidth()

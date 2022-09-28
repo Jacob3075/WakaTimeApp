@@ -23,7 +23,7 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 @Composable
 fun UserDetailsSection(
     userDetails: UserDetails?,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.Start,

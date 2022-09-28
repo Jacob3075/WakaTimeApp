@@ -6,7 +6,7 @@ import com.jacob.wakatimeapp.core.models.WeeklyStats
 sealed class HomePageViewState {
     data class Loaded(
         val contentData: WeeklyStats,
-        val userDetails: UserDetails?
+        val userDetails: UserDetails?,
     ) : HomePageViewState()
 
     data class Error(val errorMessage: String) : HomePageViewState()

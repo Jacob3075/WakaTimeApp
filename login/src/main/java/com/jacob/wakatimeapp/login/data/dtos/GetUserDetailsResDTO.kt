@@ -5,7 +5,7 @@ import kotlinx.serialization.Serializable
 
 @Serializable
 data class GetUserDetailsResDTO(
-    val data: Data
+    val data: Data,
 ) {
     @Serializable
     data class Data(
@@ -21,6 +21,6 @@ data class GetUserDetailsResDTO(
         @SerialName("durations_slice_by") val durationsSliceBy: String,
         @SerialName("created_at") val createdAt: String,
         @SerialName("date_format") val dateFormat: String,
-        @SerialName("photo") val photoUrl: String
+        @SerialName("photo") val photoUrl: String,
     )
 }

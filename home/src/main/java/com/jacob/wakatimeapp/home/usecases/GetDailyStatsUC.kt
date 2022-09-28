@@ -9,7 +9,7 @@ import com.jacob.wakatimeapp.home.data.mappers.toModel
 import javax.inject.Inject
 
 class GetDailyStatsUC @Inject constructor(
-    private val homePageNetworkData: HomePageNetworkData
+    private val homePageNetworkData: HomePageNetworkData,
 ) {
     @Suppress("TooGenericExceptionCaught")
     suspend operator fun invoke(): Result<DailyStats> {

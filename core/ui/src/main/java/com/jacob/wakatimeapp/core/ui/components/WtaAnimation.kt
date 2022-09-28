@@ -20,7 +20,7 @@ fun WtaAnimation(
     animations: List<Int>,
     text: String,
     animationTestTag: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) {
     val composition by rememberLottieComposition(RawRes(animations.random()))
 

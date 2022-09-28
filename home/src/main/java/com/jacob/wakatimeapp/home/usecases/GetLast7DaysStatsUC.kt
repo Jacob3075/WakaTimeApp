@@ -12,7 +12,7 @@ import javax.inject.Inject
 import timber.log.Timber
 
 class GetLast7DaysStatsUC @Inject constructor(
-    private val homePageNetworkData: HomePageNetworkData
+    private val homePageNetworkData: HomePageNetworkData,
 ) {
     @Suppress("TooGenericExceptionCaught")
     suspend operator fun invoke(): Result<WeeklyStats> {

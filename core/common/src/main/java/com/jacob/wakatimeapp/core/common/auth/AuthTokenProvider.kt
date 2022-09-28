@@ -20,7 +20,7 @@ import net.openid.appauth.TokenResponse
  */
 class AuthTokenProvider @Inject constructor(
     private val authDataStore: AuthDataStore,
-    private val authService: AuthorizationService
+    private val authService: AuthorizationService,
 ) {
     private val authStateFlow = authDataStore.getAuthState()
 
@@ -31,7 +31,7 @@ class AuthTokenProvider @Inject constructor(
 
     suspend fun updateAfterTokenResponse(
         response: TokenResponse?,
-        ex: AuthorizationException?
+        ex: AuthorizationException?,
     ): AuthState {
         val current = current
         current.update(response, ex)

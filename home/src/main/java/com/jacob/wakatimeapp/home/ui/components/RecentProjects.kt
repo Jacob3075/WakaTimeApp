@@ -27,7 +27,7 @@ import java.time.LocalDate
 
 @Composable
 internal fun RecentProjects(
-    dailyStats: DailyStats?
+    dailyStats: DailyStats?,
 ) {
     Column(
         modifier = Modifier.fillMaxWidth()

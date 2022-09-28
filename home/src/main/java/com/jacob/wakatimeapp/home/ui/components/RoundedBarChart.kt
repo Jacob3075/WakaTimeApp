@@ -44,7 +44,7 @@ class RoundedBarChart : BarChart {
         chart: BarDataProvider?,
         animator: ChartAnimator?,
         viewPortHandler: ViewPortHandler?,
-        private val mRadius: Int
+        private val mRadius: Int,
     ) : BarChartRenderer(chart, animator, viewPortHandler) {
         private val mBarShadowRectBuffer = RectF()
         override fun drawHighlighted(c: Canvas, indices: Array<Highlight>) {

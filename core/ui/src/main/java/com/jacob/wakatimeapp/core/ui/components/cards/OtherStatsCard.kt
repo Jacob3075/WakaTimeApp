@@ -10,7 +10,7 @@ fun OtherStatsCard(
     @DrawableRes iconId: Int,
     mainText: String,
     language: String,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) = StatsCard(
     gradient = gradient,
     roundedCornerPercent = 25,

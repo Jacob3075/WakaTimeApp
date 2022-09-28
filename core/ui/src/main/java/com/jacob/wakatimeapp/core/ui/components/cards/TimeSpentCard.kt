@@ -19,7 +19,7 @@ fun TimeSpentCard(
     @DrawableRes iconId: Int,
     mainText: String,
     time: Time,
-    onClick: () -> Unit
+    onClick: () -> Unit,
 ) = StatsCard(
     gradient = gradient,
     roundedCornerPercent = roundedCornerPercent,

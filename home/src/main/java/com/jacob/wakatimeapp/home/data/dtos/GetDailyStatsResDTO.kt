@@ -8,14 +8,14 @@ data class GetDailyStatsResDTO(
     val data: List<Data>,
     val end: String,
     val start: String,
-    @SerialName("cummulative_total") val cumulativeTotal: CumulativeTotal
+    @SerialName("cummulative_total") val cumulativeTotal: CumulativeTotal,
 ) {
     @Serializable
     data class CumulativeTotal(
         val decimal: String,
         val digital: String,
         val seconds: Double,
-        val text: String
+        val text: String,
     )
 
     @Serializable
@@ -28,7 +28,7 @@ data class GetDailyStatsResDTO(
         val projects: List<Project>,
         val range: Range,
         @SerialName("grand_total") val grandTotal: GrandTotal,
-        @SerialName("operating_systems") val operatingSystems: List<OperatingSystem>
+        @SerialName("operating_systems") val operatingSystems: List<OperatingSystem>,
     ) {
         @Serializable
         data class Category(
@@ -40,7 +40,7 @@ data class GetDailyStatsResDTO(
             val percent: Double,
             val seconds: Int,
             val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double
+            @SerialName("total_seconds") val totalSeconds: Double,
         )
 
         @Serializable
@@ -53,7 +53,7 @@ data class GetDailyStatsResDTO(
             val percent: Double,
             val seconds: Int,
             val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double
+            @SerialName("total_seconds") val totalSeconds: Double,
         )
 
         @Serializable
@@ -63,7 +63,7 @@ data class GetDailyStatsResDTO(
             val hours: Int,
             val minutes: Int,
             val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double
+            @SerialName("total_seconds") val totalSeconds: Double,
         )
 
         @Serializable
@@ -76,7 +76,7 @@ data class GetDailyStatsResDTO(
             val percent: Double,
             val seconds: Int,
             val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double
+            @SerialName("total_seconds") val totalSeconds: Double,
         )
 
         @Serializable
@@ -90,7 +90,7 @@ data class GetDailyStatsResDTO(
             val seconds: Int,
             val text: String,
             @SerialName("machine_name_id") val machineNameId: String,
-            @SerialName("total_seconds") val totalSeconds: Double
+            @SerialName("total_seconds") val totalSeconds: Double,
         )
 
         @Serializable
@@ -103,7 +103,7 @@ data class GetDailyStatsResDTO(
             val percent: Double,
             val seconds: Int,
             val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double
+            @SerialName("total_seconds") val totalSeconds: Double,
         )
 
         @Serializable
@@ -116,7 +116,7 @@ data class GetDailyStatsResDTO(
             val percent: Double,
             val seconds: Int,
             val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double
+            @SerialName("total_seconds") val totalSeconds: Double,
         )
 
         @Serializable
@@ -125,7 +125,7 @@ data class GetDailyStatsResDTO(
             val end: String,
             val start: String,
             val text: String,
-            val timezone: String
+            val timezone: String,
         )
 
         @Serializable

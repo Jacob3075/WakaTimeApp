@@ -32,7 +32,7 @@ internal fun StatsCard(
     roundedCornerPercent: Int = 25,
     weights: Pair<Float, Float> = Pair(1f, 1f),
     iconOffset: Int = 50,
-    iconSize: Int = 80
+    iconSize: Int = 80,
 ) {
     val cardGradient =
         Brush.horizontalGradient(

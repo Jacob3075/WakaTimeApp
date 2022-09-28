@@ -18,7 +18,7 @@ fun WtaIllustration(
     illustrations: List<Int>,
     text: String,
     illustrationTestTag: String,
-    modifier: Modifier = Modifier
+    modifier: Modifier = Modifier,
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center,

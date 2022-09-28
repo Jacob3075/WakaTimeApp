@@ -6,7 +6,7 @@ import kotlinx.serialization.Serializable
 @Serializable
 data class AllTimeDataDTO(
     @SerialName("data") val data: Data,
-    @SerialName("message") val message: String?
+    @SerialName("message") val message: String?,
 ) {
     @Serializable
     data class Data(
@@ -17,7 +17,7 @@ data class AllTimeDataDTO(
         val text: String,
         @SerialName("total_seconds") val totalSeconds: String,
         @SerialName("is_up_to_date") val isUpToDate: Boolean?,
-        @SerialName("percent_calculated") val percentCalculated: Int?
+        @SerialName("percent_calculated") val percentCalculated: Int?,
     )
 
     @Serializable
@@ -28,6 +28,6 @@ data class AllTimeDataDTO(
         @SerialName("start") val start: String,
         @SerialName("start_date") val startDate: String,
         @SerialName("start_text") val startText: String,
-        @SerialName("timezone") val timezone: String
+        @SerialName("timezone") val timezone: String,
     )
 }

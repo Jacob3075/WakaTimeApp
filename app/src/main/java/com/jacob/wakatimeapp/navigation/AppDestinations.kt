@@ -19,7 +19,7 @@ fun LoginPage(loginPageNavigator: LoginPageNavigator) =
 @Destination
 fun HomePage(
     homePageNavigator: HomePageNavigator,
-    scaffoldState: ScaffoldState
+    scaffoldState: ScaffoldState,
 ) = HomePageContent(
     navigator = homePageNavigator,
     scaffoldState = scaffoldState
