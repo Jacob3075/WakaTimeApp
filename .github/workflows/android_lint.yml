@@ -24,6 +24,5 @@ jobs:
           CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
         run: echo CLIENT_SECRET="$CLIENT_SECRET" >> ./local.properties
 
-
       - name: Run Lint Checks
-        run: ./gradlew detekt
+        run: ./gradlew detektMain
