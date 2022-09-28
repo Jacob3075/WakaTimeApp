@@ -29,14 +29,11 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
 
-interface LoginPageNavigator {
-    fun toHomePage()
-}
-
 @Composable
 fun LoginPageContent(
-    viewModel: LoginPageViewModel = hiltViewModel(),
     loginPageNavigator: LoginPageNavigator,
+    modifier: Modifier = Modifier,
+    viewModel: LoginPageViewModel = hiltViewModel(),
 ) {
     LaunchedEffect(viewModel.authStatus) {
         if (viewModel.authStatus) {
@@ -50,7 +47,7 @@ fun LoginPageContent(
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier
+        modifier = modifier
             .fillMaxSize()
             .statusBarsPadding()
     ) {
@@ -67,7 +64,7 @@ private fun AppTitle() {
         style = TextStyle(
             fontSize = MaterialTheme.typography.h3.fontSize,
             fontWeight = FontWeight.SemiBold,
-            fontFamily = FontFamily.Cursive,
+            fontFamily = FontFamily.Cursive
         )
     )
 }
@@ -88,7 +85,7 @@ private fun LoginButton(
 ) {
     val loginButtonGradient =
         Brush.horizontalGradient(listOf(Gradients.primary.startColor, Gradients.primary.endColor))
-    val buttonShape = RoundedCornerShape(45)
+    val buttonShape = RoundedCornerShape(percent = 45)
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(Color.Transparent),

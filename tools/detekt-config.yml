@@ -487,7 +487,7 @@ potential-bugs:
   UnreachableCode:
     active: true
   UnsafeCallOnNullableType:
-    active: true
+    active: false
     excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   UnsafeCast:
     active: true
@@ -507,6 +507,7 @@ formatting:
     autoCorrect: true
     layout: '*,java.**,javax.**,kotlin.**,^'
   TrailingComma:
+    autoCorrect: true
     allowTrailingComma: true
     allowTrailingCommaOnCallSite: true
   NoWildcardImports:

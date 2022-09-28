@@ -13,6 +13,8 @@ import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.login.BuildConfig
 import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
+import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
@@ -21,15 +23,13 @@ import net.openid.appauth.*
 import net.openid.appauth.AuthorizationRequest.Builder
 import timber.log.Timber
 import timber.log.Timber.Forest
-import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val ioDispatcher: CoroutineContext,
-    private val authTokenProvider: AuthTokenProvider,
+    private val authTokenProvider: AuthTokenProvider
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
 
@@ -45,7 +45,6 @@ class LoginPageViewModel @Inject constructor(
         Uri.parse(Constants.redirectUrl)
     ).setScopes(Constants.scope)
         .build()
-
 
     var authStatus by mutableStateOf(authTokenProvider.current.isAuthorized)
         private set
