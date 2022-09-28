@@ -1,3 +1,5 @@
+@file: Suppress("MagicNumber")
+
 package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration
@@ -56,7 +58,7 @@ fun WeeklyReport(
 
 @Composable
 private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
-    val cardShape = RoundedCornerShape(10)
+    val cardShape = RoundedCornerShape(percent = 10)
 
     val pairList by remember {
         derivedStateOf {
@@ -75,7 +77,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
             .background(Colors.CardBGPrimary, shape = cardShape)
     ) {
         AndroidView(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(all = 8.dp),
             factory = {
                 RoundedBarChart(it).apply {
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
@@ -148,7 +150,6 @@ private fun RoundedBarChart.configureAxis(labels: Map<Int, String>) {
 
 private fun RoundedBarChart.configureChartProperties() {
     setRadius(10)
-
     setScaleEnabled(false)
     setPinchZoom(false)
     isDoubleTapToZoomEnabled = false
