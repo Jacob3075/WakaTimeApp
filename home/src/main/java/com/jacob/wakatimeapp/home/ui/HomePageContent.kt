@@ -16,8 +16,10 @@ import com.jacob.wakatimeapp.core.ui.components.WtaIllustration
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.home.R
-import com.jacob.wakatimeapp.home.ui.components.*
+import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
+import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
+import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import kotlin.random.Random
 import kotlinx.coroutines.launch
 

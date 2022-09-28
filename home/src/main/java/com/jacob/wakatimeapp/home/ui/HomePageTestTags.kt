@@ -23,5 +23,4 @@ object HomePageTestTags {
     const val OTHER_STATS_LANGUAGE_TEXT = ""
     const val OTHER_STATS_OS_TEXT = ""
     const val OTHER_STATS_EDITOR_TEXT = ""
-
 }

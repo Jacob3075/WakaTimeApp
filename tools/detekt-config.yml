@@ -498,6 +498,23 @@ potential-bugs:
   WrongEqualsTypeParameter:
     active: true
 
+formatting:
+  active: true
+  android: true
+  autoCorrect: true
+  ImportOrdering:
+    active: false
+    autoCorrect: true
+    layout: '*,java.**,javax.**,kotlin.**,^'
+  TrailingComma:
+    allowTrailingComma: true
+    allowTrailingCommaOnCallSite: true
+  NoWildcardImports:
+    active: false
+  MaximumLineLength:
+    maxLineLength: 120
+    ignoreBackTickedIdentifier: true
+
 style:
   active: true
   CanBeNonNullable:
