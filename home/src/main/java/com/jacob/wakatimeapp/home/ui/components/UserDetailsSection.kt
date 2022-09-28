@@ -45,7 +45,7 @@ fun UserDetailsSection(
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(
-            text = userDetails?.fullName ?: "",
+            text = userDetails?.fullName.orEmpty(),
             fontSize = Typography.h4.fontSize,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,

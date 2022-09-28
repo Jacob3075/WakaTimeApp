@@ -34,28 +34,25 @@ fun OtherDailyStatsSection(
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
             gradient = Gradients.greenCyan,
-            roundedCornerPercent = 25,
             iconId = drawable.ic_code_file,
             mainText = "Most Language Used",
-            language = dailyStats?.mostUsedLanguage ?: "",
+            language = dailyStats?.mostUsedLanguage.orEmpty(),
             onClick = onClick
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
             gradient = Gradients.purpleCyanLight,
-            roundedCornerPercent = 25,
             iconId = drawable.ic_laptop,
             mainText = "Most OS Used",
-            language = dailyStats?.mostUsedOs ?: "",
+            language = dailyStats?.mostUsedOs.orEmpty(),
             onClick = onClick
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
             gradient = Gradients.purpleCyanLight,
-            roundedCornerPercent = 25,
             iconId = drawable.ic_laptop,
             mainText = "Most OS Used",
-            language = dailyStats?.mostUsedOs ?: "",
+            language = dailyStats?.mostUsedOs.orEmpty(),
             onClick = onClick
         )
     }

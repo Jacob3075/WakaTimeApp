@@ -50,7 +50,7 @@ fun WeeklyReport(
             Text(text = "Details", color = Colors.AccentText, fontSize = 14.sp)
         }
         Spacer(modifier = Modifier.height(10.dp))
-        WeeklyReportChart(dailyStats ?: emptyList())
+        WeeklyReportChart(dailyStats.orEmpty())
     }
 }
 

@@ -41,7 +41,7 @@ internal fun RecentProjects(
             Text(text = "See All", color = Colors.AccentText, fontSize = 14.sp)
         }
         RecentProjectList(
-            projects = dailyStats?.projectsWorkedOn ?: emptyList(),
+            projects = dailyStats?.projectsWorkedOn.orEmpty(),
             modifier = Modifier.padding(horizontal = 12.dp)
         )
     }

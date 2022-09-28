@@ -7,14 +7,13 @@ import com.jacob.wakatimeapp.core.ui.theme.Gradient
 @Composable
 fun OtherStatsCard(
     gradient: Gradient,
-    roundedCornerPercent: Int,
     @DrawableRes iconId: Int,
     mainText: String,
     language: String,
     onClick: () -> Unit
 ) = StatsCard(
     gradient = gradient,
-    roundedCornerPercent = roundedCornerPercent,
+    roundedCornerPercent = 25,
     iconId = iconId,
     mainText = mainText,
     text = language,
