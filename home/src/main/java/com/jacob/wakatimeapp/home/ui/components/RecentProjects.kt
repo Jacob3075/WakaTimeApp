@@ -6,6 +6,7 @@ import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -21,7 +22,6 @@ import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.R
-import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import java.time.LocalDate
 
@@ -38,7 +38,7 @@ internal fun RecentProjects(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Recent Projects", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
-            Text(text = "See All", color = Colors.AccentText, fontSize = 14.sp)
+            Text(text = "See All", color = MaterialTheme.colors.primary, fontSize = 14.sp)
         }
         RecentProjectList(
             projects = dailyStats?.projectsWorkedOn.orEmpty(),
@@ -66,7 +66,7 @@ private fun ProjectCardItem(project: Project) {
             .shadow(elevation = 8.dp, shape = cardShape)
             .fillMaxWidth()
             .padding(vertical = 8.dp, horizontal = 2.dp)
-            .background(color = Colors.CardBGPrimary, shape = cardShape)
+            .background(color = MaterialTheme.colors.surface, shape = cardShape)
             .clickable { }
     ) {
         Row(

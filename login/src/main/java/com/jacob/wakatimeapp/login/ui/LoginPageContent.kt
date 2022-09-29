@@ -24,8 +24,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.gradients
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
 
@@ -83,8 +83,12 @@ private fun authActivityResultLauncher(viewModel: LoginPageViewModel) =
 private fun LoginButton(
     onClick: () -> Unit,
 ) {
-    val loginButtonGradient =
-        Brush.horizontalGradient(listOf(Gradients.primary.startColor, Gradients.primary.endColor))
+    val loginButtonGradient = Brush.horizontalGradient(
+        listOf(
+            MaterialTheme.gradients.primary.startColor,
+            MaterialTheme.gradients.primary.endColor,
+        )
+    )
     val buttonShape = RoundedCornerShape(percent = 45)
     Button(
         onClick = onClick,

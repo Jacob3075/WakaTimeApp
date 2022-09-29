@@ -9,6 +9,7 @@ import android.widget.LinearLayout
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +33,6 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jacob.wakatimeapp.core.common.getDisplayNameForDay
 import com.jacob.wakatimeapp.core.models.DailyStats
-import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 
 @Composable
@@ -49,7 +49,7 @@ fun WeeklyReport(
             modifier = Modifier.fillMaxWidth()
         ) {
             Text(text = "Weekly Report", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
-            Text(text = "Details", color = Colors.AccentText, fontSize = 14.sp)
+            Text(text = "Details", color = MaterialTheme.colors.primary, fontSize = 14.sp)
         }
         Spacer(modifier = Modifier.height(10.dp))
         WeeklyReportChart(dailyStats.orEmpty())
@@ -74,7 +74,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
             .padding(horizontal = 10.dp)
             .shadow(elevation = 8.dp, shape = cardShape)
             .aspectRatio(1.4f)
-            .background(Colors.CardBGPrimary, shape = cardShape)
+            .background(MaterialTheme.colors.surface, shape = cardShape)
     ) {
         AndroidView(
             modifier = Modifier.padding(all = 8.dp),

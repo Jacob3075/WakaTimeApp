@@ -2,13 +2,14 @@ package com.jacob.wakatimeapp.core.ui.components.cards
 
 import android.content.res.Configuration
 import androidx.annotation.DrawableRes
+import androidx.compose.material.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.tooling.preview.Preview
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.theme.Gradient
-import com.jacob.wakatimeapp.core.ui.theme.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.gradients
 
 // TODO: FIX MAGIC NUMBERS
 
@@ -33,7 +34,7 @@ fun TimeSpentCard(
 @Composable
 private fun TimeSpentCardPreview() = WakaTimeAppTheme(darkTheme = true) {
     TimeSpentCard(
-        gradient = Gradients.primary,
+        gradient = MaterialTheme.gradients.primary,
         roundedCornerPercent = 25,
         iconId = drawable.ic_time,
         mainText = "Total Time Spent Today",

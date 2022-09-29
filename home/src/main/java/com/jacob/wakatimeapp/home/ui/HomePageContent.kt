@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.home.ui
 import androidx.compose.foundation.layout.*
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration.Long
 import androidx.compose.runtime.*
@@ -14,7 +15,7 @@ import com.jacob.wakatimeapp.core.ui.R.raw
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.WtaIllustration
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
-import com.jacob.wakatimeapp.core.ui.theme.Gradients
+import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.home.R
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
@@ -72,7 +73,7 @@ private fun HomePageLoaded(
         Spacer(modifier = Modifier.height(25.dp))
 
         TimeSpentCard(
-            gradient = Gradients.primary,
+            gradient = MaterialTheme.gradients.primary,
             roundedCornerPercent = 25,
             iconId = drawable.ic_time,
             mainText = "Total Time Spent Today",
