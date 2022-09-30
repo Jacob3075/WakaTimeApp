@@ -4,3 +4,6 @@ plugins {
 
 dependencies {
 }
+android {
+    namespace = "com.jacob.wakatimeapp.core.models"
+}

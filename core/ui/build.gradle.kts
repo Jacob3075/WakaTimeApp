@@ -1,3 +1,5 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id("wakatimeapp.android.library")
 }
@@ -7,6 +9,7 @@ android {
     composeOptions { kotlinCompilerExtensionVersion = "1.3.1" }
 
     kotlinOptions { jvmTarget = "11" }
+    namespace = "com.jacob.wakatimeapp.core.ui"
 }
 
 dependencies {

@@ -3,6 +3,9 @@ import java.util.*
 plugins {
     id("wakatimeapp.android.feature")
 }
+android {
+    namespace = "com.jacob.wakatimeapp.login"
+}
 
 android.buildTypes.forEach {
     val properties = loadPropertiesFile()

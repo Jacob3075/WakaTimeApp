@@ -38,3 +38,6 @@ dependencies {
     debugImplementation("androidx.compose.ui:ui-tooling:1.2.1")
     debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.1")
 }
+android {
+    namespace = "com.jacob.wakatimeapp"
+}

@@ -7,3 +7,6 @@ dependencies {
     implementation("io.coil-kt:coil-compose:2.1.0")
     implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
 }
+android {
+    namespace = "com.jacob.wakatimeapp.home"
+}
