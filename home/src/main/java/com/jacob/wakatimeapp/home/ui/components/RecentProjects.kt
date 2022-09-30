@@ -66,14 +66,14 @@ private fun ProjectCardItem(project: Project) {
     val spacing = MaterialTheme.spacing
     Box(
         modifier = Modifier
+            .fillMaxWidth()
+            .padding(vertical = spacing.small)
             .shadow(
                 elevation = 8.dp,
                 shape = cardShape,
                 clip = false
             )
             .clip(shape = cardShape)
-            .fillMaxWidth()
-            .padding(vertical = spacing.small)
             .background(color = MaterialTheme.colors.surface, shape = cardShape)
             .clickable { }
     ) {

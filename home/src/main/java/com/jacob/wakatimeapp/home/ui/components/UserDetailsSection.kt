@@ -26,34 +26,31 @@ import com.jacob.wakatimeapp.core.ui.theme.spacing
 fun UserDetailsSection(
     userDetails: UserDetails?,
     modifier: Modifier = Modifier,
+) = Row(
+    horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
+    verticalAlignment = Alignment.CenterVertically,
+    modifier = modifier.fillMaxWidth()
 ) {
-    Row(
-        horizontalArrangement = Arrangement.Start,
-        verticalAlignment = Alignment.CenterVertically,
-        modifier = modifier.fillMaxWidth()
-    ) {
-        Image(
-            painter = rememberAsyncImagePainter(
-                Builder(LocalContext.current).data(data = userDetails?.photoUrl)
-                    .apply {
-                        transformations(CircleCropTransformation())
-                        placeholder(R.drawable.place_holder)
-                        fallback(R.drawable.place_holder)
-                    }
-                    .build()
-            ),
-            contentDescription = "Profile image",
-            modifier = Modifier.size(MaterialTheme.spacing.extraLarge)
-        )
-        Spacer(modifier = Modifier.width(24.dp))
-        Text(
-            text = userDetails?.fullName.orEmpty(),
-            fontSize = Typography.h4.fontSize,
-            fontWeight = FontWeight.SemiBold,
-            maxLines = 1,
-            overflow = TextOverflow.Ellipsis
-        )
-    }
+    Image(
+        painter = rememberAsyncImagePainter(
+            Builder(LocalContext.current).data(data = userDetails?.photoUrl)
+                .apply {
+                    transformations(CircleCropTransformation())
+                    placeholder(R.drawable.place_holder)
+                    fallback(R.drawable.place_holder)
+                }
+                .build()
+        ),
+        contentDescription = "Profile image",
+        modifier = Modifier.size(58.dp)
+    )
+    Text(
+        text = userDetails?.fullName.orEmpty(),
+        fontSize = Typography.h4.fontSize,
+        fontWeight = FontWeight.SemiBold,
+        maxLines = 1,
+        overflow = TextOverflow.Ellipsis
+    )
 }
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)

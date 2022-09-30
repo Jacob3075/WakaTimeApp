@@ -8,7 +8,6 @@ import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration.Long
 import androidx.compose.runtime.*
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.R.raw
@@ -16,6 +15,7 @@ import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.WtaIllustration
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.theme.gradients
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.R
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
@@ -53,6 +53,7 @@ fun HomePageContent(
                 homePageViewState = viewState as HomePageViewState.Loaded,
                 navigator = navigator
             )
+
             is HomePageViewState.Error -> HomePageError(viewState as HomePageViewState.Error)
         }
     }
@@ -64,13 +65,16 @@ private fun HomePageLoaded(
     navigator: HomePageNavigator,
 ) {
     val scrollState = rememberScrollState()
+    val spacing = MaterialTheme.spacing
     Column(
         modifier = Modifier
-            .padding(horizontal = 20.dp)
+            .padding(horizontal = spacing.medium)
             .verticalScroll(scrollState)
     ) {
+        Spacer(modifier = Modifier.height(spacing.extraSmall))
+
         UserDetailsSection(homePageViewState.userDetails)
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(spacing.medium))
 
         TimeSpentCard(
             gradient = MaterialTheme.gradients.primary,
@@ -80,19 +84,19 @@ private fun HomePageLoaded(
             time = homePageViewState.contentData.todaysStats.timeSpent,
             onClick = navigator::toDetailsPage
         )
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(spacing.medium))
 
         RecentProjects(homePageViewState.contentData.todaysStats)
-        Spacer(modifier = Modifier.height(10.dp))
+        Spacer(modifier = Modifier.height(spacing.sMedium))
 
         WeeklyReport(homePageViewState.contentData.dailyStats)
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(spacing.medium))
 
         OtherDailyStatsSection(
             homePageViewState.contentData.todaysStats,
             onClick = {}
         )
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(spacing.medium))
     }
 }
 
