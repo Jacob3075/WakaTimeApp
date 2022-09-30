@@ -26,6 +26,7 @@ import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.gradients
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
 
@@ -43,6 +44,7 @@ fun LoginPageContent(
     }
 
     val launcher = authActivityResultLauncher(viewModel)
+    val spacing = MaterialTheme.spacing
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -50,6 +52,7 @@ fun LoginPageContent(
         modifier = modifier
             .fillMaxSize()
             .statusBarsPadding()
+            .padding(top = spacing.small, bottom = spacing.large)
     ) {
         AppTitle()
         LoginButton(onClick = { launcher.launch(viewModel.getAuthIntent()) })
@@ -57,17 +60,14 @@ fun LoginPageContent(
 }
 
 @Composable
-private fun AppTitle() {
-    Text(
-        text = "Wakatime Client",
-        modifier = Modifier.padding(top = 2.dp),
-        style = TextStyle(
-            fontSize = MaterialTheme.typography.h3.fontSize,
-            fontWeight = FontWeight.SemiBold,
-            fontFamily = FontFamily.Cursive
-        )
+private fun AppTitle() = Text(
+    text = "Wakatime Client",
+    style = TextStyle(
+        fontSize = MaterialTheme.typography.h3.fontSize,
+        fontWeight = FontWeight.SemiBold,
+        fontFamily = FontFamily.Cursive
     )
-}
+)
 
 @Composable
 private fun authActivityResultLauncher(viewModel: LoginPageViewModel) =
@@ -90,28 +90,28 @@ private fun LoginButton(
         )
     )
     val buttonShape = RoundedCornerShape(percent = 45)
+    val spacing = MaterialTheme.spacing
     Button(
         onClick = onClick,
         colors = ButtonDefaults.buttonColors(Color.Transparent),
         shape = buttonShape,
         contentPadding = PaddingValues(),
         modifier = Modifier
-            .padding(horizontal = 48.dp)
-            .padding(bottom = 50.dp)
-            .shadow(12.dp, shape = buttonShape)
+            .padding(horizontal = spacing.large + spacing.medium)
+            .shadow(elevation = 8.dp, shape = buttonShape, clip = false)
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(loginButtonGradient, buttonShape)
-                .padding(vertical = 8.dp)
+                .padding(vertical = spacing.small)
         ) {
             Text(
                 text = "Login to Wakatime",
                 fontSize = 16.sp,
                 fontWeight = FontWeight.SemiBold,
-                modifier = Modifier.padding(14.dp)
+                modifier = Modifier.padding(spacing.medium)
             )
         }
     }
