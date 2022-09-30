@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.home.ui.components
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -19,6 +20,7 @@ import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.ui.R
 import com.jacob.wakatimeapp.core.ui.theme.Typography
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
 fun UserDetailsSection(
@@ -41,7 +43,7 @@ fun UserDetailsSection(
                     .build()
             ),
             contentDescription = "Profile image",
-            modifier = Modifier.size(58.dp)
+            modifier = Modifier.size(MaterialTheme.spacing.extraLarge)
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(

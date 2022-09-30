@@ -12,6 +12,7 @@ import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
@@ -23,49 +24,56 @@ import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.R
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 import java.time.LocalDate
 
 @Composable
 internal fun RecentProjects(
     dailyStats: DailyStats?,
+) = Column(
+    modifier = Modifier.fillMaxWidth()
 ) {
-    Column(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Recent Projects", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
-            Text(text = "See All", color = MaterialTheme.colors.primary, fontSize = 14.sp)
-        }
-        RecentProjectList(
-            projects = dailyStats?.projectsWorkedOn.orEmpty(),
-            modifier = Modifier.padding(horizontal = 12.dp)
-        )
+        Text(text = "Recent Projects", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
+        Text(text = "See All", color = MaterialTheme.colors.primary, fontSize = 14.sp)
     }
+    RecentProjectList(
+        projects = dailyStats?.projectsWorkedOn.orEmpty(),
+    )
 }
 
 @Composable
-private fun RecentProjectList(projects: List<Project>, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-    ) {
-        projects.take(n = 3)
-            .map { ProjectCardItem(it) }
-        Spacer(modifier = Modifier.height(10.dp))
-    }
+private fun RecentProjectList(
+    projects: List<Project>,
+) = Column(
+    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small)
+) {
+    projects.take(n = 3)
+        .map { ProjectCardItem(it) }
 }
 
 @Composable
 private fun ProjectCardItem(project: Project) {
     val cardShape = RoundedCornerShape(percent = 25)
+    /*
+    * Not using surface because it applies an overlay which changes the color of the background.
+    * Copied the modifiers from Surface composable without the overlay logic.
+    * */
+    val spacing = MaterialTheme.spacing
     Box(
         modifier = Modifier
-            .shadow(elevation = 8.dp, shape = cardShape)
+            .shadow(
+                elevation = 8.dp,
+                shape = cardShape,
+                clip = false
+            )
+            .clip(shape = cardShape)
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 2.dp)
+            .padding(vertical = spacing.small)
             .background(color = MaterialTheme.colors.surface, shape = cardShape)
             .clickable { }
     ) {
@@ -73,7 +81,7 @@ private fun ProjectCardItem(project: Project) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .padding(horizontal = spacing.medium, vertical = spacing.sMedium)
         ) {
             Column(
                 Modifier

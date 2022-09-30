@@ -41,20 +41,20 @@ fun OtherDailyStatsSection(
         language = dailyStats?.mostUsedLanguage.orEmpty(),
         onClick = onClick
     )
-    Spacer(modifier = Modifier.height(spacing.medium))
+    Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
-        gradient = gradients.purpleCyanLight,
+        gradient = gradients.blueCyan,
         iconId = drawable.ic_laptop,
         mainText = "Most OS Used",
         language = dailyStats?.mostUsedOs.orEmpty(),
         onClick = onClick
     )
-    Spacer(modifier = Modifier.height(spacing.medium))
+    Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
         gradient = gradients.purpleCyanLight,
         iconId = drawable.ic_laptop,
-        mainText = "Most OS Used",
-        language = dailyStats?.mostUsedOs.orEmpty(),
+        mainText = "Most Editor Used",
+        language = dailyStats?.mostUsedEditor.orEmpty(),
         onClick = onClick
     )
 }

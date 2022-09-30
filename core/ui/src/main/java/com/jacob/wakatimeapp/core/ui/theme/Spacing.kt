@@ -9,6 +9,10 @@ import androidx.compose.ui.unit.dp
 data class Spacing internal constructor(
     val extraSmall: Dp = 4.dp,
     val small: Dp = 8.dp,
+    /**
+     * [When a size small is too small and the size medium is too big you are a size smedium](https://english.stackexchange.com/a/163611)
+     * */
+    val sMedium: Dp = 12.dp,
     val medium: Dp = 16.dp,
     val large: Dp = 32.dp,
     val extraLarge: Dp = 64.dp,
