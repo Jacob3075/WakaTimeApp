@@ -4,13 +4,13 @@ import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.home.data.dtos.AllTimeDataDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
+import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
-import javax.inject.Inject
-import javax.inject.Singleton
 
 interface HomePageAPI {
     @GET("/api/v1/users/current/all_time_since_today")
@@ -29,7 +29,10 @@ class HomePageNetworkData @Inject constructor(
     private val homePageAPI: HomePageAPI,
 ) {
     private val token: String
-        get() = runBlocking { authTokenProvider.getFreshToken().first() }
+        get() = runBlocking {
+            authTokenProvider.getFreshToken()
+                .first()
+        }
 
     suspend fun getLast7DaysStats(): Response<GetLast7DaysStatsResDTO> =
         homePageAPI.getLast7DaysStats("Bearer $token")

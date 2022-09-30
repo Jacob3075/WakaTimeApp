@@ -1,0 +1,24 @@
+plugins {
+    id("io.gitlab.arturbosch.detekt")
+}
+
+dependencies {
+    detektPlugins("ru.kode:detekt-rules-compose:1.2.1")
+    detektPlugins("com.twitter.compose.rules:detekt:0.0.14")
+    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.21.0")
+}
+
+detekt {
+    parallel = true
+    config = files("${rootProject.rootDir}/tools/detekt-config.yml")
+    buildUponDefaultConfig = true
+}
+
+tasks.detekt.configure {
+    reports {
+        html.required.set(false)
+        md.required.set(true)
+        md.outputLocation.set(file("${rootProject.rootDir}/tools/reports/${project.name}-detekt.md"))
+    }
+    jvmTarget = "11"
+}

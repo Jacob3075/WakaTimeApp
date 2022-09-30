@@ -23,11 +23,12 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 @Composable
 fun UserDetailsSection(
     userDetails: UserDetails?,
+    modifier: Modifier = Modifier,
 ) {
     Row(
         horizontalArrangement = Arrangement.Start,
         verticalAlignment = Alignment.CenterVertically,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth()
     ) {
         Image(
             painter = rememberAsyncImagePainter(
@@ -36,25 +37,26 @@ fun UserDetailsSection(
                         transformations(CircleCropTransformation())
                         placeholder(R.drawable.place_holder)
                         fallback(R.drawable.place_holder)
-                    }.build()
+                    }
+                    .build()
             ),
             contentDescription = "Profile image",
-            modifier = Modifier.size(58.dp),
+            modifier = Modifier.size(58.dp)
         )
         Spacer(modifier = Modifier.width(24.dp))
         Text(
-            text = userDetails?.fullName ?: "",
+            text = userDetails?.fullName.orEmpty(),
             fontSize = Typography.h4.fontSize,
             fontWeight = FontWeight.SemiBold,
             maxLines = 1,
-            overflow = TextOverflow.Ellipsis,
+            overflow = TextOverflow.Ellipsis
         )
     }
 }
 
 @Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun UserDetailsPreview() = WakaTimeAppTheme {
+private fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
         UserDetails(
             bio = "",
@@ -70,6 +72,6 @@ fun UserDetailsPreview() = WakaTimeAppTheme {
             createdAt = "",
             dateFormat = "",
             photoUrl = ""
-        ),
+        )
     )
 }

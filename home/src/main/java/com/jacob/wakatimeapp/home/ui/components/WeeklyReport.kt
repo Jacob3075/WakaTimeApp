@@ -1,3 +1,5 @@
+@file: Suppress("MagicNumber")
+
 package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration
@@ -10,6 +12,9 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.derivedStateOf
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -25,19 +30,18 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
+import com.jacob.wakatimeapp.core.common.getDisplayNameForDay
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import java.time.format.TextStyle.SHORT
-import java.util.*
-
 
 @Composable
 fun WeeklyReport(
     dailyStats: List<DailyStats>?,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -48,29 +52,22 @@ fun WeeklyReport(
             Text(text = "Details", color = Colors.AccentText, fontSize = 14.sp)
         }
         Spacer(modifier = Modifier.height(10.dp))
-        WeeklyReportChart(dailyStats ?: emptyList())
+        WeeklyReportChart(dailyStats.orEmpty())
     }
 }
 
 @Composable
 private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
-    val cardShape = RoundedCornerShape(10)
+    val cardShape = RoundedCornerShape(percent = 10)
 
-    val labels = mutableMapOf<Int, String>()
-    val entries = dailyStats.mapIndexed { index, value ->
-        labels[index] = value.date.dayOfWeek.getDisplayName(SHORT, Locale.getDefault())
-        BarEntry(
-            index.toFloat(),
-            value.timeSpent.decimal,
-            value
-        )
+    val pairList by remember {
+        derivedStateOf {
+            dailyStats.mapIndexed { index, value -> index to value }
+        }
     }
 
-    val dataSet = BarDataSet(entries, "Label").apply {
-        setDrawValues(false)
-        valueTextColor = Color.WHITE
-    }
-    val barData = BarData(dataSet).apply { barWidth = 0.3f }
+    val labels by getLabels(pairList)
+    val barData by getBarData(pairList)
 
     Box(
         modifier = Modifier
@@ -80,42 +77,16 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
             .background(Colors.CardBGPrimary, shape = cardShape)
     ) {
         AndroidView(
-            modifier = Modifier.padding(8.dp),
+            modifier = Modifier.padding(all = 8.dp),
             factory = {
                 RoundedBarChart(it).apply {
-                    setRadius(10)
-
-                    setScaleEnabled(false)
-                    setPinchZoom(false)
-                    isDoubleTapToZoomEnabled = false
-                    description.isEnabled = false
-
-                    xAxis.apply {
-                        setDrawGridLines(false)
-                        textColor = Color.WHITE
-                        position = BOTTOM
-                        valueFormatter = XAxisDayFormatter(labels)
-                    }
-                    axisLeft.apply {
-                        setDrawGridLines(true)
-                        isEnabled = true
-                        spaceBottom = 0f
-                        labelCount = 3
-                        textColor = Color.WHITE
-                        textSize = 8f
-                        valueFormatter = YAxisHourFormatter()
-                        axisMinimum = 0.1f // Can't be zero because of RoundedBarChart
-                    }
-                    axisRight.setDrawGridLines(false)
-                    axisRight.isEnabled = false
-
-                    legend.isEnabled = false
-
                     layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+
+                    configureChartProperties()
+                    configureAxis(labels)
+
                     data = barData
                     invalidate()
-
-                    animateY(3000, Easing.EaseInOutBack)
                 }
             },
             update = {
@@ -127,9 +98,69 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
     }
 }
 
+@Composable
+private fun getLabels(pairList: List<Pair<Int, DailyStats>>) =
+    remember {
+        derivedStateOf {
+            pairList.associate { (index, value) ->
+                index to value.date.getDisplayNameForDay()
+            }
+        }
+    }
+
+@Composable
+private fun getBarData(pairList: List<Pair<Int, DailyStats>>) =
+    remember {
+        derivedStateOf {
+            val entries = pairList.map { (index, value) ->
+                BarEntry(
+                    index.toFloat(),
+                    value.timeSpent.decimal,
+                    value
+                )
+            }
+            val barDataSet = BarDataSet(entries, "Label").apply {
+                setDrawValues(false)
+                valueTextColor = Color.WHITE
+            }
+            BarData(barDataSet).apply { barWidth = 0.3f }
+        }
+    }
+
+private fun RoundedBarChart.configureAxis(labels: Map<Int, String>) {
+    xAxis.apply {
+        setDrawGridLines(false)
+        textColor = Color.WHITE
+        position = BOTTOM
+        valueFormatter = XAxisDayFormatter(labels)
+    }
+    axisLeft.apply {
+        setDrawGridLines(true)
+        isEnabled = true
+        spaceBottom = 0f
+        labelCount = 3
+        textColor = Color.WHITE
+        textSize = 8f
+        valueFormatter = YAxisHourFormatter()
+        axisMinimum = 0.1f // Can't be zero because of RoundedBarChart
+    }
+    axisRight.setDrawGridLines(false)
+    axisRight.isEnabled = false
+}
+
+private fun RoundedBarChart.configureChartProperties() {
+    setRadius(10)
+    setScaleEnabled(false)
+    setPinchZoom(false)
+    isDoubleTapToZoomEnabled = false
+    description.isEnabled = false
+    legend.isEnabled = false
+    animateY(3000, Easing.EaseInOutBack)
+}
+
 @Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
-fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
+private fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         WeeklyReport(emptyList())
     }

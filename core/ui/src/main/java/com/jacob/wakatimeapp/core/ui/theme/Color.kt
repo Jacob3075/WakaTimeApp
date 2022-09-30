@@ -1,3 +1,5 @@
+@file:Suppress("MagicNumber")
+
 package com.jacob.wakatimeapp.core.ui.theme
 
 import androidx.compose.ui.graphics.Color

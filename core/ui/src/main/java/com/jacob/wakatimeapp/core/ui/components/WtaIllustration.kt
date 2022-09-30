@@ -15,10 +15,10 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun WtaIllustration(
-    modifier: Modifier = Modifier,
     illustrations: List<Int>,
     text: String,
     illustrationTestTag: String,
+    modifier: Modifier = Modifier,
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center,
@@ -34,6 +34,6 @@ fun WtaIllustration(
     Text(
         text = text,
         fontWeight = FontWeight.SemiBold,
-        fontSize = 18.sp,
+        fontSize = 18.sp
     )
 }

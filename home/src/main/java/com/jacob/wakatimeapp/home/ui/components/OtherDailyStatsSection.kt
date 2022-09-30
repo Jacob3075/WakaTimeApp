@@ -18,9 +18,10 @@ import com.jacob.wakatimeapp.core.ui.theme.Gradients
 fun OtherDailyStatsSection(
     dailyStats: DailyStats?,
     onClick: () -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = Modifier.fillMaxWidth()
+        modifier = modifier.fillMaxWidth()
     ) {
         Row(
             verticalAlignment = Alignment.CenterVertically,
@@ -33,29 +34,26 @@ fun OtherDailyStatsSection(
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
             gradient = Gradients.greenCyan,
-            roundedCornerPercent = 25,
             iconId = drawable.ic_code_file,
             mainText = "Most Language Used",
-            language = dailyStats?.mostUsedLanguage ?: "",
-            onClick = onClick,
+            language = dailyStats?.mostUsedLanguage.orEmpty(),
+            onClick = onClick
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
             gradient = Gradients.purpleCyanLight,
-            roundedCornerPercent = 25,
             iconId = drawable.ic_laptop,
             mainText = "Most OS Used",
-            language = dailyStats?.mostUsedOs ?: "",
-            onClick = onClick,
+            language = dailyStats?.mostUsedOs.orEmpty(),
+            onClick = onClick
         )
         Spacer(modifier = Modifier.height(15.dp))
         OtherStatsCard(
             gradient = Gradients.purpleCyanLight,
-            roundedCornerPercent = 25,
             iconId = drawable.ic_laptop,
             mainText = "Most OS Used",
-            language = dailyStats?.mostUsedOs ?: "",
-            onClick = onClick,
+            language = dailyStats?.mostUsedOs.orEmpty(),
+            onClick = onClick
         )
     }
 }

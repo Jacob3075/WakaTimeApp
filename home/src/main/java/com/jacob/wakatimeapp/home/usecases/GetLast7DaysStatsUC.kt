@@ -8,12 +8,13 @@ import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.HomePageNetworkData
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.mappers.toModel
-import timber.log.Timber
 import javax.inject.Inject
+import timber.log.Timber
 
 class GetLast7DaysStatsUC @Inject constructor(
     private val homePageNetworkData: HomePageNetworkData,
 ) {
+    @Suppress("TooGenericExceptionCaught")
     suspend operator fun invoke(): Result<WeeklyStats> {
         try {
             val statsForTodayResponse = homePageNetworkData.getLast7DaysStats()
@@ -22,7 +23,8 @@ class GetLast7DaysStatsUC @Inject constructor(
             )
 
             val weeklyStats =
-                statsForTodayResponse.body()!!.run(GetLast7DaysStatsResDTO::toModel)
+                statsForTodayResponse.body()!!
+                    .run(GetLast7DaysStatsResDTO::toModel)
 
             return Success(weeklyStats)
         } catch (exception: Exception) {

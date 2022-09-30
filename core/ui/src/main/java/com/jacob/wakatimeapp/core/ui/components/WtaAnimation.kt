@@ -17,10 +17,10 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
 fun WtaAnimation(
-    modifier: Modifier = Modifier,
     animations: List<Int>,
     text: String,
     animationTestTag: String,
+    modifier: Modifier = Modifier,
 ) {
     val composition by rememberLottieComposition(RawRes(animations.random()))
 
@@ -38,7 +38,7 @@ fun WtaAnimation(
         Text(
             text = text,
             fontWeight = FontWeight.SemiBold,
-            fontSize = 18.sp,
+            fontSize = 18.sp
         )
     }
 }
