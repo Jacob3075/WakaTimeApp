@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.core.ui.components
 
+import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.*
 import androidx.compose.material.Text
@@ -15,7 +16,7 @@ import androidx.compose.ui.unit.sp
 
 @Composable
 fun WtaIllustration(
-    illustrations: List<Int>,
+    @DrawableRes illustration: Int,
     text: String,
     illustrationTestTag: String,
     modifier: Modifier = Modifier,
@@ -25,7 +26,7 @@ fun WtaIllustration(
     modifier = modifier.fillMaxSize()
 ) {
     Image(
-        painter = painterResource(id = illustrations.random()),
+        painter = painterResource(id = illustration),
         contentDescription = "",
         contentScale = ContentScale.Fit,
         modifier = Modifier.testTag(illustrationTestTag)
