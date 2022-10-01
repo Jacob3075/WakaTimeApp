@@ -1,6 +1,11 @@
 package com.jacob.wakatimeapp.core.ui.components
 
-import androidx.compose.foundation.layout.*
+import androidx.annotation.RawRes as XmlRawRes
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
@@ -17,12 +22,12 @@ import com.airbnb.lottie.compose.rememberLottieComposition
 
 @Composable
 fun WtaAnimation(
-    animations: List<Int>,
+    @XmlRawRes animation: Int,
     text: String,
     animationTestTag: String,
     modifier: Modifier = Modifier,
 ) {
-    val composition by rememberLottieComposition(RawRes(animations.random()))
+    val composition by rememberLottieComposition(RawRes(animation))
 
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,

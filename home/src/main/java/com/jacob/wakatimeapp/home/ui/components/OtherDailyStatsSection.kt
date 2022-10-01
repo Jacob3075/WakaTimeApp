@@ -10,8 +10,8 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.models.DailyStats
-import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.components.cards.OtherStatsCard
+import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 
@@ -25,6 +25,7 @@ fun OtherDailyStatsSection(
 ) {
     val gradients = MaterialTheme.gradients
     val spacing = MaterialTheme.spacing
+    val icons = MaterialTheme.assets.icons
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
@@ -36,7 +37,7 @@ fun OtherDailyStatsSection(
     Spacer(modifier = Modifier.height(spacing.medium))
     OtherStatsCard(
         gradient = gradients.greenCyan,
-        iconId = drawable.ic_code_file,
+        iconId = icons.codeFile,
         mainText = "Most Language Used",
         language = dailyStats?.mostUsedLanguage.orEmpty(),
         onClick = onClick
@@ -44,7 +45,7 @@ fun OtherDailyStatsSection(
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
         gradient = gradients.blueCyan,
-        iconId = drawable.ic_laptop,
+        iconId = icons.laptop,
         mainText = "Most OS Used",
         language = dailyStats?.mostUsedOs.orEmpty(),
         onClick = onClick
@@ -52,7 +53,7 @@ fun OtherDailyStatsSection(
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
         gradient = gradients.purpleCyanLight,
-        iconId = drawable.ic_laptop,
+        iconId = icons.laptop,
         mainText = "Most Editor Used",
         language = dailyStats?.mostUsedEditor.orEmpty(),
         onClick = onClick

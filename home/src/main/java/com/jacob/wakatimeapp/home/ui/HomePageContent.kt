@@ -1,21 +1,27 @@
 package com.jacob.wakatimeapp.home.ui
 
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.ScaffoldState
 import androidx.compose.material.SnackbarDuration.Long
-import androidx.compose.runtime.*
+import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jacob.wakatimeapp.core.ui.R.drawable
-import com.jacob.wakatimeapp.core.ui.R.raw
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
+import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import com.jacob.wakatimeapp.home.R
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
@@ -64,6 +70,7 @@ private fun HomePageLoaded(
 ) {
     val scrollState = rememberScrollState()
     val spacing = MaterialTheme.spacing
+    val icons = MaterialTheme.assets.icons
     Column(
         modifier = Modifier
             .padding(horizontal = spacing.medium)
@@ -77,7 +84,7 @@ private fun HomePageLoaded(
         TimeSpentCard(
             gradient = MaterialTheme.gradients.primary,
             roundedCornerPercent = 25,
-            iconId = drawable.ic_time,
+            iconId = icons.time,
             mainText = "Total Time Spent Today",
             time = homePageViewState.contentData.todaysStats.timeSpent,
             onClick = navigator::toDetailsPage
@@ -100,25 +107,14 @@ private fun HomePageLoaded(
 
 @Composable
 private fun HomePageError(errorMessage: HomePageViewState.Error) = WtaAnimation(
-    animations = listOf(
-        raw.error_1,
-        raw.error_2,
-        raw.error_animation
-    ),
+    animation = MaterialTheme.assets.animations.randomErrorAnimation,
     text = errorMessage.errorMessage,
     animationTestTag = HomePageTestTags.ERROR_ANIMATION_ILLUSTRATION
 )
 
 @Composable
 private fun HomePageLoading() = WtaAnimation(
-    animations = listOf(
-        R.raw.loading_1,
-        R.raw.loading_2,
-        R.raw.loading_animation,
-        R.raw.loading_bloob,
-        R.raw.loading_paperplane_1,
-        R.raw.loading_paperplane_2
-    ),
+    animation = MaterialTheme.assets.animations.randomLoadingAnimation,
     text = "Loading..",
     animationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
 )

@@ -2,7 +2,10 @@ package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.size
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -17,9 +20,9 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest.Builder
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.core.models.UserDetails
-import com.jacob.wakatimeapp.core.ui.R
 import com.jacob.wakatimeapp.core.ui.theme.Typography
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
@@ -35,9 +38,10 @@ fun UserDetailsSection(
         painter = rememberAsyncImagePainter(
             Builder(LocalContext.current).data(data = userDetails?.photoUrl)
                 .apply {
+                    val icons = MaterialTheme.assets.icons
                     transformations(CircleCropTransformation())
-                    placeholder(R.drawable.place_holder)
-                    fallback(R.drawable.place_holder)
+                    placeholder(icons.placeholder)
+                    fallback(icons.placeholder)
                 }
                 .build()
         ),

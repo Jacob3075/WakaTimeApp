@@ -4,7 +4,14 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
@@ -22,8 +29,8 @@ import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.ui.R
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import java.time.LocalDate
 
@@ -95,7 +102,10 @@ private fun ProjectCardItem(project: Project) {
                     fontWeight = FontWeight.Light
                 )
             }
-            Image(painter = painterResource(id = R.drawable.ic_arrow), contentDescription = "")
+            Image(
+                painter = painterResource(id = MaterialTheme.assets.icons.arrow),
+                contentDescription = ""
+            )
         }
     }
 }
