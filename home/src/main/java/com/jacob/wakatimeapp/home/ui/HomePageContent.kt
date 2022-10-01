@@ -12,7 +12,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.R.drawable
 import com.jacob.wakatimeapp.core.ui.R.raw
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
-import com.jacob.wakatimeapp.core.ui.components.WtaIllustration
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
@@ -21,7 +20,6 @@ import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
-import kotlin.random.Random
 import kotlinx.coroutines.launch
 
 @Composable
@@ -112,25 +110,15 @@ private fun HomePageError(errorMessage: HomePageViewState.Error) = WtaAnimation(
 )
 
 @Composable
-private fun HomePageLoading() =
-    if (Random.nextBoolean()) WtaAnimation(
-        animations = listOf(
-            R.raw.loading_1,
-            R.raw.loading_2,
-            R.raw.loading_animation,
-            R.raw.loading_bloob,
-            R.raw.loading_paperplane_1,
-            R.raw.loading_paperplane_2
-        ),
-        text = "Loading..",
-        animationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
-    ) else WtaIllustration(
-        illustrations = listOf(
-            R.drawable.il_loading_1,
-            R.drawable.il_loading_2,
-            R.drawable.il_loading_3,
-            R.drawable.il_loading_3a
-        ),
-        text = "Loading..",
-        illustrationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
-    )
+private fun HomePageLoading() = WtaAnimation(
+    animations = listOf(
+        R.raw.loading_1,
+        R.raw.loading_2,
+        R.raw.loading_animation,
+        R.raw.loading_bloob,
+        R.raw.loading_paperplane_1,
+        R.raw.loading_paperplane_2
+    ),
+    text = "Loading..",
+    animationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
+)
