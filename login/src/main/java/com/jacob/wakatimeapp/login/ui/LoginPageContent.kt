@@ -4,7 +4,14 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.background
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.PaddingValues
+import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
@@ -22,7 +29,6 @@ import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.gradients
@@ -63,7 +69,7 @@ fun LoginPageContent(
 private fun AppTitle() = Text(
     text = "Wakatime Client",
     style = TextStyle(
-        fontSize = MaterialTheme.typography.h3.fontSize,
+        fontSize = MaterialTheme.typography.h3.fontSize, // TODO
         fontWeight = FontWeight.SemiBold,
         fontFamily = FontFamily.Cursive
     )
@@ -109,8 +115,10 @@ private fun LoginButton(
         ) {
             Text(
                 text = "Login to Wakatime",
-                fontSize = 16.sp,
-                fontWeight = FontWeight.SemiBold,
+                style = MaterialTheme.typography.body1.copy(
+                    // TODO
+                    fontWeight = FontWeight.SemiBold,
+                ),
                 modifier = Modifier.padding(spacing.medium)
             )
         }

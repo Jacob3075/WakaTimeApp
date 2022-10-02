@@ -12,7 +12,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -20,7 +19,6 @@ import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest.Builder
 import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.core.models.UserDetails
-import com.jacob.wakatimeapp.core.ui.theme.Typography
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.spacing
@@ -50,8 +48,7 @@ fun UserDetailsSection(
     )
     Text(
         text = userDetails?.fullName.orEmpty(),
-        fontSize = Typography.h4.fontSize,
-        fontWeight = FontWeight.SemiBold,
+        style = MaterialTheme.typography.h4, // TODO
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )
