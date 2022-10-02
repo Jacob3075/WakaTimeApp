@@ -21,6 +21,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
@@ -76,9 +77,10 @@ private fun ProjectCardItem(project: Project) {
             .fillMaxWidth()
             .padding(vertical = spacing.small)
             .shadow(
-                elevation = 8.dp,
+                elevation = 12.dp,
                 shape = cardShape,
-                clip = false
+                clip = false,
+                spotColor = Color.Black
             )
             .clip(shape = cardShape)
             .background(color = MaterialTheme.colors.surface, shape = cardShape)
