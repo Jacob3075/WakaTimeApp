@@ -37,25 +37,8 @@ private val latoFontFamily = FontFamily(
     Font(R.font.lato_black, FontWeight.Black),
 )
 
-private val defaultTypography = Typography()
-
 val Typography = Typography(
     defaultFontFamily = latoFontFamily,
-    subtitle1 = defaultTypography.subtitle1.copy(
-        fontSize = 18.sp,
-        fontWeight = FontWeight.SemiBold,
-    ),
-    h4 = defaultTypography.h4.copy(
-        fontWeight = FontWeight.SemiBold,
-    ),
-    h5 = defaultTypography.h5.copy(
-        fontSize = 28.sp,
-        fontWeight = FontWeight.SemiBold,
-    ),
-    h6 = defaultTypography.h6.copy(
-        fontSize = 22.sp,
-        fontWeight = FontWeight.Normal,
-    ),
 )
 
 val Typography.sectionTitle
