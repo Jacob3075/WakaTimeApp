@@ -4,90 +4,116 @@ import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Surface
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.ui.R
-import com.jacob.wakatimeapp.core.ui.theme.Colors
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.cardHeader
+import com.jacob.wakatimeapp.core.ui.theme.cardSubtitle
+import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
+import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 import java.time.LocalDate
 
 @Composable
 internal fun RecentProjects(
     dailyStats: DailyStats?,
+) = Column(
+    modifier = Modifier.fillMaxWidth()
 ) {
-    Column(
+    Row(
+        verticalAlignment = Alignment.CenterVertically,
+        horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Row(
-            verticalAlignment = Alignment.CenterVertically,
-            horizontalArrangement = Arrangement.SpaceBetween,
-            modifier = Modifier.fillMaxWidth()
-        ) {
-            Text(text = "Recent Projects", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
-            Text(text = "See All", color = Colors.AccentText, fontSize = 14.sp)
-        }
-        RecentProjectList(
-            projects = dailyStats?.projectsWorkedOn.orEmpty(),
-            modifier = Modifier.padding(horizontal = 12.dp)
+        val typography = MaterialTheme.typography
+        Text(text = "Recent Projects", style = typography.sectionTitle)
+        Text(
+            text = "See All",
+            color = MaterialTheme.colors.primary,
+            style = typography.sectionSubtitle
         )
     }
+    RecentProjectList(
+        projects = dailyStats?.projectsWorkedOn.orEmpty(),
+    )
 }
 
 @Composable
-private fun RecentProjectList(projects: List<Project>, modifier: Modifier = Modifier) {
-    Column(
-        modifier = modifier
-    ) {
-        projects.take(n = 3)
-            .map { ProjectCardItem(it) }
-        Spacer(modifier = Modifier.height(10.dp))
-    }
+private fun RecentProjectList(
+    projects: List<Project>,
+) = Column(
+    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small)
+) {
+    projects.take(n = 3)
+        .map { ProjectCardItem(it) }
 }
 
 @Composable
 private fun ProjectCardItem(project: Project) {
     val cardShape = RoundedCornerShape(percent = 25)
+    val spacing = MaterialTheme.spacing
+    /*
+    * Not using surface because it applies an overlay which changes the color of the background.
+    * Copied the modifiers from Surface composable without the overlay logic.
+    * */
     Box(
         modifier = Modifier
-            .shadow(elevation = 8.dp, shape = cardShape)
             .fillMaxWidth()
-            .padding(vertical = 8.dp, horizontal = 2.dp)
-            .background(color = Colors.CardBGPrimary, shape = cardShape)
+            .padding(vertical = spacing.small)
+            .shadow(
+                elevation = 12.dp,
+                shape = cardShape,
+                clip = false,
+                spotColor = Color.Black
+            )
+            .clip(shape = cardShape)
+            .background(color = MaterialTheme.colors.surface, shape = cardShape)
             .clickable { }
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(horizontal = 20.dp, vertical = 12.dp)
+                .padding(spacing.medium)
         ) {
             Column(
                 Modifier
                     .weight(1f, fill = true)
             ) {
-                Text(text = project.name, fontSize = 22.sp)
+                Text(text = project.name, style = MaterialTheme.typography.cardHeader)
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "${project.time.hours} Hours, ${project.time.minutes} Mins",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Light
+                    style = MaterialTheme.typography.cardSubtitle
                 )
             }
-            Image(painter = painterResource(id = R.drawable.ic_arrow), contentDescription = "")
+            Image(
+                painter = painterResource(id = MaterialTheme.assets.icons.arrow),
+                contentDescription = ""
+            )
         }
     }
 }

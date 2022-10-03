@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.core.ui.components.cards
 
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
+import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.theme.Gradient
 
 @Composable
@@ -17,8 +18,7 @@ fun OtherStatsCard(
     iconId = iconId,
     mainText = mainText,
     text = language,
-    weights = Pair(1f, 0.5f),
-    iconOffset = 90,
-    iconSize = 70,
+    iconOffset = 90.dp,
+    iconSize = 70.dp,
     onClick = onClick
 )

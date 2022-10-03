@@ -2,23 +2,14 @@
 
 package com.jacob.wakatimeapp.core.ui.theme
 
+import androidx.compose.runtime.Immutable
+import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 
+@Immutable
 data class Gradient(val startColor: Color, val endColor: Color, val opacity: Int = 100)
 
-val Purple200 = Color(0xFFBB86FC)
-val Purple500 = Color(0xFF6200EE)
-val Purple700 = Color(0xFF3700B3)
-val Teal200 = Color(0xFF03DAC5)
-
-object Colors {
-    val AppBG = Color(0xFF121212)
-    val CardBGPrimary = Color(0xFF272727)
-    val CardBGSecondary = Color(0xFF2E2E2E)
-    val AccentIcons = Color(0xFF6FEBFF)
-    val AccentText = Color(0xFF8CE3E3)
-}
-
+@Immutable
 object Gradients {
     val primary = Gradient(Color(0xFF3F67E0), Color(0xFF65D1E2))
     val secondary = Gradient(Color(0xFF3F55E0), Color(0xFF5EC2D2), 85)
@@ -29,3 +20,5 @@ object Gradients {
     val redPurple = Gradient(Color(0xFFEB4F4F), Color(0xFFDC52B5))
     val orangeYellow = Gradient(Color(0xFFFF9900), Color(0xFFE8C754))
 }
+
+val LocalGradients = staticCompositionLocalOf { Gradients }

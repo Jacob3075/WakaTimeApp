@@ -25,3 +25,6 @@ dependencies {
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
 }
+android {
+    namespace = "com.jacob.wakatimeapp.core.common"
+}
