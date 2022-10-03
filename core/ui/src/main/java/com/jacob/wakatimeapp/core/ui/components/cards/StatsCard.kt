@@ -4,8 +4,13 @@ import androidx.annotation.DrawableRes
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
-import androidx.compose.foundation.layout.*
+import androidx.compose.foundation.layout.Box
+import androidx.compose.foundation.layout.Row
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -18,9 +23,12 @@ import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.ui.theme.Gradient
+import com.jacob.wakatimeapp.core.ui.theme.cardContent
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
 internal fun StatsCard(
@@ -30,17 +38,16 @@ internal fun StatsCard(
     text: String,
     onClick: () -> Unit,
     roundedCornerPercent: Int = 25,
-    weights: Pair<Float, Float> = Pair(1f, 1f),
-    iconOffset: Int = 50,
-    iconSize: Int = 80,
+    weights: Pair<Float, Float> = Pair(1f, 0.5f),
+    iconOffset: Dp = 50.dp,
+    iconSize: Dp = 80.dp,
 ) {
-    val cardGradient =
-        Brush.horizontalGradient(
-            listOf(
-                gradient.startColor,
-                gradient.endColor
-            )
+    val cardGradient = Brush.horizontalGradient(
+        listOf(
+            gradient.startColor,
+            gradient.endColor
         )
+    )
     val cardShape = RoundedCornerShape(roundedCornerPercent)
     Box(
         contentAlignment = Alignment.Center,
@@ -49,15 +56,15 @@ internal fun StatsCard(
             .clickable { onClick() }
             .fillMaxWidth()
             .background(cardGradient, cardShape)
-            .padding(horizontal = 22.dp)
+            .padding(horizontal = MaterialTheme.spacing.lMedium)
     ) {
         Image(
             painter = painterResource(id = iconId),
             contentDescription = "",
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
-                .padding(start = iconOffset.dp)
-                .size(iconSize.dp)
+                .padding(start = iconOffset)
+                .size(iconSize)
         )
         Row(
             verticalAlignment = Alignment.CenterVertically
@@ -66,11 +73,7 @@ internal fun StatsCard(
                 text = mainText,
                 maxLines = 2,
                 modifier = Modifier.weight(weights.first, true),
-                style = TextStyle(
-                    fontSize = 18.sp,
-                    color = Color.White,
-                    fontWeight = FontWeight.SemiBold
-                )
+                style = MaterialTheme.typography.cardContent,
             )
             Text(
                 text = text,

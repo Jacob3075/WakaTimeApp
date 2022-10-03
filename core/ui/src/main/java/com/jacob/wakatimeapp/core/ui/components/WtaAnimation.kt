@@ -6,19 +6,18 @@ import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
+import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.testTag
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.airbnb.lottie.compose.LottieAnimation
 import com.airbnb.lottie.compose.LottieCompositionSpec.RawRes
 import com.airbnb.lottie.compose.LottieConstants
 import com.airbnb.lottie.compose.rememberLottieComposition
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
 fun WtaAnimation(
@@ -39,11 +38,10 @@ fun WtaAnimation(
             iterations = LottieConstants.IterateForever,
             modifier = Modifier.testTag(animationTestTag)
         )
-        Spacer(modifier = Modifier.height(25.dp))
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.lMedium))
         Text(
             text = text,
-            fontWeight = FontWeight.SemiBold,
-            fontSize = 18.sp
+            style = MaterialTheme.typography.subtitle1,
         )
     }
 }

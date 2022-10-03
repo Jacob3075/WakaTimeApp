@@ -21,16 +21,19 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.cardHeader
+import com.jacob.wakatimeapp.core.ui.theme.cardSubtitle
+import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
+import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import java.time.LocalDate
 
@@ -45,8 +48,13 @@ internal fun RecentProjects(
         horizontalArrangement = Arrangement.SpaceBetween,
         modifier = Modifier.fillMaxWidth()
     ) {
-        Text(text = "Recent Projects", fontSize = 28.sp, fontWeight = FontWeight.SemiBold)
-        Text(text = "See All", color = MaterialTheme.colors.primary, fontSize = 14.sp)
+        val typography = MaterialTheme.typography
+        Text(text = "Recent Projects", style = typography.sectionTitle)
+        Text(
+            text = "See All",
+            color = MaterialTheme.colors.primary,
+            style = typography.sectionSubtitle
+        )
     }
     RecentProjectList(
         projects = dailyStats?.projectsWorkedOn.orEmpty(),
@@ -66,19 +74,20 @@ private fun RecentProjectList(
 @Composable
 private fun ProjectCardItem(project: Project) {
     val cardShape = RoundedCornerShape(percent = 25)
+    val spacing = MaterialTheme.spacing
     /*
     * Not using surface because it applies an overlay which changes the color of the background.
     * Copied the modifiers from Surface composable without the overlay logic.
     * */
-    val spacing = MaterialTheme.spacing
     Box(
         modifier = Modifier
             .fillMaxWidth()
             .padding(vertical = spacing.small)
             .shadow(
-                elevation = 8.dp,
+                elevation = 12.dp,
                 shape = cardShape,
-                clip = false
+                clip = false,
+                spotColor = Color.Black
             )
             .clip(shape = cardShape)
             .background(color = MaterialTheme.colors.surface, shape = cardShape)
@@ -88,18 +97,17 @@ private fun ProjectCardItem(project: Project) {
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(horizontal = spacing.medium, vertical = spacing.sMedium)
+                .padding(spacing.medium)
         ) {
             Column(
                 Modifier
                     .weight(1f, fill = true)
             ) {
-                Text(text = project.name, fontSize = 22.sp)
+                Text(text = project.name, style = MaterialTheme.typography.cardHeader)
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "${project.time.hours} Hours, ${project.time.minutes} Mins",
-                    fontSize = 14.sp,
-                    fontWeight = FontWeight.Light
+                    style = MaterialTheme.typography.cardSubtitle
                 )
             }
             Image(
