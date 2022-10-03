@@ -43,8 +43,13 @@ val playfairDisplayFontFamily = FontFamily(
     Font(R.font.playfair_display),
 )
 
+val defaultTypography = Typography()
 val Typography = Typography(
     defaultFontFamily = poppinsFontFamily,
+    button = defaultTypography.button.copy(
+        fontSize = 16.sp,
+        fontWeight = FontWeight.SemiBold
+    )
 )
 
 val Typography.pageTitle: TextStyle

@@ -24,7 +24,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -110,11 +109,8 @@ private fun LoginButton(
                 .padding(vertical = spacing.small)
         ) {
             Text(
-                text = "Login to Wakatime",
-                style = MaterialTheme.typography.body1.copy(
-                    // TODO
-                    fontWeight = FontWeight.SemiBold,
-                ),
+                text = "Login to Wakatime".uppercase(),
+                style = MaterialTheme.typography.button,
                 modifier = Modifier.padding(spacing.medium)
             )
         }
