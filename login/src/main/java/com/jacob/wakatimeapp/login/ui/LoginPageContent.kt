@@ -24,14 +24,13 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.gradients
+import com.jacob.wakatimeapp.core.ui.theme.pageTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import net.openid.appauth.AuthorizationException
 import timber.log.Timber
@@ -59,6 +58,7 @@ fun LoginPageContent(
             .fillMaxSize()
             .statusBarsPadding()
             .padding(top = spacing.small, bottom = spacing.large)
+            .padding(horizontal = spacing.small)
     ) {
         AppTitle()
         LoginButton(onClick = { launcher.launch(viewModel.getAuthIntent()) })
@@ -68,11 +68,7 @@ fun LoginPageContent(
 @Composable
 private fun AppTitle() = Text(
     text = "Wakatime Client",
-    style = TextStyle(
-        fontSize = MaterialTheme.typography.h3.fontSize, // TODO
-        fontWeight = FontWeight.SemiBold,
-        fontFamily = FontFamily.Cursive
-    )
+    style = MaterialTheme.typography.pageTitle,
 )
 
 @Composable
@@ -103,7 +99,7 @@ private fun LoginButton(
         shape = buttonShape,
         contentPadding = PaddingValues(),
         modifier = Modifier
-            .padding(horizontal = spacing.large + spacing.medium)
+            .padding(horizontal = spacing.large)
             .shadow(elevation = 8.dp, shape = buttonShape, clip = false)
     ) {
         Box(

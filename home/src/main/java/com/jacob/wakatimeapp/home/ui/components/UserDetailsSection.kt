@@ -12,6 +12,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
@@ -21,6 +22,7 @@ import coil.transform.CircleCropTransformation
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.pageTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
@@ -48,7 +50,9 @@ fun UserDetailsSection(
     )
     Text(
         text = userDetails?.fullName.orEmpty(),
-        style = MaterialTheme.typography.h4, // TODO
+        style = MaterialTheme.typography.pageTitle.copy(
+            baselineShift = BaselineShift(multiplier = 0.3f),
+        ),
         maxLines = 1,
         overflow = TextOverflow.Ellipsis
     )

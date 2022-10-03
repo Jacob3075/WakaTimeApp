@@ -1,9 +1,11 @@
 package com.jacob.wakatimeapp.core.ui.theme
 
 import androidx.compose.material.Typography
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.ui.R
 
@@ -37,9 +39,21 @@ private val latoFontFamily = FontFamily(
     Font(R.font.lato_black, FontWeight.Black),
 )
 
-val Typography = Typography(
-    defaultFontFamily = latoFontFamily,
+val playfairDisplayFontFamily = FontFamily(
+    Font(R.font.playfair_display),
 )
+
+val Typography = Typography(
+    defaultFontFamily = poppinsFontFamily,
+)
+
+val Typography.pageTitle: TextStyle
+    get() = h3.copy(
+        fontFamily = playfairDisplayFontFamily,
+        fontSize = 56.sp,
+        textAlign = TextAlign.Center,
+        lineHeight = 60.sp,
+    )
 
 val Typography.sectionTitle
     get() = h5.copy(
