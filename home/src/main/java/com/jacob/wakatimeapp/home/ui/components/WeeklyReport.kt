@@ -5,7 +5,7 @@ package com.jacob.wakatimeapp.home.ui.components
 import android.content.res.Configuration
 import android.graphics.Color
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout
+import android.widget.LinearLayout.LayoutParams
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
@@ -38,6 +38,7 @@ import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jacob.wakatimeapp.core.common.getDisplayNameForDay
 import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
@@ -94,12 +95,12 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
             modifier = Modifier.padding(spacing.small),
             factory = {
                 RoundedBarChart(it).apply {
-                    layoutParams = LinearLayout.LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    data = barData
 
                     configureChartProperties()
                     configureAxis(labels)
 
-                    data = barData
                     invalidate()
                 }
             },
@@ -134,8 +135,10 @@ private fun getBarData(pairList: List<Pair<Int, DailyStats>>) =
                 )
             }
             val barDataSet = BarDataSet(entries, "Label").apply {
-                setDrawValues(false)
+                setDrawValues(true)
+                isHighlightEnabled = false
                 valueTextColor = Color.WHITE
+                valueFormatter = BarValueFormatter()
             }
             BarData(barDataSet).apply { barWidth = 0.3f }
         }
@@ -208,4 +211,10 @@ private class YAxisHourFormatter : ValueFormatter() {
      * @return formatted string label
      */
     override fun getAxisLabel(value: Float, axis: AxisBase) = "${value.toInt()}H"
+}
+
+private class BarValueFormatter : ValueFormatter() {
+    override fun getBarLabel(barEntry: BarEntry?): String =
+        Time.fromDecimal(barEntry?.y ?: 0f)
+            .formattedPrint()
 }
