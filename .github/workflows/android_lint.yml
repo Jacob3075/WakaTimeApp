@@ -3,7 +3,7 @@ name: Android Lint
 on: push
 
 jobs:
-  build:
+  lint_checks:
     runs-on: ubuntu-latest
     steps:
       - name: Checkout
