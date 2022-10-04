@@ -51,14 +51,14 @@ fun HomePageContent(
     }
 
     Column(modifier = modifier.statusBarsPadding()) {
-        when (viewState) {
+        when (val viewSateInstance = viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
             is HomePageViewState.Loaded -> HomePageLoaded(
-                homePageViewState = viewState as HomePageViewState.Loaded,
+                homePageViewState = viewSateInstance,
                 navigator = navigator
             )
 
-            is HomePageViewState.Error -> HomePageError(viewState as HomePageViewState.Error)
+            is HomePageViewState.Error -> HomePageError(viewSateInstance)
         }
     }
 }
@@ -76,10 +76,7 @@ private fun HomePageLoaded(
             .padding(horizontal = spacing.medium)
             .verticalScroll(scrollState)
     ) {
-        Spacer(modifier = Modifier.height(spacing.extraSmall))
-
         UserDetailsSection(homePageViewState.userDetails)
-        Spacer(modifier = Modifier.height(spacing.medium))
 
         TimeSpentCard(
             gradient = MaterialTheme.gradients.primary,
@@ -89,13 +86,13 @@ private fun HomePageLoaded(
             time = homePageViewState.contentData.todaysStats.timeSpent,
             onClick = navigator::toDetailsPage
         )
-        Spacer(modifier = Modifier.height(spacing.medium))
+        Spacer(modifier = Modifier.height(spacing.small))
 
         RecentProjects(homePageViewState.contentData.todaysStats)
-        Spacer(modifier = Modifier.height(spacing.sMedium))
+        Spacer(modifier = Modifier.height(spacing.extraSmall))
 
         WeeklyReport(homePageViewState.contentData.dailyStats)
-        Spacer(modifier = Modifier.height(spacing.medium))
+        Spacer(modifier = Modifier.height(spacing.small))
 
         OtherDailyStatsSection(
             homePageViewState.contentData.todaysStats,
