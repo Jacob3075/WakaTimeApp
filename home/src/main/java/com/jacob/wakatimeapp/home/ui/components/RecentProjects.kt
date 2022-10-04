@@ -65,7 +65,8 @@ internal fun RecentProjects(
 private fun RecentProjectList(
     projects: List<Project>,
 ) = Column(
-    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small)
+    modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
+    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sMedium)
 ) {
     projects.take(n = 3)
         .map { ProjectCardItem(it) }
@@ -82,7 +83,6 @@ private fun ProjectCardItem(project: Project) {
     Box(
         modifier = Modifier
             .fillMaxWidth()
-            .padding(vertical = spacing.small)
             .shadow(
                 elevation = 12.dp,
                 shape = cardShape,

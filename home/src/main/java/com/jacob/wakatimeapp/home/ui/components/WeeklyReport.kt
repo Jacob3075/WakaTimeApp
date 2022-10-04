@@ -50,7 +50,7 @@ fun WeeklyReport(
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = modifier.fillMaxWidth(),
-    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
+    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
