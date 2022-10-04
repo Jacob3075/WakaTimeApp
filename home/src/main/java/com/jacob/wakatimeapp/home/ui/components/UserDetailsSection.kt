@@ -16,6 +16,7 @@ import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.style.TextOverflow
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest.Builder
 import coil.transform.CircleCropTransformation
@@ -51,10 +52,11 @@ fun UserDetailsSection(
     Text(
         text = userDetails?.fullName.orEmpty(),
         style = MaterialTheme.typography.pageTitle.copy(
+            fontSize = 50.sp,
             baselineShift = BaselineShift(multiplier = 0.3f),
         ),
         maxLines = 1,
-        overflow = TextOverflow.Ellipsis
+        overflow = TextOverflow.Ellipsis,
     )
 }
 
