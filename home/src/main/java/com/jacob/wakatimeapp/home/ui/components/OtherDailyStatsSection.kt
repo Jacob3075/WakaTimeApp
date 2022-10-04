@@ -40,7 +40,7 @@ fun OtherDailyStatsSection(
         Text(text = "Other Daily Stats", style = typography.sectionTitle)
         Text(text = "Details", color = colors.primary, style = typography.sectionSubtitle)
     }
-    Spacer(modifier = Modifier.height(spacing.medium))
+    Spacer(modifier = Modifier.height(spacing.extraSmall))
     OtherStatsCard(
         gradient = gradients.greenCyan,
         iconId = icons.codeFile,
