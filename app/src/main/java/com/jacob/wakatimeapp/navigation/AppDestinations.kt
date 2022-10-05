@@ -12,8 +12,8 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 @RootNavGraph(start = true)
 @Destination
 @Composable
-fun LoginPage(loginPageNavigator: LoginPageNavigator) =
-    LoginPageContent(loginPageNavigator = loginPageNavigator)
+fun LoginPage(loginPageNavigator: LoginPageNavigator, scaffoldState: ScaffoldState) =
+    LoginPageContent(loginPageNavigator = loginPageNavigator, scaffoldState = scaffoldState)
 
 @Composable
 @Destination

@@ -1,7 +1,10 @@
 package com.jacob.wakatimeapp.login.ui
 
+import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -18,11 +21,14 @@ import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
 import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
+import androidx.compose.material.ScaffoldState
+import androidx.compose.material.SnackbarDuration
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -36,28 +42,43 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.pageTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.launch
 
 @Composable
 fun LoginPageContent(
     loginPageNavigator: LoginPageNavigator,
+    scaffoldState: ScaffoldState,
     modifier: Modifier = Modifier,
     viewModel: LoginPageViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
+    val snackBarCoroutineScope = rememberCoroutineScope()
     LaunchedEffect(viewState) {
         when (val viewStateInstance = viewState) {
-            //            is LoginPageState.Success -> {
-            //                viewModel.updateUserDetails()
-            //                loginPageNavigator.toHomePage()
-            //            }
+            is LoginPageState.Success -> {
+                viewModel.updateUserDetails()
+                loginPageNavigator.toHomePage()
+            }
 
-            is LoginPageState.Error -> showSnackBar(viewStateInstance)
+            is LoginPageState.Error -> showSnackBar(
+                viewStateInstance,
+                snackBarCoroutineScope,
+                scaffoldState
+            )
+
             else -> Unit
         }
     }
 
+    val launcher = authActivityResultLauncher(viewModel)
+
     when (viewState) {
-        is LoginPageState.Idle -> LoginPageIdleState(viewModel)
+        is LoginPageState.Idle, is LoginPageState.Error -> LoginPageIdleState(
+            viewModel,
+            launcher = launcher
+        )
+
         is LoginPageState.Loading -> Box(
             modifier = Modifier.fillMaxSize()
                 .gesturesDisabled()
@@ -66,21 +87,30 @@ fun LoginPageContent(
                 modifier = Modifier.align(Alignment.Center)
                     .size(60.dp),
             )
-            LoginPageIdleState(viewModel)
+            LoginPageIdleState(viewModel, launcher = launcher)
         }
 
         else -> Unit
     }
 }
 
-private fun showSnackBar(viewState: LoginPageState.Error): Unit = TODO("Not yet implemented")
+private fun showSnackBar(
+    viewState: LoginPageState.Error,
+    snackBarCoroutineScope: CoroutineScope,
+    scaffoldState: ScaffoldState,
+) = snackBarCoroutineScope.launch {
+    scaffoldState.snackbarHostState.showSnackbar(
+        message = viewState.message,
+        duration = SnackbarDuration.Long
+    )
+}
 
 @Composable
 private fun LoginPageIdleState(
     viewModel: LoginPageViewModel,
     modifier: Modifier = Modifier,
+    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
 ) {
-    val launcher = authActivityResultLauncher(viewModel)
     val spacing = MaterialTheme.spacing
 
     Column(

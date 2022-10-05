@@ -86,7 +86,7 @@ class LoginPageViewModel @Inject constructor(
             authorizationResponse.createTokenExchangeRequest(),
             ClientSecretPost(BuildConfig.CLIENT_SECRET)
         ) { tokenResponse, authorizationException ->
-            authorizationException?.let(Forest::e)
+            authorizationException?.let(Timber::e)
             viewModelScope.launch {
                 val authState = authTokenProvider.updateAfterTokenResponse(
                     tokenResponse,
