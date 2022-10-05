@@ -1,0 +1,3 @@
+<component name="DependencyValidationManager">
+  <scope name="Project Non Generated" pattern="file[WakatimeApp.app.main]:java//*||file[WakatimeApp.core.common.main]:java//*||file[WakatimeApp.core.ui.main]:java//*||file[WakatimeApp.core.models.main]:java//*||file[WakatimeApp.home.main]:java//*||file[WakatimeApp.login.main]:java//*||file[WakatimeApp.details.main]:java//*||file[WakatimeApp.buildSrc.main]:kotlin//*" />
+</component>
