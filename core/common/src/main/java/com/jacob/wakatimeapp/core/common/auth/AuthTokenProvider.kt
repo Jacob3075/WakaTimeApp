@@ -22,7 +22,7 @@ class AuthTokenProvider @Inject constructor(
     private val authDataStore: AuthDataStore,
     private val authService: AuthorizationService,
 ) {
-    private val authStateFlow = authDataStore.getAuthState()
+    val authStateFlow = authDataStore.getAuthState()
 
     val current
         get() = runBlocking { authStateFlow.firstOrNull() ?: AuthState() }
