@@ -9,6 +9,7 @@ import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.HomePageNetworkData
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.mappers.toModel
+import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton
 import timber.log.Timber
@@ -33,7 +34,10 @@ class GetLast7DaysStatsUC @Inject constructor(
             .right()
     }
         .mapLeft {
-            Timber.e(it.message)
-            NetworkErrors.create(it.message!!)
+            Timber.e(it.toString())
+            when (it) {
+                is UnknownHostException -> NetworkErrors.NoConnection("No internet connection")
+                else -> NetworkErrors.create(it.message!!)
+            }
         }
 }

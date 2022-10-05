@@ -44,7 +44,6 @@ fun HomePageContent(
         snackBarCoroutineScope.launch {
             scaffoldState.snackbarHostState.showSnackbar(
                 message = (viewState as HomePageViewState.Error).errorMessage,
-                actionLabel = "Action",
                 duration = Long
             )
         }
