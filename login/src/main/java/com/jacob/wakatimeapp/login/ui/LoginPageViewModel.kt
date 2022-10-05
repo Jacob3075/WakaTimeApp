@@ -20,7 +20,6 @@ import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import net.openid.appauth.AuthorizationException
-import net.openid.appauth.AuthorizationRequest
 import net.openid.appauth.AuthorizationRequest.Builder
 import net.openid.appauth.AuthorizationResponse
 import net.openid.appauth.AuthorizationService
@@ -28,7 +27,6 @@ import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.ClientSecretPost
 import net.openid.appauth.ResponseTypeValues
 import timber.log.Timber
-import timber.log.Timber.Forest
 
 @HiltViewModel
 class LoginPageViewModel @Inject constructor(
@@ -46,13 +44,18 @@ class LoginPageViewModel @Inject constructor(
         Uri.parse(Constants.tokenUrl)
     )
 
-    private val authRequest: AuthorizationRequest = Builder(
+    private val authRequest = Builder(
         serviceConfig,
         BuildConfig.CLIENT_ID,
         ResponseTypeValues.CODE,
         Uri.parse(Constants.redirectUrl)
     ).setScopes(Constants.scope)
         .build()
+
+    init {
+        val authToken = authTokenProvider.current
+        if (authToken.isAuthorized) _viewState.value = LoginPageState.Success
+    }
 
     /**
      * Gets fresh auth token if needed and stores updates the stored user details
