@@ -10,8 +10,10 @@ import com.jacob.wakatimeapp.home.data.HomePageNetworkData
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.mappers.toModel
 import javax.inject.Inject
+import javax.inject.Singleton
 import timber.log.Timber
 
+@Singleton
 class GetLast7DaysStatsUC @Inject constructor(
     private val homePageNetworkData: HomePageNetworkData,
 ) {
@@ -26,10 +28,9 @@ class GetLast7DaysStatsUC @Inject constructor(
                 .left()
         }
 
-        val weeklyStats = statsForTodayResponse.body()!!
+        statsForTodayResponse.body()!!
             .run(GetLast7DaysStatsResDTO::toModel)
-
-        weeklyStats.right()
+            .right()
     }
         .mapLeft {
             Timber.e(it.message)
