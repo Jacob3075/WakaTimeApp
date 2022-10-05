@@ -54,17 +54,6 @@ class LoginPageViewModel @Inject constructor(
     ).setScopes(Constants.scope)
         .build()
 
-    init {
-        viewModelScope.launch {
-            authTokenProvider.authStateFlow.collect {
-                _viewState.value = when (it.isAuthorized) {
-                    true -> LoginPageState.Success
-                    false -> LoginPageState.Error("Not authorized")
-                }
-            }
-        }
-    }
-
     /**
      * Gets fresh auth token if needed and stores updates the stored user details
      *
@@ -99,7 +88,15 @@ class LoginPageViewModel @Inject constructor(
         ) { tokenResponse, authorizationException ->
             authorizationException?.let(Forest::e)
             viewModelScope.launch {
-                authTokenProvider.updateAfterTokenResponse(tokenResponse, authorizationException)
+                val authState = authTokenProvider.updateAfterTokenResponse(
+                    tokenResponse,
+                    authorizationException
+                )
+                if (authState.isAuthorized) {
+                    _viewState.value = LoginPageState.Success
+                } else {
+                    _viewState.value = LoginPageState.Error("Failed to login")
+                }
             }
         }
     }

@@ -1,10 +1,7 @@
 package com.jacob.wakatimeapp.login.ui
 
-import android.content.Intent
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -14,10 +11,12 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material.Button
 import androidx.compose.material.ButtonDefaults
+import androidx.compose.material.CircularProgressIndicator
 import androidx.compose.material.MaterialTheme
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
@@ -32,7 +31,7 @@ import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jacob.wakatimeapp.core.ui.theme.Spacing
+import com.jacob.wakatimeapp.core.ui.modifiers.gesturesDisabled
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.pageTitle
@@ -47,22 +46,29 @@ fun LoginPageContent(
     val viewState by viewModel.viewState.collectAsState()
     LaunchedEffect(viewState) {
         when (val viewStateInstance = viewState) {
-            is LoginPageState.Success -> {
-                viewModel.updateUserDetails()
-                loginPageNavigator.toHomePage()
-            }
+            //            is LoginPageState.Success -> {
+            //                viewModel.updateUserDetails()
+            //                loginPageNavigator.toHomePage()
+            //            }
 
             is LoginPageState.Error -> showSnackBar(viewStateInstance)
             else -> Unit
         }
     }
 
-    val launcher = authActivityResultLauncher(viewModel)
-    val spacing = MaterialTheme.spacing
-
     when (viewState) {
-        is LoginPageState.Idle -> LoginPageIdleState(modifier, spacing, launcher, viewModel)
-        is LoginPageState.Loading -> TODO()
+        is LoginPageState.Idle -> LoginPageIdleState(viewModel)
+        is LoginPageState.Loading -> Box(
+            modifier = Modifier.fillMaxSize()
+                .gesturesDisabled()
+        ) {
+            CircularProgressIndicator(
+                modifier = Modifier.align(Alignment.Center)
+                    .size(60.dp),
+            )
+            LoginPageIdleState(viewModel)
+        }
+
         else -> Unit
     }
 }
@@ -71,11 +77,12 @@ private fun showSnackBar(viewState: LoginPageState.Error): Unit = TODO("Not yet 
 
 @Composable
 private fun LoginPageIdleState(
-    modifier: Modifier,
-    spacing: Spacing,
-    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
     viewModel: LoginPageViewModel,
+    modifier: Modifier = Modifier,
 ) {
+    val launcher = authActivityResultLauncher(viewModel)
+    val spacing = MaterialTheme.spacing
+
     Column(
         horizontalAlignment = Alignment.CenterHorizontally,
         verticalArrangement = Arrangement.SpaceBetween,
