@@ -3,7 +3,7 @@ package com.jacob.wakatimeapp.core.ui.components.cards
 import androidx.annotation.DrawableRes
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.unit.dp
-import com.jacob.wakatimeapp.core.ui.theme.Gradient
+import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 
 @Composable
 fun OtherStatsCard(

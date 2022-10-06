@@ -50,7 +50,7 @@ fun OtherDailyStatsSection(
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
-        gradient = gradients.blueCyan,
+        gradient = gradients.purpleCyan,
         iconId = icons.laptop,
         mainText = "Most OS Used",
         language = dailyStats?.mostUsedOs.orEmpty(),
@@ -58,7 +58,7 @@ fun OtherDailyStatsSection(
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
-        gradient = gradients.purpleCyanLight,
+        gradient = gradients.pinkCyanLight,
         iconId = icons.laptop,
         mainText = "Most Editor Used",
         language = dailyStats?.mostUsedEditor.orEmpty(),
