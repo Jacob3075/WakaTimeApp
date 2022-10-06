@@ -7,9 +7,9 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.verticalScroll
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarDuration.Long
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -31,7 +31,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun HomePageContent(
     navigator: HomePageNavigator,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: HomePageViewModel = hiltViewModel(),
 ) {
@@ -42,9 +42,9 @@ fun HomePageContent(
         if (viewState !is HomePageViewState.Error) return@LaunchedEffect
 
         snackBarCoroutineScope.launch {
-            scaffoldState.snackbarHostState.showSnackbar(
+            snackbarHostState.showSnackbar(
                 message = (viewState as HomePageViewState.Error).errorMessage,
-                duration = Long
+                duration = SnackbarDuration.Long
             )
         }
     }

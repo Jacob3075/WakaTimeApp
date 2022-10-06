@@ -15,9 +15,9 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
@@ -61,7 +61,7 @@ fun WeeklyReport(
         Text(text = "Weekly Report", style = typography.sectionTitle)
         Text(
             text = "Details",
-            color = MaterialTheme.colors.primary,
+            color = MaterialTheme.colorScheme.primary,
             style = typography.sectionSubtitle
         )
     }
@@ -88,7 +88,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
             .padding(horizontal = spacing.small)
             .shadow(elevation = 8.dp, shape = cardShape, clip = false)
             .clip(shape = cardShape)
-            .background(MaterialTheme.colors.surface, shape = cardShape)
+            .background(MaterialTheme.colorScheme.surface, shape = cardShape)
             .aspectRatio(1.4f)
     ) {
         AndroidView(

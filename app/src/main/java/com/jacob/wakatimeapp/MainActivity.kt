@@ -8,10 +8,13 @@ import android.os.Bundle
 import androidx.activity.compose.setContent
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
-import androidx.compose.material.Scaffold
-import androidx.compose.material.rememberScaffoldState
+import androidx.compose.material3.ExperimentalMaterial3Api
+import androidx.compose.material3.Scaffold
+import androidx.compose.material3.SnackbarHost
+import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
+import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
@@ -22,6 +25,7 @@ import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
 
+@ExperimentalMaterial3Api
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
@@ -30,9 +34,9 @@ class MainActivity : AppCompatActivity() {
         installSplashScreen()
         setContent {
             WakaTimeAppTheme {
-                val scaffoldState = rememberScaffoldState()
+                val snackbarHostState = remember { SnackbarHostState() }
                 Scaffold(
-                    scaffoldState = scaffoldState,
+                    snackbarHost = { SnackbarHost(snackbarHostState) },
                     modifier = Modifier.fillMaxSize()
                 ) {
                     LockScreenOrientation()
@@ -40,7 +44,7 @@ class MainActivity : AppCompatActivity() {
                         navGraph = NavGraphs.root,
                         dependenciesContainerBuilder = {
                             dependency(ApplicationNavigator(navController))
-                            dependency(scaffoldState)
+                            dependency(snackbarHostState)
                         }
                     )
                 }
