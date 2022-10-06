@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.core.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
-import androidx.compose.material.MaterialTheme
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
@@ -10,7 +10,7 @@ import com.jacob.wakatimeapp.core.ui.theme.assets.LocalAssets
 
 @Composable
 fun WakaTimeAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Composable () -> Unit) {
-    val colors = if (darkTheme) DarkColorPalette else LightColorPalette
+    val colors = if (darkTheme) DarkColors else LightColors
 
     CompositionLocalProvider(
         LocalSpacing provides Spacing,
@@ -18,7 +18,7 @@ fun WakaTimeAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
         LocalAssets provides Assets,
     ) {
         MaterialTheme(
-            colors = colors,
+            colorScheme = colors,
             typography = Typography,
             shapes = Shapes,
             content = content
