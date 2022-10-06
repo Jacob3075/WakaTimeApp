@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.core.ui.theme
 
-import androidx.compose.material.Typography
+import androidx.compose.material3.Typography
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.Font
 import androidx.compose.ui.text.font.FontFamily
@@ -44,16 +44,37 @@ val playfairDisplayFontFamily = FontFamily(
 )
 
 val defaultTypography = Typography()
-val Typography = Typography(
-    defaultFontFamily = poppinsFontFamily,
-    button = defaultTypography.button.copy(
+
+val Typography = defaultTypography.let {
+    fun TextStyle.setDefaultFontFamily() = copy(fontFamily = poppinsFontFamily)
+
+    Typography(
+        displayLarge = it.displayLarge.setDefaultFontFamily(),
+        displayMedium = it.displayMedium.setDefaultFontFamily(),
+        displaySmall = it.displaySmall.setDefaultFontFamily(),
+        headlineLarge = it.headlineLarge.setDefaultFontFamily(),
+        headlineMedium = it.headlineMedium.setDefaultFontFamily(),
+        headlineSmall = it.headlineSmall.setDefaultFontFamily(),
+        titleLarge = it.titleLarge.setDefaultFontFamily(),
+        titleMedium = it.titleMedium.setDefaultFontFamily(),
+        titleSmall = it.titleSmall.setDefaultFontFamily(),
+        bodyLarge = it.bodyLarge.setDefaultFontFamily(),
+        bodyMedium = it.bodyMedium.setDefaultFontFamily(),
+        bodySmall = it.bodySmall.setDefaultFontFamily(),
+        labelLarge = it.labelLarge.setDefaultFontFamily(),
+        labelMedium = it.labelMedium.setDefaultFontFamily(),
+        labelSmall = it.labelSmall.setDefaultFontFamily(),
+    )
+}
+
+val Typography.button: TextStyle
+    get() = bodySmall.copy(
         fontSize = 16.sp,
         fontWeight = FontWeight.SemiBold
     )
-)
 
 val Typography.pageTitle: TextStyle
-    get() = h3.copy(
+    get() = displayMedium.copy(
         fontFamily = playfairDisplayFontFamily,
         fontSize = 56.sp,
         textAlign = TextAlign.Center,
@@ -61,27 +82,27 @@ val Typography.pageTitle: TextStyle
     )
 
 val Typography.sectionTitle
-    get() = h5.copy(
+    get() = headlineSmall.copy(
         fontSize = 28.sp,
         fontWeight = FontWeight.SemiBold,
     )
 
 val Typography.sectionSubtitle
-    get() = body2
+    get() = labelLarge
 
 val Typography.cardHeader
-    get() = h6.copy(
+    get() = titleLarge.copy(
         fontSize = 22.sp,
         fontWeight = FontWeight.Normal,
     )
 
 val Typography.cardSubtitle
-    get() = body2.copy(
+    get() = bodyMedium.copy(
         fontWeight = FontWeight.Light,
     )
 
 val Typography.cardContent
-    get() = subtitle1.copy(
+    get() = bodyLarge.copy(
         fontSize = 18.sp,
         fontWeight = FontWeight.Normal,
     )
