@@ -10,8 +10,8 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -26,8 +26,8 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
-import com.jacob.wakatimeapp.core.ui.theme.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.cardContent
+import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
@@ -74,6 +74,7 @@ internal fun StatsCard(
                 maxLines = 2,
                 modifier = Modifier.weight(weights.first, true),
                 style = MaterialTheme.typography.cardContent,
+                color = gradient.onStartColor,
             )
             Text(
                 text = text,
@@ -82,8 +83,9 @@ internal fun StatsCard(
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Medium,
+                ),
+                color = gradient.onEndColor,
             )
         }
     }

@@ -3,29 +3,26 @@
 package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration
-import android.graphics.Color
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams
-import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.Surface
-import androidx.compose.material.Text
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -61,7 +58,7 @@ fun WeeklyReport(
         Text(text = "Weekly Report", style = typography.sectionTitle)
         Text(
             text = "Details",
-            color = MaterialTheme.colors.primary,
+            color = MaterialTheme.colorScheme.primary,
             style = typography.sectionSubtitle
         )
     }
@@ -83,14 +80,15 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
 
     val spacing = MaterialTheme.spacing
 
-    Box(
+    Surface(
         modifier = Modifier
             .padding(horizontal = spacing.small)
-            .shadow(elevation = 8.dp, shape = cardShape, clip = false)
-            .clip(shape = cardShape)
-            .background(MaterialTheme.colors.surface, shape = cardShape)
-            .aspectRatio(1.4f)
+            .aspectRatio(1.4f),
+        shape = cardShape,
+        shadowElevation = 10.dp,
+        tonalElevation = 2.dp,
     ) {
+        val onSurface = MaterialTheme.colorScheme.onSurface.toArgb()
         AndroidView(
             modifier = Modifier.padding(spacing.small),
             factory = {
@@ -99,7 +97,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
                     data = barData
 
                     configureChartProperties()
-                    configureAxis(labels)
+                    configureAxis(labels, onSurface)
 
                     invalidate()
                 }
@@ -124,8 +122,12 @@ private fun getLabels(pairList: List<Pair<Int, DailyStats>>) =
     }
 
 @Composable
-private fun getBarData(pairList: List<Pair<Int, DailyStats>>) =
-    remember {
+private fun getBarData(pairList: List<Pair<Int, DailyStats>>): State<BarData> {
+    val colorScheme = MaterialTheme.colorScheme
+    val onSurface = colorScheme.onSurface.toArgb()
+    val barColor = colorScheme.primary.toArgb()
+
+    return remember {
         derivedStateOf {
             val entries = pairList.map { (index, value) ->
                 BarEntry(
@@ -137,17 +139,19 @@ private fun getBarData(pairList: List<Pair<Int, DailyStats>>) =
             val barDataSet = BarDataSet(entries, "Label").apply {
                 setDrawValues(true)
                 isHighlightEnabled = false
-                valueTextColor = Color.WHITE
+                valueTextColor = onSurface
                 valueFormatter = BarValueFormatter()
+                color = barColor
             }
             BarData(barDataSet).apply { barWidth = 0.3f }
         }
     }
+}
 
-private fun RoundedBarChart.configureAxis(labels: Map<Int, String>) {
+private fun RoundedBarChart.configureAxis(labels: Map<Int, String>, onSurface: Int) {
     xAxis.apply {
         setDrawGridLines(false)
-        textColor = Color.WHITE
+        textColor = onSurface
         position = BOTTOM
         valueFormatter = XAxisDayFormatter(labels)
     }
@@ -156,7 +160,7 @@ private fun RoundedBarChart.configureAxis(labels: Map<Int, String>) {
         isEnabled = true
         spaceBottom = 0f
         labelCount = 3
-        textColor = Color.WHITE
+        textColor = onSurface
         textSize = 8f
         valueFormatter = YAxisHourFormatter()
         axisMinimum = 0.1f // Can't be zero because of RoundedBarChart

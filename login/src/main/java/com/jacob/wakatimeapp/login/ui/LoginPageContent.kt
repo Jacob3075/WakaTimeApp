@@ -17,13 +17,13 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material.Button
-import androidx.compose.material.ButtonDefaults
-import androidx.compose.material.CircularProgressIndicator
-import androidx.compose.material.MaterialTheme
-import androidx.compose.material.ScaffoldState
-import androidx.compose.material.SnackbarDuration
-import androidx.compose.material.Text
+import androidx.compose.material3.Button
+import androidx.compose.material3.ButtonDefaults
+import androidx.compose.material3.CircularProgressIndicator
+import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.SnackbarDuration
+import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -39,6 +39,7 @@ import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.modifiers.gesturesDisabled
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.button
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.pageTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
@@ -48,7 +49,7 @@ import kotlinx.coroutines.launch
 @Composable
 fun LoginPageContent(
     loginPageNavigator: LoginPageNavigator,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: LoginPageViewModel = hiltViewModel(),
 ) {
@@ -64,7 +65,7 @@ fun LoginPageContent(
             is LoginPageState.Error -> showSnackBar(
                 viewStateInstance,
                 snackBarCoroutineScope,
-                scaffoldState
+                snackbarHostState
             )
 
             else -> Unit
@@ -97,9 +98,9 @@ fun LoginPageContent(
 private fun showSnackBar(
     viewState: LoginPageState.Error,
     snackBarCoroutineScope: CoroutineScope,
-    scaffoldState: ScaffoldState,
+    snackbarHostState: SnackbarHostState,
 ) = snackBarCoroutineScope.launch {
-    scaffoldState.snackbarHostState.showSnackbar(
+    snackbarHostState.showSnackbar(
         message = viewState.message,
         duration = SnackbarDuration.Long
     )
@@ -175,6 +176,7 @@ private fun LoginButton(
             Text(
                 text = "Login to Wakatime".uppercase(),
                 style = MaterialTheme.typography.button,
+                color = MaterialTheme.gradients.primary.onEndColor,
                 modifier = Modifier.padding(spacing.medium)
             )
         }
