@@ -18,20 +18,15 @@ private val CYAN_ALT = Color(0xFF5EC2D2)
 private val ORANGE = Color(0xFFFF9900)
 private val YELLOW = Color(0xFFE8C754)
 
-private val darkPurple = Color(0xFFE8B3FF)
-private val onDarkPurple = Color(0xFF500074)
-private val darkPurpleContainer = Color(0xFF7200A3)
-private val onDarkPurpleContainer = Color(0xFFF6D9FF)
+private val orange = Color(0xFFFFB86F)
+private val onOrange = Color(0xFF4A2800)
+private val orangeContainer = Color(0xFF693C00)
+private val onOrangeContainer = Color(0xFFFFDCBD)
 
-private val cyanAlt = Color(0xFF50D8EC)
-private val onCyanAlt = Color(0xFF00363D)
-private val cyanAltContainer = Color(0xFF004F58)
-private val onCyanAltContainer = Color(0xFF99F0FF)
-
-private val green = Color(0xFF5EDE92)
-private val onGreen = Color(0xFF00391D)
-private val greenContainer = Color(0xFF00522C)
-private val onGreenContainer = Color(0xFF7CFBAC)
+private val yellow = Color(0xFFE6C449)
+private val onYellow = Color(0xFF3B2F00)
+private val yellowContainer = Color(0xFF564500)
+private val onYellowContainer = Color(0xFFFFE07D)
 
 private val blue = Color(0xFFB6C4FF)
 private val onBlue = Color(0xFF00287D)
@@ -48,6 +43,11 @@ private val onDarkPink = Color(0xFF5D0055)
 private val darkPinkContainer = Color(0xFF840079)
 private val onDarkPinkContainer = Color(0xFFFFD7F1)
 
+private val green = Color(0xFF5EDE92)
+private val onGreen = Color(0xFF00391D)
+private val greenContainer = Color(0xFF00522C)
+private val onGreenContainer = Color(0xFF7CFBAC)
+
 private val purple = Color(0xFFC9BFFF)
 private val onPurple = Color(0xFF2E009C)
 private val purpleContainer = Color(0xFF441CC8)
@@ -63,19 +63,19 @@ private val onPink = Color(0xFF60004C)
 private val pinkContainer = Color(0xFF87006C)
 private val onPinkContainer = Color(0xFFFFD8EC)
 
-private val orange = Color(0xFFFFB86F)
-private val onOrange = Color(0xFF4A2800)
-private val orangeContainer = Color(0xFF693C00)
-private val onOrangeContainer = Color(0xFFFFDCBD)
+private val darkPurple = Color(0xFFE8B3FF)
+private val onDarkPurple = Color(0xFF500074)
+private val darkPurpleContainer = Color(0xFF7200A3)
+private val onDarkPurpleContainer = Color(0xFFF6D9FF)
 
-private val yellow = Color(0xFFE6C449)
-private val onYellow = Color(0xFF3B2F00)
-private val yellowContainer = Color(0xFF564500)
-private val onYellowContainer = Color(0xFFFFE07D)
+private val cyanAlt = Color(0xFF50D8EC)
+private val onCyanAlt = Color(0xFF00363D)
+private val cyanAltContainer = Color(0xFF004F58)
+private val onCyanAltContainer = Color(0xFF99F0FF)
 
 val DarkGradients = Gradients(
     primary = Gradient(
-        startColor = BLUE,
+        startColor = blue,
         endColor = cyan,
         onStartColor = onBlue,
         onEndColor = onCyan

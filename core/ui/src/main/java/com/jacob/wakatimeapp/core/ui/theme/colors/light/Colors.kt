@@ -5,7 +5,7 @@ package com.jacob.wakatimeapp.core.ui.theme.colors.light
 import androidx.compose.material3.lightColorScheme
 import androidx.compose.ui.graphics.Color
 
-private val lightPrimary = Color(0xFF006874)
+private val lightPrimary = Color(0xFF26C6DA)
 private val lightOnPrimary = Color(0xFFFFFFFF)
 private val lightPrimaryContainer = Color(0xFF96F0FF)
 private val lightOnPrimaryContainer = Color(0xFF001F24)

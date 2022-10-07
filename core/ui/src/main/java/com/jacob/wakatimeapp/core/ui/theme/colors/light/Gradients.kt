@@ -16,12 +16,12 @@ private val onYellow = Color(0xFFFFFFFF)
 private val yellowContainer = Color(0xFFFFE07D)
 private val onYellowContainer = Color(0xFF231B00)
 
-private val blue = Color(0xFF2854CD)
+private val blue = Color(0xFF3463E4)
 private val onBlue = Color(0xFFFFFFFF)
 private val blueContainer = Color(0xFFDCE1FF)
 private val onBlueContainer = Color(0xFF00164F)
 
-private val cyan = Color(0xFF006874)
+private val cyan = Color(0xFF26C6DA)
 private val onCyan = Color(0xFFFFFFFF)
 private val cyanContainer = Color(0xFF99F0FF)
 private val onCyanContainer = Color(0xFF001F24)
@@ -31,12 +31,12 @@ private val onDarkPink = Color(0xFFFFFFFF)
 private val darkPinkContainer = Color(0xFFFFD7F1)
 private val onDarkPinkContainer = Color(0xFF390034)
 
-private val green = Color(0xFF006D3D)
+private val green = Color(0xFF00A75D)
 private val onGreen = Color(0xFFFFFFFF)
 private val greenContainer = Color(0xFF7CFBAC)
 private val onGreenContainer = Color(0xFF00210F)
 
-private val purple = Color(0xFF5D3FE0)
+private val purple = Color(0xFF6A4EE2)
 private val onPurple = Color(0xFFFFFFFF)
 private val purpleContainer = Color(0xFFE5DEFF)
 private val onPurpleContainer = Color(0xFF1A0063)
@@ -70,9 +70,9 @@ val LightGradients = Gradients(
     ),
     secondary = Gradient(Color(0xFF3F55E0), Color(0xFF5EC2D2), 85),
     pinkCyanLight = Gradient(
-        startColor = pink,
+        startColor = darkPink,
         endColor = cyan,
-        onStartColor = onPink,
+        onStartColor = onDarkPink,
         onEndColor = onCyan
     ),
     purpleCyanDark = Gradient(
