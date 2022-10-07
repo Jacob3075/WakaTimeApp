@@ -29,8 +29,8 @@ data class Time(
             )
         }
 
-        fun createFrom(timeString: String, decimal: String): Time {
-            val (hours, minutes) = timeString.split(":")
+        fun createFrom(digialString: String, decimal: String): Time {
+            val (hours, minutes) = digialString.split(":")
                 .map(String::toInt)
             return Time(hours, minutes, decimal.toFloat())
         }
