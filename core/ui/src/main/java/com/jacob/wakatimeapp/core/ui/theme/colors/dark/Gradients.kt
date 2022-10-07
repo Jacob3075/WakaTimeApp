@@ -122,3 +122,78 @@ val DarkGradients = Gradients(
         onEndColor = onYellow
     )
 )
+
+/**
+ * [Source](https://jemimaabu.github.io/random-gradient-generator/)
+ */
+fun abc() {
+    Gradient(startColor = Color(0xFFf64cea), Color(0xFF8605f1))
+    Gradient(startColor = Color(0xFF4565c1), Color(0xFFa654de))
+    Gradient(startColor = Color(0xFFeb5831), Color(0xFF933caf))
+    Gradient(startColor = Color(0xFF8314b9), Color(0xFF96477c))
+    Gradient(startColor = Color(0xFF38bc36), Color(0xFF74fbbc))
+    Gradient(startColor = Color(0xFFd7954e), Color(0xFFe4e121))
+    Gradient(startColor = Color(0xFF240f88), Color(0xFF5e3fe0))
+    Gradient(startColor = Color(0xFF444ecf), Color(0xFF26f6c3))
+    Gradient(startColor = Color(0xFF677fc4), Color(0xFF5bced7))
+}
+
+/**
+ * [Source](https://uigradients.com)
+ */
+fun abcd() {
+    val flare = Gradient(
+        startColor = Color(0xFFF12711),
+        endColor = Color(0xFFF5AF19),
+        onStartColor = Color(0xFFFFFFFF),
+        onEndColor = Color(0xFFFFFFFF)
+    )
+    val shifter = Gradient(
+        startColor = Color(0xFFBC4E9C),
+        endColor = Color(0xFFF80759),
+        onStartColor = Color(0xFFFFFFFF),
+        onEndColor = Color(0xFFFFFFFF)
+    )
+    val quepal = Gradient(
+        startColor = Color(0xFF11998E),
+        endColor = Color(0xFF38EF7d),
+        onStartColor = Color(0xFF),
+        onEndColor = Color(0xFF)
+    )
+    val tealLove = Gradient(
+        startColor = Color(0xFFAAFFA9),
+        endColor = Color(0xFF11FFBD),
+        onStartColor = Color(0xFF),
+        onEndColor = Color(0xFF)
+    )
+    val facebookMessenger = Gradient(
+        startColor = Color(0xFF00C6FF),
+        endColor = Color(0xFF0072FF),
+        onStartColor = Color(0xFF),
+        onEndColor = Color(0xFF)
+    )
+    val reef = Gradient(
+        startColor = Color(0xFF00D2FF),
+        endColor = Color(0xFF3A7BD5),
+        onStartColor = Color(0xFF),
+        onEndColor = Color(0xFF)
+    )
+    val amin = Gradient(
+        startColor = Color(0xFF8E2DE2),
+        endColor = Color(0xFF4A00E0),
+        onStartColor = Color(0xFF),
+        onEndColor = Color(0xFF)
+    )
+    val neuromancer = Gradient(
+        startColor = Color(0xFFF953C6),
+        endColor = Color(0xFFB91D73),
+        onStartColor = Color(0xFF),
+        onEndColor = Color(0xFF)
+    )
+    val purpink = Gradient(
+        startColor = Color(0xFF7F00FF),
+        endColor = Color(0xFFE100FF),
+        onStartColor = Color(0xFF),
+        onEndColor = Color(0xFF)
+    )
+}
