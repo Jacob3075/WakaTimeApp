@@ -3,7 +3,6 @@
 package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration
-import android.graphics.Color
 import android.view.ViewGroup.LayoutParams.MATCH_PARENT
 import android.widget.LinearLayout.LayoutParams
 import androidx.compose.foundation.background
@@ -19,6 +18,7 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.State
 import androidx.compose.runtime.derivedStateOf
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
@@ -26,6 +26,7 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.draw.shadow
+import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
@@ -91,6 +92,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
             .background(MaterialTheme.colorScheme.surface, shape = cardShape)
             .aspectRatio(1.4f)
     ) {
+        val onSurface = MaterialTheme.colorScheme.onSurface.toArgb()
         AndroidView(
             modifier = Modifier.padding(spacing.small),
             factory = {
@@ -99,7 +101,7 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
                     data = barData
 
                     configureChartProperties()
-                    configureAxis(labels)
+                    configureAxis(labels, onSurface)
 
                     invalidate()
                 }
@@ -124,8 +126,12 @@ private fun getLabels(pairList: List<Pair<Int, DailyStats>>) =
     }
 
 @Composable
-private fun getBarData(pairList: List<Pair<Int, DailyStats>>) =
-    remember {
+private fun getBarData(pairList: List<Pair<Int, DailyStats>>): State<BarData> {
+    val colorScheme = MaterialTheme.colorScheme
+    val onSurface = colorScheme.onSurface.toArgb()
+    val barColor = colorScheme.primary.toArgb()
+
+    return remember {
         derivedStateOf {
             val entries = pairList.map { (index, value) ->
                 BarEntry(
@@ -137,17 +143,19 @@ private fun getBarData(pairList: List<Pair<Int, DailyStats>>) =
             val barDataSet = BarDataSet(entries, "Label").apply {
                 setDrawValues(true)
                 isHighlightEnabled = false
-                valueTextColor = Color.WHITE
+                valueTextColor = onSurface
                 valueFormatter = BarValueFormatter()
+                color = barColor
             }
             BarData(barDataSet).apply { barWidth = 0.3f }
         }
     }
+}
 
-private fun RoundedBarChart.configureAxis(labels: Map<Int, String>) {
+private fun RoundedBarChart.configureAxis(labels: Map<Int, String>, onSurface: Int) {
     xAxis.apply {
         setDrawGridLines(false)
-        textColor = Color.WHITE
+        textColor = onSurface
         position = BOTTOM
         valueFormatter = XAxisDayFormatter(labels)
     }
@@ -156,7 +164,7 @@ private fun RoundedBarChart.configureAxis(labels: Map<Int, String>) {
         isEnabled = true
         spaceBottom = 0f
         labelCount = 3
-        textColor = Color.WHITE
+        textColor = onSurface
         textSize = 8f
         valueFormatter = YAxisHourFormatter()
         axisMinimum = 0.1f // Can't be zero because of RoundedBarChart

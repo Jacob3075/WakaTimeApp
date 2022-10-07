@@ -25,6 +25,7 @@ import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
@@ -54,27 +55,27 @@ fun LoginPageContent(
 ) {
     val viewState by viewModel.viewState.collectAsState()
     val snackBarCoroutineScope = rememberCoroutineScope()
-    //    LaunchedEffect(viewState) {
-    //        when (val viewStateInstance = viewState) {
-    //            is LoginPageState.Success -> {
-    //                viewModel.updateUserDetails()
-    //                loginPageNavigator.toHomePage()
-    //            }
-    //
-    //            is LoginPageState.Error -> showSnackBar(
-    //                viewStateInstance,
-    //                snackBarCoroutineScope,
-    //                snackbarHostState
-    //            )
-    //
-    //            else -> Unit
-    //        }
-    //    }
+    LaunchedEffect(viewState) {
+        when (val viewStateInstance = viewState) {
+            is LoginPageState.Success -> {
+                viewModel.updateUserDetails()
+                loginPageNavigator.toHomePage()
+            }
+
+            is LoginPageState.Error -> showSnackBar(
+                viewStateInstance,
+                snackBarCoroutineScope,
+                snackbarHostState
+            )
+
+            else -> Unit
+        }
+    }
 
     val launcher = authActivityResultLauncher(viewModel)
 
     when (viewState) {
-        is LoginPageState.Idle, is LoginPageState.Error, LoginPageState.Success -> LoginPageIdleState(
+        is LoginPageState.Idle, is LoginPageState.Error -> LoginPageIdleState(
             viewModel,
             launcher = launcher
         )
@@ -175,6 +176,7 @@ private fun LoginButton(
             Text(
                 text = "Login to Wakatime".uppercase(),
                 style = MaterialTheme.typography.button,
+                color = MaterialTheme.gradients.primary.onEndColor,
                 modifier = Modifier.padding(spacing.medium)
             )
         }

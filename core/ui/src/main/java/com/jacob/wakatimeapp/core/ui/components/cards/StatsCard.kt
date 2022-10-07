@@ -74,6 +74,7 @@ internal fun StatsCard(
                 maxLines = 2,
                 modifier = Modifier.weight(weights.first, true),
                 style = MaterialTheme.typography.cardContent,
+                color = gradient.onStartColor,
             )
             Text(
                 text = text,
@@ -82,8 +83,9 @@ internal fun StatsCard(
                 style = TextStyle(
                     color = Color.White,
                     fontSize = 20.sp,
-                    fontWeight = FontWeight.Bold
-                )
+                    fontWeight = FontWeight.Medium,
+                ),
+                color = gradient.onEndColor,
             )
         }
     }
