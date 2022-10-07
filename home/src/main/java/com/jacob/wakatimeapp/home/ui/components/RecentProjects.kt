@@ -2,10 +2,8 @@ package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
-import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
@@ -19,9 +17,6 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.draw.clip
-import androidx.compose.ui.draw.shadow
-import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
@@ -77,22 +72,13 @@ private fun RecentProjectList(
 private fun ProjectCardItem(project: Project) {
     val cardShape = RoundedCornerShape(percent = 25)
     val spacing = MaterialTheme.spacing
-    /*
-    * Not using surface because it applies an overlay which changes the color of the background.
-    * Copied the modifiers from Surface composable without the overlay logic.
-    * */
-    Box(
+    Surface(
         modifier = Modifier
             .fillMaxWidth()
-            .shadow(
-                elevation = 12.dp,
-                shape = cardShape,
-                clip = false,
-                spotColor = Color.Black
-            )
-            .clip(shape = cardShape)
-            .background(color = MaterialTheme.colorScheme.surface, shape = cardShape)
-            .clickable { }
+            .clickable { },
+        shape = cardShape,
+        shadowElevation = 10.dp,
+        tonalElevation = 2.dp,
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
