@@ -1,10 +1,10 @@
-package com.jacob.wakatimeapp.home.data.dtos
+package com.jacob.wakatimeapp.core.common.data.dtos
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class MachineDTO(
+data class ProjectDTO(
     val decimal: String,
     val digital: String,
     val hours: Int,
@@ -13,6 +13,9 @@ data class MachineDTO(
     val percent: Double,
     val seconds: Int,
     val text: String,
-    @SerialName("machine_name_id") val machineNameId: String,
     @SerialName("total_seconds") val totalSeconds: Double,
-)
+) {
+
+    fun isUnknownProject() =
+        name == "Unknown Project"
+}

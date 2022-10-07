@@ -1,19 +1,18 @@
 package com.jacob.wakatimeapp.home.data.mappers // ktlint-disable filename
 
+import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
+import com.jacob.wakatimeapp.core.common.data.mappers.toModel
 import com.jacob.wakatimeapp.core.models.DailyStats
-import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
-import com.jacob.wakatimeapp.home.data.dtos.EditorDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO.Data
-import com.jacob.wakatimeapp.home.data.dtos.LanguageDTO
-import com.jacob.wakatimeapp.home.data.dtos.OperatingSystemDTO
-import com.jacob.wakatimeapp.home.data.dtos.ProjectDTO
 import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Date
 import java.util.Locale
 import java.util.TimeZone
 
@@ -37,22 +36,12 @@ private fun getDailyStatsFromDto(data: List<Data>) = data.map {
         mostUsedOs = it.operatingSystems.maxByOrNull(OperatingSystemDTO::percent)?.name ?: "NA",
         date = LocalDate.parse(it.range.date),
         projectsWorkedOn = it.projects.filterNot(ProjectDTO::isUnknownProject)
-            .map { project ->
-                Project(
-                    Time(
-                        project.hours,
-                        project.minutes,
-                        project.decimal.toFloat()
-                    ),
-                    project.name,
-                    project.percent
-                )
-            }
+            .map(ProjectDTO::toModel)
     )
 }
 
-private fun parseDate(dateTimeString: String): Date {
-    val sdf = SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US)
-    sdf.timeZone = TimeZone.getTimeZone("GMT")
-    return sdf.parse(dateTimeString)!!
-}
+private fun parseDate(dateTimeString: String) =
+    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
+        timeZone = TimeZone.getTimeZone("GMT")
+    }
+        .parse(dateTimeString)!!

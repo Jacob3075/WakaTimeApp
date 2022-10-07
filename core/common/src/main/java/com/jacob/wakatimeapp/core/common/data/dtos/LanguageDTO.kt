@@ -1,10 +1,10 @@
-package com.jacob.wakatimeapp.home.data.dtos
+package com.jacob.wakatimeapp.core.common.data.dtos
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class CategoryDTO(
+data class LanguageDTO(
     val decimal: String,
     val digital: String,
     val hours: Int,

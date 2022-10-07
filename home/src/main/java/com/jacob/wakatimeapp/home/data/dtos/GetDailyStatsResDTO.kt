@@ -1,5 +1,15 @@
 package com.jacob.wakatimeapp.home.data.dtos
 
+import com.jacob.wakatimeapp.core.common.data.dtos.CategoryDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.CumulativeTotalDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.DependencyDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.GrandTotalDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.MachineDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.RangeDTO
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
@@ -8,127 +18,18 @@ data class GetDailyStatsResDTO(
     val data: List<Data>,
     val end: String,
     val start: String,
-    @SerialName("cummulative_total") val cumulativeTotal: CumulativeTotal,
+    @SerialName("cummulative_total") val cumulativeTotal: CumulativeTotalDTO,
 ) {
     @Serializable
-    data class CumulativeTotal(
-        val decimal: String,
-        val digital: String,
-        val seconds: Double,
-        val text: String,
-    )
-
-    @Serializable
     data class Data(
-        val categories: List<Category>,
-        val dependencies: List<Dependency>,
-        val editors: List<Editor>,
-        val languages: List<Language>,
-        val machines: List<Machine>,
-        val projects: List<Project>,
-        val range: Range,
-        @SerialName("grand_total") val grandTotal: GrandTotal,
-        @SerialName("operating_systems") val operatingSystems: List<OperatingSystem>,
-    ) {
-        @Serializable
-        data class Category(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val name: String,
-            val percent: Double,
-            val seconds: Int,
-            val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-
-        @Serializable
-        data class Editor(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val name: String,
-            val percent: Double,
-            val seconds: Int,
-            val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-
-        @Serializable
-        data class GrandTotal(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-
-        @Serializable
-        data class Language(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val name: String,
-            val percent: Double,
-            val seconds: Int,
-            val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-
-        @Serializable
-        data class Machine(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val name: String,
-            val percent: Double,
-            val seconds: Int,
-            val text: String,
-            @SerialName("machine_name_id") val machineNameId: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-
-        @Serializable
-        data class OperatingSystem(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val name: String,
-            val percent: Double,
-            val seconds: Int,
-            val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-
-        @Serializable
-        data class Project(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val name: String,
-            val percent: Double,
-            val seconds: Int,
-            val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-
-        @Serializable
-        data class Range(
-            val date: String,
-            val end: String,
-            val start: String,
-            val text: String,
-            val timezone: String,
-        )
-
-        @Serializable
-        class Dependency
-    }
+        val categories: List<CategoryDTO>,
+        val dependencies: List<DependencyDTO>,
+        val editors: List<EditorDTO>,
+        val languages: List<LanguageDTO>,
+        val machines: List<MachineDTO>,
+        val projects: List<ProjectDTO>,
+        val range: RangeDTO,
+        @SerialName("grand_total") val grandTotal: GrandTotalDTO,
+        @SerialName("operating_systems") val operatingSystems: List<OperatingSystemDTO>,
+    )
 }
