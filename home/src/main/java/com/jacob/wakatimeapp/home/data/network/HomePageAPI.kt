@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.data
+package com.jacob.wakatimeapp.home.data.network
 
 import com.jacob.wakatimeapp.home.data.dtos.AllTimeDataDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO

@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.home
 
-import com.jacob.wakatimeapp.home.data.HomePageAPI
+import com.jacob.wakatimeapp.home.data.network.HomePageAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn

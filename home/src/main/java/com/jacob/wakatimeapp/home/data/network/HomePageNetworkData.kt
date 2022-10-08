@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.data
+package com.jacob.wakatimeapp.home.data.network
 
 import arrow.core.Either
 import arrow.core.left
