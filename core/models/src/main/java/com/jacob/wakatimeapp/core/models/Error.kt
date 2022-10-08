@@ -40,4 +40,8 @@ sealed class Error : Exception() {
             }
         }
     }
+
+    data class UnknownError(val error: Throwable) : Error() {
+        override val message: String = error.message!!
+    }
 }

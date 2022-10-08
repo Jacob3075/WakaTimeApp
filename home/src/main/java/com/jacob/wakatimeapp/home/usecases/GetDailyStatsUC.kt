@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.home.usecases
 
-import com.jacob.wakatimeapp.home.data.HomePageNetworkData
+import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import javax.inject.Inject
 import javax.inject.Singleton
 
