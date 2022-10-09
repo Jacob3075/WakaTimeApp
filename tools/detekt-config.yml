@@ -626,6 +626,8 @@ style:
     excludeImportStatements: true
     excludeCommentStatements: true
     excludeRawStrings: true
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
+    ignoreAnnotated: ['Test']
   MayBeConst:
     active: true
   ModifierOrder:

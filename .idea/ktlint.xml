@@ -8,6 +8,7 @@
         <option value="no-wildcard-imports" />
         <option value="no-wildcard-imports" />
         <option value="trailing-comma" />
+        <option value="max-line-length" />
       </list>
     </disabledRules>
   </component>
