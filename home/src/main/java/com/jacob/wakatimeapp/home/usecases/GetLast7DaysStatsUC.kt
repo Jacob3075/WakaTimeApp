@@ -32,46 +32,34 @@ class GetLast7DaysStatsUC @Inject constructor(
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
-    /**
-     * Gets the stats for the last 7 days from the cache if the last request was made within the
-     * last 15 minutes, otherwise it will fetch the data from the network and update the cache.
-     *
-     * If the latest value in the cache is from the previous day, it will fetch the data from the
-     * network and not show the cached data.
-     *
-     * Data is always sent from the database, network data is sent to the db which then sends to
-     * the UI
-     *
-     * @return A flow of either a [WeeklyStats] or an [Error]
-     */
-    operator fun invoke(): Flow<Either<Error, WeeklyStats>> = flow {
-        /*
-        *   (1)                        (2)                                  (3)
-        ----------|-----------------------------------------------|-------------------|---
-             start of day                                    15 mins aga             now
-        *
-        * check if last request falls in (1), if it does make request and update cache
-        * if it falls in (2) or (3) then get data from cache,
-        * if its in (1) or (3) return.
-        * if its in (2) then make request and update cache
-        */
+    operator fun invoke(cacheValidity: Int = DEFAULT): Flow<Either<Error, WeeklyStats>> = flow {
         val lastRequestTime = homePageCache.getLastRequestTime()
+        when {
+            firstRequestOfDay(lastRequestTime) -> {
+                makeRequestAndUpdateCache()
+                sendDataFromCache()
+            }
 
-        if (lastRequestTime.isPreviousDay()) makeRequestAndUpdateCache()
+            validDataInCache(lastRequestTime, cacheValidity) -> {
+                sendDataFromCache()
+            }
 
+            else -> {
+                sendDataFromCache()
+                makeRequestAndUpdateCache()
+            }
+        }
+    }
+
+    private suspend fun FlowCollector<Either<Error, WeeklyStats>>.sendDataFromCache() {
         homePageCache.getCachedData()
             .map { it.right() }
             .catch { throwable ->
-                Error.UnknownError(throwable)
+                Error.UnknownError(throwable.message!!, throwable)
                     .left()
                     .let { emit(it) }
             }
             .let { emitAll(it) }
-
-        if (lastRequestTime.isLessThan15Mins()) return@flow
-        if (lastRequestTime.isPreviousDay()) return@flow
-
-        makeRequestAndUpdateCache()
     }
 
     private suspend fun FlowCollector<Either<Error, WeeklyStats>>.makeRequestAndUpdateCache() {
@@ -80,25 +68,34 @@ class GetLast7DaysStatsUC @Inject constructor(
             .tapLeft { emit(it.left()) }
     }
 
-    private fun Instant.isPreviousDay(): Boolean {
-        val startOfDay = Instant.now()
-            .plus(1, ChronoUnit.DAYS)
-            .truncatedTo(ChronoUnit.DAYS)
-
-        return isBefore(startOfDay)
-    }
-
-    private fun Instant.isLessThan15Mins(): Boolean {
-        val minutesBetweenLastRequest = Duration.between(this, Instant.now())
-            .toMinutes()
-        return minutesBetweenLastRequest < 15
-    }
-
     private suspend fun WeeklyStats.updateCaches() {
         listOf(
             ioScope.async { homePageCache.updateCache(this@updateCaches) },
             ioScope.async { homePageCache.updateLastRequestTime() },
         )
             .awaitAll()
+    }
+
+    private fun validDataInCache(
+        lastRequestTime: Instant,
+        cacheValidityTime: Int,
+    ): Boolean {
+        val minutesBetweenLastRequest = Duration.between(lastRequestTime, Instant.now())
+            .toMinutes()
+        return minutesBetweenLastRequest < cacheValidityTime
+    }
+
+    private fun firstRequestOfDay(lastRequestTime: Instant) = lastRequestTime.isPreviousDay()
+
+    private fun Instant.isPreviousDay(): Boolean {
+        val startOfDay = Instant.now()
+            .truncatedTo(ChronoUnit.DAYS)
+
+        return isBefore(startOfDay)
+    }
+
+    companion object CacheValidity {
+        const val DEFAULT = 15
+        const val INVALID_DATA = 0
     }
 }
