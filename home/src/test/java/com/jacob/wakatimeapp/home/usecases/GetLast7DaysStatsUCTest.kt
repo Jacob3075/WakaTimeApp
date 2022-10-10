@@ -23,7 +23,6 @@ import io.mockk.mockk
 import java.time.Instant
 import java.time.LocalDate
 import java.time.temporal.ChronoUnit
-import java.util.Date
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
@@ -51,11 +50,11 @@ internal class GetLast7DaysStatsUCTest {
         .minus(20, ChronoUnit.MINUTES)
 
     private val weeklyStats = WeeklyStats(
-        totalTime = Time.fromDecimal(1.0f),
+        totalTime = Time.ZERO,
         dailyStats = listOf(),
         range = StatsRange(
-            startDate = Date.from(Instant.now()),
-            endDate = Date.from(Instant.now())
+            startDate = LocalDate.now(),
+            endDate = LocalDate.now()
         ),
         todaysStats = DailyStats(
             timeSpent = Time.fromDecimal(1.0f),

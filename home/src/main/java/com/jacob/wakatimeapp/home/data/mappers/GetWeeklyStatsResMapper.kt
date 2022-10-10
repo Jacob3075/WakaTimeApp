@@ -11,24 +11,21 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO.Data
-import java.text.SimpleDateFormat
 import java.time.LocalDate
-import java.util.Locale
-import java.util.TimeZone
 
 fun GetLast7DaysStatsResDTO.toModel() = WeeklyStats(
     totalTime = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
     dailyStats = getDailyStatsFromDto(data),
     range = StatsRange(
-        startDate = parseDate(start),
-        endDate = parseDate(end)
+        startDate = LocalDate.parse(start),
+        endDate = LocalDate.parse(end),
     )
 )
 
 private fun getDailyStatsFromDto(data: List<Data>) = data.map {
     DailyStats(
         timeSpent = Time.createFrom(
-            digialString = it.grandTotal.digital,
+            digitalString = it.grandTotal.digital,
             decimal = it.grandTotal.decimal
         ),
         mostUsedEditor = it.editors.maxByOrNull(EditorDTO::percent)?.name ?: "NA",
@@ -39,9 +36,3 @@ private fun getDailyStatsFromDto(data: List<Data>) = data.map {
             .map(ProjectDTO::toModel)
     )
 }
-
-private fun parseDate(dateTimeString: String) =
-    SimpleDateFormat("yyyy-MM-dd'T'HH:mm:ss'Z'", Locale.US).apply {
-        timeZone = TimeZone.getTimeZone("GMT")
-    }
-        .parse(dateTimeString)!!
