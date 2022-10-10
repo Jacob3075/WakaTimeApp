@@ -34,16 +34,16 @@ import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jacob.wakatimeapp.core.common.getDisplayNameForDay
-import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun WeeklyReport(
-    dailyStats: List<DailyStats>?,
+    weeklyTimeSpent: Map<LocalDate, Time>,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = modifier.fillMaxWidth(),
@@ -62,21 +62,15 @@ fun WeeklyReport(
             style = typography.sectionSubtitle
         )
     }
-    WeeklyReportChart(dailyStats.orEmpty())
+    WeeklyReportChart(weeklyTimeSpent)
 }
 
 @Composable
-private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
+private fun WeeklyReportChart(weeklyTimeSpent: Map<LocalDate, Time>) {
     val cardShape = RoundedCornerShape(percent = 10)
 
-    val pairList by remember {
-        derivedStateOf {
-            dailyStats.mapIndexed { index, value -> index to value }
-        }
-    }
-
-    val labels by getLabels(pairList)
-    val barData by getBarData(pairList)
+    val labels by getLabels(weeklyTimeSpent.keys)
+    val barData by getBarData(weeklyTimeSpent.values)
 
     val spacing = MaterialTheme.spacing
 
@@ -112,27 +106,28 @@ private fun WeeklyReportChart(dailyStats: List<DailyStats>) {
 }
 
 @Composable
-private fun getLabels(pairList: List<Pair<Int, DailyStats>>) =
+private fun getLabels(days: Set<LocalDate>): State<Map<Int, String>> =
     remember {
         derivedStateOf {
-            pairList.associate { (index, value) ->
-                index to value.date.getDisplayNameForDay()
+            days.mapIndexed { index, value ->
+                index to value.getDisplayNameForDay()
             }
+                .toMap()
         }
     }
 
 @Composable
-private fun getBarData(pairList: List<Pair<Int, DailyStats>>): State<BarData> {
+private fun getBarData(weeklyStats: Collection<Time>): State<BarData> {
     val colorScheme = MaterialTheme.colorScheme
     val onSurface = colorScheme.onSurface.toArgb()
     val barColor = colorScheme.primary.toArgb()
 
     return remember {
         derivedStateOf {
-            val entries = pairList.map { (index, value) ->
+            val entries = weeklyStats.mapIndexed { index, value ->
                 BarEntry(
                     index.toFloat(),
-                    value.timeSpent.decimal,
+                    value.decimal,
                     value
                 )
             }
@@ -183,7 +178,7 @@ private fun RoundedBarChart.configureChartProperties() {
 @Composable
 private fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
-        WeeklyReport(emptyList())
+        WeeklyReport(emptyMap())
     }
 }
 

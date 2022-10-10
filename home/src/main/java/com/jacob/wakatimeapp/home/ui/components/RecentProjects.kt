@@ -21,7 +21,6 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
@@ -31,11 +30,10 @@ import com.jacob.wakatimeapp.core.ui.theme.cardSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import kotlinx.datetime.LocalDate
 
 @Composable
 internal fun RecentProjects(
-    dailyStats: DailyStats?,
+    projectsWorkedOn: List<Project>,
 ) = Column(
     modifier = Modifier.fillMaxWidth()
 ) {
@@ -53,7 +51,7 @@ internal fun RecentProjects(
         )
     }
     RecentProjectList(
-        projects = dailyStats?.projectsWorkedOn.orEmpty(),
+        projects = projectsWorkedOn,
     )
 }
 
@@ -111,17 +109,10 @@ private fun ProjectCardItem(project: Project) {
 private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
         RecentProjects(
-            DailyStats(
-                timeSpent = Time(0, 0, 0f),
-                projectsWorkedOn = listOf(
-                    Project(Time(10, 9, 0f), "Project 1", 75.0),
-                    Project(Time(100, 26, 0f), "Project 2", 20.0),
-                    Project(Time(5, 15, 0f), "Project 3", 10.0)
-                ),
-                mostUsedLanguage = "",
-                mostUsedEditor = "",
-                mostUsedOs = "",
-                date = LocalDate(2022, 10, 12)
+            projectsWorkedOn = listOf(
+                Project(Time(10, 9, 0f), "Project 1", 75.0),
+                Project(Time(100, 26, 0f), "Project 2", 20.0),
+                Project(Time(5, 15, 0f), "Project 3", 10.0)
             )
         )
     }

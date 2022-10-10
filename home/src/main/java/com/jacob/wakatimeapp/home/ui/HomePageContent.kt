@@ -82,20 +82,22 @@ private fun HomePageLoaded(
             roundedCornerPercent = 25,
             iconId = icons.time,
             mainText = "Total Time Spent Today",
-            time = homePageViewState.contentData.todaysStats.timeSpent,
+            time = homePageViewState.contentData.timeSpentToday,
             onClick = navigator::toDetailsPage
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
-        RecentProjects(homePageViewState.contentData.todaysStats)
+        RecentProjects(homePageViewState.contentData.projectsWorkedOn)
         Spacer(modifier = Modifier.height(spacing.extraSmall))
 
-        WeeklyReport(homePageViewState.contentData.dailyStats)
+        WeeklyReport(homePageViewState.contentData.weeklyTimeSpent)
         Spacer(modifier = Modifier.height(spacing.small))
 
         OtherDailyStatsSection(
-            homePageViewState.contentData.todaysStats,
-            onClick = {}
+            mostUsedLanguage = homePageViewState.contentData.mostUsedLanguage,
+            mostUsedOs = homePageViewState.contentData.mostUsedOs,
+            mostUsedEditor = homePageViewState.contentData.mostUsedEditor,
+            onClick = {},
         )
         Spacer(modifier = Modifier.height(spacing.medium))
     }
