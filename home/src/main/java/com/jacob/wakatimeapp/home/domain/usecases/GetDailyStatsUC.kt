@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.usecases
+package com.jacob.wakatimeapp.home.domain.usecases
 
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import javax.inject.Inject

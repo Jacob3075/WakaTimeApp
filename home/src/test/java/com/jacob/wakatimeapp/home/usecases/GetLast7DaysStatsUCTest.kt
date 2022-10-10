@@ -10,6 +10,7 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
 import io.kotest.matchers.types.shouldBeSameInstanceAs
@@ -74,27 +75,8 @@ internal class GetLast7DaysStatsUCTest {
             dispatcher = UnconfinedTestDispatcher(),
             homePageNetworkData = networkDataMock,
             homePageCache = cacheMock,
+            instantProvider = { Instant.now() },
         )
-    }
-
-    @Test
-    internal fun `when network api is called, cache should always be updated`() = runTest {
-        coEvery { cacheMock.getLastRequestTime() } returns previousDay
-        coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-        coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats)
-
-        val responses = useCase().toList()
-
-        responses.size shouldBe 1
-        responses shouldContain weeklyStats.right()
-
-        coVerifyOrder {
-            cacheMock.getLastRequestTime()
-            networkDataMock.getLast7DaysStats()
-            cacheMock.updateCache(weeklyStats)
-            cacheMock.updateLastRequestTime(any())
-            cacheMock.getCachedData()
-        }
     }
 
     @Test
@@ -134,10 +116,30 @@ internal class GetLast7DaysStatsUCTest {
         }
 
     @Test
-    @Disabled
     internal fun `when making first request of the day but data is valid, api request is made`() =
         runTest {
-            TODO("add parameter to provide instant into use case")
+            val startOfDay = Instant.now()
+                .truncatedTo(ChronoUnit.DAYS)
+
+            useCase = GetLast7DaysStatsUC(
+                dispatcher = UnconfinedTestDispatcher(),
+                homePageNetworkData = networkDataMock,
+                homePageCache = cacheMock,
+                instantProvider = { startOfDay.plus(5, ChronoUnit.MINUTES) },
+            )
+
+            coEvery { cacheMock.getLastRequestTime() } returns startOfDay.minus(
+                5,
+                ChronoUnit.MINUTES
+            )
+            coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
+            coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats)
+
+            useCase().collect()
+
+            coVerify(exactly = 1) {
+                networkDataMock.getLast7DaysStats()
+            }
         }
 
     @Test

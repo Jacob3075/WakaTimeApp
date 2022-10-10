@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.usecases
+package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.left
@@ -7,6 +7,8 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
+import com.jacob.wakatimeapp.home.domain.InstantProvider
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.DEFAULT
 import java.time.Duration
 import java.time.Instant
 import java.time.temporal.ChronoUnit
@@ -17,7 +19,6 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
@@ -29,10 +30,11 @@ class GetLast7DaysStatsUC @Inject constructor(
     dispatcher: CoroutineContext = Dispatchers.IO,
     private val homePageNetworkData: HomePageNetworkData,
     private val homePageCache: HomePageCache,
+    private val instantProvider: InstantProvider,
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
-    operator fun invoke(cacheValidity: Int = DEFAULT): Flow<Either<Error, WeeklyStats>> = flow {
+    operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = flow {
         val lastRequestTime = homePageCache.getLastRequestTime()
         when {
             firstRequestOfDay(lastRequestTime) -> {
@@ -40,9 +42,7 @@ class GetLast7DaysStatsUC @Inject constructor(
                 sendDataFromCache()
             }
 
-            validDataInCache(lastRequestTime, cacheValidity) -> {
-                sendDataFromCache()
-            }
+            validDataInCache(lastRequestTime, cacheValidity) -> sendDataFromCache()
 
             else -> {
                 sendDataFromCache()
@@ -78,24 +78,24 @@ class GetLast7DaysStatsUC @Inject constructor(
 
     private fun validDataInCache(
         lastRequestTime: Instant,
-        cacheValidityTime: Int,
+        cacheValidityTime: CacheValidity,
     ): Boolean {
-        val minutesBetweenLastRequest = Duration.between(lastRequestTime, Instant.now())
+        val minutesBetweenLastRequest = Duration.between(lastRequestTime, instantProvider.now())
             .toMinutes()
-        return minutesBetweenLastRequest < cacheValidityTime
+        return minutesBetweenLastRequest < cacheValidityTime.minutes
     }
 
     private fun firstRequestOfDay(lastRequestTime: Instant) = lastRequestTime.isPreviousDay()
 
     private fun Instant.isPreviousDay(): Boolean {
-        val startOfDay = Instant.now()
+        val startOfDay = instantProvider.now()
             .truncatedTo(ChronoUnit.DAYS)
 
         return isBefore(startOfDay)
     }
 
-    companion object CacheValidity {
-        const val DEFAULT = 15
-        const val INVALID_DATA = 0
+    enum class CacheValidity(val minutes: Long) {
+        DEFAULT(15L),
+        INVALID(0L),
     }
 }

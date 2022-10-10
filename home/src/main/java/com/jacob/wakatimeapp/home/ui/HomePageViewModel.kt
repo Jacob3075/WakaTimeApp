@@ -6,9 +6,9 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import com.jacob.wakatimeapp.home.ui.HomePageViewState.Error
 import com.jacob.wakatimeapp.home.ui.HomePageViewState.Loaded
-import com.jacob.wakatimeapp.home.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
