@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.data.mappers // ktlint-disable filename
+package com.jacob.wakatimeapp.home.data.network.mappers // ktlint-disable filename
 
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.mappers.toModel

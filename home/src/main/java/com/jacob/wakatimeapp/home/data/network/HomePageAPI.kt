@@ -1,8 +1,8 @@
 package com.jacob.wakatimeapp.home.data.network
 
-import com.jacob.wakatimeapp.home.data.dtos.AllTimeDataDTO
-import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
-import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.AllTimeDataDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

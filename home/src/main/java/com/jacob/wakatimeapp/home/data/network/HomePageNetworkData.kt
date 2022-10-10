@@ -6,10 +6,10 @@ import arrow.core.right
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.NetworkErrors
-import com.jacob.wakatimeapp.home.data.dtos.AllTimeDataDTO
-import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
-import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
-import com.jacob.wakatimeapp.home.data.mappers.toModel
+import com.jacob.wakatimeapp.home.data.network.dtos.AllTimeDataDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
+import com.jacob.wakatimeapp.home.data.network.mappers.toModel
 import java.net.UnknownHostException
 import javax.inject.Inject
 import javax.inject.Singleton

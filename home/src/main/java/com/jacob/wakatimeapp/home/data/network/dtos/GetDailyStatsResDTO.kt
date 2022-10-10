@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.data.dtos
+package com.jacob.wakatimeapp.home.data.network.dtos
 
 import com.jacob.wakatimeapp.core.common.data.dtos.CategoryDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.CumulativeTotalDTO
@@ -14,13 +14,12 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetLast7DaysStatsResDTO(
+data class GetDailyStatsResDTO(
     val data: List<Data>,
     val end: String,
     val start: String,
     @SerialName("cummulative_total") val cumulativeTotal: CumulativeTotalDTO,
 ) {
-
     @Serializable
     data class Data(
         val categories: List<CategoryDTO>,
@@ -30,7 +29,7 @@ data class GetLast7DaysStatsResDTO(
         val machines: List<MachineDTO>,
         val projects: List<ProjectDTO>,
         val range: RangeDTO,
-        @SerialName("operating_systems") val operatingSystems: List<OperatingSystemDTO>,
         @SerialName("grand_total") val grandTotal: GrandTotalDTO,
+        @SerialName("operating_systems") val operatingSystems: List<OperatingSystemDTO>,
     )
 }
