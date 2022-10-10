@@ -1,8 +1,10 @@
 package com.jacob.wakatimeapp.home.usecases
 
 import arrow.core.getOrHandle
+import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
@@ -173,7 +175,7 @@ internal class GetLast7DaysStatsUCTest {
     }
 
     @Test
-    @Disabled
+    @Disabled("cannot test with hard coded flow, need instrumented test")
     internal fun `when invalid data is present in cache, then first updated data is sent followed by new data`() =
         runTest {
             val cachedStats = weeklyStats.copy(totalTime = Time.fromDecimal(2.0f))
@@ -182,7 +184,7 @@ internal class GetLast7DaysStatsUCTest {
             coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
             coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats)
 
-            useCase().collect() {
+            useCase().collect {
                 println(it)
             }
 
@@ -194,5 +196,37 @@ internal class GetLast7DaysStatsUCTest {
             }
         }
 
-    // todo error cases
+    @Test
+    internal fun `when making first request of the day and request fails, then error is propagated`() =
+        runTest {
+            val error = Error.UnknownError("error")
+                .left()
+
+            coEvery { cacheMock.getLastRequestTime() } returns previousDay
+            coEvery { networkDataMock.getLast7DaysStats() } returns error
+            coEvery { cacheMock.getCachedData() } returns flowOf()
+
+            val responses = useCase().toList()
+
+            responses.size shouldBe 1
+            responses shouldContain error
+        }
+
+    @Test
+    internal fun `when api request during invalid data is made and request fails, then old data is shown and error is sent after that`() =
+        runTest {
+            val cachedStats = weeklyStats.copy()
+            val error = Error.UnknownError("error")
+                .left()
+
+            coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
+            coEvery { networkDataMock.getLast7DaysStats() } returns error
+            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats)
+
+            val results = useCase().toList()
+
+            results.size shouldBe 2
+            results[0] shouldBe cachedStats.right()
+            results[1] shouldBe error
+        }
 }
