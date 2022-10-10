@@ -4,6 +4,8 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.longPreferencesKey
+import arrow.core.Either
+import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import java.time.Instant
 import javax.inject.Inject
@@ -33,7 +35,7 @@ class HomePageCache @Inject constructor(
         }
     }
 
-    suspend fun getCachedData(): Flow<WeeklyStats> {
+    suspend fun getCachedData(): Flow<Either<Error, WeeklyStats>> {
         TODO()
     }
 

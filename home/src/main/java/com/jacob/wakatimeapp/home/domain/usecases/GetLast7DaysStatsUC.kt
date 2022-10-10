@@ -2,7 +2,6 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.left
-import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
@@ -23,7 +22,7 @@ import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.map
+import kotlinx.coroutines.flow.onEach
 
 @Singleton
 class GetLast7DaysStatsUC @Inject constructor(
@@ -53,7 +52,12 @@ class GetLast7DaysStatsUC @Inject constructor(
 
     private suspend fun FlowCollector<Either<Error, WeeklyStats>>.sendDataFromCache() {
         homePageCache.getCachedData()
-            .map { it.right() }
+            .onEach {
+                when (it) {
+                    is Either.Left -> emit(it)
+                    else -> Unit
+                }
+            }
             .catch { throwable ->
                 Error.UnknownError(throwable.message!!, throwable)
                     .left()

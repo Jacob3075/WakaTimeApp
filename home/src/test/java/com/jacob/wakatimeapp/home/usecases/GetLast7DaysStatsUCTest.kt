@@ -82,7 +82,7 @@ internal class GetLast7DaysStatsUCTest {
     internal fun `when making first call of the day, then api call is made`() = runTest {
         coEvery { cacheMock.getLastRequestTime() } returns previousDay
         coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-        coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats)
+        coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats.right())
 
         useCase().collect()
 
@@ -98,7 +98,7 @@ internal class GetLast7DaysStatsUCTest {
 
             coEvery { cacheMock.getLastRequestTime() } returns previousDay
             coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats)
+            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
 
             val results = useCase().toList()
 
@@ -132,7 +132,7 @@ internal class GetLast7DaysStatsUCTest {
                 ChronoUnit.MINUTES
             )
             coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-            coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats)
+            coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats.right())
 
             useCase().collect()
 
@@ -144,7 +144,7 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when valid data is available in cache, no api call is made`() = runTest {
         coEvery { cacheMock.getLastRequestTime() } returns validDataInstant
-        coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats)
+        coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats.right())
 
         useCase().collect()
 
@@ -164,7 +164,7 @@ internal class GetLast7DaysStatsUCTest {
 
         coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
         coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-        coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats)
+        coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
 
         useCase().collect()
 
@@ -183,7 +183,7 @@ internal class GetLast7DaysStatsUCTest {
 
             coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
             coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats)
+            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
 
             useCase().collect {
                 println(it)
@@ -222,7 +222,7 @@ internal class GetLast7DaysStatsUCTest {
 
             coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
             coEvery { networkDataMock.getLast7DaysStats() } returns error
-            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats)
+            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
 
             val results = useCase().toList()
 
