@@ -4,9 +4,8 @@ import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.mappers.toModel
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.home.data.dtos.GetDailyStatsResDTO
-import java.time.LocalDate
-import java.time.format.DateTimeFormatter
+import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
+import kotlinx.datetime.toLocalDate
 
 fun GetDailyStatsResDTO.toModel() = DailyStats(
     timeSpent = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
@@ -14,5 +13,5 @@ fun GetDailyStatsResDTO.toModel() = DailyStats(
     mostUsedLanguage = "",
     mostUsedEditor = "",
     mostUsedOs = "",
-    date = LocalDate.parse(data.first().range.date, DateTimeFormatter.ISO_DATE)
+    date = data.first().range.date.toLocalDate()
 )

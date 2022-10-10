@@ -31,7 +31,7 @@ import com.jacob.wakatimeapp.core.ui.theme.cardSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 @Composable
 internal fun RecentProjects(
@@ -121,7 +121,7 @@ private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
                 mostUsedOs = "",
-                date = LocalDate.now()
+                date = LocalDate(2022, 10, 12)
             )
         )
     }

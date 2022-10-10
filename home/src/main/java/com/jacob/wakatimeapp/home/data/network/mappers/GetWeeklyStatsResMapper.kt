@@ -9,16 +9,16 @@ import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
-import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO
-import com.jacob.wakatimeapp.home.data.dtos.GetLast7DaysStatsResDTO.Data
-import java.time.LocalDate
+import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO.Data
+import kotlinx.datetime.toLocalDate
 
 fun GetLast7DaysStatsResDTO.toModel() = WeeklyStats(
     totalTime = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
     dailyStats = getDailyStatsFromDto(data),
     range = StatsRange(
-        startDate = LocalDate.parse(start),
-        endDate = LocalDate.parse(end),
+        startDate = start.toLocalDate(),
+        endDate = end.toLocalDate(),
     )
 )
 
@@ -31,7 +31,7 @@ private fun getDailyStatsFromDto(data: List<Data>) = data.map {
         mostUsedEditor = it.editors.maxByOrNull(EditorDTO::percent)?.name ?: "NA",
         mostUsedLanguage = it.languages.maxByOrNull(LanguageDTO::percent)?.name ?: "NA",
         mostUsedOs = it.operatingSystems.maxByOrNull(OperatingSystemDTO::percent)?.name ?: "NA",
-        date = LocalDate.parse(it.range.date),
+        date = it.range.date.toLocalDate(),
         projectsWorkedOn = it.projects.filterNot(ProjectDTO::isUnknownProject)
             .map(ProjectDTO::toModel)
     )
