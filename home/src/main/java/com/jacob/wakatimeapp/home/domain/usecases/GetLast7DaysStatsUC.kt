@@ -7,6 +7,8 @@ import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
+import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.toLoadedStateData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.DEFAULT
 import java.time.Duration
 import java.time.Instant
@@ -50,7 +52,7 @@ class GetLast7DaysStatsUC @Inject constructor(
         }
     }
 
-    private suspend fun FlowCollector<Either<Error, WeeklyStats>>.sendDataFromCache() {
+    private suspend fun FlowCollector<Either<Error, HomePageUiData>>.sendDataFromCache() {
         homePageCache.getCachedData()
             .onEach {
                 when (it) {
@@ -66,13 +68,14 @@ class GetLast7DaysStatsUC @Inject constructor(
             .let { emitAll(it) }
     }
 
-    private suspend fun FlowCollector<Either<Error, WeeklyStats>>.makeRequestAndUpdateCache() {
+    private suspend fun FlowCollector<Either<Error, HomePageUiData>>.makeRequestAndUpdateCache() {
         homePageNetworkData.getLast7DaysStats()
+            .map(WeeklyStats::toLoadedStateData)
             .tap { it.updateCaches() }
             .tapLeft { emit(it.left()) }
     }
 
-    private suspend fun WeeklyStats.updateCaches() {
+    private suspend fun HomePageUiData.updateCaches() {
         listOf(
             ioScope.async { homePageCache.updateCache(this@updateCaches) },
             ioScope.async { homePageCache.updateLastRequestTime() },

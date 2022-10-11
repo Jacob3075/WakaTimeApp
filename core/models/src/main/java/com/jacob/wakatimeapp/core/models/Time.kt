@@ -1,5 +1,8 @@
 package com.jacob.wakatimeapp.core.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Time(
     val hours: Int,
     val minutes: Int,

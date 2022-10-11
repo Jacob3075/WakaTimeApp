@@ -6,10 +6,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either.Left
 import arrow.core.Either.Right
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
-import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
-import com.jacob.wakatimeapp.home.ui.HomePageViewState.Error
-import com.jacob.wakatimeapp.home.ui.HomePageViewState.Loaded
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -40,9 +37,9 @@ class HomePageViewModel @Inject constructor(
                 userDetailsFlow,
             ) { either, userDetails ->
                 when (either) {
-                    is Left -> Error(either.value.message)
-                    is Right -> Loaded(
-                        contentData = either.value.toLoadedStateData(),
+                    is Left -> HomePageViewState.Error(either.value.message)
+                    is Right -> HomePageViewState.Loaded(
+                        contentData = either.value,
                         userDetails = userDetails
                     )
                 }
@@ -50,12 +47,3 @@ class HomePageViewModel @Inject constructor(
         }
     }
 }
-
-private fun WeeklyStats.toLoadedStateData() = LoadedStateData(
-    timeSpentToday = totalTime,
-    projectsWorkedOn = todaysStats.projectsWorkedOn,
-    weeklyTimeSpent = dailyStats.associate { it.date to it.timeSpent },
-    mostUsedLanguage = todaysStats.mostUsedLanguage,
-    mostUsedEditor = todaysStats.mostUsedEditor,
-    mostUsedOs = todaysStats.mostUsedOs,
-)
