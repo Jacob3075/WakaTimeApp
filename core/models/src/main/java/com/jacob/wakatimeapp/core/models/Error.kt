@@ -41,5 +41,11 @@ sealed class Error : Exception() {
         }
     }
 
+    sealed class DatabaseError : Error() {
+        data class EmptyCache(override val message: String) : DatabaseError()
+        data class UnknownError(override val message: String, val exception: Throwable) :
+            DatabaseError()
+    }
+
     data class UnknownError(override val message: String, val error: Throwable? = null) : Error()
 }
