@@ -4,12 +4,14 @@ import arrow.core.getOrHandle
 import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.DailyStats
-import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Error.UnknownError
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
+import com.jacob.wakatimeapp.home.domain.InstantProvider
+import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.shouldBe
@@ -20,15 +22,19 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.coVerifyOrder
 import io.mockk.mockk
-import java.time.Instant
-import java.time.LocalDate
-import java.time.temporal.ChronoUnit
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.collect
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.Clock
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.LocalDateTime
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toInstant
 import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
@@ -40,21 +46,30 @@ internal class GetLast7DaysStatsUCTest {
     private val networkDataMock: HomePageNetworkData = mockk(relaxUnitFun = true)
     private val cacheMock: HomePageCache = mockk(relaxUnitFun = true)
 
-    private val previousDay = Instant.now()
-        .minus(1, ChronoUnit.DAYS)
+    private val previousDay = Clock.System.now()
+        .minus(1.days)
 
-    private val validDataInstant = Instant.now()
-        .minus(10, ChronoUnit.MINUTES)
+    private val validDataInstant = Clock.System.now()
+        .minus(10.minutes)
 
-    private val invalidDataInstant = Instant.now()
-        .minus(20, ChronoUnit.MINUTES)
+    private val invalidDataInstant = Clock.System.now()
+        .minus(20.minutes)
+
+    private val homePageUiData = HomePageUiData(
+        timeSpentToday = Time.ZERO,
+        projectsWorkedOn = listOf(),
+        weeklyTimeSpent = mapOf(),
+        mostUsedLanguage = "",
+        mostUsedEditor = "",
+        mostUsedOs = ""
+    )
 
     private val weeklyStats = WeeklyStats(
         totalTime = Time.ZERO,
         dailyStats = listOf(),
         range = StatsRange(
-            startDate = LocalDate.now(),
-            endDate = LocalDate.now()
+            startDate = LocalDate(2022, 10, 10),
+            endDate = LocalDate(2022, 10, 10)
         ),
         todaysStats = DailyStats(
             timeSpent = Time.fromDecimal(1.0f),
@@ -62,7 +77,7 @@ internal class GetLast7DaysStatsUCTest {
             mostUsedLanguage = "",
             mostUsedEditor = "",
             mostUsedOs = "",
-            date = LocalDate.now(),
+            date = LocalDate(2022, 10, 10),
         )
     )
 
@@ -74,7 +89,11 @@ internal class GetLast7DaysStatsUCTest {
             dispatcher = UnconfinedTestDispatcher(),
             homePageNetworkData = networkDataMock,
             homePageCache = cacheMock,
-            instantProvider = { Instant.now() },
+            instantProvider = object : InstantProvider {
+                override val timeZone = TimeZone.UTC
+
+                override fun now() = Clock.System.now()
+            },
         )
     }
 
@@ -82,7 +101,7 @@ internal class GetLast7DaysStatsUCTest {
     internal fun `when making first call of the day, then api call is made`() = runTest {
         coEvery { cacheMock.getLastRequestTime() } returns previousDay
         coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-        coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats.right())
+        coEvery { cacheMock.getCachedData() } returns flowOf(homePageUiData.right())
 
         useCase().collect()
 
@@ -94,7 +113,7 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when making first call of the day, data from cache is sent after getting from api`() =
         runTest {
-            val cachedStats = weeklyStats.copy()
+            val cachedStats = homePageUiData.copy()
 
             coEvery { cacheMock.getLastRequestTime() } returns previousDay
             coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
@@ -107,7 +126,7 @@ internal class GetLast7DaysStatsUCTest {
 
             results.size shouldBe 1
             cachedStatsResult shouldBeSameInstanceAs cachedStats
-            cachedStatsResult shouldNotBeSameInstanceAs weeklyStats
+            cachedStatsResult shouldNotBeSameInstanceAs homePageUiData
 
             coVerify(exactly = 1) {
                 cacheMock.getCachedData()
@@ -117,22 +136,30 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when making first request of the day but data is valid, api request is made`() =
         runTest {
-            val startOfDay = Instant.now()
-                .truncatedTo(ChronoUnit.DAYS)
+            val startOfDay = LocalDateTime(
+                year = 2022,
+                monthNumber = 10,
+                dayOfMonth = 1,
+                hour = 0,
+                minute = 0,
+                second = 0,
+                nanosecond = 0
+            ).toInstant(TimeZone.UTC)
 
             useCase = GetLast7DaysStatsUC(
                 dispatcher = UnconfinedTestDispatcher(),
                 homePageNetworkData = networkDataMock,
                 homePageCache = cacheMock,
-                instantProvider = { startOfDay.plus(5, ChronoUnit.MINUTES) },
+                instantProvider = object : InstantProvider {
+                    override val timeZone = TimeZone.UTC
+
+                    override fun now() = startOfDay + 5.minutes
+                },
             )
 
-            coEvery { cacheMock.getLastRequestTime() } returns startOfDay.minus(
-                5,
-                ChronoUnit.MINUTES
-            )
+            coEvery { cacheMock.getLastRequestTime() } returns startOfDay - 5.minutes
             coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-            coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats.right())
+            coEvery { cacheMock.getCachedData() } returns flowOf(homePageUiData.right())
 
             useCase().collect()
 
@@ -144,7 +171,7 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when valid data is available in cache, no api call is made`() = runTest {
         coEvery { cacheMock.getLastRequestTime() } returns validDataInstant
-        coEvery { cacheMock.getCachedData() } returns flowOf(weeklyStats.right())
+        coEvery { cacheMock.getCachedData() } returns flowOf(homePageUiData.right())
 
         useCase().collect()
 
@@ -160,7 +187,7 @@ internal class GetLast7DaysStatsUCTest {
 
     @Test
     internal fun `when invalid data is present in cache, api call is made`() = runTest {
-        val cachedStats = weeklyStats.copy()
+        val cachedStats = homePageUiData.copy()
 
         coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
         coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
@@ -179,7 +206,7 @@ internal class GetLast7DaysStatsUCTest {
     @Disabled("cannot test with hard coded flow, need instrumented test")
     internal fun `when invalid data is present in cache, then first updated data is sent followed by new data`() =
         runTest {
-            val cachedStats = weeklyStats.copy(totalTime = Time.fromDecimal(2.0f))
+            val cachedStats = homePageUiData.copy(timeSpentToday = Time.fromDecimal(2.0f))
 
             coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
             coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
@@ -192,7 +219,7 @@ internal class GetLast7DaysStatsUCTest {
             coVerifyOrder {
                 cacheMock.getCachedData()
                 networkDataMock.getLast7DaysStats()
-                cacheMock.updateCache(weeklyStats)
+                cacheMock.updateCache(homePageUiData)
                 cacheMock.updateLastRequestTime(any())
             }
         }
@@ -200,7 +227,7 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when making first request of the day and request fails, then error is propagated`() =
         runTest {
-            val error = Error.UnknownError("error")
+            val error = UnknownError("error")
                 .left()
 
             coEvery { cacheMock.getLastRequestTime() } returns previousDay
@@ -216,8 +243,8 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when api request during invalid data is made and request fails, then old data is shown and error is sent after that`() =
         runTest {
-            val cachedStats = weeklyStats.copy()
-            val error = Error.UnknownError("error")
+            val cachedStats = homePageUiData.copy()
+            val error = UnknownError("error")
                 .left()
 
             coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
