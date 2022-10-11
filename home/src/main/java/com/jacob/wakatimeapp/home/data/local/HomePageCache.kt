@@ -1,5 +1,3 @@
-@file:Suppress("ThrowableNotThrown")
-
 package com.jacob.wakatimeapp.home.data.local
 
 import androidx.datastore.core.DataStore
@@ -12,12 +10,13 @@ import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
 import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
-import java.time.Instant
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
+import kotlinx.datetime.Clock
+import kotlinx.datetime.Instant
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
@@ -30,14 +29,14 @@ class HomePageCache @Inject constructor(
 
     suspend fun getLastRequestTime(): Instant = dataStore.data.map {
         val value = it[KEY_LAST_REQUEST_TIME]
-        value?.let(Instant::ofEpochMilli) ?: Instant.MIN
+        value?.let(Instant::fromEpochMilliseconds) ?: Instant.DISTANT_PAST
     }
-        .catch { Instant.MIN }
+        .catch { Instant.DISTANT_PAST }
         .first()
 
-    suspend fun updateLastRequestTime(time: Instant = Instant.now()) {
+    suspend fun updateLastRequestTime(time: Instant = Clock.System.now()) {
         dataStore.edit {
-            it[KEY_LAST_REQUEST_TIME] = time.toEpochMilli()
+            it[KEY_LAST_REQUEST_TIME] = time.toEpochMilliseconds()
         }
     }
 

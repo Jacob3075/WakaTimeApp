@@ -10,9 +10,6 @@ import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.toLoadedStateData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.DEFAULT
-import java.time.Duration
-import java.time.Instant
-import java.time.temporal.ChronoUnit
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
@@ -25,6 +22,8 @@ import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.onEach
+import kotlinx.datetime.Instant
+import kotlinx.datetime.toLocalDateTime
 
 @Singleton
 class GetLast7DaysStatsUC @Inject constructor(
@@ -87,18 +86,18 @@ class GetLast7DaysStatsUC @Inject constructor(
         lastRequestTime: Instant,
         cacheValidityTime: CacheValidity,
     ): Boolean {
-        val minutesBetweenLastRequest = Duration.between(lastRequestTime, instantProvider.now())
-            .toMinutes()
-        return minutesBetweenLastRequest < cacheValidityTime.minutes
+        val minutesBetweenLastRequest = instantProvider.now() - lastRequestTime
+        return minutesBetweenLastRequest.inWholeMinutes < cacheValidityTime.minutes
     }
 
     private fun firstRequestOfDay(lastRequestTime: Instant) = lastRequestTime.isPreviousDay()
 
     private fun Instant.isPreviousDay(): Boolean {
-        val startOfDay = instantProvider.now()
-            .truncatedTo(ChronoUnit.DAYS)
+        val lastRequestDate = this.toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
+        val currentDate = instantProvider.now()
+            .toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
 
-        return isBefore(startOfDay)
+        return currentDate - lastRequestDate >= 1
     }
 
     enum class CacheValidity(val minutes: Long) {

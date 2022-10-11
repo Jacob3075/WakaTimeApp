@@ -15,10 +15,6 @@ data class HomePageUiData(
     val mostUsedEditor: String,
     val mostUsedOs: String,
 ) {
-    init {
-        require(weeklyTimeSpent.size == NUMBER_OF_DAYS) { "Weekly time spent must have 7 days" }
-    }
-
     companion object {
         private const val NUMBER_OF_DAYS = 7
     }
