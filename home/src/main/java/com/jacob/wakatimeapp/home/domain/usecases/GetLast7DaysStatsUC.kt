@@ -9,7 +9,7 @@ import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.toLoadedStateData
-import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.DEFAULT
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.INVALID
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
@@ -34,7 +34,7 @@ class GetLast7DaysStatsUC @Inject constructor(
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
-    operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = flow {
+    operator fun invoke(cacheValidity: CacheValidity = INVALID) = flow {
         val lastRequestTime = homePageCache.getLastRequestTime()
         when {
             firstRequestOfDay(lastRequestTime) -> {

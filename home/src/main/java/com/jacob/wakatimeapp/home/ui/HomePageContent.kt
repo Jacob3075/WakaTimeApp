@@ -27,6 +27,7 @@ import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun HomePageContent(
@@ -40,10 +41,14 @@ fun HomePageContent(
 
     LaunchedEffect(viewState) {
         if (viewState !is HomePageViewState.Error) return@LaunchedEffect
+        val viewStateError = viewState as HomePageViewState.Error
+
+        Timber.e(viewStateError.error.message)
+        Timber.e(viewStateError.error.exception)
 
         snackBarCoroutineScope.launch {
             snackbarHostState.showSnackbar(
-                message = (viewState as HomePageViewState.Error).errorMessage,
+                message = viewStateError.error.message,
                 duration = SnackbarDuration.Long
             )
         }
@@ -106,7 +111,7 @@ private fun HomePageLoaded(
 @Composable
 private fun HomePageError(errorMessage: HomePageViewState.Error) = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomErrorAnimation,
-    text = errorMessage.errorMessage,
+    text = errorMessage.error.message,
     animationTestTag = HomePageTestTags.ERROR_ANIMATION_ILLUSTRATION
 )
 

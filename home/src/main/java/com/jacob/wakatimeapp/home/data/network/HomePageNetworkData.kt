@@ -29,26 +29,32 @@ class HomePageNetworkData @Inject constructor(
                 .first()
         }
 
-    suspend fun getLast7DaysStats() = Either.catchAndFlatten {
+    suspend fun getLast7DaysStats() = try {
         homePageAPI.getLast7DaysStats("Bearer $token")
             .checkResponse()
             .map(GetLast7DaysStatsResDTO::toModel)
+    } catch (exception: Exception) {
+        Timber.e(exception)
+        handleNetworkException(exception)
     }
-        .mapLeft(::handleNetworkException)
 
-    suspend fun getStatsForToday() = Either.catchAndFlatten {
+    suspend fun getStatsForToday() = try {
         homePageAPI.getStatsForToday("Bearer $token")
             .checkResponse()
             .map(GetDailyStatsResDTO::toModel)
+    } catch (exception: Exception) {
+        Timber.e(exception)
+        handleNetworkException(exception)
     }
-        .mapLeft(::handleNetworkException)
 
-    suspend fun getData() = Either.catchAndFlatten {
+    suspend fun getData() = try {
         homePageAPI.getData("Bearer $token")
             .checkResponse()
             .map(AllTimeDataDTO::toString)
+    } catch (exception: Exception) {
+        Timber.e(exception)
+        handleNetworkException(exception)
     }
-        .mapLeft(::handleNetworkException)
 }
 
 private fun <T> Response<T>.checkResponse(): Either<Error, T> = if (isSuccessful) {
@@ -58,10 +64,10 @@ private fun <T> Response<T>.checkResponse(): Either<Error, T> = if (isSuccessful
         .left()
 }
 
-private fun handleNetworkException(exception: Throwable): Error {
+private fun handleNetworkException(exception: Throwable): Either<Error, Nothing> {
     Timber.e(exception.toString())
     return when (exception) {
-        is UnknownHostException -> NetworkErrors.NoConnection("No internet connection")
-        else -> NetworkErrors.create(exception.message!!)
+        is UnknownHostException -> NetworkErrors.NoConnection("No internet connection").left()
+        else -> NetworkErrors.create(exception.message!!).left()
     }
 }

@@ -37,7 +37,7 @@ class HomePageViewModel @Inject constructor(
                 userDetailsFlow,
             ) { either, userDetails ->
                 when (either) {
-                    is Left -> HomePageViewState.Error(either.value.message)
+                    is Left -> HomePageViewState.Error(either.value)
                     is Right -> HomePageViewState.Loaded(
                         contentData = either.value,
                         userDetails = userDetails

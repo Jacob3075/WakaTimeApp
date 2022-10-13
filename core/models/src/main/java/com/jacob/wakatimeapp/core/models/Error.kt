@@ -2,8 +2,9 @@ package com.jacob.wakatimeapp.core.models
 
 import timber.log.Timber
 
-sealed class Error : Exception() {
-    abstract override val message: String
+sealed class Error {
+    abstract val message: String
+    open val exception: Throwable? = null
 
     sealed class DomainError : Error() {
         data class InvalidData(override val message: String) : DomainError()
@@ -43,7 +44,7 @@ sealed class Error : Exception() {
 
     sealed class DatabaseError : Error() {
         data class EmptyCache(override val message: String) : DatabaseError()
-        data class UnknownError(override val message: String, val exception: Throwable) :
+        data class UnknownError(override val message: String, override val exception: Throwable) :
             DatabaseError()
     }
 

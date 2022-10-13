@@ -17,8 +17,10 @@ fun GetLast7DaysStatsResDTO.toModel() = WeeklyStats(
     totalTime = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
     dailyStats = getDailyStatsFromDto(data),
     range = StatsRange(
-        startDate = start.toLocalDate(),
-        endDate = end.toLocalDate(),
+        startDate = start.takeWhile { it != 'T' }
+            .toLocalDate(),
+        endDate = end.takeWhile { it != 'T' }
+            .toLocalDate(),
     )
 )
 

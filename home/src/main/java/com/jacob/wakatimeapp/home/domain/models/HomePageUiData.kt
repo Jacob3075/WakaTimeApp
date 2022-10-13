@@ -14,14 +14,10 @@ data class HomePageUiData(
     val mostUsedLanguage: String,
     val mostUsedEditor: String,
     val mostUsedOs: String,
-) {
-    companion object {
-        private const val NUMBER_OF_DAYS = 7
-    }
-}
+)
 
 fun WeeklyStats.toLoadedStateData() = HomePageUiData(
-    timeSpentToday = totalTime,
+    timeSpentToday = todaysStats.timeSpent,
     projectsWorkedOn = todaysStats.projectsWorkedOn,
     weeklyTimeSpent = dailyStats.associate { it.date to it.timeSpent },
     mostUsedLanguage = todaysStats.mostUsedLanguage,
