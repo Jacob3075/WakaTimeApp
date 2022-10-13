@@ -1,136 +1,51 @@
 package com.jacob.wakatimeapp.home.usecases
 
-import arrow.core.getOrHandle
 import arrow.core.left
 import arrow.core.right
-import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error.UnknownError
-import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.models.WeeklyStats
-import com.jacob.wakatimeapp.home.data.local.HomePageCache
-import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
-import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
-import io.kotest.matchers.collections.shouldContain
-import io.kotest.matchers.shouldBe
-import io.kotest.matchers.types.shouldBeSameInstanceAs
-import io.kotest.matchers.types.shouldNotBeSameInstanceAs
-import io.mockk.clearMocks
-import io.mockk.coEvery
-import io.mockk.coVerify
-import io.mockk.coVerifyOrder
-import io.mockk.mockk
-import kotlin.time.Duration.Companion.days
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.homePageUiData
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.invalidDataInstant
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.previousDay
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.validDataInstant
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.weeklyStats
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.collect
-import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.flow.toList
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
-import kotlinx.datetime.Clock
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import org.junit.jupiter.api.BeforeEach
 import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class GetLast7DaysStatsUCTest {
-    private lateinit var useCase: GetLast7DaysStatsUC
-
-    private val networkDataMock: HomePageNetworkData = mockk(relaxUnitFun = true)
-    private val cacheMock: HomePageCache = mockk(relaxUnitFun = true)
-
-    private val previousDay = Clock.System.now()
-        .minus(1.days)
-
-    private val validDataInstant = Clock.System.now()
-        .minus(10.minutes)
-
-    private val invalidDataInstant = Clock.System.now()
-        .minus(20.minutes)
-
-    private val homePageUiData = HomePageUiData(
-        timeSpentToday = Time.ZERO,
-        projectsWorkedOn = listOf(),
-        weeklyTimeSpent = mapOf(),
-        mostUsedLanguage = "",
-        mostUsedEditor = "",
-        mostUsedOs = ""
-    )
-
-    private val weeklyStats = WeeklyStats(
-        totalTime = Time.ZERO,
-        dailyStats = listOf(),
-        range = StatsRange(
-            startDate = LocalDate(2022, 10, 10),
-            endDate = LocalDate(2022, 10, 10)
-        ),
-        todaysStats = DailyStats(
-            timeSpent = Time.fromDecimal(1.0f),
-            projectsWorkedOn = listOf(),
-            mostUsedLanguage = "",
-            mostUsedEditor = "",
-            mostUsedOs = "",
-            date = LocalDate(2022, 10, 10),
-        )
-    )
-
-    @BeforeEach
-    internal fun setUp() {
-        clearMocks(networkDataMock, cacheMock)
-
-        useCase = GetLast7DaysStatsUC(
-            dispatcher = UnconfinedTestDispatcher(),
-            homePageNetworkData = networkDataMock,
-            homePageCache = cacheMock,
-            instantProvider = object : InstantProvider {
-                override val timeZone = TimeZone.UTC
-
-                override fun now() = Clock.System.now()
-            },
-        )
-    }
+    private val useCaseRobot: GetLast7DaysStatsUCRobot = GetLast7DaysStatsUCRobot()
 
     @Test
     internal fun `when making first call of the day, then api call is made`() = runTest {
-        coEvery { cacheMock.getLastRequestTime() } returns previousDay
-        coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-        coEvery { cacheMock.getCachedData() } returns flowOf(homePageUiData.right())
-
-        useCase().collect()
-
-        coVerify(exactly = 1) {
-            networkDataMock.getLast7DaysStats()
-        }
+        useCaseRobot.build()
+            .mockCacheLastRequestTime(previousDay)
+            .mockNetworkData(weeklyStats.right())
+            .mockCachedData(homePageUiData)
+            .callUseCase()
+            .verifyGetLast7DaysStatsCalled()
     }
 
     @Test
     internal fun `when making first call of the day, data from cache is sent after getting from api`() =
         runTest {
             val cachedStats = homePageUiData.copy()
-
-            coEvery { cacheMock.getLastRequestTime() } returns previousDay
-            coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
-
-            val results = useCase().toList()
-
-            val cachedStatsResult = results.first()
-                .getOrHandle { error("failed") }
-
-            results.size shouldBe 1
-            cachedStatsResult shouldBeSameInstanceAs cachedStats
-            cachedStatsResult shouldNotBeSameInstanceAs homePageUiData
-
-            coVerify(exactly = 1) {
-                cacheMock.getCachedData()
-            }
+            useCaseRobot.build()
+                .mockCacheLastRequestTime(previousDay)
+                .mockNetworkData(weeklyStats.right())
+                .mockCachedData(cachedStats)
+                .callUseCase()
+                .resultSizeShouldBe(1)
+                .resultsShouldContain(cachedStats.right())
+                .verifyCacheGetCachedDataCalled()
         }
 
     @Test
@@ -146,60 +61,42 @@ internal class GetLast7DaysStatsUCTest {
                 nanosecond = 0
             ).toInstant(TimeZone.UTC)
 
-            useCase = GetLast7DaysStatsUC(
-                dispatcher = UnconfinedTestDispatcher(),
-                homePageNetworkData = networkDataMock,
-                homePageCache = cacheMock,
+            useCaseRobot.build(
                 instantProvider = object : InstantProvider {
                     override val timeZone = TimeZone.UTC
 
                     override fun now() = startOfDay + 5.minutes
-                },
+                }
             )
-
-            coEvery { cacheMock.getLastRequestTime() } returns startOfDay - 5.minutes
-            coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-            coEvery { cacheMock.getCachedData() } returns flowOf(homePageUiData.right())
-
-            useCase().collect()
-
-            coVerify(exactly = 1) {
-                networkDataMock.getLast7DaysStats()
-            }
+                .mockCacheLastRequestTime(startOfDay - 5.minutes)
+                .mockNetworkData(weeklyStats.right())
+                .mockCachedData(homePageUiData)
+                .callUseCase()
+                .verifyGetLast7DaysStatsCalled()
         }
 
     @Test
     internal fun `when valid data is available in cache, no api call is made`() = runTest {
-        coEvery { cacheMock.getLastRequestTime() } returns validDataInstant
-        coEvery { cacheMock.getCachedData() } returns flowOf(homePageUiData.right())
-
-        useCase().collect()
-
-        coVerify(exactly = 0) {
-            networkDataMock.getLast7DaysStats()
-            cacheMock.updateLastRequestTime(any())
-        }
-
-        coVerify(exactly = 1) {
-            cacheMock.getCachedData()
-        }
+        useCaseRobot.build()
+            .mockCacheLastRequestTime(validDataInstant)
+            .mockCachedData(homePageUiData)
+            .callUseCase()
+            .verifyGetLast7DaysStatsCalled(0)
+            .verifyCacheUpdateLastRequestTimeCalled(0)
+            .verifyCacheGetCachedDataCalled()
     }
 
     @Test
     internal fun `when invalid data is present in cache, api call is made`() = runTest {
         val cachedStats = homePageUiData.copy()
-
-        coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
-        coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-        coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
-
-        useCase().collect()
-
-        coVerifyOrder {
-            cacheMock.getCachedData()
-            networkDataMock.getLast7DaysStats()
-            cacheMock.updateLastRequestTime(any())
-        }
+        useCaseRobot.build()
+            .mockCacheLastRequestTime(invalidDataInstant)
+            .mockNetworkData(weeklyStats.right())
+            .mockCachedData(cachedStats)
+            .callUseCase()
+            .verifyCacheGetCachedDataCalled()
+            .verifyGetLast7DaysStatsCalled()
+            .verifyCacheUpdateLastRequestTimeCalled()
     }
 
     @Test
@@ -208,53 +105,43 @@ internal class GetLast7DaysStatsUCTest {
         runTest {
             val cachedStats = homePageUiData.copy(timeSpentToday = Time.fromDecimal(2.0f))
 
-            coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
-            coEvery { networkDataMock.getLast7DaysStats() } returns weeklyStats.right()
-            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
-
-            useCase().collect {
-                println(it)
-            }
-
-            coVerifyOrder {
-                cacheMock.getCachedData()
-                networkDataMock.getLast7DaysStats()
-                cacheMock.updateCache(homePageUiData)
-                cacheMock.updateLastRequestTime(any())
-            }
+            useCaseRobot.build()
+                .mockCacheLastRequestTime(invalidDataInstant)
+                .mockNetworkData(weeklyStats.right())
+                .mockCachedData(cachedStats)
+                .callUseCase()
+                .verifyCacheGetCachedDataCalled()
+                .verifyGetLast7DaysStatsCalled()
+                .verifyCacheSetCachedDataCalled(data = homePageUiData)
+                .verifyCacheUpdateLastRequestTimeCalled()
         }
 
     @Test
     internal fun `when making first request of the day and request fails, then error is propagated`() =
         runTest {
-            val error = UnknownError("error")
-                .left()
+            val error = UnknownError("error").left()
 
-            coEvery { cacheMock.getLastRequestTime() } returns previousDay
-            coEvery { networkDataMock.getLast7DaysStats() } returns error
-            coEvery { cacheMock.getCachedData() } returns flowOf()
-
-            val responses = useCase().toList()
-
-            responses.size shouldBe 1
-            responses shouldContain error
+            useCaseRobot.build()
+                .mockCacheLastRequestTime(previousDay)
+                .mockNetworkData(error)
+                .mockCachedData()
+                .callUseCase()
+                .resultSizeShouldBe(1)
+                .resultsShouldContain(error)
         }
 
     @Test
     internal fun `when api request during invalid data is made and request fails, then old data is shown and error is sent after that`() =
         runTest {
             val cachedStats = homePageUiData.copy()
-            val error = UnknownError("error")
-                .left()
+            val error = UnknownError("error").left()
 
-            coEvery { cacheMock.getLastRequestTime() } returns invalidDataInstant
-            coEvery { networkDataMock.getLast7DaysStats() } returns error
-            coEvery { cacheMock.getCachedData() } returns flowOf(cachedStats.right())
-
-            val results = useCase().toList()
-
-            results.size shouldBe 2
-            results[0] shouldBe cachedStats.right()
-            results[1] shouldBe error
+            useCaseRobot.build()
+                .mockCacheLastRequestTime(invalidDataInstant)
+                .mockNetworkData(error)
+                .mockCachedData(cachedStats)
+                .callUseCase()
+                .resultSizeShouldBe(2)
+                .resultsShouldContain(listOf(cachedStats.right(), error))
         }
 }
