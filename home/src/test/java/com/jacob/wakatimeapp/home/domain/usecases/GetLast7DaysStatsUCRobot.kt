@@ -112,6 +112,8 @@ internal class GetLast7DaysStatsUCRobot {
         val invalidDataInstant = Clock.System.now()
             .minus(20.minutes)
 
+        private val todaysDate = LocalDate(2022, 10, 10)
+
         val homePageUiData = HomePageUiData(
             timeSpentToday = Time.ZERO,
             projectsWorkedOn = listOf(),
@@ -125,8 +127,8 @@ internal class GetLast7DaysStatsUCRobot {
             totalTime = Time.ZERO,
             dailyStats = listOf(),
             range = StatsRange(
-                startDate = LocalDate(2022, 10, 10),
-                endDate = LocalDate(2022, 10, 10)
+                startDate = todaysDate,
+                endDate = todaysDate,
             ),
             todaysStats = DailyStats(
                 timeSpent = Time.fromDecimal(1.0f),
@@ -134,7 +136,7 @@ internal class GetLast7DaysStatsUCRobot {
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
                 mostUsedOs = "",
-                date = LocalDate(2022, 10, 10),
+                date = todaysDate,
             )
         )
     }
