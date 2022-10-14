@@ -17,13 +17,13 @@ import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
 import io.mockk.coEvery
+import io.mockk.coJustRun
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.emptyFlow
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.asFlow
 import kotlinx.coroutines.flow.toList
 import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.datetime.Clock
@@ -74,11 +74,14 @@ internal class GetLast7DaysStatsUCRobot {
         coEvery { cacheMock.getLastRequestTime() } returns instant
     }
 
-    fun mockCachedData(data: HomePageUiData? = null) = apply {
+    fun mockUpdateCacheData(data: HomePageUiData) = apply {
+        coJustRun { cacheMock.updateCache(data) }
+    }
+
+    fun mockCachedData(vararg data: HomePageUiData) = apply {
         coEvery { cacheMock.getCachedData() } returns (
-            data?.right()
-                ?.let { flowOf(it) }
-                ?: emptyFlow()
+            data.map(HomePageUiData::right)
+                .asFlow()
             )
     }
 
@@ -91,7 +94,7 @@ internal class GetLast7DaysStatsUCRobot {
     }
 
     fun verifyCacheSetCachedDataCalled(data: HomePageUiData, count: Int = 1) = apply {
-        coVerify(exactly = count) { cacheMock.updateCache(data) }
+        coVerify(exactly = count) { cacheMock.updateCache(eq(data)) }
     }
 
     fun verifyCacheUpdateLastRequestTimeCalled(count: Int = 1) = apply {

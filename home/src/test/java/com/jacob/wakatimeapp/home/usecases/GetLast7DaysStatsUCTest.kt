@@ -3,7 +3,6 @@ package com.jacob.wakatimeapp.home.usecases
 import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error.UnknownError
-import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.homePageUiData
@@ -17,7 +16,6 @@ import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.LocalDateTime
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.toInstant
-import org.junit.jupiter.api.Disabled
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -37,14 +35,15 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when making first call of the day, data from cache is sent after getting from api`() =
         runTest {
-            val cachedStats = homePageUiData.copy()
+            val oldCacheData = homePageUiData.copy()
+            val newCacheData = homePageUiData.copy()
             useCaseRobot.build()
                 .mockCacheLastRequestTime(previousDay)
                 .mockNetworkData(weeklyStats.right())
-                .mockCachedData(cachedStats)
+                .mockCachedData(oldCacheData, newCacheData)
                 .callUseCase()
                 .resultSizeShouldBe(1)
-                .resultsShouldContain(cachedStats.right())
+                .resultsShouldContain(newCacheData.right())
                 .verifyCacheGetCachedDataCalled()
         }
 
@@ -100,31 +99,31 @@ internal class GetLast7DaysStatsUCTest {
     }
 
     @Test
-    @Disabled("cannot test with hard coded flow, need instrumented test")
-    internal fun `when invalid data is present in cache, then first updated data is sent followed by new data`() =
+    internal fun `when invalid data is present in cache, then first old data is sent followed by new data`() =
         runTest {
-            val cachedStats = homePageUiData.copy(timeSpentToday = Time.fromDecimal(2.0f))
+            val oldCacheData = homePageUiData.copy()
+            val newCacheData = homePageUiData.copy()
 
             useCaseRobot.build()
                 .mockCacheLastRequestTime(invalidDataInstant)
                 .mockNetworkData(weeklyStats.right())
-                .mockCachedData(cachedStats)
+                .mockCachedData(oldCacheData, newCacheData)
+                .mockUpdateCacheData(homePageUiData)
                 .callUseCase()
-                .verifyCacheGetCachedDataCalled()
-                .verifyGetLast7DaysStatsCalled()
-                .verifyCacheSetCachedDataCalled(data = homePageUiData)
-                .verifyCacheUpdateLastRequestTimeCalled()
+                .resultSizeShouldBe(2)
+                .resultsShouldContain(listOf(oldCacheData.right(), newCacheData.right()))
         }
 
     @Test
     internal fun `when making first request of the day and request fails, then error is propagated`() =
         runTest {
+            val oldCacheData = homePageUiData.copy()
             val error = UnknownError("error").left()
 
             useCaseRobot.build()
                 .mockCacheLastRequestTime(previousDay)
                 .mockNetworkData(error)
-                .mockCachedData()
+                .mockCachedData(oldCacheData)
                 .callUseCase()
                 .resultSizeShouldBe(1)
                 .resultsShouldContain(error)
