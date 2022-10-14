@@ -17,12 +17,13 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.FlowCollector
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
+import kotlinx.coroutines.flow.drop
 import kotlinx.coroutines.flow.flow
+import kotlinx.coroutines.flow.merge
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
-import timber.log.Timber
 
 @Singleton
 class GetLast7DaysStatsUC @Inject constructor(
@@ -33,47 +34,50 @@ class GetLast7DaysStatsUC @Inject constructor(
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
-    operator fun invoke(cacheValidity: CacheValidity = INVALID) = flow {
+    @SuppressWarnings("kotlin:S6309")
+    suspend operator fun invoke(cacheValidity: CacheValidity = INVALID): Flow<Either<Error, HomePageUiData>> {
         val lastRequestTime = homePageCache.getLastRequestTime()
-        when {
+        val dataFromCache = sendDataFromCache()
+
+        return when {
             firstRequestOfDay(lastRequestTime) -> {
-                Timber.d("First request of the day")
-                makeRequestAndUpdateCache()
-                sendDataFromCache()
-                    .collect { emit(it) }
+                val networkErrors = makeRequestAndUpdateCache()
+
+                val previousDaysData = 1
+                merge(dataFromCache.drop(previousDaysData), networkErrors)
             }
 
-            validDataInCache(lastRequestTime, cacheValidity) -> {
-                Timber.d("Valid data in cache")
-                sendDataFromCache().collect { emit(it) }
-            }
+            validDataInCache(lastRequestTime, cacheValidity) -> dataFromCache
 
             else -> {
-                Timber.d("Invalid data in cache")
-                sendDataFromCache().collect {
-                    emit(it)
-                }
-                Timber.e("making request")
-                makeRequestAndUpdateCache()
+                val networkErrors = makeRequestAndUpdateCache()
+
+                merge(dataFromCache, networkErrors)
             }
         }
     }
 
-    private fun FlowCollector<Either<Error, HomePageUiData>>.sendDataFromCache() =
-        homePageCache.getCachedData()
-            .catch { throwable ->
-                Error.UnknownError(throwable.message!!, throwable)
-                    .left()
-                    .let { emit(it) }
-            }
+    private fun sendDataFromCache() = homePageCache.getCachedData()
+        .catch { throwable ->
+            Error.UnknownError(throwable.message!!, throwable)
+                .left()
+                .let { emit(it) }
+        }
 
-    private suspend fun FlowCollector<Either<Error, HomePageUiData>>.makeRequestAndUpdateCache() {
+    /**
+     * Gets data from network and updates the cache is successful.
+     *
+     * Returns a flow of errors if any.
+     */
+    private suspend fun makeRequestAndUpdateCache() = flow {
         homePageNetworkData.getLast7DaysStats()
             .map(WeeklyStats::toLoadedStateData)
             .tap { it.updateCaches() }
-            .tapLeft {
-                Timber.e(it.exception, "Error getting last 7 days stats")
-                emit(it.left())
+            .let {
+                when (it) {
+                    is Either.Left -> emit(it)
+                    is Either.Right -> Unit
+                }
             }
     }
 

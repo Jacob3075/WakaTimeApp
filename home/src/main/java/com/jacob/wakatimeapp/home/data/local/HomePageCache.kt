@@ -8,10 +8,12 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
 import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -41,7 +43,7 @@ class HomePageCache @Inject constructor(
         }
     }
 
-    fun getCachedData() = dataStore.data.map {
+    fun getCachedData(): Flow<Either<Error, HomePageUiData>> = dataStore.data.map {
         val emptyCacheError: Either<DatabaseError, Nothing> = DatabaseError.EmptyCache("")
             .left()
         val stringUiData = it[KEY_CACHED_HOME_PAGE_UI_DATA] ?: return@map emptyCacheError
