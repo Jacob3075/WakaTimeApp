@@ -40,6 +40,7 @@ fun HomePageContent(
     val viewState by viewModel.homePageState.collectAsState()
 
     LaunchedEffect(viewState) {
+        Timber.d(viewState.toString())
         if (viewState !is HomePageViewState.Error) return@LaunchedEffect
         val viewStateError = viewState as HomePageViewState.Error
 

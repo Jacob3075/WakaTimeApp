@@ -19,11 +19,10 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.FlowCollector
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.emitAll
 import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
+import timber.log.Timber
 
 @Singleton
 class GetLast7DaysStatsUC @Inject constructor(
@@ -38,40 +37,44 @@ class GetLast7DaysStatsUC @Inject constructor(
         val lastRequestTime = homePageCache.getLastRequestTime()
         when {
             firstRequestOfDay(lastRequestTime) -> {
+                Timber.d("First request of the day")
                 makeRequestAndUpdateCache()
                 sendDataFromCache()
+                    .collect { emit(it) }
             }
 
-            validDataInCache(lastRequestTime, cacheValidity) -> sendDataFromCache()
+            validDataInCache(lastRequestTime, cacheValidity) -> {
+                Timber.d("Valid data in cache")
+                sendDataFromCache().collect { emit(it) }
+            }
 
             else -> {
-                sendDataFromCache()
+                Timber.d("Invalid data in cache")
+                sendDataFromCache().collect {
+                    emit(it)
+                }
+                Timber.e("making request")
                 makeRequestAndUpdateCache()
             }
         }
     }
 
-    private suspend fun FlowCollector<Either<Error, HomePageUiData>>.sendDataFromCache() {
+    private fun FlowCollector<Either<Error, HomePageUiData>>.sendDataFromCache() =
         homePageCache.getCachedData()
-            .onEach {
-                when (it) {
-                    is Either.Left -> emit(it)
-                    else -> Unit
-                }
-            }
             .catch { throwable ->
                 Error.UnknownError(throwable.message!!, throwable)
                     .left()
                     .let { emit(it) }
             }
-            .let { emitAll(it) }
-    }
 
     private suspend fun FlowCollector<Either<Error, HomePageUiData>>.makeRequestAndUpdateCache() {
         homePageNetworkData.getLast7DaysStats()
             .map(WeeklyStats::toLoadedStateData)
             .tap { it.updateCaches() }
-            .tapLeft { emit(it.left()) }
+            .tapLeft {
+                Timber.e(it.exception, "Error getting last 7 days stats")
+                emit(it.left())
+            }
     }
 
     private suspend fun HomePageUiData.updateCaches() {

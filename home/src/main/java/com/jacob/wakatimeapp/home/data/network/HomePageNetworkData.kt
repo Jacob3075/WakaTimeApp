@@ -67,7 +67,10 @@ private fun <T> Response<T>.checkResponse(): Either<Error, T> = if (isSuccessful
 private fun handleNetworkException(exception: Throwable): Either<Error, Nothing> {
     Timber.e(exception.toString())
     return when (exception) {
-        is UnknownHostException -> NetworkErrors.NoConnection("No internet connection").left()
-        else -> NetworkErrors.create(exception.message!!).left()
+        is UnknownHostException -> NetworkErrors.NoConnection("No internet connection")
+            .left()
+
+        else -> NetworkErrors.create(exception.message!!)
+            .left()
     }
 }

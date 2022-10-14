@@ -20,6 +20,7 @@ import kotlinx.datetime.Instant
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
+import timber.log.Timber
 
 @Singleton
 class HomePageCache @Inject constructor(
@@ -44,10 +45,13 @@ class HomePageCache @Inject constructor(
         val emptyCacheError: Either<DatabaseError, Nothing> = DatabaseError.EmptyCache("")
             .left()
         val stringUiData = it[KEY_CACHED_HOME_PAGE_UI_DATA] ?: return@map emptyCacheError
-        json.decodeFromString<HomePageUiData>(stringUiData)
+        val right = json.decodeFromString<HomePageUiData>(stringUiData)
             .right()
+        Timber.e("value in cache: $right")
+        right
     }
         .catch {
+            Timber.e(it)
             emit(
                 DatabaseError.UnknownError(it.message!!, it)
                     .left()
@@ -57,6 +61,7 @@ class HomePageCache @Inject constructor(
     suspend fun updateCache(homePageUiData: HomePageUiData) {
         dataStore.edit {
             it[KEY_CACHED_HOME_PAGE_UI_DATA] = json.encodeToString(homePageUiData)
+            Timber.e("updated cache")
         }
     }
 

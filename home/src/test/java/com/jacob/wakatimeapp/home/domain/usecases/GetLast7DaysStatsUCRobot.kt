@@ -11,6 +11,7 @@ import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.DEFAULT
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactly
 import io.kotest.matchers.shouldBe
@@ -54,7 +55,7 @@ internal class GetLast7DaysStatsUCRobot {
     }
 
     suspend fun callUseCase() = apply {
-        useCase().toList(results)
+        useCase(DEFAULT).toList(results)
     }
 
     fun resultSizeShouldBe(size: Int = 1) = apply {
