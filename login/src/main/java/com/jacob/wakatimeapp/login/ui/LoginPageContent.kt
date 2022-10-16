@@ -35,6 +35,8 @@ import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.modifiers.gesturesDisabled
@@ -47,7 +49,7 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginPageContent(
+fun LoginPageScreen(
     loginPageNavigator: LoginPageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
@@ -72,23 +74,43 @@ fun LoginPageContent(
         }
     }
 
-    val launcher = authActivityResultLauncher(viewModel)
+    LoginPageContent(
+        viewState = viewState,
+        getLoginAuthIntent = viewModel::getAuthIntent,
+        authDataNotFound = viewModel::authDataNotFound,
+        exchangeToken = viewModel::exchangeToken
+    )
+}
+
+@Composable
+private fun LoginPageContent(
+    viewState: LoginPageState,
+    getLoginAuthIntent: () -> Intent?,
+    authDataNotFound: (Intent) -> Unit,
+    exchangeToken: (Intent) -> Unit,
+) {
+    val launcher = authActivityResultLauncher(
+        authDataNotFound = authDataNotFound,
+        exchangeToken = exchangeToken
+    )
 
     when (viewState) {
         is LoginPageState.Idle, is LoginPageState.Error -> LoginPageIdleState(
-            viewModel,
+            getLoginAuthIntent = getLoginAuthIntent,
             launcher = launcher
         )
 
         is LoginPageState.Loading -> Box(
-            modifier = Modifier.fillMaxSize()
+            modifier = Modifier
+                .fillMaxSize()
                 .gesturesDisabled()
         ) {
             CircularProgressIndicator(
-                modifier = Modifier.align(Alignment.Center)
+                modifier = Modifier
+                    .align(Alignment.Center)
                     .size(60.dp),
             )
-            LoginPageIdleState(viewModel, launcher = launcher)
+            LoginPageIdleState(getLoginAuthIntent = getLoginAuthIntent, launcher = launcher)
         }
 
         else -> Unit
@@ -108,9 +130,9 @@ private fun showSnackBar(
 
 @Composable
 private fun LoginPageIdleState(
-    viewModel: LoginPageViewModel,
     modifier: Modifier = Modifier,
     launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
+    getLoginAuthIntent: () -> Intent?,
 ) {
     val spacing = MaterialTheme.spacing
 
@@ -124,7 +146,7 @@ private fun LoginPageIdleState(
             .padding(horizontal = spacing.small)
     ) {
         AppTitle()
-        LoginButton(onClick = { launcher.launch(viewModel.getAuthIntent()) })
+        LoginButton(onClick = { launcher.launch(getLoginAuthIntent()) })
     }
 }
 
@@ -135,14 +157,17 @@ private fun AppTitle() = Text(
 )
 
 @Composable
-private fun authActivityResultLauncher(viewModel: LoginPageViewModel) =
+private fun authActivityResultLauncher(
+    authDataNotFound: (Intent) -> Unit,
+    exchangeToken: (Intent) -> Unit,
+) =
     rememberLauncherForActivityResult(StartActivityForResult()) { result ->
         val data = result.data
         if (data == null) {
-            viewModel.authDataNotFound(result.data!!)
+            authDataNotFound(result.data!!)
             return@rememberLauncherForActivityResult
         }
-        data.let(viewModel::exchangeToken)
+        data.let(exchangeToken)
     }
 
 @Composable
@@ -185,8 +210,21 @@ private fun LoginButton(
 
 @Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
 @Composable
-private fun LoginButtonPreview() = WakaTimeAppTheme { LoginButton {} }
+private fun LoginPagePreview(
+    @PreviewParameter(LoginPagePreviewProvider::class) state: LoginPageState,
+) = WakaTimeAppTheme {
+    LoginPageContent(
+        viewState = state,
+        getLoginAuthIntent = { null },
+        authDataNotFound = {},
+        exchangeToken = {}
+    )
+}
 
-@Preview(showBackground = true)
-@Composable
-private fun LoginButtonPreview2() = WakaTimeAppTheme { LoginButton {} }
+class LoginPagePreviewProvider : PreviewParameterProvider<LoginPageState> {
+    override val values = sequenceOf(
+        LoginPageState.Idle,
+        LoginPageState.Loading,
+        LoginPageState.Error("Error"),
+    )
+}

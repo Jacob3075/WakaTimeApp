@@ -4,8 +4,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import com.jacob.wakatimeapp.home.ui.HomePageContent
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
-import com.jacob.wakatimeapp.login.ui.LoginPageContent
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
+import com.jacob.wakatimeapp.login.ui.LoginPageScreen
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 
@@ -13,7 +13,7 @@ import com.ramcosta.composedestinations.annotation.RootNavGraph
 @Destination
 @Composable
 fun LoginPage(loginPageNavigator: LoginPageNavigator, scaffoldState: SnackbarHostState) =
-    LoginPageContent(loginPageNavigator = loginPageNavigator, snackbarHostState = scaffoldState)
+    LoginPageScreen(loginPageNavigator = loginPageNavigator, snackbarHostState = scaffoldState)
 
 @Composable
 @Destination
