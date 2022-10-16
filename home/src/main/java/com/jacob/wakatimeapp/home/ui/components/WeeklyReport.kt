@@ -12,13 +12,11 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.State
-import androidx.compose.runtime.derivedStateOf
-import androidx.compose.runtime.getValue
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
@@ -68,9 +66,10 @@ fun WeeklyReport(
 @Composable
 private fun WeeklyReportChart(weeklyTimeSpent: Map<LocalDate, Time>) {
     val cardShape = RoundedCornerShape(percent = 10)
+    val colorScheme = MaterialTheme.colorScheme
 
-    val labels by getLabels(weeklyTimeSpent.keys)
-    val barData by getBarData(weeklyTimeSpent.values)
+    val labels = rememberLabels(weeklyTimeSpent.keys)
+    val barData = rememberBarData(weeklyTimeSpent.values, colorScheme)
 
     val spacing = MaterialTheme.spacing
 
@@ -106,42 +105,35 @@ private fun WeeklyReportChart(weeklyTimeSpent: Map<LocalDate, Time>) {
 }
 
 @Composable
-private fun getLabels(days: Set<LocalDate>): State<Map<Int, String>> =
-    remember {
-        derivedStateOf {
-            days.mapIndexed { index, value ->
-                index to value.getDisplayNameForDay()
-            }
-                .toMap()
-        }
+private fun rememberLabels(days: Set<LocalDate>): Map<Int, String> = remember {
+    days.mapIndexed { index, value ->
+        index to value.getDisplayNameForDay()
     }
+        .toMap()
+}
 
 @Composable
-private fun getBarData(weeklyStats: Collection<Time>): State<BarData> {
-    val colorScheme = MaterialTheme.colorScheme
-    val onSurface = colorScheme.onSurface.toArgb()
-    val barColor = colorScheme.primary.toArgb()
+private fun rememberBarData(weeklyStats: Collection<Time>, colorScheme: ColorScheme) =
+    remember(key1 = weeklyStats) {
+        val onSurface = colorScheme.onSurface.toArgb()
+        val barColor = colorScheme.primary.toArgb()
 
-    return remember {
-        derivedStateOf {
-            val entries = weeklyStats.mapIndexed { index, value ->
-                BarEntry(
-                    index.toFloat(),
-                    value.decimal,
-                    value
-                )
-            }
-            val barDataSet = BarDataSet(entries, "Label").apply {
-                setDrawValues(true)
-                isHighlightEnabled = false
-                valueTextColor = onSurface
-                valueFormatter = BarValueFormatter()
-                color = barColor
-            }
-            BarData(barDataSet).apply { barWidth = 0.3f }
+        val entries = weeklyStats.mapIndexed { index, value ->
+            BarEntry(
+                index.toFloat(),
+                value.decimal,
+                value
+            )
         }
+        val barDataSet = BarDataSet(entries, "Label").apply {
+            setDrawValues(true)
+            isHighlightEnabled = false
+            valueTextColor = onSurface
+            valueFormatter = BarValueFormatter()
+            color = barColor
+        }
+        BarData(barDataSet).apply { barWidth = 0.3f }
     }
-}
 
 private fun RoundedBarChart.configureAxis(labels: Map<Int, String>, onSurface: Int) {
     xAxis.apply {
