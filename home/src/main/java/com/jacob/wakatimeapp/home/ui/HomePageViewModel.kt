@@ -12,8 +12,8 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -32,18 +32,14 @@ class HomePageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            combine(
-                getLast7DaysStatsUC(),
-                userDetailsFlow,
-            ) { either, userDetails ->
-                when (either) {
-                    is Left -> HomePageViewState.Error(either.value)
+            getLast7DaysStatsUC(userDetailsFlow.first()).collect {
+                _homePageState.value = when (it) {
+                    is Left -> HomePageViewState.Error(it.value)
                     is Right -> HomePageViewState.Loaded(
-                        contentData = either.value,
-                        userDetails = userDetails
+                        contentData = it.value,
                     )
                 }
-            }.collect { _homePageState.value = it }
+            }
         }
     }
 }

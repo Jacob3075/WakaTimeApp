@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.left
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.core.models.WeeklyStats
+import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
@@ -31,19 +31,22 @@ class GetLast7DaysStatsUC @Inject constructor(
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
-    operator fun invoke(cacheValidity: CacheValidity = INVALID) = channelFlow {
-        val lastRequestTime = homePageCache.getLastRequestTime()
+    operator fun invoke(userDetails: UserDetails, cacheValidity: CacheValidity = INVALID) =
+        channelFlow {
+            val lastRequestTime = homePageCache.getLastRequestTime()
 
-        when {
-            firstRequestOfDay(lastRequestTime) -> makeRequestAndUpdateCache()?.let { send(it) }
-            !validDataInCache(
-                lastRequestTime,
-                cacheValidity
-            ) -> launch { makeRequestAndUpdateCache()?.let { send(it) } }
+            when {
+                firstRequestOfDay(lastRequestTime) ->
+                    makeRequestAndUpdateCache(userDetails)?.let { send(it) }
+
+                !validDataInCache(
+                    lastRequestTime,
+                    cacheValidity
+                ) -> launch { makeRequestAndUpdateCache(userDetails)?.let { send(it) } }
+            }
+
+            dataFromCache().collect { send(it) }
         }
-
-        dataFromCache().collect { send(it) }
-    }
 
     private fun dataFromCache() = homePageCache.getCachedData()
         .catch { throwable ->
@@ -57,10 +60,11 @@ class GetLast7DaysStatsUC @Inject constructor(
      *
      * Returns an [Either.Left<Error>] if any errors happened.
      */
-    private suspend fun makeRequestAndUpdateCache() = homePageNetworkData.getLast7DaysStats()
-        .map(WeeklyStats::toLoadedStateData)
-        .tap { it.updateCaches() }
-        .fold(ifLeft = Error::left, ifRight = { null })
+    private suspend fun makeRequestAndUpdateCache(userDetails: UserDetails) =
+        homePageNetworkData.getLast7DaysStats()
+            .map { it.toLoadedStateData(userDetails) }
+            .tap { it.updateCaches() }
+            .fold(ifLeft = Error::left, ifRight = { null })
 
     private suspend fun HomePageUiData.updateCaches() {
         listOf(
