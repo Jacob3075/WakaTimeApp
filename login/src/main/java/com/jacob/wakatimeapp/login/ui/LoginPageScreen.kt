@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.login.ui
 
 import android.content.Intent
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
+import android.content.res.Configuration
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -208,7 +208,18 @@ private fun LoginButton(
     }
 }
 
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@Preview(
+    apiLevel = 31,
+    showSystemUi = true,
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
+)
+@Preview(
+    apiLevel = 31,
+    showSystemUi = true,
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
 @Composable
 private fun LoginPagePreview(
     @PreviewParameter(LoginPagePreviewProvider::class) state: LoginPageState,
