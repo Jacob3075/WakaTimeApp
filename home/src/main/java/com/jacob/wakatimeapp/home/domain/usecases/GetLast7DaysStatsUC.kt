@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
-import arrow.core.Either
 import arrow.core.left
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.WeeklyStats
@@ -17,12 +16,9 @@ import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.drop
-import kotlinx.coroutines.flow.filterIsInstance
-import kotlinx.coroutines.flow.flow
-import kotlinx.coroutines.flow.merge
+import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
 
@@ -35,27 +31,18 @@ class GetLast7DaysStatsUC @Inject constructor(
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
-    @SuppressWarnings("kotlin:S6309")
-    suspend operator fun invoke(cacheValidity: CacheValidity = INVALID): Flow<Either<Error, HomePageUiData>> {
+    operator fun invoke(cacheValidity: CacheValidity = INVALID) = channelFlow {
         val lastRequestTime = homePageCache.getLastRequestTime()
-        val dataFromCache = dataFromCache()
 
-        return when {
-            firstRequestOfDay(lastRequestTime) -> {
-                val networkErrors = makeRequestAndUpdateCache()
-
-                val previousDaysData = 1
-                merge(dataFromCache.drop(previousDaysData), networkErrors)
-            }
-
-            validDataInCache(lastRequestTime, cacheValidity) -> dataFromCache
-
-            else -> {
-                val networkErrors = makeRequestAndUpdateCache()
-
-                merge(dataFromCache, networkErrors)
-            }
+        when {
+            firstRequestOfDay(lastRequestTime) -> makeRequestAndUpdateCache()?.let { send(it) }
+            !validDataInCache(
+                lastRequestTime,
+                cacheValidity
+            ) -> launch { makeRequestAndUpdateCache()?.let { send(it) } }
         }
+
+        dataFromCache().collect { send(it) }
     }
 
     private fun dataFromCache() = homePageCache.getCachedData()
@@ -68,14 +55,12 @@ class GetLast7DaysStatsUC @Inject constructor(
     /**
      * Gets data from network and updates the cache is successful.
      *
-     * Returns a flow of errors if any.
+     * Returns an [Either.Left<Error>] if any errors happened.
      */
-    private fun makeRequestAndUpdateCache() = flow {
-        homePageNetworkData.getLast7DaysStats()
-            .map(WeeklyStats::toLoadedStateData)
-            .tap { it.updateCaches() }
-            .let { emit(it) }
-    }.filterIsInstance<Either.Left<Error>>()
+    private suspend fun makeRequestAndUpdateCache() = homePageNetworkData.getLast7DaysStats()
+        .map(WeeklyStats::toLoadedStateData)
+        .tap { it.updateCaches() }
+        .fold(ifLeft = Error::left, ifRight = { null })
 
     private suspend fun HomePageUiData.updateCaches() {
         listOf(

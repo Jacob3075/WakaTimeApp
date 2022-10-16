@@ -35,15 +35,14 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when making first call of the day, data from cache is sent after getting from api`() =
         runTest {
-            val oldCacheData = homePageUiData.copy()
-            val newCacheData = homePageUiData.copy()
+            val cacheData = homePageUiData.copy()
             useCaseRobot.build()
                 .mockCacheLastRequestTime(previousDay)
                 .mockNetworkData(weeklyStats.right())
-                .mockCachedData(oldCacheData, newCacheData)
+                .mockCachedData(cacheData)
                 .callUseCase()
                 .resultSizeShouldBe(1)
-                .resultsShouldContain(newCacheData.right())
+                .resultsShouldContain(cacheData.right())
                 .verifyCacheGetCachedDataCalled()
         }
 
@@ -117,13 +116,12 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when making first request of the day and request fails, then error is propagated`() =
         runTest {
-            val oldCacheData = homePageUiData.copy()
             val error = UnknownError("error").left()
 
             useCaseRobot.build()
                 .mockCacheLastRequestTime(previousDay)
                 .mockNetworkData(error)
-                .mockCachedData(oldCacheData)
+                .mockCachedData()
                 .callUseCase()
                 .resultSizeShouldBe(1)
                 .resultsShouldContain(error)
