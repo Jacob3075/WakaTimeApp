@@ -4,26 +4,14 @@ on: pull_request
 
 # creates device snapshot for faster startup
 jobs:
-  ui_test:
-    runs-on: macos-latest # performance improvements
+  test:
+    runs-on: macos-latest
+    strategy:
+      matrix:
+        api-level: [ 29 ]
     steps:
       - name: checkout
         uses: actions/checkout@v3
-
-      - name: Set Up JDK
-        uses: actions/setup-java@v1
-        with:
-          java-version: 1.11
-
-      - name: Update CLIENT_ID
-        env:
-          CLIENT_ID: ${{ secrets.CLIENT_ID }}
-        run: echo CLIENT_ID="$CLIENT_ID" > ./local.properties
-
-      - name: Update CLIENT_SECRET
-        env:
-          CLIENT_SECRET: ${{ secrets.CLIENT_SECRET }}
-        run: echo CLIENT_SECRET="$CLIENT_SECRET" >> ./local.properties
 
       - name: Gradle cache
         uses: gradle/gradle-build-action@v2
@@ -35,13 +23,13 @@ jobs:
           path: |
             ~/.android/avd/*
             ~/.android/adb*
-          key: avd-33
+          key: avd-${{ matrix.api-level }}
 
       - name: create AVD and generate snapshot for caching
         if: steps.avd-cache.outputs.cache-hit != 'true'
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: ${{ matrix.api-level }}
           force-avd-creation: false
           emulator-options: -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: false
@@ -50,7 +38,7 @@ jobs:
       - name: run tests
         uses: reactivecircus/android-emulator-runner@v2
         with:
-          api-level: 33
+          api-level: ${{ matrix.api-level }}
           force-avd-creation: false
           emulator-options: -no-snapshot-save -no-window -gpu swiftshader_indirect -noaudio -no-boot-anim -camera-back none
           disable-animations: true
