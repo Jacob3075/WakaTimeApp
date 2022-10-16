@@ -27,6 +27,7 @@ import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 fun HomePageContent(
@@ -39,11 +40,16 @@ fun HomePageContent(
     val viewState by viewModel.homePageState.collectAsState()
 
     LaunchedEffect(viewState) {
+        Timber.d(viewState.toString())
         if (viewState !is HomePageViewState.Error) return@LaunchedEffect
+        val viewStateError = viewState as HomePageViewState.Error
+
+        Timber.e(viewStateError.error.message)
+        Timber.e(viewStateError.error.exception)
 
         snackBarCoroutineScope.launch {
             snackbarHostState.showSnackbar(
-                message = (viewState as HomePageViewState.Error).errorMessage,
+                message = viewStateError.error.message,
                 duration = SnackbarDuration.Long
             )
         }
@@ -82,20 +88,22 @@ private fun HomePageLoaded(
             roundedCornerPercent = 25,
             iconId = icons.time,
             mainText = "Total Time Spent Today",
-            time = homePageViewState.contentData.todaysStats.timeSpent,
+            time = homePageViewState.contentData.timeSpentToday,
             onClick = navigator::toDetailsPage
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
-        RecentProjects(homePageViewState.contentData.todaysStats)
+        RecentProjects(homePageViewState.contentData.projectsWorkedOn)
         Spacer(modifier = Modifier.height(spacing.extraSmall))
 
-        WeeklyReport(homePageViewState.contentData.dailyStats)
+        WeeklyReport(homePageViewState.contentData.weeklyTimeSpent)
         Spacer(modifier = Modifier.height(spacing.small))
 
         OtherDailyStatsSection(
-            homePageViewState.contentData.todaysStats,
-            onClick = {}
+            mostUsedLanguage = homePageViewState.contentData.mostUsedLanguage,
+            mostUsedOs = homePageViewState.contentData.mostUsedOs,
+            mostUsedEditor = homePageViewState.contentData.mostUsedEditor,
+            onClick = {},
         )
         Spacer(modifier = Modifier.height(spacing.medium))
     }
@@ -104,7 +112,7 @@ private fun HomePageLoaded(
 @Composable
 private fun HomePageError(errorMessage: HomePageViewState.Error) = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomErrorAnimation,
-    text = errorMessage.errorMessage,
+    text = errorMessage.error.message,
     animationTestTag = HomePageTestTags.ERROR_ANIMATION_ILLUSTRATION
 )
 

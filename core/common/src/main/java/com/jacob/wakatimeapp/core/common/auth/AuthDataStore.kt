@@ -7,11 +7,11 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.jacob.wakatimeapp.core.models.UserDetails
 import javax.inject.Inject
 import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
-import kotlinx.serialization.json.Json.Default
 import net.openid.appauth.AuthState
 
 class AuthDataStore @Inject constructor(
@@ -20,9 +20,9 @@ class AuthDataStore @Inject constructor(
 ) {
     fun getUserDetails(): Flow<UserDetails> =
         dataStore.data.map { preferences ->
-            preferences[KEY_USER_DETAILS]?.let(Default::decodeFromString)
-                ?: error("SHOULD NOT HAPPEN")
+            preferences[KEY_USER_DETAILS]?.let<String, UserDetails>(json::decodeFromString)
         }
+            .filterNotNull()
 
     suspend fun updateUserDetails(userDetails: UserDetails) {
         dataStore.edit {

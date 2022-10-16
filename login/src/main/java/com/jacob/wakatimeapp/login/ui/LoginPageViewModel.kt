@@ -11,8 +11,6 @@ import com.jacob.wakatimeapp.login.BuildConfig
 import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -32,7 +30,6 @@ import timber.log.Timber
 class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
-    private val ioDispatcher: CoroutineContext,
     private val authTokenProvider: AuthTokenProvider,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
@@ -64,7 +61,7 @@ class LoginPageViewModel @Inject constructor(
      * token is available
      */
     fun updateUserDetails() {
-        CoroutineScope(ioDispatcher).launch {
+        viewModelScope.launch {
             authTokenProvider.getFreshToken()
                 .filterNotNull()
                 .first()

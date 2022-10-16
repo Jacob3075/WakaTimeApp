@@ -1,8 +1,10 @@
 package com.jacob.wakatimeapp.core.models
 
-import java.util.*
+import kotlinx.datetime.LocalDate
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class StatsRange(
-    val startDate: Date,
-    val endDate: Date,
+    val startDate: LocalDate,
+    val endDate: LocalDate,
 )

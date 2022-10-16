@@ -2,8 +2,9 @@ package com.jacob.wakatimeapp.core.models
 
 import timber.log.Timber
 
-sealed class Error : Exception() {
-    abstract override val message: String
+sealed class Error {
+    abstract val message: String
+    open val exception: Throwable? = null
 
     sealed class DomainError : Error() {
         data class InvalidData(override val message: String) : DomainError()
@@ -14,7 +15,7 @@ sealed class Error : Exception() {
         abstract val statusCode: Int
 
         data class NoConnection(override val message: String) : NetworkErrors() {
-            override val statusCode = SERVICE_UNAVAILABLE
+            override val statusCode = -1
         }
 
         data class GenericError(override val message: String) : NetworkErrors() {
@@ -32,15 +33,20 @@ sealed class Error : Exception() {
             fun create(message: String, code: Int? = null): NetworkErrors = when (code) {
                 null -> GenericError(message)
                 in 400..499 -> ClientError(message, code)
-                SERVICE_UNAVAILABLE -> NoConnection(message)
                 in 500..599 -> ServerError(message, code)
                 else -> {
                     Timber.e("Unknown error code: $code, message: $message")
                     TODO("Handle this case")
                 }
             }
-
-            private const val SERVICE_UNAVAILABLE = 503
         }
     }
+
+    sealed class DatabaseError : Error() {
+        data class EmptyCache(override val message: String) : DatabaseError()
+        data class UnknownError(override val message: String, override val exception: Throwable) :
+            DatabaseError()
+    }
+
+    data class UnknownError(override val message: String, val error: Throwable? = null) : Error()
 }

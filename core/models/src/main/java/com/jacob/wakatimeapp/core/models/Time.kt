@@ -1,5 +1,8 @@
 package com.jacob.wakatimeapp.core.models
 
+import kotlinx.serialization.Serializable
+
+@Serializable
 data class Time(
     val hours: Int,
     val minutes: Int,
@@ -13,8 +16,7 @@ data class Time(
     fun longFormattedPrint() = "$hours Hours, $minutes Minutes"
 
     companion object {
-        private fun calculateTotalSeconds(hours: Int, minutes: Int) =
-            (hours * MINUTES_IN_HOURS * MINUTES_IN_HOURS) + (minutes * MINUTES_IN_HOURS)
+        val ZERO = Time(0, 0, 0f)
 
         fun fromDecimal(decimal: Float): Time {
             val hours = decimal.toInt()
@@ -29,11 +31,14 @@ data class Time(
             )
         }
 
-        fun createFrom(timeString: String, decimal: String): Time {
-            val (hours, minutes) = timeString.split(":")
+        fun createFrom(digitalString: String, decimal: String): Time {
+            val (hours, minutes) = digitalString.split(":")
                 .map(String::toInt)
             return Time(hours, minutes, decimal.toFloat())
         }
+
+        private fun calculateTotalSeconds(hours: Int, minutes: Int) =
+            (hours * MINUTES_IN_HOURS * MINUTES_IN_HOURS) + (minutes * MINUTES_IN_HOURS)
 
         private const val MINUTES_IN_HOURS = 60
     }

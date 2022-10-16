@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.core.models
 
-import java.time.LocalDate
+import kotlinx.datetime.LocalDate
 
 data class DailyStats(
     val timeSpent: Time,

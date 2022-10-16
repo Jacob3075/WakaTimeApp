@@ -617,8 +617,8 @@ style:
   MandatoryBracesLoops:
     active: false
   MaxChainedCallsOnSameLine:
-    active: false
-    maxChainedCalls: 5
+    active: true
+    maxChainedCalls: 3
   MaxLineLength:
     active: true
     maxLineLength: 120
@@ -626,6 +626,8 @@ style:
     excludeImportStatements: true
     excludeCommentStatements: true
     excludeRawStrings: true
+    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
+    ignoreAnnotated: ['Test']
   MayBeConst:
     active: true
   ModifierOrder:
