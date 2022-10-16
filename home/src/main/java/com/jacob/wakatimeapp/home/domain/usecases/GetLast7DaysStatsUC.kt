@@ -20,6 +20,7 @@ import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.drop
+import kotlinx.coroutines.flow.filterIsInstance
 import kotlinx.coroutines.flow.flow
 import kotlinx.coroutines.flow.merge
 import kotlinx.datetime.Instant
@@ -37,7 +38,7 @@ class GetLast7DaysStatsUC @Inject constructor(
     @SuppressWarnings("kotlin:S6309")
     suspend operator fun invoke(cacheValidity: CacheValidity = INVALID): Flow<Either<Error, HomePageUiData>> {
         val lastRequestTime = homePageCache.getLastRequestTime()
-        val dataFromCache = sendDataFromCache()
+        val dataFromCache = dataFromCache()
 
         return when {
             firstRequestOfDay(lastRequestTime) -> {
@@ -57,7 +58,7 @@ class GetLast7DaysStatsUC @Inject constructor(
         }
     }
 
-    private fun sendDataFromCache() = homePageCache.getCachedData()
+    private fun dataFromCache() = homePageCache.getCachedData()
         .catch { throwable ->
             Error.UnknownError(throwable.message!!, throwable)
                 .left()
@@ -69,17 +70,12 @@ class GetLast7DaysStatsUC @Inject constructor(
      *
      * Returns a flow of errors if any.
      */
-    private suspend fun makeRequestAndUpdateCache() = flow {
+    private fun makeRequestAndUpdateCache() = flow {
         homePageNetworkData.getLast7DaysStats()
             .map(WeeklyStats::toLoadedStateData)
             .tap { it.updateCaches() }
-            .let {
-                when (it) {
-                    is Either.Left -> emit(it)
-                    is Either.Right -> Unit
-                }
-            }
-    }
+            .let { emit(it) }
+    }.filterIsInstance<Either.Left<Error>>()
 
     private suspend fun HomePageUiData.updateCaches() {
         listOf(

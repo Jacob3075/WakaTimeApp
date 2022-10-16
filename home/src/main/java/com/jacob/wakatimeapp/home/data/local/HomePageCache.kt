@@ -47,10 +47,8 @@ class HomePageCache @Inject constructor(
         val emptyCacheError: Either<DatabaseError, Nothing> = DatabaseError.EmptyCache("")
             .left()
         val stringUiData = it[KEY_CACHED_HOME_PAGE_UI_DATA] ?: return@map emptyCacheError
-        val right = json.decodeFromString<HomePageUiData>(stringUiData)
+        json.decodeFromString<HomePageUiData>(stringUiData)
             .right()
-        Timber.e("value in cache: $right")
-        right
     }
         .catch {
             Timber.e(it)
@@ -63,7 +61,6 @@ class HomePageCache @Inject constructor(
     suspend fun updateCache(homePageUiData: HomePageUiData) {
         dataStore.edit {
             it[KEY_CACHED_HOME_PAGE_UI_DATA] = json.encodeToString(homePageUiData)
-            Timber.e("updated cache")
         }
     }
 
