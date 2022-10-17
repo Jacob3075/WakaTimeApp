@@ -2,11 +2,10 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.left
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.toLoadedStateData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.INVALID
 import javax.inject.Inject
@@ -31,18 +30,18 @@ class GetLast7DaysStatsUC @Inject constructor(
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
-    operator fun invoke(userDetails: UserDetails, cacheValidity: CacheValidity = INVALID) =
+    operator fun invoke(cacheValidity: CacheValidity = INVALID) =
         channelFlow {
             val lastRequestTime = homePageCache.getLastRequestTime()
 
             when {
                 firstRequestOfDay(lastRequestTime) ->
-                    makeRequestAndUpdateCache(userDetails)?.let { send(it) }
+                    makeRequestAndUpdateCache()?.let { send(it) }
 
                 !validDataInCache(
                     lastRequestTime,
                     cacheValidity
-                ) -> launch { makeRequestAndUpdateCache(userDetails)?.let { send(it) } }
+                ) -> launch { makeRequestAndUpdateCache()?.let { send(it) } }
             }
 
             dataFromCache().collect { send(it) }
@@ -60,13 +59,13 @@ class GetLast7DaysStatsUC @Inject constructor(
      *
      * Returns an [Either.Left<Error>] if any errors happened.
      */
-    private suspend fun makeRequestAndUpdateCache(userDetails: UserDetails) =
+    private suspend fun makeRequestAndUpdateCache() =
         homePageNetworkData.getLast7DaysStats()
-            .map { it.toLoadedStateData(userDetails) }
+            .map { it.toLoadedStateData() }
             .tap { it.updateCaches() }
             .fold(ifLeft = Error::left, ifRight = { null })
 
-    private suspend fun HomePageUiData.updateCaches() {
+    private suspend fun Last7DaysStats.updateCaches() {
         listOf(
             ioScope.async { homePageCache.updateCache(this@updateCaches) },
             ioScope.async { homePageCache.updateLastRequestTime() },

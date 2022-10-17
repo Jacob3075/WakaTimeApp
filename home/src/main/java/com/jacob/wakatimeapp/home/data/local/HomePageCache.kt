@@ -10,7 +10,7 @@ import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
-import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -43,11 +43,11 @@ class HomePageCache @Inject constructor(
         }
     }
 
-    fun getCachedData(): Flow<Either<Error, HomePageUiData>> = dataStore.data.map {
+    fun getCachedData(): Flow<Either<Error, Last7DaysStats>> = dataStore.data.map {
         val emptyCacheError: Either<DatabaseError, Nothing> = DatabaseError.EmptyCache("")
             .left()
         val stringUiData = it[KEY_CACHED_HOME_PAGE_UI_DATA] ?: return@map emptyCacheError
-        json.decodeFromString<HomePageUiData>(stringUiData)
+        json.decodeFromString<Last7DaysStats>(stringUiData)
             .right()
     }
         .catch {
@@ -58,7 +58,7 @@ class HomePageCache @Inject constructor(
             )
         }
 
-    suspend fun updateCache(homePageUiData: HomePageUiData) {
+    suspend fun updateCache(homePageUiData: Last7DaysStats) {
         dataStore.edit {
             it[KEY_CACHED_HOME_PAGE_UI_DATA] = json.encodeToString(homePageUiData)
         }
