@@ -11,7 +11,7 @@ import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.Streaks
+import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.Flow
@@ -60,15 +60,15 @@ class HomePageCache @Inject constructor(
 
     fun getCurrentStreak() = dataStore.data.map {
         val stringCurrentStreak = it[KEY_CURRENT_STREAK] ?: return@map emptyCacheError
-        json.decodeFromString<Streaks>(stringCurrentStreak).right()
+        json.decodeFromString<StreakRange>(stringCurrentStreak).right()
     }.catch {
         Timber.e(it)
         emit(DatabaseError.UnknownError(it.message!!, it).left())
     }
 
-    suspend fun updateCurrentStreak(streaks: Streaks) {
+    suspend fun updateCurrentStreak(streakRange: StreakRange) {
         dataStore.edit {
-            it[KEY_CURRENT_STREAK] = json.encodeToString(streaks)
+            it[KEY_CURRENT_STREAK] = json.encodeToString(streakRange)
         }
     }
 
