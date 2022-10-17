@@ -47,7 +47,7 @@ class GetLast7DaysStatsUC @Inject constructor(
             dataFromCache().collect { send(it) }
         }
 
-    private fun dataFromCache() = homePageCache.getCachedData()
+    private fun dataFromCache() = homePageCache.getLast7DaysStats()
         .catch { throwable ->
             Error.UnknownError(throwable.message!!, throwable)
                 .left()
@@ -67,10 +67,9 @@ class GetLast7DaysStatsUC @Inject constructor(
 
     private suspend fun Last7DaysStats.updateCaches() {
         listOf(
-            ioScope.async { homePageCache.updateCache(this@updateCaches) },
+            ioScope.async { homePageCache.updateLast7DaysStats(this@updateCaches) },
             ioScope.async { homePageCache.updateLastRequestTime() },
-        )
-            .awaitAll()
+        ).awaitAll()
     }
 
     private fun validDataInCache(
@@ -85,8 +84,8 @@ class GetLast7DaysStatsUC @Inject constructor(
 
     private fun Instant.isPreviousDay(): Boolean {
         val lastRequestDate = this.toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
-        val currentDate = instantProvider.now()
-            .toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
+        val currentDate =
+            instantProvider.now().toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
 
         return currentDate - lastRequestDate >= 1
     }

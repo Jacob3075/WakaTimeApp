@@ -75,11 +75,11 @@ internal class GetLast7DaysStatsUCRobot {
     }
 
     fun mockUpdateCacheData(data: Last7DaysStats) = apply {
-        coJustRun { cacheMock.updateCache(data) }
+        coJustRun { cacheMock.updateLast7DaysStats(data) }
     }
 
     fun mockCachedData(vararg data: Last7DaysStats) = apply {
-        coEvery { cacheMock.getCachedData() } returns (
+        coEvery { cacheMock.getLast7DaysStats() } returns (
             data.map(Last7DaysStats::right)
                 .asFlow()
             )
@@ -90,11 +90,11 @@ internal class GetLast7DaysStatsUCRobot {
     }
 
     fun verifyCacheGetCachedDataCalled(count: Int = 1) = apply {
-        coVerify(exactly = count) { cacheMock.getCachedData() }
+        coVerify(exactly = count) { cacheMock.getLast7DaysStats() }
     }
 
     fun verifyCacheSetCachedDataCalled(data: Last7DaysStats, count: Int = 1) = apply {
-        coVerify(exactly = count) { cacheMock.updateCache(eq(data)) }
+        coVerify(exactly = count) { cacheMock.updateLast7DaysStats(eq(data)) }
     }
 
     fun verifyCacheUpdateLastRequestTimeCalled(count: Int = 1) = apply {

@@ -6,6 +6,8 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import arrow.core.computations.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
+import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
@@ -41,15 +43,18 @@ class HomePageViewModel @Inject constructor(
                 userDetailsFlow,
                 getLast7DaysStatsUC(),
                 calculateCurrentStreakUC(),
-            ) { userDetails, eitherLast7DaysStats, eitherStreaks ->
+            ) { userDetails, eitherLast7DaysStats, eitherCurrentStreaks ->
                 either {
                     val last7DaysStats = eitherLast7DaysStats.bind()
-                    val streaks = eitherStreaks.bind()
+                    val currentStreak = eitherCurrentStreaks.bind()
 
                     HomePageViewState.Loaded(
                         last7DaysStats = last7DaysStats,
                         userDetails = userDetails.toHomePageUserDetails(),
-                        streaks = streaks,
+                        streaks = Streaks(
+                            currentStreak = currentStreak,
+                            longestStreak = StreakRange.ZERO,
+                        ),
                     )
                 }
                     .mapLeft(HomePageViewState::Error)
