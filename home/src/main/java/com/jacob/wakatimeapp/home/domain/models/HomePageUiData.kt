@@ -4,8 +4,11 @@ import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -36,6 +39,13 @@ data class StreakRange(
     val end: LocalDate,
 ) {
     val days = start.daysUntil(end)
+
+    companion object {
+        val ZERO = StreakRange(
+            Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
+            Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date
+        )
+    }
 }
 
 fun WeeklyStats.toLoadedStateData() = Last7DaysStats(
