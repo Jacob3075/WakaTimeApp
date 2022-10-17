@@ -6,12 +6,11 @@ import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC.CacheValidity.DEFAULT
 import io.kotest.matchers.collections.shouldContain
 import io.kotest.matchers.collections.shouldContainExactly
@@ -34,7 +33,7 @@ import kotlinx.datetime.TimeZone
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class GetLast7DaysStatsUCRobot {
-    private val results: MutableList<Either<Error, HomePageUiData>> = mutableListOf()
+    private val results: MutableList<Either<Error, Last7DaysStats>> = mutableListOf()
     private lateinit var useCase: GetLast7DaysStatsUC
 
     private val networkDataMock: HomePageNetworkData = mockk(relaxUnitFun = true)
@@ -56,18 +55,18 @@ internal class GetLast7DaysStatsUCRobot {
     }
 
     suspend fun callUseCase() = apply {
-        useCase(userDetails, DEFAULT).toList(results)
+        useCase(DEFAULT).toList(results)
     }
 
     fun resultSizeShouldBe(size: Int = 1) = apply {
         results.size shouldBe size
     }
 
-    fun resultsShouldContain(expected: Either<Error, HomePageUiData>) = apply {
+    fun resultsShouldContain(expected: Either<Error, Last7DaysStats>) = apply {
         results shouldContain expected
     }
 
-    fun resultsShouldContain(expected: List<Either<Error, HomePageUiData>>) = apply {
+    fun resultsShouldContain(expected: List<Either<Error, Last7DaysStats>>) = apply {
         results shouldContainExactly expected
     }
 
@@ -75,13 +74,13 @@ internal class GetLast7DaysStatsUCRobot {
         coEvery { cacheMock.getLastRequestTime() } returns instant
     }
 
-    fun mockUpdateCacheData(data: HomePageUiData) = apply {
+    fun mockUpdateCacheData(data: Last7DaysStats) = apply {
         coJustRun { cacheMock.updateCache(data) }
     }
 
-    fun mockCachedData(vararg data: HomePageUiData) = apply {
+    fun mockCachedData(vararg data: Last7DaysStats) = apply {
         coEvery { cacheMock.getCachedData() } returns (
-            data.map(HomePageUiData::right)
+            data.map(Last7DaysStats::right)
                 .asFlow()
             )
     }
@@ -94,7 +93,7 @@ internal class GetLast7DaysStatsUCRobot {
         coVerify(exactly = count) { cacheMock.getCachedData() }
     }
 
-    fun verifyCacheSetCachedDataCalled(data: HomePageUiData, count: Int = 1) = apply {
+    fun verifyCacheSetCachedDataCalled(data: Last7DaysStats, count: Int = 1) = apply {
         coVerify(exactly = count) { cacheMock.updateCache(eq(data)) }
     }
 
@@ -119,31 +118,13 @@ internal class GetLast7DaysStatsUCRobot {
 
         private val todaysDate = LocalDate(2022, 10, 10)
 
-        private val userDetails = UserDetails(
-            bio = "",
-            email = "",
-            id = "",
-            timeout = 0,
-            timezone = "",
-            username = "",
-            displayName = "",
-            lastProject = "",
-            fullName = "",
-            durationsSliceBy = "",
-            createdAt = "",
-            dateFormat = "",
-            photoUrl = ""
-        )
-
-        val homePageUiData = HomePageUiData(
+        val homePageUiData = Last7DaysStats(
             timeSpentToday = Time.ZERO,
             projectsWorkedOn = listOf(),
             weeklyTimeSpent = mapOf(),
             mostUsedLanguage = "",
             mostUsedEditor = "",
             mostUsedOs = "",
-            photoUrl = "",
-            fullName = ""
         )
 
         val weeklyStats = WeeklyStats(

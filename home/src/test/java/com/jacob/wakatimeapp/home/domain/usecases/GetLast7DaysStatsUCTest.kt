@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error.UnknownError
+import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.homePageUiData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.invalidDataInstant
@@ -99,8 +100,8 @@ internal class GetLast7DaysStatsUCTest {
     @Test
     internal fun `when invalid data is present in cache, then first old data is sent followed by new data`() =
         runTest {
-            val oldCacheData = homePageUiData.copy()
-            val newCacheData = homePageUiData.copy()
+            val oldCacheData = homePageUiData.copy(timeSpentToday = Time.fromDecimal(1.0f))
+            val newCacheData = homePageUiData.copy(timeSpentToday = Time.fromDecimal(2.0f))
 
             useCaseRobot.build()
                 .mockCacheLastRequestTime(invalidDataInstant)
