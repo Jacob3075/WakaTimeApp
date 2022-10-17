@@ -1,10 +1,9 @@
-package com.jacob.wakatimeapp.home.usecases
+package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error.UnknownError
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.homePageUiData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.invalidDataInstant
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.previousDay

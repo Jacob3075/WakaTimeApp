@@ -6,6 +6,7 @@ import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
@@ -55,7 +56,7 @@ internal class GetLast7DaysStatsUCRobot {
     }
 
     suspend fun callUseCase() = apply {
-        useCase(DEFAULT).toList(results)
+        useCase(userDetails, DEFAULT).toList(results)
     }
 
     fun resultSizeShouldBe(size: Int = 1) = apply {
@@ -118,13 +119,31 @@ internal class GetLast7DaysStatsUCRobot {
 
         private val todaysDate = LocalDate(2022, 10, 10)
 
+        private val userDetails = UserDetails(
+            bio = "",
+            email = "",
+            id = "",
+            timeout = 0,
+            timezone = "",
+            username = "",
+            displayName = "",
+            lastProject = "",
+            fullName = "",
+            durationsSliceBy = "",
+            createdAt = "",
+            dateFormat = "",
+            photoUrl = ""
+        )
+
         val homePageUiData = HomePageUiData(
             timeSpentToday = Time.ZERO,
             projectsWorkedOn = listOf(),
             weeklyTimeSpent = mapOf(),
             mostUsedLanguage = "",
             mostUsedEditor = "",
-            mostUsedOs = ""
+            mostUsedOs = "",
+            photoUrl = "",
+            fullName = ""
         )
 
         val weeklyStats = WeeklyStats(

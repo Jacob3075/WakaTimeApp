@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.home.ui
 
+import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -16,21 +17,27 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.tooling.preview.PreviewParameter
+import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @Composable
-fun HomePageContent(
+fun HomePageScreen(
     navigator: HomePageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
@@ -40,12 +47,8 @@ fun HomePageContent(
     val viewState by viewModel.homePageState.collectAsState()
 
     LaunchedEffect(viewState) {
-        Timber.d(viewState.toString())
         if (viewState !is HomePageViewState.Error) return@LaunchedEffect
         val viewStateError = viewState as HomePageViewState.Error
-
-        Timber.e(viewStateError.error.message)
-        Timber.e(viewStateError.error.exception)
 
         snackBarCoroutineScope.launch {
             snackbarHostState.showSnackbar(
@@ -55,15 +58,28 @@ fun HomePageContent(
         }
     }
 
+    HomePageContent(
+        viewState = viewState,
+        toDetailsPage = navigator::toDetailsPage,
+        modifier = modifier
+    )
+}
+
+@Composable
+private fun HomePageContent(
+    viewState: HomePageViewState,
+    toDetailsPage: () -> Unit,
+    modifier: Modifier = Modifier,
+) {
     Column(modifier = modifier.statusBarsPadding()) {
-        when (val viewSateInstance = viewState) {
+        when (viewState) {
             is HomePageViewState.Loading -> HomePageLoading()
             is HomePageViewState.Loaded -> HomePageLoaded(
-                homePageViewState = viewSateInstance,
-                navigator = navigator
+                homePageViewState = viewState,
+                toDetailsPage = toDetailsPage,
             )
 
-            is HomePageViewState.Error -> HomePageError(viewSateInstance)
+            is HomePageViewState.Error -> HomePageError(viewState)
         }
     }
 }
@@ -71,7 +87,7 @@ fun HomePageContent(
 @Composable
 private fun HomePageLoaded(
     homePageViewState: HomePageViewState.Loaded,
-    navigator: HomePageNavigator,
+    toDetailsPage: () -> Unit,
 ) {
     val scrollState = rememberScrollState()
     val spacing = MaterialTheme.spacing
@@ -81,7 +97,10 @@ private fun HomePageLoaded(
             .padding(horizontal = spacing.medium)
             .verticalScroll(scrollState)
     ) {
-        UserDetailsSection(homePageViewState.userDetails)
+        UserDetailsSection(
+            fullName = homePageViewState.contentData.photoUrl,
+            photoUrl = homePageViewState.contentData.fullName
+        )
 
         TimeSpentCard(
             gradient = MaterialTheme.gradients.primary,
@@ -89,7 +108,7 @@ private fun HomePageLoaded(
             iconId = icons.time,
             mainText = "Total Time Spent Today",
             time = homePageViewState.contentData.timeSpentToday,
-            onClick = navigator::toDetailsPage
+            onClick = toDetailsPage
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
@@ -121,4 +140,42 @@ private fun HomePageLoading() = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomLoadingAnimation,
     text = "Loading..",
     animationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
+)
+
+@Preview(
+    apiLevel = 31,
+    showSystemUi = true,
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
+)
+@Preview(
+    apiLevel = 31,
+    showSystemUi = true,
+    showBackground = true,
+    uiMode = Configuration.UI_MODE_NIGHT_YES
+)
+@Composable
+fun HomePagePreview(
+    @PreviewParameter(HomePagePreviewProvider::class) viewState: HomePageViewState,
+) = WakaTimeAppTheme {
+    HomePageContent(viewState = viewState, toDetailsPage = { })
+}
+
+class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewState>(
+    listOf(
+        HomePageViewState.Loading,
+        HomePageViewState.Error(Error.UnknownError("Something went wrong")),
+        HomePageViewState.Loaded(
+            contentData = HomePageUiData(
+                timeSpentToday = Time.ZERO,
+                projectsWorkedOn = listOf(),
+                weeklyTimeSpent = mapOf(),
+                mostUsedLanguage = "",
+                mostUsedEditor = "",
+                mostUsedOs = "",
+                photoUrl = "",
+                fullName = "",
+            )
+        ),
+    )
 )

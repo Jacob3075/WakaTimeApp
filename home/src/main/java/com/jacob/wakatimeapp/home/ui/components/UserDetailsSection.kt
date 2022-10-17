@@ -20,7 +20,6 @@ import androidx.compose.ui.unit.sp
 import coil.compose.rememberAsyncImagePainter
 import coil.request.ImageRequest.Builder
 import coil.transform.CircleCropTransformation
-import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.pageTitle
@@ -28,7 +27,8 @@ import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
 fun UserDetailsSection(
-    userDetails: UserDetails?,
+    fullName: String,
+    photoUrl: String,
     modifier: Modifier = Modifier,
 ) = Row(
     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
@@ -37,7 +37,7 @@ fun UserDetailsSection(
 ) {
     Image(
         painter = rememberAsyncImagePainter(
-            Builder(LocalContext.current).data(data = userDetails?.photoUrl)
+            Builder(LocalContext.current).data(data = photoUrl)
                 .apply {
                     val icons = MaterialTheme.assets.icons
                     transformations(CircleCropTransformation())
@@ -50,7 +50,7 @@ fun UserDetailsSection(
         modifier = Modifier.size(58.dp)
     )
     Text(
-        text = userDetails?.fullName.orEmpty(),
+        text = fullName,
         style = MaterialTheme.typography.pageTitle.copy(
             fontSize = 50.sp,
             baselineShift = BaselineShift(multiplier = 0.3f),
@@ -64,20 +64,7 @@ fun UserDetailsSection(
 @Composable
 private fun UserDetailsPreview() = WakaTimeAppTheme {
     UserDetailsSection(
-        UserDetails(
-            bio = "",
-            email = "",
-            id = "",
-            timeout = 0,
-            timezone = "",
-            username = "",
-            displayName = "",
-            lastProject = "",
-            fullName = "Jacob Bosco",
-            durationsSliceBy = "",
-            createdAt = "",
-            dateFormat = "",
-            photoUrl = ""
-        )
+        fullName = "",
+        photoUrl = "",
     )
 }
