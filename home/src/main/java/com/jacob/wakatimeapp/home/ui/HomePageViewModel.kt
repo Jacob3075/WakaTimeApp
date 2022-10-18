@@ -17,7 +17,6 @@ import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.distinctUntilChanged
-import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -58,10 +57,12 @@ class HomePageViewModel @Inject constructor(
                 }
 
                 if ((cachedData is FirstRequest) or (cachedData is StaleData)) {
-                    merge(
-                        getLast7DaysStatsUC(),
-                        calculateCurrentStreakUC(),
-                    ).collect { _homePageState.value = HomePageViewState.Error(it) }
+                    getLast7DaysStatsUC()?.let {
+                        _homePageState.value = HomePageViewState.Error(it)
+                    }
+                    calculateCurrentStreakUC()?.let {
+                        _homePageState.value = HomePageViewState.Error(it)
+                    }
                 }
             }
         }

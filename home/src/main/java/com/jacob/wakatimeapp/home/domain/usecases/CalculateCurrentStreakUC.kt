@@ -10,8 +10,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.LocalDate
 
@@ -21,7 +19,7 @@ class CalculateCurrentStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
 ) {
 
-    operator fun invoke(): Flow<Error> = channelFlow {
+    suspend operator fun invoke(): Error? {
         val currentStreakFlow = homePageCache.getCurrentStreak().first()
         val last7DaysStatsFlow = homePageCache.getLast7DaysStats()
 
@@ -49,5 +47,7 @@ class CalculateCurrentStreakUC @Inject constructor(
                 homePageCache.updateCurrentStreak(updatedStreakRange)
             }
         }
+
+        return null
     }
 }
