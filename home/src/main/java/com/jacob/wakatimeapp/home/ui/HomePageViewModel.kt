@@ -1,10 +1,8 @@
 package com.jacob.wakatimeapp.home.ui
 
-import android.app.Application
-import androidx.lifecycle.AndroidViewModel
+import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
-import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.home.domain.usecases.CacheState.FirstRequest
 import com.jacob.wakatimeapp.home.domain.usecases.CacheState.StaleData
 import com.jacob.wakatimeapp.home.domain.usecases.CacheState.ValidData
@@ -16,28 +14,22 @@ import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.launch
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
-    application: Application,
-    authDataStore: AuthDataStore,
     ioDispatcher: CoroutineContext,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
     private val calculateCurrentStreakUC: CalculateCurrentStreakUC,
     private val getCachedHomePageUiData: GetCachedHomePageUiData,
-) : AndroidViewModel(application) {
+) : ViewModel() {
 
     private val _homePageState =
         MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
     val homePageState = _homePageState.asStateFlow()
-    private val userDetailsFlow = authDataStore.getUserDetails()
-        .distinctUntilChanged()
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            userDetailsFlow
 
             getCachedHomePageUiData().collect { eitherCachedData ->
                 if (eitherCachedData is Either.Left) {
