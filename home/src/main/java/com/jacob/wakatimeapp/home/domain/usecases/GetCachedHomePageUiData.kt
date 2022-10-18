@@ -11,7 +11,7 @@ import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.CacheState.FirstRequest
-import com.jacob.wakatimeapp.home.domain.usecases.CacheState.InvalidData
+import com.jacob.wakatimeapp.home.domain.usecases.CacheState.StaleData
 import com.jacob.wakatimeapp.home.domain.usecases.CacheState.ValidData
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiData.CacheValidity.DEFAULT
 import javax.inject.Inject
@@ -59,7 +59,7 @@ class GetCachedHomePageUiData @Inject constructor(
                         streaks = streaks
                     )
 
-                    else -> InvalidData(
+                    else -> StaleData(
                         last7DaysStats = last7DaysStats,
                         userDetails = userDetails.toHomePageUserDetails(),
                         streaks = streaks
@@ -108,7 +108,7 @@ sealed class CacheState {
         val streaks: Streaks,
     ) : CacheState()
 
-    data class InvalidData(
+    data class StaleData(
         val last7DaysStats: Last7DaysStats,
         val userDetails: HomePageUserDetails,
         val streaks: Streaks,
