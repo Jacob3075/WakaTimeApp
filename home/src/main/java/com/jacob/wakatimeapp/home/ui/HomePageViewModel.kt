@@ -4,20 +4,20 @@ import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
-import arrow.core.computations.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
-import com.jacob.wakatimeapp.home.domain.models.Streaks
-import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
+import com.jacob.wakatimeapp.home.domain.usecases.CacheState.FirstRequest
+import com.jacob.wakatimeapp.home.domain.usecases.CacheState.StaleData
+import com.jacob.wakatimeapp.home.domain.usecases.CacheState.ValidData
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
-import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.distinctUntilChanged
+import kotlinx.coroutines.flow.merge
 import kotlinx.coroutines.launch
 
 @HiltViewModel
@@ -27,6 +27,7 @@ class HomePageViewModel @Inject constructor(
     ioDispatcher: CoroutineContext,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
     private val calculateCurrentStreakUC: CalculateCurrentStreakUC,
+    private val getCachedHomePageUiData: GetCachedHomePageUiData,
 ) : AndroidViewModel(application) {
 
     private val _homePageState =
@@ -39,32 +40,30 @@ class HomePageViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             userDetailsFlow
 
-            combine(
-                userDetailsFlow,
-                getLast7DaysStatsUC(),
-                calculateCurrentStreakUC(),
-            ) { userDetails, eitherLast7DaysStats, eitherCurrentStreaks ->
-                either {
-                    val last7DaysStats = eitherLast7DaysStats.bind()
-                    val currentStreak = eitherCurrentStreaks.bind()
+            getCachedHomePageUiData().collect { eitherCachedData ->
+                if (eitherCachedData is Either.Left) {
+                    _homePageState.value = HomePageViewState.Error(eitherCachedData.value)
+                    return@collect
+                }
 
-                    HomePageViewState.Loaded(
-                        last7DaysStats = last7DaysStats,
-                        userDetails = userDetails.toHomePageUserDetails(),
-                        streaks = Streaks(
-                            currentStreak = currentStreak,
-                            longestStreak = StreakRange.ZERO,
-                        ),
+                val cachedData = (eitherCachedData as Either.Right).value
+
+                if ((cachedData is ValidData) or (cachedData is StaleData)) {
+                    cachedData as ValidData
+                    _homePageState.value = HomePageViewState.Loaded(
+                        last7DaysStats = cachedData.last7DaysStats,
+                        userDetails = cachedData.userDetails,
+                        streaks = cachedData.streaks,
                     )
                 }
-                    .mapLeft(HomePageViewState::Error)
-            }
-                .collect {
-                    when (it) {
-                        is Either.Left -> _homePageState.value = it.value
-                        is Either.Right -> _homePageState.value = it.value
-                    }
+
+                if ((cachedData is FirstRequest) or (cachedData is StaleData)) {
+                    merge(
+                        getLast7DaysStatsUC(),
+                        calculateCurrentStreakUC(),
+                    ).collect { _homePageState.value = HomePageViewState.Error(it) }
                 }
+            }
         }
     }
 }
