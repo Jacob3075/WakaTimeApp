@@ -15,7 +15,6 @@ import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.catch
-import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
 import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
@@ -30,12 +29,11 @@ class HomePageCache @Inject constructor(
     private val json: Json,
 ) {
 
-    suspend fun getLastRequestTime(): Instant = dataStore.data.map {
+    fun getLastRequestTime() = dataStore.data.map {
         val value = it[KEY_LAST_REQUEST_TIME]
         value?.let(Instant::fromEpochMilliseconds) ?: Instant.DISTANT_PAST
     }
         .catch { Instant.DISTANT_PAST }
-        .first()
 
     suspend fun updateLastRequestTime(time: Instant = Clock.System.now()) {
         dataStore.edit {

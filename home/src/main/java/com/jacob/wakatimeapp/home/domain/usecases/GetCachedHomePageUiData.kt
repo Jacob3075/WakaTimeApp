@@ -18,6 +18,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.combine
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.flowOn
 import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
@@ -30,9 +31,9 @@ class GetCachedHomePageUiData @Inject constructor(
     private val authDataStore: AuthDataStore,
 ) {
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
-        val lastRequestTime = homePageCache.getLastRequestTime()
+        val initialLastRequestTime = homePageCache.getLastRequestTime().first()
 
-        if (firstRequestOfDay(lastRequestTime)) {
+        if (firstRequestOfDay(initialLastRequestTime)) {
             send(FirstRequest.right())
             return@channelFlow
         }
@@ -40,8 +41,9 @@ class GetCachedHomePageUiData @Inject constructor(
         combine(
             getLast7DaysStats(),
             getHomePageUserDetails(),
-            getStreaks()
-        ) { last7DaysStatsEither, userDetails, streaksEither ->
+            getStreaks(),
+            homePageCache.getLastRequestTime(),
+        ) { last7DaysStatsEither, userDetails, streaksEither, lastRequestTime ->
             either {
                 val last7DaysStats = last7DaysStatsEither.bind()
                 val streakRange = streaksEither.bind()

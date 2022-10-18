@@ -17,6 +17,7 @@ import kotlinx.coroutines.async
 import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.channelFlow
+import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.launch
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
@@ -32,7 +33,7 @@ class GetLast7DaysStatsUC @Inject constructor(
 
     operator fun invoke(cacheValidity: CacheValidity = INVALID) =
         channelFlow {
-            val lastRequestTime = homePageCache.getLastRequestTime()
+            val lastRequestTime = homePageCache.getLastRequestTime().first()
 
             when {
                 firstRequestOfDay(lastRequestTime) ->
