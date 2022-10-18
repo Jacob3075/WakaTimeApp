@@ -14,7 +14,6 @@ import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.first
 import kotlinx.coroutines.flow.map
@@ -44,7 +43,7 @@ class HomePageCache @Inject constructor(
         }
     }
 
-    fun getLast7DaysStats(): Flow<Either<Error, Last7DaysStats>> = dataStore.data.map {
+    fun getLast7DaysStats() = dataStore.data.map {
         val stringUiData = it[KEY_LAST_7_DAYS_STATS] ?: return@map emptyCacheError
         json.decodeFromString<Last7DaysStats>(stringUiData).right()
     }.catch {
@@ -58,9 +57,10 @@ class HomePageCache @Inject constructor(
         }
     }
 
-    fun getCurrentStreak() = dataStore.data.map {
-        val stringCurrentStreak = it[KEY_CURRENT_STREAK] ?: return@map emptyCacheError
-        json.decodeFromString<StreakRange>(stringCurrentStreak).right()
+    fun getCurrentStreak() = dataStore.data.map<Preferences, Either<Error, StreakRange>> {
+        val streakRange = it[KEY_CURRENT_STREAK]?.let<String, StreakRange>(json::decodeFromString)
+            ?: StreakRange.ZERO
+        streakRange.right()
     }.catch {
         Timber.e(it)
         emit(DatabaseError.UnknownError(it.message!!, it).left())

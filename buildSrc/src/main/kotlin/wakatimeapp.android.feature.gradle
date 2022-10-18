@@ -82,6 +82,7 @@ dependencies {
     testImplementation("org.jetbrains.kotlinx:kotlinx-coroutines-test:1.6.4")
     testImplementation("io.mockk:mockk:1.13.2")
     testImplementation("io.kotest:kotest-assertions-core:5.5.0")
+    testImplementation("io.kotest.extensions:kotest-assertions-arrow:1.2.5")
 
     androidTestImplementation("androidx.test.ext:junit:1.1.3")
 
