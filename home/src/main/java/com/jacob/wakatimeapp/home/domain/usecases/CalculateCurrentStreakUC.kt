@@ -1,6 +1,8 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
+import arrow.core.Either
 import arrow.core.computations.either
+import arrow.core.right
 import com.jacob.wakatimeapp.core.common.today
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
@@ -19,7 +21,7 @@ class CalculateCurrentStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
 ) {
 
-    suspend operator fun invoke(): Error? {
+    suspend operator fun invoke(): Either<Error, StreakRange> {
         val currentStreakFlow = homePageCache.getCurrentStreak().first()
         val last7DaysStatsFlow = homePageCache.getLast7DaysStats()
 
@@ -48,6 +50,6 @@ class CalculateCurrentStreakUC @Inject constructor(
             }
         }
 
-        return null
+        return StreakRange.ZERO.right()
     }
 }
