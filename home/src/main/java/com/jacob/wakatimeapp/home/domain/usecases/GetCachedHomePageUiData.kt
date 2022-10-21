@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
+import arrow.core.Either.Right
 import arrow.core.computations.either
-import arrow.core.right
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
@@ -10,9 +10,6 @@ import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
-import com.jacob.wakatimeapp.home.domain.usecases.CacheState.FirstRequest
-import com.jacob.wakatimeapp.home.domain.usecases.CacheState.StaleData
-import com.jacob.wakatimeapp.home.domain.usecases.CacheState.ValidData
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiData.CacheValidity.DEFAULT
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -30,11 +27,15 @@ class GetCachedHomePageUiData @Inject constructor(
     private val homePageCache: HomePageCache,
     private val authDataStore: AuthDataStore,
 ) {
+
+    /**
+     * @return [CachedHomePageUiData] if there is data for the current day in the cache, otherwise null
+     */
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
         val initialLastRequestTime = homePageCache.getLastRequestTime().first()
 
         if (firstRequestOfDay(initialLastRequestTime)) {
-            send(FirstRequest.right())
+            send(Right(null))
             return@channelFlow
         }
 
@@ -52,19 +53,15 @@ class GetCachedHomePageUiData @Inject constructor(
                     longestStreak = StreakRange.ZERO
                 )
 
-                when {
-                    validDataInCache(lastRequestTime, cacheValidity) -> ValidData(
-                        last7DaysStats = last7DaysStats,
-                        userDetails = userDetails.toHomePageUserDetails(),
-                        streaks = streaks
+                CachedHomePageUiData(
+                    last7DaysStats = last7DaysStats,
+                    userDetails = userDetails.toHomePageUserDetails(),
+                    streaks = streaks,
+                    isStateData = validDataInCache(
+                        lastRequestTime = lastRequestTime,
+                        cacheValidityTime = cacheValidity
                     )
-
-                    else -> StaleData(
-                        last7DaysStats = last7DaysStats,
-                        userDetails = userDetails.toHomePageUserDetails(),
-                        streaks = streaks
-                    )
-                }
+                )
             }
         }.onEach { send(it) }
             .flowOn(this.coroutineContext)
@@ -100,17 +97,9 @@ class GetCachedHomePageUiData @Inject constructor(
     }
 }
 
-sealed class CacheState {
-    object FirstRequest : CacheState()
-    data class ValidData(
-        val last7DaysStats: Last7DaysStats,
-        val userDetails: HomePageUserDetails,
-        val streaks: Streaks,
-    ) : CacheState()
-
-    data class StaleData(
-        val last7DaysStats: Last7DaysStats,
-        val userDetails: HomePageUserDetails,
-        val streaks: Streaks,
-    ) : CacheState()
-}
+data class CachedHomePageUiData(
+    val last7DaysStats: Last7DaysStats,
+    val userDetails: HomePageUserDetails,
+    val streaks: Streaks,
+    val isStateData: Boolean,
+)

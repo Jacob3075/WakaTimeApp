@@ -3,9 +3,6 @@ package com.jacob.wakatimeapp.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
-import com.jacob.wakatimeapp.home.domain.usecases.CacheState.FirstRequest
-import com.jacob.wakatimeapp.home.domain.usecases.CacheState.StaleData
-import com.jacob.wakatimeapp.home.domain.usecases.CacheState.ValidData
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiData
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
@@ -39,22 +36,21 @@ class HomePageViewModel @Inject constructor(
 
                 val cachedData = (eitherCachedData as Either.Right).value
 
-                if ((cachedData is ValidData) or (cachedData is StaleData)) {
-                    cachedData as ValidData
-                    _homePageState.value = HomePageViewState.Loaded(
+                when {
+                    cachedData == null || cachedData.isStateData -> {
+                        getLast7DaysStatsUC()?.let {
+                            _homePageState.value = HomePageViewState.Error(it)
+                        }
+                        calculateCurrentStreakUC()?.let {
+                            _homePageState.value = HomePageViewState.Error(it)
+                        }
+                    }
+
+                    else -> _homePageState.value = HomePageViewState.Loaded(
                         last7DaysStats = cachedData.last7DaysStats,
                         userDetails = cachedData.userDetails,
                         streaks = cachedData.streaks,
                     )
-                }
-
-                if ((cachedData is FirstRequest) or (cachedData is StaleData)) {
-                    getLast7DaysStatsUC()?.let {
-                        _homePageState.value = HomePageViewState.Error(it)
-                    }
-                    calculateCurrentStreakUC()?.let {
-                        _homePageState.value = HomePageViewState.Error(it)
-                    }
                 }
             }
         }
