@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.last7DaysStats
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUCRobot.Companion.weeklyStats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -13,39 +14,20 @@ internal class GetLast7DaysStatsUCTest {
     private val useCaseRobot: GetLast7DaysStatsUCRobot = GetLast7DaysStatsUCRobot()
 
     @Test
-    internal fun `when network request returns valid data, then update cache`() = runTest {
-        useCaseRobot.buildViewModel()
-            .mockNetworkData(weeklyStats.right())
-            .callUseCase()
-            .verifyUpdateLast7DaysStatsCacheCalled()
-    }
-
-    @Test
     internal fun `when network request returns valid data, then return null`() = runTest {
         useCaseRobot.buildViewModel()
             .mockNetworkData(weeklyStats.right())
             .callUseCase()
-            .resultsShouldBe(null)
+            .resultsShouldBe(last7DaysStats.right())
     }
 
     @Test
     internal fun `when network request fails with an error, then return the error`() = runTest {
-        val error = Error.UnknownError("error")
+        val error = Error.UnknownError("error").left()
 
         useCaseRobot.buildViewModel()
-            .mockNetworkData(error.left())
+            .mockNetworkData(error)
             .callUseCase()
             .resultsShouldBe(error)
     }
-
-    @Test
-    internal fun `when network request fails with an error, then update cache should not be called`() =
-        runTest {
-            val error = Error.UnknownError("error")
-
-            useCaseRobot.buildViewModel()
-                .mockNetworkData(error.left())
-                .callUseCase()
-                .verifyUpdateLast7DaysStatsCacheCalled(0)
-        }
 }

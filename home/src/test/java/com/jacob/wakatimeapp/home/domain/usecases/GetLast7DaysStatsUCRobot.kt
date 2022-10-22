@@ -6,34 +6,27 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
-import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
+import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.datetime.LocalDate
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class GetLast7DaysStatsUCRobot {
     private lateinit var useCase: GetLast7DaysStatsUC
 
-    private var result: Error? = null
+    private var result: Either<Error, Last7DaysStats>? = null
 
     private val networkDataMock: HomePageNetworkData = mockk(relaxUnitFun = true)
-    private val cacheMock: HomePageCache = mockk(relaxUnitFun = true)
 
     fun buildViewModel() = apply {
-        clearMocks(networkDataMock, cacheMock)
+        clearMocks(networkDataMock)
         result = null
 
         useCase = GetLast7DaysStatsUC(
-            dispatcher = UnconfinedTestDispatcher(),
             homePageNetworkData = networkDataMock,
-            homePageCache = cacheMock,
         )
     }
 
@@ -41,16 +34,12 @@ internal class GetLast7DaysStatsUCRobot {
         result = useCase()
     }
 
-    fun resultsShouldBe(expected: Error?) = apply {
+    fun resultsShouldBe(expected: Either<Error, Last7DaysStats>) = apply {
         result shouldBe expected
     }
 
     fun mockNetworkData(data: Either<Error, WeeklyStats>) = apply {
         coEvery { networkDataMock.getLast7DaysStats() } returns data
-    }
-
-    fun verifyUpdateLast7DaysStatsCacheCalled(count: Int = 1) = apply {
-        coVerify(exactly = count) { cacheMock.updateLast7DaysStats(any()) }
     }
 
     companion object {
@@ -71,6 +60,15 @@ internal class GetLast7DaysStatsUCRobot {
                 mostUsedOs = "",
                 date = todaysDate,
             )
+        )
+
+        val last7DaysStats = Last7DaysStats(
+            timeSpentToday = Time.fromDecimal(1.0f),
+            projectsWorkedOn = listOf(),
+            weeklyTimeSpent = mapOf(),
+            mostUsedLanguage = "",
+            mostUsedEditor = "",
+            mostUsedOs = "",
         )
     }
 }

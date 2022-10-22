@@ -21,7 +21,7 @@ import kotlinx.datetime.LocalDate
 internal class CalculateCurrentStreakUCRobot {
     private lateinit var useCase: CalculateCurrentStreakUC
 
-    private var result: Error? = null
+    private var result: Either<Error, StreakRange>? = null
 
     private val mockCache: HomePageCache = mockk(relaxUnitFun = true)
 
