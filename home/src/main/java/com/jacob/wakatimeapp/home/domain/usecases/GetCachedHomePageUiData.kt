@@ -34,7 +34,7 @@ class GetCachedHomePageUiData @Inject constructor(
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
         val initialLastRequestTime = homePageCache.getLastRequestTime().first()
 
-        if (firstRequestOfDay(initialLastRequestTime)) {
+        if (initialLastRequestTime.isFirstRequestOfDay()) {
             send(Right(null))
             return@channelFlow
         }
@@ -73,7 +73,12 @@ class GetCachedHomePageUiData @Inject constructor(
 
     private fun getStreaks() = homePageCache.getCurrentStreak()
 
-    private fun firstRequestOfDay(lastRequestTime: Instant) = lastRequestTime.isPreviousDay()
+    private fun Instant.isFirstRequestOfDay(): Boolean {
+        val lastRequestDate = toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
+        val currentDate =
+            instantProvider.now().toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
+        return currentDate - lastRequestDate >= 1
+    }
 
     private fun validDataInCache(
         lastRequestTime: Instant,
@@ -81,14 +86,6 @@ class GetCachedHomePageUiData @Inject constructor(
     ): Boolean {
         val minutesBetweenLastRequest = instantProvider.now() - lastRequestTime
         return minutesBetweenLastRequest.inWholeMinutes < cacheValidityTime.minutes
-    }
-
-    private fun Instant.isPreviousDay(): Boolean {
-        val lastRequestDate = this.toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
-        val currentDate =
-            instantProvider.now().toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
-
-        return currentDate - lastRequestDate >= 1
     }
 
     enum class CacheValidity(val minutes: Long) {
