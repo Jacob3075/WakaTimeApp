@@ -16,8 +16,6 @@ import javax.inject.Singleton
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.flow.flowOn
-import kotlinx.coroutines.flow.onEach
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
 
@@ -63,8 +61,7 @@ class GetCachedHomePageUiData @Inject constructor(
                     )
                 )
             }
-        }.onEach { send(it) }
-            .flowOn(this.coroutineContext)
+        }.collect { send(it) }
     }
 
     private fun getHomePageUserDetails() = authDataStore.getUserDetails()

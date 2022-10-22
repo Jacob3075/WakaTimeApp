@@ -2,6 +2,14 @@ plugins {
     id("wakatimeapp.android.feature")
 }
 
+android {
+    namespace = "com.jacob.wakatimeapp.home"
+
+    kotlinOptions {
+        freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
+    }
+}
+
 dependencies {
     // Image Loading, Charts, Lottie Animations
     implementation("io.coil-kt:coil-compose:2.1.0")
@@ -14,7 +22,4 @@ dependencies {
 
     annotationProcessor("androidx.room:room-compiler:2.4.3")
     ksp("androidx.room:room-compiler:2.4.3")
-}
-android {
-    namespace = "com.jacob.wakatimeapp.home"
 }
