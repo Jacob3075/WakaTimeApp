@@ -55,7 +55,7 @@ class GetCachedHomePageUiData @Inject constructor(
                     last7DaysStats = last7DaysStats,
                     userDetails = userDetails.toHomePageUserDetails(),
                     streaks = streaks,
-                    isStateData = validDataInCache(
+                    isStateData = !validDataInCache(
                         lastRequestTime = lastRequestTime,
                         cacheValidityTime = cacheValidity
                     )

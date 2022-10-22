@@ -12,7 +12,9 @@ import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.currentDayInstant
+import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
+import io.kotest.matchers.nulls.shouldBeNull
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
@@ -64,8 +66,6 @@ internal class GetCachedHomePageUiDataRobot {
         }
 
         block(context, this@GetCachedHomePageUiDataRobot)
-
-        receiveTurbine!!.awaitComplete()
     }
 
     context (ItemAssertionContext)
@@ -79,6 +79,11 @@ internal class GetCachedHomePageUiDataRobot {
     }
 
     context (ItemAssertionContext)
+    fun itemShouldBeLeft() = apply {
+        item.shouldBeLeft()
+    }
+
+    context (ItemAssertionContext)
     fun itemShouldNotBeNull() = apply {
         item.fold(
             ifLeft = { 1 shouldBe 2 },
@@ -87,8 +92,25 @@ internal class GetCachedHomePageUiDataRobot {
     }
 
     context (ItemAssertionContext)
+    fun itemShouldBeNull() = apply {
+        item.fold(
+            ifLeft = { 1 shouldBe 2 },
+            ifRight = { it.shouldBeNull() }
+        )
+    }
+
+    context (ItemAssertionContext)
     fun itemShouldNotBeStale() = apply {
         item.map { it!!.isStateData } shouldBeRight false
+    }
+
+    context (ItemAssertionContext)
+    fun itemShouldBeStale() = apply {
+        item.map { it!!.isStateData } shouldBeRight true
+    }
+
+    suspend fun expectNoMoreItems() = apply {
+        receiveTurbine!!.awaitComplete()
     }
 
     fun setLastRequestTime(previousDay: Instant) = apply {
