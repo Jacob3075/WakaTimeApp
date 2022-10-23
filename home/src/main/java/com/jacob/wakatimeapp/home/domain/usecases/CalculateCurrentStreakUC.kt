@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.computations.either
+import arrow.core.right
 import com.jacob.wakatimeapp.core.common.today
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
@@ -11,10 +12,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.flow.Flow
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.first
-import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 @Singleton
@@ -23,16 +21,14 @@ class CalculateCurrentStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
 ) {
 
-    operator fun invoke(): Flow<Either<Error, StreakRange>> = channelFlow {
-        val currentStreakFlow = homePageCache.getCurrentStreak()
+    suspend operator fun invoke(): Either<Error, StreakRange> {
+        val currentStreakFlow = homePageCache.getCurrentStreak().first()
         val last7DaysStatsFlow = homePageCache.getLast7DaysStats()
-
-        launch { currentStreakFlow.collect { send(it) } }
 
         last7DaysStatsFlow.collect { last7DaysStatsEither ->
             either {
                 val last7DaysStats = last7DaysStatsEither.bind()
-                val currentStreak = currentStreakFlow.first().bind()
+                val currentStreak = currentStreakFlow.bind()
 
                 val todaysStats = last7DaysStats.weeklyTimeSpent[LocalDate.today] ?: Time.ZERO
 
@@ -53,5 +49,7 @@ class CalculateCurrentStreakUC @Inject constructor(
                 homePageCache.updateCurrentStreak(updatedStreakRange)
             }
         }
+
+        return StreakRange.ZERO.right()
     }
 }

@@ -4,7 +4,6 @@ import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.last7DaysStats
-import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.streakRange
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.today
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -31,8 +30,7 @@ internal class CalculateCurrentStreakUCTest {
                 .mockGetCurrentStreak(StreakRange.ZERO.right())
                 .mockGetLast7DaysStats(updatedLast7DaysStats.right())
                 .callUseCase()
-                .resultSizeShouldBe(1)
-                .resultsShouldContain(streakRange.right())
+                .resultsShouldBe(null)
         }
 
     @Test
