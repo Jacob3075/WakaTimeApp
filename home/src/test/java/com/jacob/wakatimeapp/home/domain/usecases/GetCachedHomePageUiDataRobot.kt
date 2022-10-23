@@ -23,8 +23,9 @@ import io.mockk.mockk
 import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlin.time.Duration.Companion.seconds
 import kotlinx.coroutines.ExperimentalCoroutinesApi
-import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
@@ -38,9 +39,18 @@ internal class GetCachedHomePageUiDataRobot {
     private val mockHomePageCache: HomePageCache = mockk()
     private val mockAuthDataStore: AuthDataStore = mockk()
 
+    private lateinit var last7DaysStatsFlow: MutableSharedFlow<Either<Error, Last7DaysStats>>
+    private lateinit var userDetailsFlow: MutableSharedFlow<UserDetails>
+    private lateinit var lastRequestTimeFlow: MutableSharedFlow<Instant>
+    private lateinit var currentStreakFlow: MutableSharedFlow<Either<Error, StreakRange>>
+
     fun buildUseCase(currentInstant: Instant = currentDayInstant) = apply {
         clearMocks(mockHomePageCache, mockAuthDataStore)
         receiveTurbine = null
+        last7DaysStatsFlow = MutableSharedFlow()
+        userDetailsFlow = MutableSharedFlow()
+        lastRequestTimeFlow = MutableSharedFlow(replay = 1)
+        currentStreakFlow = MutableSharedFlow()
 
         useCase = GetCachedHomePageUiData(
             instantProvider = object : InstantProvider {
@@ -54,7 +64,7 @@ internal class GetCachedHomePageUiDataRobot {
     }
 
     fun callUseCase(testScope: TestScope) = apply {
-        receiveTurbine = useCase().testIn(testScope)
+        receiveTurbine = useCase().testIn(testScope, timeout = 5.seconds)
     }
 
     suspend fun withNextItem(
@@ -110,23 +120,39 @@ internal class GetCachedHomePageUiDataRobot {
     }
 
     suspend fun expectNoMoreItems() = apply {
-        receiveTurbine!!.awaitComplete()
+        receiveTurbine!!.cancelAndConsumeRemainingEvents().size shouldBe 0
     }
 
-    fun setLastRequestTime(previousDay: Instant) = apply {
-        coEvery { mockHomePageCache.getLastRequestTime() } returns flowOf(previousDay)
+    fun mockLastRequestTime() = apply {
+        coEvery { mockHomePageCache.getLastRequestTime() } returns lastRequestTimeFlow
     }
 
-    fun mockUserDetails(userDetails: UserDetails) = apply {
-        coEvery { mockAuthDataStore.getUserDetails() } returns flowOf(userDetails)
+    fun mockUserDetails() = apply {
+        coEvery { mockAuthDataStore.getUserDetails() } returns userDetailsFlow
     }
 
-    fun mockLast7DaysStats(last7DaysStats: Either<Error, Last7DaysStats>) = apply {
-        coEvery { mockHomePageCache.getLast7DaysStats() } returns flowOf(last7DaysStats)
+    fun mockLast7DaysStats() = apply {
+        coEvery { mockHomePageCache.getLast7DaysStats() } returns last7DaysStatsFlow
     }
 
-    fun mockCurrentStreak(currentStreak: Either<Error, StreakRange>) = apply {
-        coEvery { mockHomePageCache.getCurrentStreak() } returns flowOf(currentStreak)
+    fun mockCurrentStreak() = apply {
+        coEvery { mockHomePageCache.getCurrentStreak() } returns currentStreakFlow
+    }
+
+    suspend fun sendLastRequestTime(value: Instant) = apply {
+        lastRequestTimeFlow.emit(value)
+    }
+
+    suspend fun sendUserDetails(value: UserDetails) = apply {
+        userDetailsFlow.emit(value)
+    }
+
+    suspend fun sendLast7DaysStats(value: Either<Error, Last7DaysStats>) = apply {
+        last7DaysStatsFlow.emit(value)
+    }
+
+    suspend fun sendCurrentStreak(value: Either<Error, StreakRange>) = apply {
+        currentStreakFlow.emit(value)
     }
 
     companion object {
