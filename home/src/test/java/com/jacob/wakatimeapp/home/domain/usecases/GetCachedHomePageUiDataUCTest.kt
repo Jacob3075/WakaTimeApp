@@ -9,12 +9,12 @@ import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.currentDayInstant
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.currentStreak
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.last7DaysStats
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.previousDayInstant
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.startOfDay
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.userDetails
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.currentDayInstant
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.currentStreak
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.last7DaysStats
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.previousDayInstant
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.startOfDay
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.userDetails
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -22,8 +22,8 @@ import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class GetCachedHomePageUiDataTest {
-    private val robot = GetCachedHomePageUiDataRobot()
+internal class GetCachedHomePageUiDataUCTest {
+    private val robot = GetCachedHomePageUiDataUCRobot()
 
     @Test
     internal fun `when last request was made the previous day and time difference is more than cache lifetime, then use case should return null`() =
@@ -154,7 +154,7 @@ internal class GetCachedHomePageUiDataTest {
                 .expectNoMoreItems()
         }
 
-    private suspend fun GetCachedHomePageUiDataRobot.`when new data is sent, then new item should be emitted with correct values for previous data`(
+    private suspend fun GetCachedHomePageUiDataUCRobot.`when new data is sent, then new item should be emitted with correct values for previous data`(
         newData: Either<Error, Last7DaysStats>,
         result: CachedHomePageUiData,
     ) = apply {
@@ -166,7 +166,7 @@ internal class GetCachedHomePageUiDataTest {
             }
     }
 
-    private suspend fun GetCachedHomePageUiDataRobot.`when new data is sent, then new item should be emitted with correct values for previous data`(
+    private suspend fun GetCachedHomePageUiDataUCRobot.`when new data is sent, then new item should be emitted with correct values for previous data`(
         newData: Instant,
         result: CachedHomePageUiData,
     ) = apply {

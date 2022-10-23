@@ -11,7 +11,7 @@ import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.currentDayInstant
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.currentDayInstant
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
 import io.kotest.assertions.asClue
@@ -31,7 +31,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.TimeZone
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class GetCachedHomePageUiDataRobot {
+internal class GetCachedHomePageUiDataUCRobot {
     private lateinit var useCase: GetCachedHomePageUiData
 
     private var receiveTurbine: ReceiveTurbine<Either<Error, CachedHomePageUiData?>>? = null
@@ -68,14 +68,14 @@ internal class GetCachedHomePageUiDataRobot {
     }
 
     suspend fun withNextItem(
-        block: context(ItemAssertionContext) GetCachedHomePageUiDataRobot.() -> Unit,
+        block: context(ItemAssertionContext) GetCachedHomePageUiDataUCRobot.() -> Unit,
     ) = apply {
         val item = receiveTurbine!!.awaitItem()
         val context = object : ItemAssertionContext {
             override val item = item
         }
 
-        block(context, this@GetCachedHomePageUiDataRobot)
+        block(context, this@GetCachedHomePageUiDataUCRobot)
     }
 
     context (ItemAssertionContext)
