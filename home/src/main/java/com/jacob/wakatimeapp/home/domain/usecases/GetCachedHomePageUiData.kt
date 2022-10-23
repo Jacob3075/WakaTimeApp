@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either.Right
 import arrow.core.computations.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
+import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
@@ -15,7 +16,6 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.combine
-import kotlinx.coroutines.flow.first
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
 
@@ -30,20 +30,15 @@ class GetCachedHomePageUiData @Inject constructor(
      * @return [CachedHomePageUiData] if there is data for the current day in the cache, otherwise null
      */
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
-        val initialLastRequestTime = homePageCache.getLastRequestTime().first()
-
-        if (initialLastRequestTime.isFirstRequestOfDay()) {
-            send(Right(null))
-            return@channelFlow
-        }
-
         combine(
             getLast7DaysStats(),
             getHomePageUserDetails(),
             getStreaks(),
             homePageCache.getLastRequestTime(),
         ) { last7DaysStatsEither, userDetails, streaksEither, lastRequestTime ->
-            either {
+            if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
+
+            either<Error, CachedHomePageUiData> {
                 val last7DaysStats = last7DaysStatsEither.bind()
                 val streakRange = streaksEither.bind()
                 val streaks = Streaks(
