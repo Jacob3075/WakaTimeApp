@@ -14,7 +14,7 @@ import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataRobot.Companion.currentDayInstant
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
-import io.kotest.matchers.nulls.shouldBeNull
+import io.kotest.assertions.asClue
 import io.kotest.matchers.nulls.shouldNotBeNull
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
@@ -103,39 +103,33 @@ internal class GetCachedHomePageUiDataRobot {
 
     context (ItemAssertionContext)
     fun itemShouldBeNull() = apply {
-        item.fold(
-            ifLeft = { 1 shouldBe 2 },
-            ifRight = { it.shouldBeNull() }
-        )
+        item shouldBeRight null
     }
 
     context (ItemAssertionContext)
     fun itemShouldNotBeStale() = apply {
-        item.map { it!!.isStateData } shouldBeRight false
+        item.asClue {
+            item.map { it!!.isStateData } shouldBeRight false
+        }
     }
 
     context (ItemAssertionContext)
     fun itemShouldBeStale() = apply {
-        item.map { it!!.isStateData } shouldBeRight true
+        item.asClue {
+            item.map { it!!.isStateData } shouldBeRight true
+        }
     }
 
     suspend fun expectNoMoreItems() = apply {
-        receiveTurbine!!.cancelAndConsumeRemainingEvents().size shouldBe 0
+        receiveTurbine!!.cancelAndConsumeRemainingEvents().asClue {
+            it.size shouldBe 0
+        }
     }
 
-    fun mockLastRequestTime() = apply {
-        coEvery { mockHomePageCache.getLastRequestTime() } returns lastRequestTimeFlow
-    }
-
-    fun mockUserDetails() = apply {
-        coEvery { mockAuthDataStore.getUserDetails() } returns userDetailsFlow
-    }
-
-    fun mockLast7DaysStats() = apply {
+    fun mockAllFunctions() = apply {
         coEvery { mockHomePageCache.getLast7DaysStats() } returns last7DaysStatsFlow
-    }
-
-    fun mockCurrentStreak() = apply {
+        coEvery { mockAuthDataStore.getUserDetails() } returns userDetailsFlow
+        coEvery { mockHomePageCache.getLastRequestTime() } returns lastRequestTimeFlow
         coEvery { mockHomePageCache.getCurrentStreak() } returns currentStreakFlow
     }
 
