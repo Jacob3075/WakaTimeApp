@@ -4,10 +4,6 @@ plugins {
 
 android {
     namespace = "com.jacob.wakatimeapp.home"
-
-    kotlinOptions {
-        freeCompilerArgs = freeCompilerArgs + "-Xcontext-receivers"
-    }
 }
 
 dependencies {
