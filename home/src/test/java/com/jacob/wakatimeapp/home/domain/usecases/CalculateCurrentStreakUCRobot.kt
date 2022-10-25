@@ -1,23 +1,27 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
-import com.jacob.wakatimeapp.core.common.today
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
+import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
 import io.mockk.coEvery
-import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlin.time.Duration.Companion.days
+import kotlin.time.Duration.Companion.hours
+import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.UnconfinedTestDispatcher
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.Instant
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.minus
+import kotlinx.datetime.toLocalDateTime
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class CalculateCurrentStreakUCRobot {
     private lateinit var useCase: CalculateCurrentStreakUC
 
@@ -30,8 +34,12 @@ internal class CalculateCurrentStreakUCRobot {
         result = null
 
         useCase = CalculateCurrentStreakUC(
-            dispatcher = UnconfinedTestDispatcher(),
             homePageCache = mockCache,
+            instantProvider = object : InstantProvider {
+                override val timeZone = TimeZone.UTC
+
+                override fun now() = currentDayInstant
+            }
         )
     }
 
@@ -39,8 +47,10 @@ internal class CalculateCurrentStreakUCRobot {
         result = useCase()
     }
 
-    fun resultsShouldBe(expected: Error?) = apply {
-        result shouldBe expected
+    fun resultsShouldBe(expected: Either<Error, StreakRange>) = apply {
+        result.asClue {
+            it shouldBe expected
+        }
     }
 
     fun mockGetCurrentStreak(data: Either<Error, StreakRange>) = apply {
@@ -51,18 +61,51 @@ internal class CalculateCurrentStreakUCRobot {
         coEvery { mockCache.getLast7DaysStats() } returns flowOf(data)
     }
 
-    fun verifyUpdateCurrentStreakCalled(data: StreakRange, count: Int = 1) = apply {
-        coVerify(exactly = count) { mockCache.updateCurrentStreak(data) }
-    }
-
-    companion object {
+    internal companion object {
         val streakRange = StreakRange.ZERO
-        val today = LocalDate.today
+
+        /**
+         * Start of a random day
+         *
+         * Value:
+         *  - date: 11/10/2022 (dd/mm/yyyy)
+         *  - time: 00:00:00 (hh:mm::ss)
+         */
+        val startOfDay = Instant.parse("2022-10-11T00:00:00Z")
+
+        val currentDayInstant = startOfDay + 1.hours + 30.minutes
+
+        /**
+         * Takes [currentDayInstant] and subtracts 1 day from it
+         */
+        val previousDayInstant = currentDayInstant.minus(1.days)
+
+        val currentDay = currentDayInstant.toLocalDateTime(TimeZone.UTC).date
+
+        val noWeeklyStats = mapOf(
+            currentDay to Time.ZERO,
+            currentDay.minus(1, DateTimeUnit.DAY) to Time.ZERO,
+            currentDay.minus(2, DateTimeUnit.DAY) to Time.ZERO,
+            currentDay.minus(3, DateTimeUnit.DAY) to Time.ZERO,
+            currentDay.minus(4, DateTimeUnit.DAY) to Time.ZERO,
+            currentDay.minus(5, DateTimeUnit.DAY) to Time.ZERO,
+            currentDay.minus(6, DateTimeUnit.DAY) to Time.ZERO,
+        )
+
+        val continuousWeeklyStats = mutableMapOf(
+            currentDay to Time.fromDecimal(1f),
+            currentDay.minus(1, DateTimeUnit.DAY) to Time.fromDecimal(1f),
+            currentDay.minus(2, DateTimeUnit.DAY) to Time.fromDecimal(1f),
+            currentDay.minus(3, DateTimeUnit.DAY) to Time.fromDecimal(1f),
+            currentDay.minus(4, DateTimeUnit.DAY) to Time.fromDecimal(1f),
+            currentDay.minus(5, DateTimeUnit.DAY) to Time.fromDecimal(1f),
+            currentDay.minus(6, DateTimeUnit.DAY) to Time.fromDecimal(1f),
+        )
 
         val last7DaysStats = Last7DaysStats(
             timeSpentToday = Time.ZERO,
             projectsWorkedOn = listOf(),
-            weeklyTimeSpent = mutableMapOf(),
+            weeklyTimeSpent = noWeeklyStats,
             mostUsedLanguage = "",
             mostUsedEditor = "",
             mostUsedOs = ""

@@ -2,54 +2,77 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.computations.either
-import arrow.core.right
-import com.jacob.wakatimeapp.core.common.today
+import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
+import com.jacob.wakatimeapp.home.domain.InstantProvider
+import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlin.coroutines.CoroutineContext
-import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.first
-import kotlinx.datetime.LocalDate
+import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.minus
 
 @Singleton
 class CalculateCurrentStreakUC @Inject constructor(
-    dispatcher: CoroutineContext = Dispatchers.IO,
     private val homePageCache: HomePageCache,
+    private val instantProvider: InstantProvider,
 ) {
 
-    suspend operator fun invoke(): Either<Error, StreakRange> {
-        val currentStreakFlow = homePageCache.getCurrentStreak().first()
-        val last7DaysStatsFlow = homePageCache.getLast7DaysStats()
+    suspend operator fun invoke(): Either<Error, StreakRange> = either {
+        val last7DaysStats = homePageCache.getLast7DaysStats().first().bind()
+        val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
-        last7DaysStatsFlow.collect { last7DaysStatsEither ->
-            either {
-                val last7DaysStats = last7DaysStatsEither.bind()
-                val currentStreak = currentStreakFlow.bind()
+        val today = instantProvider.now().toDate()
+        val todaysStats = last7DaysStats.weeklyTimeSpent[today] ?: Time.ZERO
 
-                val todaysStats = last7DaysStats.weeklyTimeSpent[LocalDate.today] ?: Time.ZERO
+        val endOfCurrentStreakIsYesterday = currentStreak.end == today.minus(1, DateTimeUnit.DAY)
 
-                if (todaysStats == Time.ZERO) return@either
+        when {
+            isCurrentStreakActive(endOfCurrentStreakIsYesterday, todaysStats) -> currentStreak
 
-                val updatedStreakRange = if (currentStreak == StreakRange.ZERO) {
-                    StreakRange(
-                        start = LocalDate.today,
-                        end = LocalDate.today,
-                    )
-                } else {
-                    StreakRange(
-                        start = currentStreak.start,
-                        end = LocalDate.today,
-                    )
-                }
+            isCurrentStreakOngoing(
+                endOfCurrentStreakIsYesterday,
+                todaysStats
+            ) -> currentStreak.copy(end = today)
 
-                homePageCache.updateCurrentStreak(updatedStreakRange)
-            }
+            else -> getNewCurrentStreak(currentStreak, last7DaysStats)
+        }
+    }
+
+    /**
+     * Streak is considered active if the last date in the streak is the previous day but
+     * there is no stats for the current day.
+     */
+    private fun isCurrentStreakActive(endOfCurrentStreakIsYesterday: Boolean, todaysStats: Time) =
+        endOfCurrentStreakIsYesterday && todaysStats == Time.ZERO
+
+    /**
+     * Streak is considered on-going if there is an active streak and there is stats for the current day.
+     */
+    private fun isCurrentStreakOngoing(endOfCurrentStreakIsYesterday: Boolean, todaysStats: Time) =
+        endOfCurrentStreakIsYesterday && todaysStats != Time.ZERO
+
+    private fun getNewCurrentStreak(
+        currentStreak: StreakRange,
+        last7DaysStats: Last7DaysStats,
+    ): StreakRange {
+        if (instantProvider.now().toDate().minus(currentStreak.end).days > 7) {
         }
 
-        return StreakRange.ZERO.right()
+        val statsForCurrentStreakRange = last7DaysStats.weeklyTimeSpent
+            .toSortedMap()
+            .entries
+            .reversed()
+            .takeWhile { it.value != Time.ZERO }
+
+        if (statsForCurrentStreakRange.isEmpty()) return StreakRange.ZERO
+
+        return StreakRange(
+            start = statsForCurrentStreakRange.last().key,
+            end = statsForCurrentStreakRange.first().key,
+        )
     }
 }
