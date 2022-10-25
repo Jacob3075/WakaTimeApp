@@ -4,12 +4,16 @@ import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
+import timber.log.Timber
 
 @Serializable
 data class Last7DaysStats(
@@ -39,6 +43,15 @@ data class StreakRange(
     val end: LocalDate,
 ) {
     val days = start.daysUntil(end)
+
+    operator fun plus(other: StreakRange) = when {
+        end == other.start.minus(1, DateTimeUnit.DAY) -> StreakRange(start, other.end)
+        start == other.end.plus(1, DateTimeUnit.DAY) -> StreakRange(other.start, end)
+        else -> {
+            Timber.e("Cannot add streaks $this and $other")
+            ZERO
+        }
+    }
 
     companion object {
         val ZERO = StreakRange(

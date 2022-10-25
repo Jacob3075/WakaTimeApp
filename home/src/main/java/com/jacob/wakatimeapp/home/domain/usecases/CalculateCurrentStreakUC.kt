@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.computations.either
+import arrow.core.getOrElse
 import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
@@ -14,6 +15,8 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 
 @Singleton
@@ -62,15 +65,16 @@ class CalculateCurrentStreakUC @Inject constructor(
         last7DaysStats: Last7DaysStats,
     ): StreakRange {
         val statsForCurrentStreakRange = last7DaysStats.weeklyTimeSpent
-            .toSortedMap()
-            .entries
-            .reversed()
-            .takeWhile { it.value != Time.ZERO }
+            .getStreakInRange()
 
         if (statsForCurrentStreakRange.isEmpty()) return StreakRange.ZERO
 
         if (statsForCurrentStreakRange.size == 7) {
-            calculateStreak()
+            val start = instantProvider.now().toDate().minus(7, DateTimeUnit.DAY)
+            calculateStreak(
+                start,
+                start.minus(1, DateTimeUnit.MONTH)
+            )
         }
 
         val start = if (currentStreak.end > statsForCurrentStreakRange.last().key) {
@@ -84,4 +88,31 @@ class CalculateCurrentStreakUC @Inject constructor(
             end = statsForCurrentStreakRange.first().key,
         )
     }
+
+    private suspend fun calculateStreak(start: LocalDate, end: LocalDate): StreakRange {
+        val daysInRange = start.daysUntil(end)
+        return homePageNetworkData.getStatsForRange(start.toString(), end.toString())
+            .map { stats ->
+                stats.dailyStats
+                    .associate { it.date to it.timeSpent }
+                    .getStreakInRange()
+            }
+            .map { StreakRange(start = it.last().key, end = it.first().key) }
+            .map {
+                if (it.days == daysInRange) {
+                    it + calculateStreak(
+                        start.minus(daysInRange, DateTimeUnit.DAY),
+                        end.minus(daysInRange, DateTimeUnit.DAY)
+                    )
+                } else {
+                    it
+                }
+            }
+            .getOrElse { StreakRange.ZERO }
+    }
+
+    private fun Map<LocalDate, Time>.getStreakInRange() = toSortedMap()
+        .entries
+        .reversed()
+        .takeWhile { it.value != Time.ZERO }
 }

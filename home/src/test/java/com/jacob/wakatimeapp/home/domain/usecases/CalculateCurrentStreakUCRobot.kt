@@ -1,9 +1,13 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
+import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Stats
+import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
+import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
@@ -28,9 +32,10 @@ internal class CalculateCurrentStreakUCRobot {
     private var result: Either<Error, StreakRange>? = null
 
     private val mockCache: HomePageCache = mockk(relaxUnitFun = true)
+    private val mockNetworkData: HomePageNetworkData = mockk()
 
     fun buildUseCase() = apply {
-        clearMocks(mockCache)
+        clearMocks(mockCache, mockNetworkData)
         result = null
 
         useCase = CalculateCurrentStreakUC(
@@ -39,7 +44,8 @@ internal class CalculateCurrentStreakUCRobot {
                 override val timeZone = TimeZone.UTC
 
                 override fun now() = currentDayInstant
-            }
+            },
+            homePageNetworkData = mockNetworkData,
         )
     }
 
@@ -110,5 +116,36 @@ internal class CalculateCurrentStreakUCRobot {
             mostUsedEditor = "",
             mostUsedOs = ""
         )
+
+        val statsForRange = Stats(
+            totalTime = Time.ZERO,
+            dailyStats = listOf(
+                DailyStats(
+                    Time.ZERO,
+                    projectsWorkedOn = listOf(),
+                    mostUsedLanguage = "",
+                    mostUsedEditor = "",
+                    mostUsedOs = "",
+                    date = currentDay
+                )
+            ),
+            range = StatsRange(
+                startDate = currentDay,
+                endDate = currentDay,
+            )
+
+        )
+
+        private fun createStatsForRange() {
+            Stats(
+                totalTime = Time.ZERO,
+                dailyStats = listOf(),
+                range = StatsRange(
+                    startDate = currentDay,
+                    endDate = currentDay,
+                )
+
+            )
+        }
     }
 }
