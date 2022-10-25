@@ -6,6 +6,7 @@ import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
+import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
@@ -19,6 +20,7 @@ import kotlinx.datetime.minus
 class CalculateCurrentStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
     private val instantProvider: InstantProvider,
+    private val homePageNetworkData: HomePageNetworkData,
 ) {
 
     suspend operator fun invoke(): Either<Error, StreakRange> = either {
@@ -55,13 +57,10 @@ class CalculateCurrentStreakUC @Inject constructor(
     private fun isCurrentStreakOngoing(endOfCurrentStreakIsYesterday: Boolean, todaysStats: Time) =
         endOfCurrentStreakIsYesterday && todaysStats != Time.ZERO
 
-    private fun getNewCurrentStreak(
+    private suspend fun getNewCurrentStreak(
         currentStreak: StreakRange,
         last7DaysStats: Last7DaysStats,
     ): StreakRange {
-        if (instantProvider.now().toDate().minus(currentStreak.end).days > 7) {
-        }
-
         val statsForCurrentStreakRange = last7DaysStats.weeklyTimeSpent
             .toSortedMap()
             .entries
@@ -70,8 +69,18 @@ class CalculateCurrentStreakUC @Inject constructor(
 
         if (statsForCurrentStreakRange.isEmpty()) return StreakRange.ZERO
 
+        if (statsForCurrentStreakRange.size == 7) {
+            calculateStreak()
+        }
+
+        val start = if (currentStreak.end > statsForCurrentStreakRange.last().key) {
+            currentStreak.start
+        } else {
+            statsForCurrentStreakRange.last().key
+        }
+
         return StreakRange(
-            start = statsForCurrentStreakRange.last().key,
+            start = start,
             end = statsForCurrentStreakRange.first().key,
         )
     }

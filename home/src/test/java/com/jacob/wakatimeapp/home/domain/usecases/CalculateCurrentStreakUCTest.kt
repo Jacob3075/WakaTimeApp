@@ -74,7 +74,7 @@ internal class CalculateCurrentStreakUCTest {
         }
 
     @Test
-    internal fun `when there is a streak in the cache but its end is within the last 7 days and there is coding stats since then, then re-calculate the streak`() =
+    internal fun `when there is a streak in the cache but it ended within the last 7 days and there is coding stats since then, then re-calculate the streak`() =
         runTest {
             val initialStreakRange = StreakRange(
                 start = currentDay.minus(8, DateTimeUnit.DAY),
@@ -101,7 +101,7 @@ internal class CalculateCurrentStreakUCTest {
         }
 
     @Test
-    internal fun `when the current streak has not been updated for a few days and there is more coding activity since then, then calculating should update the original streak`() =
+    internal fun `when the current streak has not been updated for less than a week and there is more coding activity since then, then calculating should update the original streak`() =
         runTest {
             val initialStreakRange = StreakRange(
                 start = currentDay.minus(10, DateTimeUnit.DAY),
@@ -109,7 +109,7 @@ internal class CalculateCurrentStreakUCTest {
             )
 
             val result = StreakRange(
-                start = currentDay.minus(8, DateTimeUnit.DAY),
+                start = currentDay.minus(10, DateTimeUnit.DAY),
                 end = currentDay,
             )
 
