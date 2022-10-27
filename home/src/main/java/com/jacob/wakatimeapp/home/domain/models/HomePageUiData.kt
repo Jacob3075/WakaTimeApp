@@ -4,10 +4,13 @@ import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.minus
+import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import timber.log.Timber
@@ -41,9 +44,15 @@ data class StreakRange(
 ) {
     val days = start.daysUntil(end)
 
-    operator fun plus(other: StreakRange) = when {
-        end >= other.start -> StreakRange(start, other.end)
-        start <= other.end -> StreakRange(other.start, end)
+    operator fun plus(other: StreakRange): StreakRange = when {
+        end == other.start -> StreakRange(start, other.end)
+        other.end == start -> StreakRange(other.start, end)
+        end == other.start.minus(1, DateTimeUnit.DAY) -> StreakRange(start, other.end)
+        start == other.end.plus(1, DateTimeUnit.DAY) -> StreakRange(other.start, end)
+        start < other.start && end > other.end -> StreakRange(start, end)
+        other.start < start && other.end > end -> StreakRange(other.start, other.end)
+        start < other.start && end > other.start -> StreakRange(start, other.end)
+        start < other.end && end > other.start -> StreakRange(other.start, end)
         else -> {
             Timber.e("Cannot add streaks $this and $other")
             ZERO
