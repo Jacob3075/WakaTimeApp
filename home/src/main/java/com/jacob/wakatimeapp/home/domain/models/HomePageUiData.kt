@@ -15,6 +15,13 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import timber.log.Timber
 
+data class CachedHomePageUiData(
+    val last7DaysStats: Last7DaysStats,
+    val userDetails: HomePageUserDetails,
+    val streaks: Streaks,
+    val isStateData: Boolean,
+)
+
 @Serializable
 data class Last7DaysStats(
     val timeSpentToday: Time,

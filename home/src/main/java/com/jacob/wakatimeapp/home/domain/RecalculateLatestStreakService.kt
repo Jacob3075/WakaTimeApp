@@ -3,7 +3,6 @@ package com.jacob.wakatimeapp.home.domain
 import arrow.core.getOrElse
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
-import com.jacob.wakatimeapp.home.domain.usecases.getLatestStreakInRange
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.datetime.DateTimeUnit

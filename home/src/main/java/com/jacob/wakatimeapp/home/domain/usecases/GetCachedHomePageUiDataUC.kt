@@ -6,8 +6,7 @@ import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
-import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
+import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
@@ -85,10 +84,3 @@ class GetCachedHomePageUiData @Inject constructor(
         INVALID(0L),
     }
 }
-
-data class CachedHomePageUiData(
-    val last7DaysStats: Last7DaysStats,
-    val userDetails: HomePageUserDetails,
-    val streaks: Streaks,
-    val isStateData: Boolean,
-)

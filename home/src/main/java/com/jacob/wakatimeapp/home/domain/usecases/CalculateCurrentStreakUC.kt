@@ -8,13 +8,13 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.RecalculateLatestStreakService
+import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.minus
 
 @Singleton
@@ -78,8 +78,3 @@ class CalculateCurrentStreakUC @Inject constructor(
             )
         }
 }
-
-fun Map<LocalDate, Time>.getLatestStreakInRange() = toSortedMap()
-    .entries
-    .reversed()
-    .takeWhile { it.value != Time.ZERO }
