@@ -42,7 +42,7 @@ data class StreakRange(
     val start: LocalDate,
     val end: LocalDate,
 ) {
-    val days = start.daysUntil(end)
+    val days = start.daysUntil(end) + 1
 
     operator fun plus(other: StreakRange): StreakRange = when {
         end == other.start -> StreakRange(start, other.end)

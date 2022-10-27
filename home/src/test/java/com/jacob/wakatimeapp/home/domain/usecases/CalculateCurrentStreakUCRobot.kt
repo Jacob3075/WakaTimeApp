@@ -1,10 +1,7 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
-import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.core.models.Stats
-import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
@@ -16,12 +13,12 @@ import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.mockk
-import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.minus
 import kotlinx.datetime.toLocalDateTime
@@ -67,8 +64,11 @@ internal class CalculateCurrentStreakUCRobot {
         coEvery { mockCache.getLast7DaysStats() } returns flowOf(data)
     }
 
+    fun mockRecalculateStreak(start: LocalDate, result: StreakRange) = apply {
+        coEvery { mockRecalculateStreak.calculate(start, any(), any()) } returns result
+    }
+
     internal companion object {
-        val streakRange = StreakRange.ZERO
 
         /**
          * Start of a random day
@@ -77,14 +77,9 @@ internal class CalculateCurrentStreakUCRobot {
          *  - date: 11/10/2022 (dd/mm/yyyy)
          *  - time: 00:00:00 (hh:mm::ss)
          */
-        val startOfDay = Instant.parse("2022-10-11T00:00:00Z")
+        private val startOfDay = Instant.parse("2022-10-11T00:00:00Z")
 
         val currentDayInstant = startOfDay + 1.hours + 30.minutes
-
-        /**
-         * Takes [currentDayInstant] and subtracts 1 day from it
-         */
-        val previousDayInstant = currentDayInstant.minus(1.days)
 
         val currentDay = currentDayInstant.toLocalDateTime(TimeZone.UTC).date
 
@@ -116,36 +111,5 @@ internal class CalculateCurrentStreakUCRobot {
             mostUsedEditor = "",
             mostUsedOs = ""
         )
-
-        val statsForRange = Stats(
-            totalTime = Time.ZERO,
-            dailyStats = listOf(
-                DailyStats(
-                    Time.ZERO,
-                    projectsWorkedOn = listOf(),
-                    mostUsedLanguage = "",
-                    mostUsedEditor = "",
-                    mostUsedOs = "",
-                    date = currentDay
-                )
-            ),
-            range = StatsRange(
-                startDate = currentDay,
-                endDate = currentDay,
-            )
-
-        )
-
-        private fun createStatsForRange() {
-            Stats(
-                totalTime = Time.ZERO,
-                dailyStats = listOf(),
-                range = StatsRange(
-                    startDate = currentDay,
-                    endDate = currentDay,
-                )
-
-            )
-        }
     }
 }

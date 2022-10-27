@@ -33,49 +33,50 @@ class CalculateCurrentStreakUC @Inject constructor(
 
         val endOfCurrentStreakIsYesterday = currentStreak.end == today.minus(1, DateTimeUnit.DAY)
 
-        val statsForCurrentStreakRange = last7DaysStats.recalculateStreakInLast7Days()
+        val recalculatedStreakForLast7Days = last7DaysStats.recalculateStreakInLast7Days()
+
+        val combinedStreak = currentStreak + recalculatedStreakForLast7Days
+        val failedToCombine = combinedStreak == StreakRange.ZERO
 
         when {
-            isCurrentStreakActive(endOfCurrentStreakIsYesterday, todaysStats) -> currentStreak
-            isCurrentStreakOngoing(
-                endOfCurrentStreakIsYesterday,
+            endOfCurrentStreakIsYesterday -> whenEndOfCurrentStreakIsYesterday(
+                currentStreak,
                 todaysStats
-            ) -> currentStreak.copy(end = today)
-
-            statsForCurrentStreakRange.isEmpty() -> StreakRange.ZERO
-            currentStreak.end > statsForCurrentStreakRange.last().key -> StreakRange(
-                start = currentStreak.start,
-                end = statsForCurrentStreakRange.first().key,
             )
 
-            statsForCurrentStreakRange.size == 7 -> recalculateLatestStreakService.calculate(
-                start = instantProvider.now().toDate().minus(7, DateTimeUnit.DAY),
-                value = 1,
-                unit = DateTimeUnit.MONTH
-            )
-
-            else -> StreakRange(
-                start = statsForCurrentStreakRange.last().key,
-                end = statsForCurrentStreakRange.first().key,
-            )
+            failedToCombine -> whenFailedToCombine(recalculatedStreakForLast7Days)
+            else -> combinedStreak
         }
     }
 
-    /**
-     * Streak is considered active if the last date in the streak is the previous day but
-     * there is no stats for the current day.
-     */
-    private fun isCurrentStreakActive(endOfCurrentStreakIsYesterday: Boolean, todaysStats: Time) =
-        endOfCurrentStreakIsYesterday && todaysStats == Time.ZERO
+    private fun whenEndOfCurrentStreakIsYesterday(
+        currentStreak: StreakRange,
+        todaysStats: Time,
+    ) = when (todaysStats) {
+        Time.ZERO -> currentStreak
+        else -> currentStreak.copy(end = instantProvider.now().toDate())
+    }
 
-    /**
-     * Streak is considered on-going if there is an active streak and there is stats for the current day.
-     */
-    private fun isCurrentStreakOngoing(endOfCurrentStreakIsYesterday: Boolean, todaysStats: Time) =
-        endOfCurrentStreakIsYesterday && todaysStats != Time.ZERO
+    private suspend fun whenFailedToCombine(
+        recalculatedStreakForLast7Days: StreakRange,
+    ) = when (recalculatedStreakForLast7Days.days) {
+        7 -> recalculateLatestStreakService.calculate(
+            start = instantProvider.now().toDate().minus(7, DateTimeUnit.DAY),
+            value = 1,
+            unit = DateTimeUnit.MONTH
+        )
+
+        else -> recalculatedStreakForLast7Days
+    }
 
     private fun Last7DaysStats.recalculateStreakInLast7Days() = weeklyTimeSpent
         .getLatestStreakInRange()
+        .let {
+            if (it.isEmpty()) StreakRange.ZERO else StreakRange(
+                start = it.last().key,
+                end = it.first().key,
+            )
+        }
 }
 
 fun Map<LocalDate, Time>.getLatestStreakInRange() = toSortedMap()
