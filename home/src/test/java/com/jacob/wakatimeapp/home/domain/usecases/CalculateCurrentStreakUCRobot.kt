@@ -7,8 +7,8 @@ import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
-import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
+import com.jacob.wakatimeapp.home.domain.RecalculateLatestStreakService
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import io.kotest.assertions.asClue
@@ -32,20 +32,20 @@ internal class CalculateCurrentStreakUCRobot {
     private var result: Either<Error, StreakRange>? = null
 
     private val mockCache: HomePageCache = mockk(relaxUnitFun = true)
-    private val mockNetworkData: HomePageNetworkData = mockk()
+    private val mockRecalculateStreak: RecalculateLatestStreakService = mockk()
 
     fun buildUseCase() = apply {
-        clearMocks(mockCache, mockNetworkData)
+        clearMocks(mockCache, mockRecalculateStreak)
         result = null
 
         useCase = CalculateCurrentStreakUC(
-            homePageCache = mockCache,
             instantProvider = object : InstantProvider {
                 override val timeZone = TimeZone.UTC
 
                 override fun now() = currentDayInstant
             },
-            homePageNetworkData = mockNetworkData,
+            homePageCache = mockCache,
+            recalculateLatestStreakService = mockRecalculateStreak,
         )
     }
 
