@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.computations.either
+import arrow.core.right
 import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
@@ -9,7 +10,6 @@ import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.RecalculateLatestStreakService
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
-import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -33,7 +33,8 @@ class CalculateCurrentStreakUC @Inject constructor(
 
         val endOfCurrentStreakIsYesterday = currentStreak.end == today.minus(1, DateTimeUnit.DAY)
 
-        val recalculatedStreakForLast7Days = last7DaysStats.recalculateStreakInLast7Days()
+        val recalculatedStreakForLast7Days = last7DaysStats.weeklyTimeSpent
+            .getLatestStreakInRange()
 
         val combinedStreak = currentStreak + recalculatedStreakForLast7Days
         val failedToCombine = combinedStreak == StreakRange.ZERO
@@ -44,7 +45,7 @@ class CalculateCurrentStreakUC @Inject constructor(
                 todaysStats
             )
 
-            failedToCombine -> whenFailedToCombine(recalculatedStreakForLast7Days)
+            failedToCombine -> whenFailedToCombine(recalculatedStreakForLast7Days).bind()
             else -> combinedStreak
         }
     }
@@ -66,15 +67,6 @@ class CalculateCurrentStreakUC @Inject constructor(
             unit = DateTimeUnit.MONTH
         )
 
-        else -> recalculatedStreakForLast7Days
+        else -> recalculatedStreakForLast7Days.right()
     }
-
-    private fun Last7DaysStats.recalculateStreakInLast7Days() = weeklyTimeSpent
-        .getLatestStreakInRange()
-        .let {
-            if (it.isEmpty()) StreakRange.ZERO else StreakRange(
-                start = it.last().key,
-                end = it.first().key,
-            )
-        }
 }

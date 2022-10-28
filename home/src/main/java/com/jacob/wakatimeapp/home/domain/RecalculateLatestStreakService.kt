@@ -1,6 +1,8 @@
 package com.jacob.wakatimeapp.home.domain
 
-import arrow.core.getOrElse
+import arrow.core.Either
+import arrow.core.computations.either
+import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
@@ -8,6 +10,7 @@ import javax.inject.Singleton
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.DateTimeUnit.DateBased
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 
 @Singleton
@@ -18,26 +21,26 @@ class RecalculateLatestStreakService @Inject constructor(
         start: LocalDate,
         value: Int,
         unit: DateBased,
-    ): StreakRange {
+    ): Either<Error, StreakRange> = either {
         val end = start.minus(value, unit)
-        return homePageNetworkData.getStatsForRange(start.toString(), end.toString())
+        val count = end.daysUntil(start) + 1
+        homePageNetworkData.getStatsForRange(start.toString(), end.toString())
             .map { stats ->
                 stats.dailyStats
                     .associate { it.date to it.timeSpent }
                     .getLatestStreakInRange()
             }
-            .map { StreakRange(start = it.last().key, end = it.first().key) }
             .map {
-                if (it.days == value) {
-                    it + calculate(
+                when (it.days) {
+                    count -> it + calculate(
                         start = end.minus(1, DateTimeUnit.DAY),
                         value = value,
                         unit = unit
-                    )
-                } else {
-                    it
+                    ).bind()
+
+                    else -> it
                 }
             }
-            .getOrElse { StreakRange.ZERO }
+            .bind()
     }
 }
