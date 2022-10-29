@@ -18,14 +18,14 @@ dependencies {
 
     implementation("androidx.core:core-ktx:1.9.0")
     implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("com.google.android.material:material:1.7.0-rc01")
-    implementation("androidx.compose.material3:material3:1.0.0-rc01")
+    implementation("com.google.android.material:material:1.7.0")
+    implementation("androidx.compose.material3:material3:1.0.0")
 
     implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.6.4")
 
     // Compose
-    implementation("androidx.compose.ui:ui:1.2.1")
-    implementation("androidx.compose.ui:ui-tooling-preview:1.2.1")
+    implementation("androidx.compose.ui:ui:1.3.0")
+    implementation("androidx.compose.ui:ui-tooling-preview:1.3.0")
 
     implementation("com.airbnb.android:lottie-compose:5.0.3")
 

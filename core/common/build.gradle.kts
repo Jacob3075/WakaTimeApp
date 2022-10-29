@@ -2,6 +2,10 @@ plugins {
     id("wakatimeapp.android.library")
 }
 
+android {
+    namespace = "com.jacob.wakatimeapp.core.common"
+}
+
 dependencies {
     implementation(project(":core:models"))
 
@@ -24,7 +28,4 @@ dependencies {
     implementation(platform("com.squareup.okhttp3:okhttp-bom:4.9.3"))
     implementation("com.squareup.okhttp3:okhttp")
     implementation("com.squareup.okhttp3:logging-interceptor")
-}
-android {
-    namespace = "com.jacob.wakatimeapp.core.common"
 }
