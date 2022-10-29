@@ -1,6 +1,5 @@
 plugins {
     id("wakatimeapp.android.application")
-    id("androidx.navigation.safeargs.kotlin")
 }
 
 dependencies {
