@@ -31,7 +31,6 @@ class RecalculateLatestStreakService @Inject constructor(
                     .getLatestStreakInRange()
             }
             .map {
-                println("it: $it, start: $start, end: $end, count: $count, days: ${it.days}")
                 when (it.days) {
                     count -> {
                         val streakFromNextDuration = calculate(
@@ -39,7 +38,6 @@ class RecalculateLatestStreakService @Inject constructor(
                             value = value,
                             unit = unit
                         ).bind()
-                        println("streakFromNextDuration: $streakFromNextDuration")
                         if (streakFromNextDuration == StreakRange.ZERO) it else it + streakFromNextDuration
                     }
 

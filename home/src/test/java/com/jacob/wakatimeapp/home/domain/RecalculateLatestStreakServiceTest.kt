@@ -247,16 +247,38 @@ internal class RecalculateLatestStreakServiceTest {
         runTest {
             val start1 = LocalDate(2022, 4, 30)
             val end1 = start1.minus(1, DateTimeUnit.MONTH)
+            val count1 = end1.daysUntil(start1) + 1
+            val days1 = List(count1) { it }
+
             val start2 = end1.minus(1, DateTimeUnit.DAY)
             val end2 = start2.minus(1, DateTimeUnit.MONTH)
+            val count2 = end2.daysUntil(start2) + 1
+            val days2 = List(count2) { it }
+
             val start3 = end2.minus(1, DateTimeUnit.DAY)
             val end3 = start3.minus(1, DateTimeUnit.MONTH)
+            val count3 = end3.daysUntil(start3) + 1
+            val days3 = List(count3) { it }
+
             val start4 = end3.minus(1, DateTimeUnit.DAY)
             val end4 = start4.minus(1, DateTimeUnit.MONTH)
+            val count4 = end4.daysUntil(start4) + 1
+            val days4 = List(count4) { it }
+
             val start5 = end4.minus(1, DateTimeUnit.DAY)
             val end5 = start5.minus(1, DateTimeUnit.MONTH)
-            val count = end1.daysUntil(start1) + 1
-            val days = List(count) { it }
+            val count5 = end5.daysUntil(start5) + 1
+            val days5 = List(count5) { it }
+
+            val start6 = end5.minus(1, DateTimeUnit.DAY)
+            val end6 = start6.minus(1, DateTimeUnit.MONTH)
+            val count6 = end6.daysUntil(start6) + 1
+            val days6 = List(count6) { it }
+
+            val start7 = end6.minus(1, DateTimeUnit.DAY)
+            val end7 = start7.minus(1, DateTimeUnit.MONTH)
+            val count7 = end7.daysUntil(start7) + 1
+            val days7 = emptyList<Int>()
 
             robot.buildService()
                 .mockGetDataForRange(
@@ -264,7 +286,7 @@ internal class RecalculateLatestStreakServiceTest {
                     end1.toString(),
                     Stats(
                         totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days, end1),
+                        dailyStats = createDailyStats(count1, days1, end1),
                         range = StatsRange(start1, end1)
                     ).right(),
                 )
@@ -273,7 +295,7 @@ internal class RecalculateLatestStreakServiceTest {
                     end2.toString(),
                     Stats(
                         totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days, end2),
+                        dailyStats = createDailyStats(count2, days2, end2),
                         range = StatsRange(start2, end2)
                     ).right(),
                 )
@@ -282,11 +304,7 @@ internal class RecalculateLatestStreakServiceTest {
                     end3.toString(),
                     Stats(
                         totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(
-                            count,
-                            days.take(end3.daysUntil(start3) + 1),
-                            end3
-                        ),
+                        dailyStats = createDailyStats(count3, days3, end3),
                         range = StatsRange(start3, end3)
                     ).right(),
                 )
@@ -295,7 +313,7 @@ internal class RecalculateLatestStreakServiceTest {
                     end4.toString(),
                     Stats(
                         totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days, end4),
+                        dailyStats = createDailyStats(count4, days4, end4),
                         range = StatsRange(start4, end4)
                     ).right(),
                 )
@@ -304,8 +322,26 @@ internal class RecalculateLatestStreakServiceTest {
                     end5.toString(),
                     Stats(
                         totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, emptyList(), end5),
+                        dailyStats = createDailyStats(count5, days5, end5),
                         range = StatsRange(start5, end5)
+                    ).right(),
+                )
+                .mockGetDataForRange(
+                    start6.toString(),
+                    end6.toString(),
+                    Stats(
+                        totalTime = Time.ZERO,
+                        dailyStats = createDailyStats(count6, days6, end6),
+                        range = StatsRange(start6, end6)
+                    ).right(),
+                )
+                .mockGetDataForRange(
+                    start7.toString(),
+                    end7.toString(),
+                    Stats(
+                        totalTime = Time.ZERO,
+                        dailyStats = createDailyStats(count7, days7, end7),
+                        range = StatsRange(start7, end7)
                     ).right(),
                 )
                 .calculate(
@@ -315,7 +351,7 @@ internal class RecalculateLatestStreakServiceTest {
                 )
                 .resultShouldBe(
                     StreakRange(
-                        start = end4,
+                        start = end6,
                         end = start1,
                     ).right()
                 )
