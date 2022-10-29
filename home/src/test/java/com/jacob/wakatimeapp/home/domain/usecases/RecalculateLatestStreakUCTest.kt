@@ -1,11 +1,11 @@
-package com.jacob.wakatimeapp.home.domain
+package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.home.domain.RecalculateLatestStreakServiceRobot.Companion.createDailyStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.usecases.RecalculateLatestStreakUCRobot.Companion.createDailyStats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
@@ -16,8 +16,8 @@ import kotlinx.datetime.toLocalDate
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class RecalculateLatestStreakServiceTest {
-    private val robot = RecalculateLatestStreakServiceRobot()
+internal class RecalculateLatestStreakUCTest {
+    private val robot = RecalculateLatestStreakUCRobot()
 
     @Test
     internal fun `when called with duration and there is no valid streak, then return empty streak`() =

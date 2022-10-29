@@ -1,9 +1,10 @@
-package com.jacob.wakatimeapp.home.domain
+package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.computations.either
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
+import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -14,7 +15,7 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 
 @Singleton
-class RecalculateLatestStreakService @Inject constructor(
+class RecalculateLatestStreakUC @Inject constructor(
     private val homePageNetworkData: HomePageNetworkData,
 ) {
     suspend fun calculate(

@@ -8,7 +8,6 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.RecalculateLatestStreakService
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
@@ -21,7 +20,7 @@ import kotlinx.datetime.minus
 class CalculateCurrentStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
     private val instantProvider: InstantProvider,
-    private val recalculateLatestStreakService: RecalculateLatestStreakService,
+    private val recalculateLatestStreakUC: RecalculateLatestStreakUC,
 ) {
 
     suspend operator fun invoke(): Either<Error, StreakRange> = either {
@@ -61,7 +60,7 @@ class CalculateCurrentStreakUC @Inject constructor(
     private suspend fun whenFailedToCombine(
         recalculatedStreakForLast7Days: StreakRange,
     ) = when (recalculatedStreakForLast7Days.days) {
-        7 -> recalculateLatestStreakService.calculate(
+        7 -> recalculateLatestStreakUC.calculate(
             start = instantProvider.now().toDate().minus(7, DateTimeUnit.DAY),
             value = 1,
             unit = DateTimeUnit.MONTH

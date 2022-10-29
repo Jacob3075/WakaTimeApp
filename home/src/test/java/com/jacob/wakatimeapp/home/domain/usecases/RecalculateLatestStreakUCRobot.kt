@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.domain
+package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.models.DailyStats
@@ -17,8 +17,8 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 
-internal class RecalculateLatestStreakServiceRobot {
-    private lateinit var service: RecalculateLatestStreakService
+internal class RecalculateLatestStreakUCRobot {
+    private lateinit var useCase: RecalculateLatestStreakUC
 
     private val mockHomePageNetworkData: HomePageNetworkData = mockk()
 
@@ -28,11 +28,11 @@ internal class RecalculateLatestStreakServiceRobot {
         clearMocks(mockHomePageNetworkData)
         result = null
 
-        service = RecalculateLatestStreakService(mockHomePageNetworkData)
+        useCase = RecalculateLatestStreakUC(mockHomePageNetworkData)
     }
 
     suspend fun calculate(start: LocalDate, value: Int, unit: DateTimeUnit.DateBased) = apply {
-        result = service.calculate(
+        result = useCase.calculate(
             start,
             value,
             unit,
