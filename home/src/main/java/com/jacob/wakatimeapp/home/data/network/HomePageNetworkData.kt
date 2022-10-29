@@ -9,6 +9,7 @@ import com.jacob.wakatimeapp.core.models.Error.NetworkErrors
 import com.jacob.wakatimeapp.home.data.network.dtos.AllTimeDataDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import com.jacob.wakatimeapp.home.data.network.mappers.toModel
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -51,6 +52,15 @@ class HomePageNetworkData @Inject constructor(
         homePageAPI.getData("Bearer $token")
             .checkResponse()
             .map(AllTimeDataDTO::toString)
+    } catch (exception: Exception) {
+        Timber.e(exception)
+        handleNetworkException(exception)
+    }
+
+    suspend fun getStatsForRange(start: String, end: String) = try {
+        homePageAPI.getStatsForRange("Bearer $token", start, end)
+            .checkResponse()
+            .map(GetStatsForRangeResDTO::toModel)
     } catch (exception: Exception) {
         Timber.e(exception)
         handleNetworkException(exception)
