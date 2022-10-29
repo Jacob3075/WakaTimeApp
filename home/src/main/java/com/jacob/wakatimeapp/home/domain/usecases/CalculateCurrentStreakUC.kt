@@ -61,7 +61,7 @@ class CalculateCurrentStreakUC @Inject constructor(
         recalculatedStreakForLast7Days: StreakRange,
     ) = when (recalculatedStreakForLast7Days.days) {
         7 -> recalculateLatestStreakUC.calculate(
-            start = instantProvider.now().toDate().minus(7, DateTimeUnit.DAY),
+            start = instantProvider.now().toDate().minus(8, DateTimeUnit.DAY),
             value = 1,
             unit = DateTimeUnit.MONTH
         )

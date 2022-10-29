@@ -140,7 +140,7 @@ internal class CalculateCurrentStreakUCTest {
                 .mockGetLast7DaysStats(
                     last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right()
                 )
-                .mockRecalculateStreak(currentDay.minus(7, DateTimeUnit.DAY), result.right())
+                .mockRecalculateStreak(currentDay.minus(8, DateTimeUnit.DAY), result.right())
                 .callUseCase()
                 .resultsShouldBe(result.right())
         }
