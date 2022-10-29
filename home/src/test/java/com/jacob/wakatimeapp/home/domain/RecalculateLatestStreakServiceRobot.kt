@@ -45,8 +45,8 @@ internal class RecalculateLatestStreakServiceRobot {
         }
     }
 
-    fun mockGetDataForRange(start: String, end: String, vararg data: Either<Error, Stats>) = apply {
-        coEvery { mockHomePageNetworkData.getStatsForRange(start, end) }.returnsMany(*data)
+    fun mockGetDataForRange(start: String, end: String, data: Either<Error, Stats>) = apply {
+        coEvery { mockHomePageNetworkData.getStatsForRange(start, end) } returns data
     }
 
     fun verifyGetDataForRange(start: String, end: String, count: Int = 1) = apply {
@@ -61,7 +61,7 @@ internal class RecalculateLatestStreakServiceRobot {
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
                 mostUsedOs = "",
-                date = end.plus(it + 1, DateTimeUnit.DAY)
+                date = end.plus(it, DateTimeUnit.DAY)
             )
         }
     }

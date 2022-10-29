@@ -31,12 +31,17 @@ class RecalculateLatestStreakService @Inject constructor(
                     .getLatestStreakInRange()
             }
             .map {
+                println("it: $it, start: $start, end: $end, count: $count, days: ${it.days}")
                 when (it.days) {
-                    count -> it + calculate(
-                        start = end.minus(1, DateTimeUnit.DAY),
-                        value = value,
-                        unit = unit
-                    ).bind()
+                    count -> {
+                        val streakFromNextDuration = calculate(
+                            start = end.minus(1, DateTimeUnit.DAY),
+                            value = value,
+                            unit = unit
+                        ).bind()
+                        println("streakFromNextDuration: $streakFromNextDuration")
+                        if (streakFromNextDuration == StreakRange.ZERO) it else it + streakFromNextDuration
+                    }
 
                     else -> it
                 }
