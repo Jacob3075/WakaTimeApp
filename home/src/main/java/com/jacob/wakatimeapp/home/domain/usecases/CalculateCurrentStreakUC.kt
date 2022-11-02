@@ -24,7 +24,8 @@ class CalculateCurrentStreakUC @Inject constructor(
 ) {
 
     suspend operator fun invoke(): Either<Error, StreakRange> = either {
-        val last7DaysStats = homePageCache.getLast7DaysStats().first().bind()
+        val last7DaysStats =
+            homePageCache.getLast7DaysStats().first().bind() ?: return@either StreakRange.ZERO
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
         val today = instantProvider.now().toDate()

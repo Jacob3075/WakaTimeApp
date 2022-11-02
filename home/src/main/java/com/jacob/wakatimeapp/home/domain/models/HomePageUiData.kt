@@ -19,7 +19,7 @@ data class CachedHomePageUiData(
     val last7DaysStats: Last7DaysStats,
     val userDetails: HomePageUserDetails,
     val streaks: Streaks,
-    val isStateData: Boolean,
+    val isStaleData: Boolean,
 )
 
 @Serializable

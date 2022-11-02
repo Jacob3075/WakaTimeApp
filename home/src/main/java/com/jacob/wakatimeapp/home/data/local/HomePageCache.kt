@@ -10,14 +10,13 @@ import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
+import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.Flow
 import kotlinx.coroutines.flow.catch
 import kotlinx.coroutines.flow.map
-import kotlinx.datetime.Clock
 import kotlinx.datetime.Instant
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
@@ -28,6 +27,7 @@ import timber.log.Timber
 class HomePageCache @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val json: Json,
+    private val instantProvider: InstantProvider,
 ) {
 
     fun getLastRequestTime() = dataStore.data.map {
@@ -36,16 +36,15 @@ class HomePageCache @Inject constructor(
     }
         .catch { Instant.DISTANT_PAST }
 
-    suspend fun updateLastRequestTime(time: Instant = Clock.System.now()) {
+    suspend fun updateLastRequestTime(time: Instant = instantProvider.now()) {
         dataStore.edit {
             it[KEY_LAST_REQUEST_TIME] = time.toEpochMilliseconds()
         }
     }
 
-    fun getLast7DaysStats(): Flow<Either<Error, Last7DaysStats>> = dataStore.data.map {
-        val stringUiData = it[KEY_LAST_7_DAYS_STATS] ?: return@map emptyCacheError
-        json.decodeFromString<Last7DaysStats>(stringUiData).right()
-    }.catch {
+    fun getLast7DaysStats() = dataStore.data.map {
+        it[KEY_LAST_7_DAYS_STATS]?.let<String, Last7DaysStats>(json::decodeFromString).right()
+    }.catch<Either<Error, Last7DaysStats?>> {
         Timber.e(it)
         emit(DatabaseError.UnknownError(it.message!!, it).left())
     }
@@ -72,8 +71,6 @@ class HomePageCache @Inject constructor(
     }
 
     companion object {
-        private val emptyCacheError: Either<Error, Nothing> = DatabaseError.EmptyCache("").left()
-
         private val KEY_LAST_REQUEST_TIME = longPreferencesKey("KEY_LAST_REQUEST_TIME")
         private val KEY_LAST_7_DAYS_STATS = stringPreferencesKey("KEY_LAST_7_DAYS_STATS")
         private val KEY_CURRENT_STREAK = stringPreferencesKey("KEY_CURRENT_STREAK")

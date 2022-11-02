@@ -10,7 +10,7 @@ import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiData.CacheValidity.DEFAULT
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC.CacheValidity.DEFAULT
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.channelFlow
@@ -19,7 +19,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
 
 @Singleton
-class GetCachedHomePageUiData @Inject constructor(
+class GetCachedHomePageUiDataUC @Inject constructor(
     private val instantProvider: InstantProvider,
     private val homePageCache: HomePageCache,
     private val authDataStore: AuthDataStore,
@@ -37,8 +37,8 @@ class GetCachedHomePageUiData @Inject constructor(
         ) { last7DaysStatsEither, userDetails, streaksEither, lastRequestTime ->
             if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
 
-            either<Error, CachedHomePageUiData> {
-                val last7DaysStats = last7DaysStatsEither.bind()
+            either<Error, CachedHomePageUiData?> {
+                val last7DaysStats = last7DaysStatsEither.bind() ?: return@either null
                 val streakRange = streaksEither.bind()
                 val streaks = Streaks(
                     currentStreak = streakRange,
@@ -49,7 +49,7 @@ class GetCachedHomePageUiData @Inject constructor(
                     last7DaysStats = last7DaysStats,
                     userDetails = userDetails.toHomePageUserDetails(),
                     streaks = streaks,
-                    isStateData = !validDataInCache(
+                    isStaleData = !validDataInCache(
                         lastRequestTime = lastRequestTime,
                         cacheValidityTime = cacheValidity
                     )
