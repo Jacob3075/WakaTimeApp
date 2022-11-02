@@ -101,8 +101,8 @@ private fun HomePageLoaded(
             .verticalScroll(scrollState)
     ) {
         UserDetailsSection(
-            fullName = homePageViewState.userDetails.photoUrl,
-            photoUrl = homePageViewState.userDetails.fullName
+            fullName = homePageViewState.userDetails.fullName,
+            photoUrl = homePageViewState.userDetails.photoUrl
         )
 
         TimeSpentCard(
