@@ -14,7 +14,9 @@ data class Gradient(
     val opacity: Int = 100,
     val onStartColor: Color = startColor,
     val onEndColor: Color = endColor,
-)
+) {
+    val colorList get() = listOf(startColor, endColor)
+}
 
 @Immutable
 data class Gradients(
