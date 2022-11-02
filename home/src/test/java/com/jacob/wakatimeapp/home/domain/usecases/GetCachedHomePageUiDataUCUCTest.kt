@@ -120,7 +120,7 @@ internal class GetCachedHomePageUiDataUCTest {
                 userDetails = userDetails.toHomePageUserDetails(),
                 last7DaysStats = last7DaysStats,
                 streaks = Streaks(currentStreak, StreakRange.ZERO),
-                isStateData = true
+                isStaleData = true
             )
             val copy1 = last7DaysStats.copy(timeSpentToday = Time.fromDecimal(2.0f))
             val copy2 = last7DaysStats.copy(timeSpentToday = Time.fromDecimal(3.0f))
@@ -146,12 +146,34 @@ internal class GetCachedHomePageUiDataUCTest {
                 )
                 .`when new data is sent, then new item should be emitted with correct values for previous data`(
                     currentDayInstant,
-                    cachedData.copy(last7DaysStats = copy1, isStateData = false)
+                    cachedData.copy(last7DaysStats = copy1, isStaleData = false)
                 )
                 .`when new data is sent, then new item should be emitted with correct values for previous data`(
                     copy2.right(),
-                    cachedData.copy(last7DaysStats = copy2, isStateData = false)
+                    cachedData.copy(last7DaysStats = copy2, isStaleData = false)
                 )
+                .expectNoMoreItems()
+        }
+
+    @Test
+    internal fun `when there is no data in cache for last 7 days stats, then should return null`() =
+        runTest {
+            robot.buildUseCase()
+                .mockAllFunctions()
+                .callUseCase(this)
+                .sendLast7DaysStats(null.right())
+                .sendLastRequestTime(Instant.DISTANT_PAST)
+                .sendUserDetails(userDetails)
+                .sendCurrentStreak(StreakRange.ZERO.right())
+                .withNextItem {
+                    itemShouldBeRight()
+                        .itemShouldBeNull()
+                }
+                .sendLastRequestTime(currentDayInstant)
+                .withNextItem {
+                    itemShouldBeRight()
+                        .itemShouldBeNull()
+                }
                 .expectNoMoreItems()
         }
 

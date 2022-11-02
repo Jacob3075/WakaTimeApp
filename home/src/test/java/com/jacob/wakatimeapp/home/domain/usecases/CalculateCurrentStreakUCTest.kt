@@ -144,4 +144,13 @@ internal class CalculateCurrentStreakUCTest {
                 .callUseCase()
                 .resultsShouldBe(result.right())
         }
+
+    @Test
+    internal fun `when last 7 days stats is null, then return zero`() = runTest {
+        robot.buildUseCase()
+            .mockGetLast7DaysStats(null.right())
+            .mockGetCurrentStreak(StreakRange.ZERO.right())
+            .callUseCase()
+            .resultsShouldBe(StreakRange.ZERO.right())
+    }
 }

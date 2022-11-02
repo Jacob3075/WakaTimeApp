@@ -59,7 +59,7 @@ internal class CalculateCurrentStreakUCRobot {
         coEvery { mockCache.getCurrentStreak() } returns flowOf(data)
     }
 
-    fun mockGetLast7DaysStats(data: Either<Error, Last7DaysStats>) = apply {
+    fun mockGetLast7DaysStats(data: Either<Error, Last7DaysStats?>) = apply {
         coEvery { mockCache.getLast7DaysStats() } returns flowOf(data)
     }
 
