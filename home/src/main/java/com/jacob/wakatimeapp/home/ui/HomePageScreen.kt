@@ -122,10 +122,11 @@ private fun HomePageLoaded(
         Spacer(modifier = Modifier.height(spacing.small))
 
         OtherDailyStatsSection(
+            onClick = {},
             mostUsedLanguage = homePageViewState.last7DaysStats.mostUsedLanguage,
             mostUsedOs = homePageViewState.last7DaysStats.mostUsedOs,
             mostUsedEditor = homePageViewState.last7DaysStats.mostUsedEditor,
-            onClick = {},
+            currentStreak = homePageViewState.streaks.currentStreak,
         )
         Spacer(modifier = Modifier.height(spacing.medium))
     }

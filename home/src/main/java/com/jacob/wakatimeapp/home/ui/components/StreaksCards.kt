@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.home.ui.components
 
-import android.content.res.Configuration
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -19,26 +18,30 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
-import androidx.compose.ui.layout.layout
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.withStyle
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
+import com.jacob.wakatimeapp.core.ui.WtaPreviews
+import com.jacob.wakatimeapp.core.ui.modifiers.removeFontPadding
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import kotlinx.datetime.LocalDate
 
 @Composable
-internal fun CurrentStreakCard(currentStreak: StreakRange, modifier: Modifier = Modifier) {
-    val gradientColor = MaterialTheme.gradients.greenCyan
-    val gradientBrush = Brush.horizontalGradient(gradientColor.colorList)
-    val shape = RoundedCornerShape(20)
+internal fun CurrentStreakCard(
+    currentStreak: StreakRange,
+    gradient: Gradient,
+    cornerPercentage: Int,
+    modifier: Modifier = Modifier,
+) {
+    val gradientBrush = Brush.horizontalGradient(gradient.colorList)
+    val shape = RoundedCornerShape(cornerPercentage)
 
     Box(
         modifier = modifier
@@ -48,7 +51,7 @@ internal fun CurrentStreakCard(currentStreak: StreakRange, modifier: Modifier = 
         Image(
             painter = painterResource(id = MaterialTheme.assets.icons.time),
             contentDescription = null,
-            colorFilter = ColorFilter.tint(gradientColor.onEndColor),
+            colorFilter = ColorFilter.tint(gradient.onEndColor),
             modifier = Modifier
                 .padding(
                     end = MaterialTheme.spacing.small,
@@ -77,31 +80,15 @@ internal fun CurrentStreakCard(currentStreak: StreakRange, modifier: Modifier = 
                         append(" days")
                     }
                 },
-                color = gradientColor.onStartColor,
+                color = gradient.onStartColor,
                 modifier = Modifier.removeFontPadding(streakValueTextStyle)
             )
             Text(
                 text = "Current Streak",
-                color = gradientColor.onStartColor,
+                color = gradient.onStartColor,
                 style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light)
             )
         }
-    }
-}
-
-/**
- * Removes excess padding from the top and bottom of the text.
- *
- * [Source](https://issuetracker.google.com/issues/171394808#comment38)
- */
-fun Modifier.removeFontPadding(
-    textStyle: TextStyle,
-) = layout { measurable, constraints ->
-    val placeable = measurable.measure(constraints)
-    val heightWithoutPadding =
-        placeable.height - placeable.height.mod(textStyle.lineHeight.roundToPx())
-    layout(placeable.width, heightWithoutPadding) {
-        placeable.placeRelative(0, 0)
     }
 }
 
@@ -120,6 +107,8 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 1, 11)
                 ),
+                gradient = MaterialTheme.gradients.greenCyan,
+                cornerPercentage = 20,
                 modifier = Modifier.weight(0.5F)
             )
             CurrentStreakCard(
@@ -127,25 +116,10 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 1, 5)
                 ),
+                gradient = MaterialTheme.gradients.greenCyan,
+                cornerPercentage = 20,
                 modifier = Modifier.weight(0.5F)
             )
         }
     }
 }
-
-@Preview(
-    name = "Light Mode",
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL
-)
-@Preview(
-    name = "Dark Mode",
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL
-)
-@Preview(
-    name = "Full Device",
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
-    showSystemUi = true
-)
-annotation class WtaPreviews
