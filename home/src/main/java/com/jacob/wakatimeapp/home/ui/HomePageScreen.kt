@@ -29,7 +29,10 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
+import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
+import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
@@ -98,8 +101,8 @@ private fun HomePageLoaded(
             .verticalScroll(scrollState)
     ) {
         UserDetailsSection(
-            fullName = homePageViewState.contentData.photoUrl,
-            photoUrl = homePageViewState.contentData.fullName
+            fullName = homePageViewState.userDetails.fullName,
+            photoUrl = homePageViewState.userDetails.photoUrl
         )
 
         TimeSpentCard(
@@ -107,22 +110,23 @@ private fun HomePageLoaded(
             roundedCornerPercent = 25,
             iconId = icons.time,
             mainText = "Total Time Spent Today",
-            time = homePageViewState.contentData.timeSpentToday,
+            time = homePageViewState.last7DaysStats.timeSpentToday,
             onClick = toDetailsPage
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
-        RecentProjects(homePageViewState.contentData.projectsWorkedOn)
+        RecentProjects(homePageViewState.last7DaysStats.projectsWorkedOn)
         Spacer(modifier = Modifier.height(spacing.extraSmall))
 
-        WeeklyReport(homePageViewState.contentData.weeklyTimeSpent)
+        WeeklyReport(homePageViewState.last7DaysStats.weeklyTimeSpent)
         Spacer(modifier = Modifier.height(spacing.small))
 
         OtherDailyStatsSection(
-            mostUsedLanguage = homePageViewState.contentData.mostUsedLanguage,
-            mostUsedOs = homePageViewState.contentData.mostUsedOs,
-            mostUsedEditor = homePageViewState.contentData.mostUsedEditor,
             onClick = {},
+            mostUsedLanguage = homePageViewState.last7DaysStats.mostUsedLanguage,
+            mostUsedOs = homePageViewState.last7DaysStats.mostUsedOs,
+            mostUsedEditor = homePageViewState.last7DaysStats.mostUsedEditor,
+            currentStreak = homePageViewState.streaks.currentStreak,
         )
         Spacer(modifier = Modifier.height(spacing.medium))
     }
@@ -166,15 +170,21 @@ class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewS
         HomePageViewState.Loading,
         HomePageViewState.Error(Error.UnknownError("Something went wrong")),
         HomePageViewState.Loaded(
-            contentData = HomePageUiData(
+            last7DaysStats = Last7DaysStats(
                 timeSpentToday = Time.ZERO,
                 projectsWorkedOn = listOf(),
                 weeklyTimeSpent = mapOf(),
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
                 mostUsedOs = "",
+            ),
+            userDetails = HomePageUserDetails(
                 photoUrl = "",
                 fullName = "",
+            ),
+            streaks = Streaks(
+                currentStreak = StreakRange.ZERO,
+                longestStreak = StreakRange.ZERO,
             )
         ),
     )
