@@ -6,7 +6,7 @@ import arrow.core.computations.either
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
-import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiData
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import com.jacob.wakatimeapp.home.domain.usecases.UpdateCachedHomePageUiData
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -15,13 +15,14 @@ import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
     ioDispatcher: CoroutineContext,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
     private val calculateCurrentStreakUC: CalculateCurrentStreakUC,
-    private val getCachedHomePageUiData: GetCachedHomePageUiData,
+    private val getCachedHomePageUiDataUC: GetCachedHomePageUiDataUC,
     private val updateCachedHomePageUiData: UpdateCachedHomePageUiData,
 ) : ViewModel() {
 
@@ -31,12 +32,22 @@ class HomePageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            getCachedHomePageUiData().collect { eitherCachedData ->
+            getCachedHomePageUiDataUC().collect { eitherCachedData ->
                 either {
                     val cachedData = eitherCachedData.bind()
+                    Timber.d("cachedData: $cachedData")
 
                     when {
-                        cachedData == null || cachedData.isStateData -> updateCacheWithNewData().bind()
+                        cachedData == null -> updateCacheWithNewData().bind()
+                        cachedData.isStaleData -> {
+                            _homePageState.value = HomePageViewState.Loaded(
+                                last7DaysStats = cachedData.last7DaysStats,
+                                userDetails = cachedData.userDetails,
+                                streaks = cachedData.streaks,
+                            )
+                            updateCacheWithNewData().bind()
+                        }
+
                         else -> _homePageState.value = HomePageViewState.Loaded(
                             last7DaysStats = cachedData.last7DaysStats,
                             userDetails = cachedData.userDetails,

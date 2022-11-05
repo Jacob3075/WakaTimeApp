@@ -33,14 +33,14 @@ import kotlinx.datetime.TimeZone
 
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class GetCachedHomePageUiDataUCRobot {
-    private lateinit var useCase: GetCachedHomePageUiData
+    private lateinit var useCase: GetCachedHomePageUiDataUC
 
     private var receiveTurbine: ReceiveTurbine<Either<Error, CachedHomePageUiData?>>? = null
 
     private val mockHomePageCache: HomePageCache = mockk()
     private val mockAuthDataStore: AuthDataStore = mockk()
 
-    private lateinit var last7DaysStatsFlow: MutableSharedFlow<Either<Error, Last7DaysStats>>
+    private lateinit var last7DaysStatsFlow: MutableSharedFlow<Either<Error, Last7DaysStats?>>
     private lateinit var userDetailsFlow: MutableSharedFlow<UserDetails>
     private lateinit var lastRequestTimeFlow: MutableSharedFlow<Instant>
     private lateinit var currentStreakFlow: MutableSharedFlow<Either<Error, StreakRange>>
@@ -53,7 +53,7 @@ internal class GetCachedHomePageUiDataUCRobot {
         lastRequestTimeFlow = MutableSharedFlow(replay = 1)
         currentStreakFlow = MutableSharedFlow()
 
-        useCase = GetCachedHomePageUiData(
+        useCase = GetCachedHomePageUiDataUC(
             instantProvider = object : InstantProvider {
                 override val timeZone = TimeZone.UTC
 
@@ -110,14 +110,14 @@ internal class GetCachedHomePageUiDataUCRobot {
     context (ItemAssertionContext)
     fun itemShouldNotBeStale() = apply {
         item.asClue {
-            item.map { it!!.isStateData } shouldBeRight false
+            item.map { it!!.isStaleData } shouldBeRight false
         }
     }
 
     context (ItemAssertionContext)
     fun itemShouldBeStale() = apply {
         item.asClue {
-            item.map { it!!.isStateData } shouldBeRight true
+            item.map { it!!.isStaleData } shouldBeRight true
         }
     }
 
@@ -142,7 +142,7 @@ internal class GetCachedHomePageUiDataUCRobot {
         userDetailsFlow.emit(value)
     }
 
-    suspend fun sendLast7DaysStats(value: Either<Error, Last7DaysStats>) = apply {
+    suspend fun sendLast7DaysStats(value: Either<Error, Last7DaysStats?>) = apply {
         last7DaysStatsFlow.emit(value)
     }
 

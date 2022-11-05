@@ -1,6 +1,9 @@
 plugins {
     id("wakatimeapp.android.application")
-    id("androidx.navigation.safeargs.kotlin")
+}
+
+android {
+    namespace = "com.jacob.wakatimeapp"
 }
 
 dependencies {
@@ -14,7 +17,7 @@ dependencies {
 
     implementation("androidx.core:core-splashscreen:1.0.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.3.3")
+    implementation("org.jetbrains.kotlinx:kotlinx-serialization-json:1.4.0")
 
     // Core Testing
     testImplementation("junit:junit:4.13.2")
@@ -25,7 +28,7 @@ dependencies {
     androidTestImplementation("androidx.test:runner:1.4.0")
     androidTestImplementation("androidx.arch.core:core-testing:2.1.0")
     androidTestImplementation("androidx.test.espresso:espresso-core:3.4.0")
-    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.2.1")
+    androidTestImplementation("androidx.compose.ui:ui-test-junit4:1.3.0")
     androidTestImplementation("androidx.test.espresso:espresso-intents:3.4.0")
 
     androidTestImplementation("com.google.dagger:hilt-android-testing:2.42")
@@ -34,10 +37,4 @@ dependencies {
     androidTestImplementation("com.google.truth:truth:1.1.3")
     androidTestImplementation("com.squareup.okhttp3:mockwebserver:4.9.3")
     androidTestImplementation("io.mockk:mockk-android:1.12.4")
-
-    debugImplementation("androidx.compose.ui:ui-tooling:1.2.1")
-    debugImplementation("androidx.compose.ui:ui-test-manifest:1.2.1")
-}
-android {
-    namespace = "com.jacob.wakatimeapp"
 }
