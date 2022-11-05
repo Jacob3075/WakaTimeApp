@@ -15,6 +15,7 @@ import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @HiltViewModel
 class HomePageViewModel @Inject constructor(
@@ -34,9 +35,19 @@ class HomePageViewModel @Inject constructor(
             getCachedHomePageUiDataUC().collect { eitherCachedData ->
                 either {
                     val cachedData = eitherCachedData.bind()
+                    Timber.d("cachedData: $cachedData")
 
                     when {
-                        cachedData == null || cachedData.isStaleData -> updateCacheWithNewData().bind()
+                        cachedData == null -> updateCacheWithNewData().bind()
+                        cachedData.isStaleData -> {
+                            _homePageState.value = HomePageViewState.Loaded(
+                                last7DaysStats = cachedData.last7DaysStats,
+                                userDetails = cachedData.userDetails,
+                                streaks = cachedData.streaks,
+                            )
+                            updateCacheWithNewData().bind()
+                        }
+
                         else -> _homePageState.value = HomePageViewState.Loaded(
                             last7DaysStats = cachedData.last7DaysStats,
                             userDetails = cachedData.userDetails,
