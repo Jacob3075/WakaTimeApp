@@ -98,56 +98,56 @@ private val onPurpinkEndContainer = Color(0xFF36003E)
 
 internal val LightGradients = Gradients(
     flare = Gradient(
-        startColor = flareStart,
-        endColor = flareEnd,
+        startColor = Gradients.flareStart,
+        endColor = Gradients.flareEnd,
         onStartColor = onFlareStart,
         onEndColor = onFlareEnd
     ),
     shifter = Gradient(
-        startColor = shifterStart,
-        endColor = shifterEnd,
+        startColor = Gradients.shifterStart,
+        endColor = Gradients.shifterEnd,
         onStartColor = onShifterStart,
         onEndColor = onShifterEnd
     ),
     quepal = Gradient(
-        startColor = quepalStart,
-        endColor = quepalEnd,
+        startColor = Gradients.quepalStart,
+        endColor = Gradients.quepalEnd,
         onStartColor = onQuepalStart,
         onEndColor = onQuepalEnd
     ),
     tealLove = Gradient(
-        startColor = tealLoveStart,
-        endColor = tealLoveEnd,
+        startColor = Gradients.tealLoveStart,
+        endColor = Gradients.tealLoveEnd,
         onStartColor = onTealLoveStart,
         onEndColor = onTealLoveEnd
     ),
     facebookMessenger = Gradient(
-        startColor = facebookMessengerStart,
-        endColor = facebookMessengerEnd,
+        startColor = Gradients.facebookMessengerStart,
+        endColor = Gradients.facebookMessengerEnd,
         onStartColor = onFacebookMessengerStart,
         onEndColor = onFacebookMessengerEnd
     ),
     reef = Gradient(
-        startColor = reefStart,
-        endColor = reefEnd,
+        startColor = Gradients.reefStart,
+        endColor = Gradients.reefEnd,
         onStartColor = onReefStart,
         onEndColor = onReefEnd
     ),
     amin = Gradient(
-        startColor = aminStart,
-        endColor = aminEnd,
+        startColor = Gradients.aminStart,
+        endColor = Gradients.aminEnd,
         onStartColor = onAminStart,
         onEndColor = onAminEnd
     ),
     neuromancer = Gradient(
-        startColor = neuromancerStart,
-        endColor = neuromancerEnd,
+        startColor = Gradients.neuromancerStart,
+        endColor = Gradients.neuromancerEnd,
         onStartColor = onNeuromancerStart,
         onEndColor = onNeuromancerEnd
     ),
     purpink = Gradient(
-        startColor = purpinkStart,
-        endColor = purpinkEnd,
+        startColor = Gradients.purpinkStart,
+        endColor = Gradients.purpinkEnd,
         onStartColor = onPurpinkStart,
         onEndColor = onPurpinkEnd
     )
