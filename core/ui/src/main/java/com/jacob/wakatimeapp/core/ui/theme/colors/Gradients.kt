@@ -6,7 +6,6 @@ import androidx.compose.runtime.Immutable
 import androidx.compose.runtime.staticCompositionLocalOf
 import androidx.compose.ui.graphics.Color
 import com.jacob.wakatimeapp.core.ui.theme.colors.dark.DarkGradients
-import com.jacob.wakatimeapp.core.ui.theme.colors.dark.DarkNewGradients
 
 @Immutable
 data class Gradient(
@@ -21,18 +20,6 @@ data class Gradient(
 
 @Immutable
 data class Gradients(
-    val primary: Gradient,
-    val secondary: Gradient,
-    val pinkCyanLight: Gradient,
-    val purpleCyanDark: Gradient,
-    val greenCyan: Gradient,
-    val purpleCyan: Gradient,
-    val redPurple: Gradient,
-    val orangeYellow: Gradient,
-)
-
-@Immutable
-data class NewGradients(
     val flare: Gradient,
     val shifter: Gradient,
     val quepal: Gradient,
@@ -78,8 +65,6 @@ data class NewGradients(
 }
 
 val LocalGradients = staticCompositionLocalOf { DarkGradients }
-
-val LocalNewGradients = staticCompositionLocalOf { DarkNewGradients }
 
 /**
  * [Source](https://jemimaabu.github.io/random-gradient-generator/)
