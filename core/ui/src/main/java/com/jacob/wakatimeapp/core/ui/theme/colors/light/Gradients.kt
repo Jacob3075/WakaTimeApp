@@ -1,4 +1,4 @@
-@file:Suppress("MagicNumber", "UnusedPrivateMember")
+@file:Suppress("MagicNumber", "UnusedPrivateMember", "unused")
 
 package com.jacob.wakatimeapp.core.ui.theme.colors.light
 
