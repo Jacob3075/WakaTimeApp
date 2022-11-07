@@ -25,23 +25,22 @@ fun WtaAnimation(
     text: String,
     animationTestTag: String,
     modifier: Modifier = Modifier,
+) = Column(
+    horizontalAlignment = Alignment.CenterHorizontally,
+    verticalArrangement = Arrangement.Center,
+    modifier = modifier.fillMaxSize()
 ) {
     val composition by rememberLottieComposition(RawRes(animation))
-
-    Column(
-        horizontalAlignment = Alignment.CenterHorizontally,
-        verticalArrangement = Arrangement.Center,
-        modifier = modifier.fillMaxSize()
-    ) {
-        LottieAnimation(
-            composition = composition,
-            iterations = LottieConstants.IterateForever,
-            modifier = Modifier.testTag(animationTestTag)
-        )
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.lMedium))
-        Text(
-            text = text,
-            style = MaterialTheme.typography.titleMedium,
-        )
-    }
+    Spacer(modifier = Modifier.weight(0.5f))
+    LottieAnimation(
+        composition = composition,
+        iterations = LottieConstants.IterateForever,
+        modifier = Modifier.testTag(animationTestTag).weight(2f),
+    )
+    Spacer(modifier = Modifier.height(MaterialTheme.spacing.lMedium))
+    Text(
+        text = text,
+        style = MaterialTheme.typography.titleMedium,
+        modifier = Modifier.weight(1f)
+    )
 }
