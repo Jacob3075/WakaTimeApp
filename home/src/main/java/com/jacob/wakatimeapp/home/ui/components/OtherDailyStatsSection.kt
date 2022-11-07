@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.home.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.IntrinsicSize
+import androidx.compose.foundation.layout.IntrinsicSize.Min
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
@@ -46,8 +46,29 @@ fun OtherDailyStatsSection(
     SectionHeader()
     Spacer(modifier = Modifier.height(spacing.extraSmall))
 
+    StreakStats(currentStreak, longestStreak)
+
+    Spacer(modifier = Modifier.height(spacing.sMedium))
+
+    SecondaryStats(
+        mostUsedLanguage = mostUsedLanguage,
+        onClick = onClick,
+        spacing = spacing,
+        mostUsedOs = mostUsedOs,
+        mostUsedEditor = mostUsedEditor
+    )
+}
+
+@Composable
+private fun StreakStats(
+    currentStreak: StreakRange,
+    longestStreak: StreakRange,
+) {
+    val spacing = MaterialTheme.spacing
+    val gradients = MaterialTheme.gradients
+
     Row(
-        modifier = Modifier.height(IntrinsicSize.Min),
+        modifier = Modifier.height(Min),
         horizontalArrangement = Arrangement.spacedBy(spacing.small)
     ) {
         CurrentStreakCard(
@@ -74,16 +95,6 @@ fun OtherDailyStatsSection(
             )
         }
     }
-
-    Spacer(modifier = Modifier.height(spacing.sMedium))
-
-    SecondaryStats(
-        mostUsedLanguage = mostUsedLanguage,
-        onClick = onClick,
-        spacing = spacing,
-        mostUsedOs = mostUsedOs,
-        mostUsedEditor = mostUsedEditor
-    )
 }
 
 @Composable
