@@ -59,7 +59,7 @@ object Animations {
      * [Source](https://lottiefiles.com/9844-loading-40-paperplane)
      */
     @RawRes
-    private val loadingPaperPlane = raw.loading_paper_plane_1
+    private val loadingPaperPlane = raw.loading_paper_plane
 
     /**
      * [Source](https://lottiefiles.com/64095-no-mobile-internet)
@@ -77,11 +77,11 @@ object Animations {
      * [Source](https://lottiefiles.com/98312-empty)
      */
     @RawRes
-    private val empty = raw.empty_2
+    private val empty = raw.empty
 
     /**
      * [Source](https://lottiefiles.com/8572-liquid-blobby-loader)
-     * */
+     */
     @RawRes
     private val liquidBlobLoader = raw.liquid_blobby_loader
 
@@ -89,17 +89,17 @@ object Animations {
      * [Source](https://lottiefiles.com/28-loading)
      */
     @RawRes
-    private val loading2 = raw.loading_3
+    private val loading2 = raw.loading_2
 
     /**
      * [Source](https://lottiefiles.com/101961-non-data-found)
-     * */
+     */
     @RawRes
     private val noDataFound = raw.no_data_found
 
     /**
      * [Source](https://lottiefiles.com/94905-404-not-found)
-     * */
+     */
     @RawRes
     private val notFound = raw.not_found
 
