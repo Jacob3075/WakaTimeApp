@@ -1,7 +1,6 @@
 package com.jacob.wakatimeapp.login.ui
 
 import android.content.Intent
-import android.content.res.Configuration
 import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.ActivityResult
@@ -23,6 +22,7 @@ import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -34,11 +34,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jacob.wakatimeapp.core.ui.WtaPreviews
 import com.jacob.wakatimeapp.core.ui.modifiers.gesturesDisabled
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.button
@@ -174,12 +174,9 @@ private fun authActivityResultLauncher(
 private fun LoginButton(
     onClick: () -> Unit,
 ) {
-    val loginButtonGradient = Brush.horizontalGradient(
-        listOf(
-            MaterialTheme.gradients.primary.startColor,
-            MaterialTheme.gradients.primary.endColor,
-        )
-    )
+    val gradient = MaterialTheme.gradients.facebookMessenger
+    val loginButtonGradient =
+        Brush.horizontalGradient(gradient.colorList)
     val buttonShape = RoundedCornerShape(percent = 45)
     val spacing = MaterialTheme.spacing
     Button(
@@ -201,35 +198,26 @@ private fun LoginButton(
             Text(
                 text = "Login to Wakatime".uppercase(),
                 style = MaterialTheme.typography.button,
-                color = MaterialTheme.gradients.primary.onEndColor,
+                color = gradient.onEndColor,
                 modifier = Modifier.padding(spacing.medium)
             )
         }
     }
 }
 
-@Preview(
-    apiLevel = 31,
-    showSystemUi = true,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
-)
-@Preview(
-    apiLevel = 31,
-    showSystemUi = true,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
-)
+@WtaPreviews
 @Composable
 private fun LoginPagePreview(
     @PreviewParameter(LoginPagePreviewProvider::class) state: LoginPageState,
 ) = WakaTimeAppTheme {
-    LoginPageContent(
-        viewState = state,
-        getLoginAuthIntent = { null },
-        authDataNotFound = {},
-        exchangeToken = {}
-    )
+    Surface {
+        LoginPageContent(
+            viewState = state,
+            getLoginAuthIntent = { null },
+            authDataNotFound = {},
+            exchangeToken = {}
+        )
+    }
 }
 
 class LoginPagePreviewProvider : PreviewParameterProvider<LoginPageState> {

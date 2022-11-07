@@ -1,14 +1,15 @@
 package com.jacob.wakatimeapp.core.ui.components.cards
 
-import android.content.res.Configuration
 import androidx.annotation.DrawableRes
+import androidx.compose.foundation.layout.Row
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.ui.tooling.preview.Preview
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
+import com.jacob.wakatimeapp.core.ui.WtaPreviews
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 
 // TODO: FIX MAGIC NUMBERS
@@ -30,15 +31,19 @@ fun TimeSpentCard(
     onClick = onClick
 )
 
-@Preview(showBackground = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
+@WtaPreviews
 @Composable
-private fun TimeSpentCardPreview() = WakaTimeAppTheme(darkTheme = true) {
-    TimeSpentCard(
-        gradient = MaterialTheme.gradients.primary,
-        roundedCornerPercent = 25,
-        iconId = MaterialTheme.assets.icons.time,
-        mainText = "Total Time Spent Today",
-        time = Time(42, 22, 0f),
-        onClick = {}
-    )
+private fun TimeSpentCardPreview() = WakaTimeAppTheme {
+    Surface {
+        Row {
+            TimeSpentCard(
+                gradient = MaterialTheme.gradients.facebookMessenger,
+                roundedCornerPercent = 25,
+                iconId = MaterialTheme.assets.icons.time,
+                mainText = "Total Time Spent Today",
+                time = Time(42, 22, 0f),
+                onClick = {}
+            )
+        }
+    }
 }

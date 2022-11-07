@@ -1,3 +1,5 @@
+@file:Suppress("UnusedReceiverParameter")
+
 package com.jacob.wakatimeapp.core.ui.theme
 
 import androidx.compose.foundation.isSystemInDarkTheme
@@ -7,7 +9,6 @@ import androidx.compose.runtime.CompositionLocalProvider
 import androidx.compose.runtime.ReadOnlyComposable
 import com.jacob.wakatimeapp.core.ui.theme.assets.Assets
 import com.jacob.wakatimeapp.core.ui.theme.assets.LocalAssets
-import com.jacob.wakatimeapp.core.ui.theme.colors.Gradients
 import com.jacob.wakatimeapp.core.ui.theme.colors.LocalGradients
 import com.jacob.wakatimeapp.core.ui.theme.colors.dark.DarkColors
 import com.jacob.wakatimeapp.core.ui.theme.colors.dark.DarkGradients
@@ -33,17 +34,17 @@ fun WakaTimeAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
     }
 }
 
-val MaterialTheme.spacing: Spacing
+val MaterialTheme.spacing
     @Composable
     @ReadOnlyComposable
     get() = LocalSpacing.current
 
-val MaterialTheme.gradients: Gradients
+val MaterialTheme.gradients
     @Composable
     @ReadOnlyComposable
     get() = LocalGradients.current
 
-val MaterialTheme.assets: Assets
+val MaterialTheme.assets
     @Composable
     @ReadOnlyComposable
     get() = LocalAssets.current

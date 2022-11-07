@@ -106,7 +106,7 @@ private fun HomePageLoaded(
         )
 
         TimeSpentCard(
-            gradient = MaterialTheme.gradients.primary,
+            gradient = MaterialTheme.gradients.facebookMessenger,
             roundedCornerPercent = 25,
             iconId = icons.time,
             mainText = "Total Time Spent Today",

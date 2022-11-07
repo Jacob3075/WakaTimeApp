@@ -107,7 +107,7 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 1, 11)
                 ),
-                gradient = MaterialTheme.gradients.greenCyan,
+                gradient = MaterialTheme.gradients.purpink,
                 cornerPercentage = 20,
                 modifier = Modifier.weight(0.5F)
             )
@@ -116,7 +116,7 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 1, 5)
                 ),
-                gradient = MaterialTheme.gradients.greenCyan,
+                gradient = MaterialTheme.gradients.tealLove,
                 cornerPercentage = 20,
                 modifier = Modifier.weight(0.5F)
             )
