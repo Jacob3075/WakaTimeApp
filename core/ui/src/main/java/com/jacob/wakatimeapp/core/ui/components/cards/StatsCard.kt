@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
@@ -26,16 +27,20 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
+import com.jacob.wakatimeapp.core.ui.WtaPreviews
+import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.cardContent
 import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
+import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 
 @Composable
 internal fun StatsCard(
+    statsType: String,
+    statsValue: String,
     gradient: Gradient,
     @DrawableRes iconId: Int,
-    mainText: String,
-    text: String,
     onClick: () -> Unit,
     roundedCornerPercent: Int = 25,
     weights: Pair<Float, Float> = Pair(1f, 0.5f),
@@ -70,14 +75,14 @@ internal fun StatsCard(
             verticalAlignment = Alignment.CenterVertically
         ) {
             Text(
-                text = mainText,
+                text = statsType,
                 maxLines = 2,
                 modifier = Modifier.weight(weights.first, true),
                 style = MaterialTheme.typography.cardContent,
                 color = gradient.onStartColor,
             )
             Text(
-                text = text,
+                text = statsValue,
                 modifier = Modifier.weight(weights.second, true),
                 textAlign = TextAlign.End,
                 style = TextStyle(
@@ -86,6 +91,22 @@ internal fun StatsCard(
                     fontWeight = FontWeight.Medium,
                 ),
                 color = gradient.onEndColor,
+            )
+        }
+    }
+}
+
+@WtaPreviews
+@Composable
+fun StatsCardPreview() = WakaTimeAppTheme {
+    Surface {
+        Row {
+            StatsCard(
+                statsType = "Stats Type",
+                statsValue = "Stats Value",
+                gradient = MaterialTheme.gradients.reef,
+                iconId = MaterialTheme.assets.icons.time,
+                onClick = {}
             )
         }
     }

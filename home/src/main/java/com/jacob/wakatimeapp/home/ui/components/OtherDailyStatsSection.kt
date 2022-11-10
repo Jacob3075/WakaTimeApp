@@ -112,26 +112,26 @@ private fun SecondaryStats(
     val icons = MaterialTheme.assets.icons
 
     OtherStatsCard(
+        statsType = "Most Language Used",
+        language = mostUsedLanguage,
         gradient = gradients.quepal,
         iconId = icons.codeFile,
-        mainText = "Most Language Used",
-        language = mostUsedLanguage,
         onClick = onClick
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
+        statsType = "Most OS Used",
+        language = mostUsedOs,
         gradient = gradients.purpink,
         iconId = icons.laptop,
-        mainText = "Most OS Used",
-        language = mostUsedOs,
         onClick = onClick
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
+        statsType = "Most Used Editor ",
+        language = mostUsedEditor,
         gradient = gradients.neuromancer,
         iconId = icons.code,
-        mainText = "Most Used Editor ",
-        language = mostUsedEditor,
         onClick = onClick
     )
 }

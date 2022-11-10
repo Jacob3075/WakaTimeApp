@@ -106,11 +106,11 @@ private fun HomePageLoaded(
         )
 
         TimeSpentCard(
-            gradient = MaterialTheme.gradients.facebookMessenger,
-            roundedCornerPercent = 25,
-            iconId = icons.time,
-            mainText = "Total Time Spent Today",
+            statsType = "Total Time Spent Today",
             time = homePageViewState.last7DaysStats.timeSpentToday,
+            gradient = MaterialTheme.gradients.facebookMessenger,
+            iconId = icons.time,
+            roundedCornerPercent = 25,
             onClick = toDetailsPage
         )
         Spacer(modifier = Modifier.height(spacing.small))
