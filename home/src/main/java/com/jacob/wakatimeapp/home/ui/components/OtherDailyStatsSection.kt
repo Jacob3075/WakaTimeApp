@@ -77,7 +77,7 @@ private fun StreakStats(
         CurrentStreakCard(
             currentStreak = longestStreak,
             gradient = gradients.flare,
-            cornerPercentage = 10,
+            roundedCornerPercent = 10,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
@@ -89,12 +89,12 @@ private fun StreakStats(
             CurrentStreakCard(
                 currentStreak = currentStreak,
                 gradient = gradients.amin,
-                cornerPercentage = 20
+                roundedCornerPercent = 20
             )
             CurrentStreakCard(
                 currentStreak = currentStreak,
                 gradient = gradients.reef,
-                cornerPercentage = 20
+                roundedCornerPercent = 20
             )
         }
     }
