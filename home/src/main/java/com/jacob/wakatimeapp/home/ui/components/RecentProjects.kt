@@ -2,7 +2,6 @@ package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
-import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -11,6 +10,7 @@ import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.material3.ExperimentalMaterial3Api
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -66,17 +66,18 @@ private fun RecentProjectList(
         .map { ProjectCardItem(it) }
 }
 
+@OptIn(ExperimentalMaterial3Api::class)
 @Composable
 private fun ProjectCardItem(project: Project) {
     val cardShape = RoundedCornerShape(percent = 25)
     val spacing = MaterialTheme.spacing
     Surface(
         modifier = Modifier
-            .fillMaxWidth()
-            .clickable { },
+            .fillMaxWidth(),
         shape = cardShape,
         shadowElevation = 10.dp,
         tonalElevation = 2.dp,
+        onClick = {}
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

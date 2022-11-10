@@ -18,6 +18,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
@@ -51,8 +52,9 @@ fun StatsChip(
     Box(
         modifier = modifier
             .fillMaxWidth()
-            .background(gradientBrush, shape)
+            .clip(shape)
             .clickable(onClick = onClick)
+            .background(gradientBrush, shape)
     ) {
         Image(
             painter = painterResource(iconId),
