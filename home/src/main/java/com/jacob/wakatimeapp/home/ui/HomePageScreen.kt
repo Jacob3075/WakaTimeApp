@@ -127,6 +127,7 @@ private fun HomePageLoaded(
             mostUsedOs = homePageViewState.last7DaysStats.mostUsedOs,
             mostUsedEditor = homePageViewState.last7DaysStats.mostUsedEditor,
             currentStreak = homePageViewState.streaks.currentStreak,
+            numberOfDaysWorked = homePageViewState.last7DaysStats.numberOfDaysWorked,
         )
         Spacer(modifier = Modifier.height(spacing.medium))
     }

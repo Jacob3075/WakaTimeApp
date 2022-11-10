@@ -30,7 +30,9 @@ data class Last7DaysStats(
     val mostUsedLanguage: String,
     val mostUsedEditor: String,
     val mostUsedOs: String,
-)
+) {
+    val numberOfDaysWorked = weeklyTimeSpent.filter { it.value != Time.ZERO }.size
+}
 
 @Serializable
 data class HomePageUserDetails(
