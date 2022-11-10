@@ -91,10 +91,10 @@ private fun StreakStats(
                 gradient = gradients.amin,
                 roundedCornerPercent = 20
             )
-            CurrentStreakCard(
-                currentStreak = currentStreak,
+            DaysWorkedInWeek(
+                numberOfDaysWorked = numberOfDaysWorked,
                 gradient = gradients.reef,
-                roundedCornerPercent = 20
+                roundedCornerPercent = 20,
             )
         }
     }

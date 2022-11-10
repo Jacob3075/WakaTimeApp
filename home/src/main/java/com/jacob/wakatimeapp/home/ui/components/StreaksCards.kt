@@ -38,6 +38,25 @@ internal fun CurrentStreakCard(
 @Composable
 internal fun LongestStreakCard(modifier: Modifier = Modifier): Unit = TODO(modifier.toString())
 
+@Composable
+internal fun DaysWorkedInWeek(
+    numberOfDaysWorked: Int,
+    gradient: Gradient,
+    roundedCornerPercent: Int,
+    modifier: Modifier = Modifier,
+) {
+    StatsChip(
+        statsType = "Current Streak",
+        statsValue = "$numberOfDaysWorked",
+        statsValueSubText = "/7 days",
+        gradient = gradient,
+        iconId = MaterialTheme.assets.icons.time,
+        onClick = {},
+        roundedCornerPercent = roundedCornerPercent,
+        modifier = modifier,
+    )
+}
+
 @WtaPreviews
 @Composable
 private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
@@ -54,11 +73,8 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
                 roundedCornerPercent = 20,
                 modifier = Modifier.weight(0.5F)
             )
-            CurrentStreakCard(
-                currentStreak = StreakRange(
-                    start = LocalDate(2022, 1, 1),
-                    end = LocalDate(2022, 1, 5)
-                ),
+            DaysWorkedInWeek(
+                numberOfDaysWorked = 5,
                 gradient = MaterialTheme.gradients.tealLove,
                 roundedCornerPercent = 20,
                 modifier = Modifier.weight(0.5F)

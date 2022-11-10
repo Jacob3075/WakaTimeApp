@@ -23,6 +23,7 @@ import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
@@ -72,15 +73,19 @@ fun StatsChip(
                     vertical = MaterialTheme.spacing.small,
                 ),
         ) {
-            val streakValueTextStyle = MaterialTheme.typography.displayMedium
+            val streakValueTextStyle = MaterialTheme.typography.displayLarge
 
             Text(
                 text = buildAnnotatedString {
                     withStyle(style = streakValueTextStyle.toSpanStyle()) {
                         append(statsValue)
                     }
-                    withStyle(style = MaterialTheme.typography.headlineSmall.toSpanStyle()) {
-                        append(statsValueSubText)
+                    withStyle(
+                        style = MaterialTheme.typography.headlineSmall.copy(
+                            baselineShift = BaselineShift(0.5f)
+                        ).toSpanStyle()
+                    ) {
+                        append(" $statsValueSubText")
                     }
                 },
                 color = gradient.onStartColor,
@@ -105,7 +110,7 @@ fun StatsChipPreview() = WakaTimeAppTheme {
             StatsChip(
                 statsType = "Stats Type",
                 statsValue = "11",
-                statsValueSubText = " days",
+                statsValueSubText = "days",
                 gradient = MaterialTheme.gradients.purpink,
                 iconId = MaterialTheme.assets.icons.time,
                 onClick = {},
@@ -114,8 +119,8 @@ fun StatsChipPreview() = WakaTimeAppTheme {
             )
             StatsChip(
                 statsType = "Stats Type",
-                statsValue = "11",
-                statsValueSubText = " days",
+                statsValue = "1",
+                statsValueSubText = "/7 days",
                 gradient = MaterialTheme.gradients.amin,
                 iconId = MaterialTheme.assets.icons.time,
                 onClick = {},
