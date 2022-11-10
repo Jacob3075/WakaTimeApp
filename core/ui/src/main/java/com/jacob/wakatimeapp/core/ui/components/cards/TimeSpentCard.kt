@@ -16,19 +16,19 @@ import com.jacob.wakatimeapp.core.ui.theme.gradients
 
 @Composable
 fun TimeSpentCard(
-    gradient: Gradient,
-    roundedCornerPercent: Int,
-    @DrawableRes iconId: Int,
-    mainText: String,
+    statsType: String,
     time: Time,
+    gradient: Gradient,
+    @DrawableRes iconId: Int,
+    roundedCornerPercent: Int,
     onClick: () -> Unit,
 ) = StatsCard(
+    statsType = statsType,
+    statsValue = "${time.hours}H, ${time.minutes}M",
     gradient = gradient,
-    roundedCornerPercent = roundedCornerPercent,
     iconId = iconId,
-    mainText = mainText,
-    text = "${time.hours}H, ${time.minutes}M",
-    onClick = onClick
+    onClick = onClick,
+    roundedCornerPercent = roundedCornerPercent
 )
 
 @WtaPreviews
@@ -37,13 +37,12 @@ private fun TimeSpentCardPreview() = WakaTimeAppTheme {
     Surface {
         Row {
             TimeSpentCard(
-                gradient = MaterialTheme.gradients.facebookMessenger,
-                roundedCornerPercent = 25,
-                iconId = MaterialTheme.assets.icons.time,
-                mainText = "Total Time Spent Today",
+                statsType = "Total Time Spent Today",
                 time = Time(42, 22, 0f),
-                onClick = {}
-            )
+                gradient = MaterialTheme.gradients.facebookMessenger,
+                iconId = MaterialTheme.assets.icons.time,
+                roundedCornerPercent = 25
+            ) {}
         }
     }
 }

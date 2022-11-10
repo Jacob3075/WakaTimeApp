@@ -19,7 +19,6 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
 import com.jacob.wakatimeapp.core.ui.components.cards.OtherStatsCard
-import com.jacob.wakatimeapp.core.ui.theme.Spacing
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.gradients
@@ -37,25 +36,28 @@ fun OtherDailyStatsSection(
     currentStreak: StreakRange,
     longestStreak: StreakRange = StreakRange.ZERO,
     modifier: Modifier = Modifier,
+    numberOfDaysWorked: Int,
 ) = Column(
     modifier = modifier.fillMaxWidth()
 ) {
     val spacing = MaterialTheme.spacing
-    val gradients = MaterialTheme.gradients
 
     SectionHeader()
     Spacer(modifier = Modifier.height(spacing.extraSmall))
 
-    StreakStats(currentStreak, longestStreak)
+    StreakStats(
+        currentStreak = currentStreak,
+        longestStreak = longestStreak,
+        numberOfDaysWorked = numberOfDaysWorked
+    )
 
     Spacer(modifier = Modifier.height(spacing.sMedium))
 
     SecondaryStats(
         mostUsedLanguage = mostUsedLanguage,
         onClick = onClick,
-        spacing = spacing,
         mostUsedOs = mostUsedOs,
-        mostUsedEditor = mostUsedEditor
+        mostUsedEditor = mostUsedEditor,
     )
 }
 
@@ -63,6 +65,7 @@ fun OtherDailyStatsSection(
 private fun StreakStats(
     currentStreak: StreakRange,
     longestStreak: StreakRange,
+    numberOfDaysWorked: Int,
 ) {
     val spacing = MaterialTheme.spacing
     val gradients = MaterialTheme.gradients
@@ -74,7 +77,7 @@ private fun StreakStats(
         CurrentStreakCard(
             currentStreak = longestStreak,
             gradient = gradients.flare,
-            cornerPercentage = 10,
+            roundedCornerPercent = 10,
             modifier = Modifier
                 .weight(1f)
                 .fillMaxHeight()
@@ -86,12 +89,12 @@ private fun StreakStats(
             CurrentStreakCard(
                 currentStreak = currentStreak,
                 gradient = gradients.amin,
-                cornerPercentage = 20
+                roundedCornerPercent = 20
             )
-            CurrentStreakCard(
-                currentStreak = currentStreak,
-                gradient = gradients.shifter,
-                cornerPercentage = 20
+            DaysWorkedInWeek(
+                numberOfDaysWorked = numberOfDaysWorked,
+                gradient = gradients.reef,
+                roundedCornerPercent = 20,
             )
         }
     }
@@ -101,34 +104,34 @@ private fun StreakStats(
 private fun SecondaryStats(
     mostUsedLanguage: String,
     onClick: () -> Unit,
-    spacing: Spacing,
     mostUsedOs: String,
     mostUsedEditor: String,
 ) = Column {
     val gradients = MaterialTheme.gradients
+    val spacing = MaterialTheme.spacing
     val icons = MaterialTheme.assets.icons
 
     OtherStatsCard(
+        statsType = "Most Language Used",
+        language = mostUsedLanguage,
         gradient = gradients.quepal,
         iconId = icons.codeFile,
-        mainText = "Most Language Used",
-        language = mostUsedLanguage,
         onClick = onClick
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
+        statsType = "Most OS Used",
+        language = mostUsedOs,
         gradient = gradients.purpink,
         iconId = icons.laptop,
-        mainText = "Most OS Used",
-        language = mostUsedOs,
         onClick = onClick
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
+        statsType = "Most Used Editor ",
+        language = mostUsedEditor,
         gradient = gradients.neuromancer,
         iconId = icons.code,
-        mainText = "Most Used Editor ",
-        language = mostUsedEditor,
         onClick = onClick
     )
 }
@@ -153,8 +156,9 @@ fun OtherDailyStatsSectionPreview() = WakaTimeAppTheme {
             mostUsedLanguage = "Kotlin",
             mostUsedOs = "Linux",
             mostUsedEditor = "Android Studio",
+            currentStreak = StreakRange.ZERO,
             modifier = Modifier.padding(horizontal = 8.dp),
-            currentStreak = StreakRange.ZERO
+            numberOfDaysWorked = 0,
         )
     }
 }
