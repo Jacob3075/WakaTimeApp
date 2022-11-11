@@ -23,28 +23,27 @@ class RecalculateLatestStreakUC @Inject constructor(
         value: Int,
         unit: DateBased,
     ): Either<Error, StreakRange> = either {
-        val end = start.minus(value, unit)
-        val count = end.daysUntil(start) + 1
+        var nextStart = start
+        var result = StreakRange.ZERO
+
+        do {
+            val end = nextStart.minus(value, unit)
+            val count = end.daysUntil(nextStart) + 1
+
+            val latest = getStatsInRange(nextStart, end).bind()
+            result += latest
+
+            nextStart = end.minus(1, DateTimeUnit.DAY)
+        } while (latest.days == count)
+
+        result
+    }
+
+    private suspend fun getStatsInRange(start: LocalDate, end: LocalDate) =
         homePageNetworkData.getStatsForRange(start.toString(), end.toString())
             .map { stats ->
                 stats.dailyStats
                     .associate { it.date to it.timeSpent }
                     .getLatestStreakInRange()
             }
-            .map {
-                when (it.days) {
-                    count -> {
-                        val streakFromNextDuration = calculate(
-                            start = end.minus(1, DateTimeUnit.DAY),
-                            value = value,
-                            unit = unit
-                        ).bind()
-                        if (streakFromNextDuration == StreakRange.ZERO) it else it + streakFromNextDuration
-                    }
-
-                    else -> it
-                }
-            }
-            .bind()
-    }
 }
