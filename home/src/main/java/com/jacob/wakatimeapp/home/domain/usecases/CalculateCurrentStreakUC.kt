@@ -37,7 +37,7 @@ class CalculateCurrentStreakUC @Inject constructor(
             .getLatestStreakInRange()
 
         val combinedStreak = currentStreak + recalculatedStreakForLast7Days
-        val failedToCombine = combinedStreak == StreakRange.ZERO
+        val failedToCombine = !currentStreak.canBeCombinedWith(recalculatedStreakForLast7Days)
 
         when {
             endOfCurrentStreakIsYesterday -> whenEndOfCurrentStreakIsYesterday(

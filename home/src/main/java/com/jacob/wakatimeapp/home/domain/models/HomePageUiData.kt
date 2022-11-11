@@ -54,6 +54,8 @@ data class StreakRange(
     val days = start.daysUntil(end) + 1
 
     operator fun plus(other: StreakRange): StreakRange = when {
+        this == ZERO -> other
+        other == ZERO -> this
         end == other.start -> StreakRange(start, other.end)
         other.end == start -> StreakRange(other.start, end)
         end == other.start.minus(1, DateTimeUnit.DAY) -> StreakRange(start, other.end)
@@ -67,6 +69,9 @@ data class StreakRange(
             ZERO
         }
     }
+
+    fun canBeCombinedWith(other: StreakRange) =
+        !(this == ZERO || other == ZERO || (this + other) == ZERO)
 
     companion object {
         val ZERO = StreakRange(
