@@ -111,6 +111,28 @@ internal class StreakRangeTest {
     }
 
     @Test
+    internal fun `when adding a streak that is contained in another streak and with same start or end dates, then return containing streak`() {
+        val streakRange1 = StreakRange(
+            start = LocalDate(2022, 1, 1),
+            end = LocalDate(2022, 1, 10)
+        )
+        val streakRange2 = StreakRange(
+            start = LocalDate(2022, 1, 4),
+            end = LocalDate(2022, 1, 10)
+        )
+
+        (streakRange1 + streakRange2) shouldBe StreakRange(
+            start = LocalDate(2022, 1, 1),
+            end = LocalDate(2022, 1, 10)
+        )
+
+        (streakRange2 + streakRange1) shouldBe StreakRange(
+            start = LocalDate(2022, 1, 1),
+            end = LocalDate(2022, 1, 10)
+        )
+    }
+
+    @Test
     internal fun `when adding a streak to ZERO, then it should return the original streak`() {
         val streakRange1 = StreakRange(
             start = LocalDate(2022, 1, 1),

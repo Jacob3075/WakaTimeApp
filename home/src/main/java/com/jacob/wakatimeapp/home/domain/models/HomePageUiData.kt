@@ -4,7 +4,7 @@ import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
-import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -51,29 +51,34 @@ data class StreakRange(
     val start: LocalDate,
     val end: LocalDate,
 ) {
-    val days = start.daysUntil(end) + 1
+    val days: Int = if (this == ZERO) 0 else start.daysUntil(end) + 1
 
-    operator fun plus(other: StreakRange): StreakRange = when {
+    operator fun plus(other: StreakRange) = when {
         this == ZERO -> other
         other == ZERO -> this
-        end == other.start -> StreakRange(start, other.end)
-        other.end == start -> StreakRange(other.start, end)
-        end == other.start.minus(1, DateTimeUnit.DAY) -> StreakRange(start, other.end)
-        start == other.end.plus(1, DateTimeUnit.DAY) -> StreakRange(other.start, end)
-        start < other.start && end > other.end -> StreakRange(start, end)
-        other.start < start && other.end > end -> StreakRange(other.start, other.end)
-        start < other.start && end > other.start -> StreakRange(start, other.end)
-        start < other.end && end > other.start -> StreakRange(other.start, end)
+        this in other -> StreakRange(other.start, other.end)
+        other in this -> StreakRange(start, end)
+        other.start paddedIn this -> StreakRange(start, other.end)
+        start paddedIn other -> StreakRange(other.start, end)
         else -> {
             Timber.e("Cannot add streaks $this and $other")
             ZERO
         }
     }
 
+    operator fun contains(day: LocalDate) = day in start..end
+
+    operator fun contains(other: StreakRange) = other.start in this && other.end in this
+
+    private infix fun LocalDate.paddedIn(streakRange: StreakRange) =
+        this in (streakRange.start - oneDay)..(streakRange.end + oneDay)
+
     fun canBeCombinedWith(other: StreakRange) =
         !(this == ZERO || other == ZERO || (this + other) == ZERO)
 
     companion object {
+        private val oneDay = DatePeriod(days = 1)
+
         val ZERO = StreakRange(
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date
