@@ -55,14 +55,7 @@ class HomePageCache @Inject constructor(
         }
     }
 
-    fun getCurrentStreak() = dataStore.data.map<Preferences, Either<Error, StreakRange>> {
-        val streakRange = it[KEY_CURRENT_STREAK]?.let<String, StreakRange>(json::decodeFromString)
-            ?: StreakRange.ZERO
-        streakRange.right()
-    }.catch {
-        Timber.e(it)
-        emit(DatabaseError.UnknownError(it.message!!, it).left())
-    }
+    fun getCurrentStreak() = getStreak(KEY_CURRENT_STREAK)
 
     suspend fun updateCurrentStreak(streakRange: StreakRange) {
         dataStore.edit {
@@ -70,9 +63,28 @@ class HomePageCache @Inject constructor(
         }
     }
 
+    fun getLongestStreak() = getStreak(KEY_LONGEST_STREAK)
+
+    suspend fun updateLongestStreak(streakRange: StreakRange) {
+        dataStore.edit {
+            it[KEY_LONGEST_STREAK] = json.encodeToString(streakRange)
+        }
+    }
+
+    private fun getStreak(key: Preferences.Key<String>) =
+        dataStore.data.map<Preferences, Either<Error, StreakRange>> {
+            val streakRange = it[key]?.let<String, StreakRange>(json::decodeFromString)
+                ?: StreakRange.ZERO
+            streakRange.right()
+        }.catch {
+            Timber.e(it)
+            emit(DatabaseError.UnknownError(it.message!!, it).left())
+        }
+
     companion object {
         private val KEY_LAST_REQUEST_TIME = longPreferencesKey("KEY_LAST_REQUEST_TIME")
         private val KEY_LAST_7_DAYS_STATS = stringPreferencesKey("KEY_LAST_7_DAYS_STATS")
         private val KEY_CURRENT_STREAK = stringPreferencesKey("KEY_CURRENT_STREAK")
+        private val KEY_LONGEST_STREAK = stringPreferencesKey("KEY_LONGEST_STREAK")
     }
 }

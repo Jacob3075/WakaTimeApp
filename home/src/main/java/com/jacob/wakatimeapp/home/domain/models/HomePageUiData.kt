@@ -70,6 +70,8 @@ data class StreakRange(
 
     operator fun contains(other: StreakRange) = other.start in this && other.end in this
 
+    operator fun compareTo(streakRange: StreakRange) = days.compareTo(streakRange.days)
+
     private infix fun LocalDate.paddedIn(streakRange: StreakRange) =
         this in (streakRange.start - oneDay)..(streakRange.end + oneDay)
 
