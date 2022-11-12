@@ -18,12 +18,15 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
+import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 
+@OptIn(ExperimentalCoroutinesApi::class)
 internal class CalculateLongestStreakUCRobot {
     private lateinit var calculateLongestStreakUC: CalculateLongestStreakUC
     private var result: Either<Error, StreakRange>? = null
@@ -34,6 +37,7 @@ internal class CalculateLongestStreakUCRobot {
     fun buildUseCase(
         currentInstant: Instant = defaultCurrentInstant,
         userCreatedAt: LocalDate? = null,
+        dispatcher: TestDispatcher,
     ) = apply {
         clearMocks(mockHomePageCache, mockHomePageNetworkData)
         result = null
@@ -42,6 +46,7 @@ internal class CalculateLongestStreakUCRobot {
             homePageNetworkData = mockHomePageNetworkData,
             homePageCache = mockHomePageCache,
             userDetails = userCreatedAt?.let { USER_DETAILS.copy(createdAt = it) } ?: USER_DETAILS,
+            dispatcher = dispatcher,
             instantProvider = object : InstantProvider {
                 override val timeZone: TimeZone
                     get() = TimeZone.UTC

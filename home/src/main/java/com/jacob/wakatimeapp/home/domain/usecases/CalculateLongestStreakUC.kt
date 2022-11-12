@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.computations.either
 import com.jacob.wakatimeapp.core.common.toDate
+import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
@@ -11,6 +12,11 @@ import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.Map.Entry
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.LocalDate
@@ -22,7 +28,10 @@ class CalculateLongestStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
     private val userDetails: UserDetails,
     private val instantProvider: InstantProvider,
+    dispatcher: CoroutineContext = Dispatchers.IO,
 ) {
+    private val ioScope = CoroutineScope(dispatcher)
+
     suspend operator fun invoke(batchSize: DatePeriod = DEFAULT_BATCH_SIZE) = either {
         val cachedLongestStreak = homePageCache.getLongestStreak().first().bind()
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
@@ -38,24 +47,29 @@ class CalculateLongestStreakUC @Inject constructor(
             .plusElement(currentDay)
             .zipWithNext()
             .toList()
-            .map {
-                homePageNetworkData.getStatsForRange(
-                    start = it.first.toString(),
-                    end = it.second.toString(),
-                ).bind()
-            }
-            .flatMap { stats ->
-                stats.dailyStats
-                    .associate { it.date to it.timeSpent }
-                    .entries
-                    .groupConsecutive()
-            }
-            .filter { it.isNotEmpty() }
+            .map(::getStatsFromApiAsync)
+            .awaitAll()
+            .map { it.bind() }
+            .flatMap(::groupConsecutiveDaysWithStats)
+            .filter(List<Entry<LocalDate, Time>>::isNotEmpty)
             .toStreaks()
             .combineStreaks()
-            .maxByOrNull { it.days }
+            .maxByOrNull(StreakRange::days)
             ?: StreakRange.ZERO
     }
+
+    private fun groupConsecutiveDaysWithStats(stats: Stats) = stats.dailyStats
+        .associate { it.date to it.timeSpent }
+        .entries
+        .groupConsecutive()
+
+    private fun getStatsFromApiAsync(it: Pair<LocalDate, LocalDate>) =
+        ioScope.async {
+            homePageNetworkData.getStatsForRange(
+                start = it.first.toString(),
+                end = it.second.toString(),
+            )
+        }
 
     companion object {
         private val DEFAULT_BATCH_SIZE = DatePeriod(months = 6)

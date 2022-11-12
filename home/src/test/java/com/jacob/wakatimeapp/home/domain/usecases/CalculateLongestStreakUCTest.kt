@@ -7,6 +7,7 @@ import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.stats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
+import kotlinx.coroutines.test.UnconfinedTestDispatcher
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
@@ -25,7 +26,7 @@ internal class CalculateLongestStreakUCTest {
                 start = LocalDate(2022, 4, 1),
                 end = LocalDate(2022, 4, 10)
             )
-            robot.buildUseCase()
+            robot.buildUseCase(dispatcher = UnconfinedTestDispatcher(testScheduler))
                 .mockHomePageCacheGetCurrentStreak(currentStreak.right())
                 .mockHomePageCacheGetLongestStreak(
                     StreakRange(
@@ -39,7 +40,7 @@ internal class CalculateLongestStreakUCTest {
 
     @Test
     internal fun `when cache has value for longest streak, then do not recalculate`() = runTest {
-        robot.buildUseCase()
+        robot.buildUseCase(dispatcher = UnconfinedTestDispatcher(testScheduler))
             .mockHomePageCacheGetLongestStreak(
                 StreakRange(
                     start = LocalDate(2022, 1, 1),
@@ -67,6 +68,7 @@ internal class CalculateLongestStreakUCTest {
             val userCreatedAt = LocalDate(2022, 1, 1)
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
+                dispatcher = UnconfinedTestDispatcher(testScheduler),
                 userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
@@ -87,6 +89,7 @@ internal class CalculateLongestStreakUCTest {
             val userCreatedAt = LocalDate(2022, 1, 1)
             val currentInstant = Instant.parse("2022-02-10T00:00:00Z")
             robot.buildUseCase(
+                dispatcher = UnconfinedTestDispatcher(testScheduler),
                 userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
@@ -112,6 +115,7 @@ internal class CalculateLongestStreakUCTest {
             val userCreatedAt = LocalDate(2022, 1, 1)
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
+                dispatcher = UnconfinedTestDispatcher(testScheduler),
                 userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
@@ -139,6 +143,7 @@ internal class CalculateLongestStreakUCTest {
             val userCreatedAt = LocalDate(2022, 1, 1)
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
+                dispatcher = UnconfinedTestDispatcher(testScheduler),
                 userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
@@ -185,6 +190,7 @@ internal class CalculateLongestStreakUCTest {
             )
 
             robot.buildUseCase(
+                dispatcher = UnconfinedTestDispatcher(testScheduler),
                 userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
@@ -223,6 +229,7 @@ internal class CalculateLongestStreakUCTest {
             }
 
             robot.buildUseCase(
+                dispatcher = UnconfinedTestDispatcher(testScheduler),
                 userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
@@ -313,6 +320,7 @@ internal class CalculateLongestStreakUCTest {
             )
 
             robot.buildUseCase(
+                dispatcher = UnconfinedTestDispatcher(testScheduler),
                 userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
