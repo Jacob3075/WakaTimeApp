@@ -47,34 +47,34 @@ class CalculateLongestStreakUC @Inject constructor(
             .plusElement(currentDay)
             .zipWithNext()
             .toList()
-            .map(::getStatsFromApiAsync)
+            .map(::getStreaksInBatchAsync)
             .awaitAll()
-            .map { it.bind() }
-            .flatMap(::groupConsecutiveDaysWithStats)
-            .filter(List<Entry<LocalDate, Time>>::isNotEmpty)
-            .toStreaks()
+            .flatMap { it.bind() }
             .combineStreaks()
             .maxByOrNull(StreakRange::days)
             ?: StreakRange.ZERO
     }
 
-    private fun groupConsecutiveDaysWithStats(stats: Stats) = stats.dailyStats
-        .associate { it.date to it.timeSpent }
-        .entries
-        .groupConsecutive()
-
-    private fun getStatsFromApiAsync(it: Pair<LocalDate, LocalDate>) =
-        ioScope.async {
-            homePageNetworkData.getStatsForRange(
-                start = it.first.toString(),
-                end = it.second.toString(),
-            )
+    private fun getStreaksInBatchAsync(batchStartEnd: Pair<LocalDate, LocalDate>) = ioScope.async {
+        homePageNetworkData.getStatsForRange(
+            start = batchStartEnd.first.toString(),
+            end = batchStartEnd.second.toString(),
+        ).map {
+            it.groupConsecutiveDaysWithStats()
+                .filter(List<Entry<LocalDate, Time>>::isNotEmpty)
+                .toStreaks()
         }
+    }
 
     companion object {
         private val DEFAULT_BATCH_SIZE = DatePeriod(months = 6)
     }
 }
+
+private fun Stats.groupConsecutiveDaysWithStats() = dailyStats
+    .associate { it.date to it.timeSpent }
+    .entries
+    .groupConsecutive()
 
 /**
  * [Source](https://stackoverflow.com/a/65357359/13181948)
