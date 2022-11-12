@@ -53,7 +53,8 @@ class CalculateLongestStreakUC @Inject constructor(
             .filter { it.isNotEmpty() }
             .toStreaks()
             .combineStreaks()
-            .maxBy { it.days }
+            .maxByOrNull { it.days }
+            ?: StreakRange.ZERO
     }
 
     companion object {
@@ -77,15 +78,17 @@ private fun List<List<Entry<LocalDate, Time>>>.toStreaks(): List<StreakRange> = 
     StreakRange(it.first().key, it.last().key)
 }
 
-private fun List<StreakRange>.combineStreaks(): List<StreakRange> = drop(1)
-    .fold(mutableListOf(first())) { acc, streakRange ->
-        val last = acc.last()
-        when (last.canBeCombinedWith(streakRange)) {
-            true -> acc.replaceLast(last + streakRange)
-            false -> acc.add(streakRange)
+private fun List<StreakRange>.combineStreaks(): List<StreakRange> =
+    if (isEmpty()) this
+    else drop(1)
+        .fold(mutableListOf(first())) { acc, streakRange ->
+            val last = acc.last()
+            when (last.canBeCombinedWith(streakRange)) {
+                true -> acc.replaceLast(last + streakRange)
+                false -> acc.add(streakRange)
+            }
+            acc
         }
-        acc
-    }
 
 private fun MutableList<StreakRange>.replaceLast(e: StreakRange) {
     removeLast()

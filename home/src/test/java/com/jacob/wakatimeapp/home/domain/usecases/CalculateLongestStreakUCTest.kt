@@ -1,11 +1,16 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.right
+import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats
+import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.stats
 import kotlin.collections.Map.Entry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DatePeriod
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import org.junit.jupiter.api.Test
 
@@ -28,7 +33,7 @@ internal class CalculateLongestStreakUCTest {
                         end = LocalDate(2022, 1, 5)
                     ).right()
                 )
-                .callUseCase()
+                .callUseCase(DatePeriod(months = 1))
                 .resultShouldBe(currentStreak.right())
                 .verifyHomePageCacheUpdateLongestStreakCalled(1, currentStreak)
         }
@@ -48,7 +53,7 @@ internal class CalculateLongestStreakUCTest {
                     end = LocalDate(2022, 1, 5)
                 ).right()
             )
-            .callUseCase()
+            .callUseCase(DatePeriod(months = 1))
             .resultShouldBe(
                 StreakRange(
                     start = LocalDate(2022, 1, 1),
@@ -57,6 +62,125 @@ internal class CalculateLongestStreakUCTest {
             )
             .verifyHomePageCacheUpdateLongestStreakCalled(count = 0)
     }
+
+    @Test
+    internal fun `when creating batches that is greater than user creation time, then api call should be made from creation date till batch size`() =
+        runTest {
+            val userCreatedAt = LocalDate(2022, 1, 1)
+            val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
+            robot.buildUseCase(
+                userCreatedAt = userCreatedAt,
+                currentInstant = currentInstant
+            )
+                .mockHomePageCacheGetLongestStreak()
+                .mockHomePageCacheGetCurrentStreak()
+                .mockGetStatsForRange(
+                    start = userCreatedAt.toString(),
+                    end = currentInstant.toDate().toString(),
+                    data = stats.right(),
+                )
+                .callUseCase(batchSize = DatePeriod(months = 1))
+                .verifyGetStatsForRangeCalled(1)
+        }
+
+    @Test
+    internal fun `when creating batches and there are some days that are not part of the initial batch, then current day should be added at the end`() =
+        runTest {
+            val userCreatedAt = LocalDate(2022, 1, 1)
+            val currentInstant = Instant.parse("2022-02-10T00:00:00Z")
+            robot.buildUseCase(
+                userCreatedAt = userCreatedAt,
+                currentInstant = currentInstant
+            )
+                .mockHomePageCacheGetLongestStreak()
+                .mockHomePageCacheGetCurrentStreak()
+                .mockGetStatsForRange(
+                    start = userCreatedAt.toString(),
+                    end = LocalDate(2022, 2, 1).toString(),
+                    data = stats.right(),
+                )
+                .mockGetStatsForRange(
+                    start = LocalDate(2022, 2, 1).toString(),
+                    end = currentInstant.toDate().toString(),
+                    data = stats.right(),
+                )
+                .callUseCase(batchSize = DatePeriod(months = 1))
+                .verifyGetStatsForRangeCalled(2)
+        }
+
+    @Test
+    internal fun `when there is only 1 batch and it has no streak, then ZERO should be returned`() =
+        runTest {
+            val userCreatedAt = LocalDate(2022, 1, 1)
+            val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
+            robot.buildUseCase(
+                userCreatedAt = userCreatedAt,
+                currentInstant = currentInstant
+            )
+                .mockHomePageCacheGetLongestStreak()
+                .mockHomePageCacheGetCurrentStreak()
+                .mockGetStatsForRange(
+                    start = userCreatedAt.toString(),
+                    end = currentInstant.toDate().toString(),
+                    data = stats.copy(
+                        dailyStats = List(30) {
+                            dailyStats.copy(
+                                timeSpent = Time.ZERO,
+                                date = LocalDate(2022, 1, it + 1)
+                            )
+                        },
+
+                    ).right(),
+                )
+                .callUseCase(batchSize = DatePeriod(months = 1))
+                .resultShouldBe(StreakRange.ZERO.right())
+        }
+
+    @Test
+    internal fun `when there is only 1 batch and it has only 1 streak, then that streak should be returned`() =
+        runTest {
+            val userCreatedAt = LocalDate(2022, 1, 1)
+            val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
+            robot.buildUseCase(
+                userCreatedAt = userCreatedAt,
+                currentInstant = currentInstant
+            )
+                .mockHomePageCacheGetLongestStreak()
+                .mockHomePageCacheGetCurrentStreak()
+                .mockGetStatsForRange(
+                    start = userCreatedAt.toString(),
+                    end = currentInstant.toDate().toString(),
+                    data = stats.copy(
+                        dailyStats = List(10) {
+                            dailyStats.copy(
+                                date = LocalDate(2022, 1, it + 1)
+                            )
+                        },
+                    ).right(),
+                )
+                .callUseCase(batchSize = DatePeriod(months = 1))
+                .resultShouldBe(
+                    StreakRange(
+                        start = LocalDate(2022, 1, 1),
+                        end = LocalDate(2022, 1, 10)
+                    ).right()
+                )
+        }
+
+    @Test
+    internal fun `when there is only 1 batch and it has multiple streaks, then longest from that should be returned`() =
+        runTest {
+        }
+
+    @Test
+    internal fun `when there is only 1 streak and it is spread across multiple batches, then combined streak should be returned`() =
+        runTest {
+        }
+
+    @Test
+    internal fun `when there are many streaks and batches but no continuous streaks across batches, then largest streak should be returned`() =
+        runTest {
+        }
 
     @Test
     internal fun name() {
