@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.core.models
 
+import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
 @Serializable
@@ -14,7 +15,7 @@ data class UserDetails(
     val lastProject: String,
     val fullName: String,
     val durationsSliceBy: String,
-    val createdAt: String,
+    val createdAt: LocalDate,
     val dateFormat: String,
     val photoUrl: String,
 )

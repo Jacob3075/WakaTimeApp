@@ -29,6 +29,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -192,7 +193,7 @@ internal class GetCachedHomePageUiDataUCRobot {
             displayName = "",
             lastProject = "",
             durationsSliceBy = "",
-            createdAt = "",
+            createdAt = LocalDate(2021, 1, 1),
             dateFormat = "",
         )
     }
