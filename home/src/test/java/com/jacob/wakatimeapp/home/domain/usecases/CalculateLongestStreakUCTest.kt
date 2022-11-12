@@ -6,12 +6,12 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.stats
-import kotlin.collections.Map.Entry
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.plus
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -19,7 +19,7 @@ internal class CalculateLongestStreakUCTest {
     private val robot = CalculateLongestStreakUCRobot()
 
     @Test
-    internal fun `when current streak from cache is greater than previous longest streak, then update longest streak with current`() =
+    internal fun `when current streak from cache is greater than previous longest streak, then return current streak`() =
         runTest {
             val currentStreak = StreakRange(
                 start = LocalDate(2022, 4, 1),
@@ -35,7 +35,6 @@ internal class CalculateLongestStreakUCTest {
                 )
                 .callUseCase(DatePeriod(months = 1))
                 .resultShouldBe(currentStreak.right())
-                .verifyHomePageCacheUpdateLongestStreakCalled(1, currentStreak)
         }
 
     @Test
@@ -60,7 +59,6 @@ internal class CalculateLongestStreakUCTest {
                     end = LocalDate(2022, 2, 5)
                 ).right()
             )
-            .verifyHomePageCacheUpdateLongestStreakCalled(count = 0)
     }
 
     @Test
@@ -126,10 +124,9 @@ internal class CalculateLongestStreakUCTest {
                         dailyStats = List(30) {
                             dailyStats.copy(
                                 timeSpent = Time.ZERO,
-                                date = LocalDate(2022, 1, it + 1)
+                                date = userCreatedAt + it.days
                             )
                         },
-
                     ).right(),
                 )
                 .callUseCase(batchSize = DatePeriod(months = 1))
@@ -152,9 +149,7 @@ internal class CalculateLongestStreakUCTest {
                     end = currentInstant.toDate().toString(),
                     data = stats.copy(
                         dailyStats = List(10) {
-                            dailyStats.copy(
-                                date = LocalDate(2022, 1, it + 1)
-                            )
+                            dailyStats.copy(date = userCreatedAt + it.days)
                         },
                     ).right(),
                 )
@@ -170,107 +165,192 @@ internal class CalculateLongestStreakUCTest {
     @Test
     internal fun `when there is only 1 batch and it has multiple streaks, then longest from that should be returned`() =
         runTest {
+            val userCreatedAt = LocalDate(2022, 1, 1)
+            val currentInstant = Instant.parse("2022-01-12T00:00:00Z")
+            val zeroDailyStats = dailyStats.copy(timeSpent = Time.ZERO)
+
+            val testDailyStats = listOf(
+                dailyStats.copy(date = userCreatedAt + 0.days),
+                dailyStats.copy(date = userCreatedAt + 1.days),
+                zeroDailyStats.copy(date = userCreatedAt + 2.days),
+                zeroDailyStats.copy(date = userCreatedAt + 3.days),
+                zeroDailyStats.copy(date = userCreatedAt + 4.days),
+                dailyStats.copy(date = userCreatedAt + 5.days),
+                zeroDailyStats.copy(date = userCreatedAt + 6.days),
+                dailyStats.copy(date = userCreatedAt + 7.days),
+                dailyStats.copy(date = userCreatedAt + 8.days),
+                dailyStats.copy(date = userCreatedAt + 9.days),
+                dailyStats.copy(date = userCreatedAt + 10.days),
+                zeroDailyStats.copy(date = userCreatedAt + 11.days),
+            )
+
+            robot.buildUseCase(
+                userCreatedAt = userCreatedAt,
+                currentInstant = currentInstant
+            )
+                .mockHomePageCacheGetLongestStreak()
+                .mockHomePageCacheGetCurrentStreak()
+                .mockGetStatsForRange(
+                    start = userCreatedAt.toString(),
+                    end = currentInstant.toDate().toString(),
+                    data = stats.copy(
+                        dailyStats = testDailyStats,
+                    ).right(),
+                )
+                .callUseCase(batchSize = DatePeriod(months = 1))
+                .resultShouldBe(
+                    StreakRange(
+                        start = LocalDate(2022, 1, 8),
+                        end = LocalDate(2022, 1, 11)
+                    ).right()
+                )
         }
 
     @Test
     internal fun `when there is only 1 streak and it is spread across multiple batches, then combined streak should be returned`() =
         runTest {
-        }
+            val userCreatedAt = LocalDate(2022, 1, 1)
+            val currentInstant = Instant.parse("2022-01-22T00:00:00Z")
 
-    @Test
-    internal fun `when there are many streaks and batches but no continuous streaks across batches, then largest streak should be returned`() =
-        runTest {
-        }
-
-    @Test
-    internal fun name() {
-        listOf(
-            mapOf(
-                LocalDate(2022, 1, 1) to Time.ZERO,
-                LocalDate(2022, 1, 2) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 3) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 4) to Time.ZERO,
-                LocalDate(2022, 1, 5) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 6) to Time.fromDecimal(1f),
-            ),
-
-            mapOf(
-                LocalDate(2022, 1, 7) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 8) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 9) to Time.ZERO,
-                LocalDate(2022, 1, 10) to Time.fromDecimal(1f),
-            ),
-
-            mapOf(
-                LocalDate(2022, 1, 11) to Time.ZERO,
-                LocalDate(2022, 1, 12) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 13) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 14) to Time.ZERO,
-                LocalDate(2022, 1, 15) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 16) to Time.ZERO,
-            ),
-
-            mapOf(
-                LocalDate(2022, 1, 17) to Time.ZERO,
-                LocalDate(2022, 1, 18) to Time.ZERO,
-                LocalDate(2022, 1, 19) to Time.ZERO,
-                LocalDate(2022, 1, 20) to Time.ZERO,
-                LocalDate(2022, 1, 21) to Time.ZERO,
-                LocalDate(2022, 1, 22) to Time.fromDecimal(1f),
-            ),
-
-            mapOf(
-                LocalDate(2022, 1, 23) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 24) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 25) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 26) to Time.fromDecimal(1f),
-            ),
-
-            mapOf(
-                LocalDate(2022, 1, 27) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 28) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 29) to Time.fromDecimal(1f),
-                LocalDate(2022, 1, 30) to Time.fromDecimal(1f),
-            )
-        ).flatMap { map ->
-            map.entries
-                .groupConsecutiveBy()
-                .filter { it.isNotEmpty() }
-                .toStreaks()
-        }
-            .combineStreaks()
-            .forEach(::println)
-    }
-}
-
-/**
- * [Source](https://stackoverflow.com/a/65357359/13181948)
- */
-private fun Iterable<Entry<LocalDate, Time>>.groupConsecutiveBy() =
-    fold(mutableListOf(mutableListOf<Entry<LocalDate, Time>>())) { groups, dateTimeEntry ->
-        when (dateTimeEntry.value) {
-            Time.ZERO -> groups.add(mutableListOf())
-            else -> groups.last().add(dateTimeEntry)
-        }
-        groups
-    }
-
-private fun List<List<Entry<LocalDate, Time>>>.toStreaks(): List<StreakRange> = map {
-    StreakRange(it.first().key, it.last().key)
-}
-
-private fun List<StreakRange>.combineStreaks(): List<StreakRange> =
-    drop(1)
-        .fold(mutableListOf(first())) { acc, streakRange ->
-            val last = acc.last()
-            when (last.canBeCombinedWith(streakRange)) {
-                true -> acc.replaceLast(last + streakRange)
-                false -> acc.add(streakRange)
+            val testDailyStats1 = List(8) {
+                dailyStats.copy(date = userCreatedAt + it.days)
             }
-            acc
+            val testDailyStats2 = List(8) {
+                dailyStats.copy(date = userCreatedAt + (it + 7).days)
+            }
+            val testDailyStats3 = List(8) {
+                dailyStats.copy(date = userCreatedAt + (it + 14).days)
+            }
+
+            robot.buildUseCase(
+                userCreatedAt = userCreatedAt,
+                currentInstant = currentInstant
+            )
+                .mockHomePageCacheGetLongestStreak()
+                .mockHomePageCacheGetCurrentStreak()
+                .mockGetStatsForRange(
+                    start = userCreatedAt.toString(),
+                    end = (userCreatedAt + 7.days).toString(),
+                    data = stats.copy(dailyStats = testDailyStats1).right(),
+                )
+                .mockGetStatsForRange(
+                    start = (userCreatedAt + 7.days).toString(),
+                    end = (userCreatedAt + 14.days).toString(),
+                    data = stats.copy(dailyStats = testDailyStats2).right(),
+                )
+                .mockGetStatsForRange(
+                    start = (userCreatedAt + 14.days).toString(),
+                    end = (userCreatedAt + 21.days).toString(),
+                    data = stats.copy(dailyStats = testDailyStats3).right(),
+                )
+                .callUseCase(batchSize = DatePeriod(days = 7))
+                .resultShouldBe(
+                    StreakRange(
+                        start = userCreatedAt,
+                        end = currentInstant.toDate(),
+                    ).right()
+                )
         }
 
-private fun MutableList<StreakRange>.replaceLast(e: StreakRange) {
-    removeLast()
-    add(e)
+    @Test
+    internal fun `when there are many batches and streaks with continuous streaks across some batches, then largest streak should be returned`() =
+        runTest {
+            val userCreatedAt = LocalDate(2022, 1, 1)
+            val currentInstant = Instant.parse("2022-02-02T00:00:00Z")
+            val zeroDailyStats = dailyStats.copy(timeSpent = Time.ZERO)
+
+            val testDailyStats1 = listOf(
+                dailyStats.copy(date = userCreatedAt + 0.days),
+                dailyStats.copy(date = userCreatedAt + 1.days),
+                dailyStats.copy(date = userCreatedAt + 2.days),
+                zeroDailyStats.copy(date = userCreatedAt + 3.days),
+                dailyStats.copy(date = userCreatedAt + 4.days),
+                zeroDailyStats.copy(date = userCreatedAt + 5.days),
+                dailyStats.copy(date = userCreatedAt + 6.days),
+                dailyStats.copy(date = userCreatedAt + 7.days),
+            )
+
+            val testDailyStats2 = listOf(
+                dailyStats.copy(date = userCreatedAt + 7.days),
+                dailyStats.copy(date = userCreatedAt + 8.days),
+                dailyStats.copy(date = userCreatedAt + 9.days),
+                dailyStats.copy(date = userCreatedAt + 10.days),
+                dailyStats.copy(date = userCreatedAt + 11.days),
+                zeroDailyStats.copy(date = userCreatedAt + 12.days),
+                zeroDailyStats.copy(date = userCreatedAt + 13.days),
+                dailyStats.copy(date = userCreatedAt + 14.days),
+            )
+
+            val testDailyStats3 = listOf(
+                dailyStats.copy(date = userCreatedAt + 14.days),
+                dailyStats.copy(date = userCreatedAt + 15.days),
+                zeroDailyStats.copy(date = userCreatedAt + 16.days),
+                dailyStats.copy(date = userCreatedAt + 17.days),
+                zeroDailyStats.copy(date = userCreatedAt + 18.days),
+                dailyStats.copy(date = userCreatedAt + 19.days),
+                zeroDailyStats.copy(date = userCreatedAt + 20.days),
+                dailyStats.copy(date = userCreatedAt + 21.days),
+            )
+
+            val testDailyStats4 = listOf(
+                dailyStats.copy(date = userCreatedAt + 21.days),
+                dailyStats.copy(date = userCreatedAt + 22.days),
+                zeroDailyStats.copy(date = userCreatedAt + 23.days),
+                zeroDailyStats.copy(date = userCreatedAt + 24.days),
+                dailyStats.copy(date = userCreatedAt + 25.days),
+                dailyStats.copy(date = userCreatedAt + 26.days),
+                zeroDailyStats.copy(date = userCreatedAt + 27.days),
+                zeroDailyStats.copy(date = userCreatedAt + 28.days),
+            )
+
+            val testDailyStats5 = listOf(
+                zeroDailyStats.copy(date = userCreatedAt + 28.days),
+                dailyStats.copy(date = userCreatedAt + 29.days),
+                dailyStats.copy(date = userCreatedAt + 30.days),
+                zeroDailyStats.copy(date = userCreatedAt + 31.days),
+                zeroDailyStats.copy(date = userCreatedAt + 32.days),
+                dailyStats.copy(date = userCreatedAt + 33.days),
+            )
+
+            robot.buildUseCase(
+                userCreatedAt = userCreatedAt,
+                currentInstant = currentInstant
+            )
+                .mockHomePageCacheGetLongestStreak()
+                .mockHomePageCacheGetCurrentStreak()
+                .mockGetStatsForRange(
+                    start = userCreatedAt.toString(),
+                    end = (userCreatedAt + 7.days).toString(),
+                    data = stats.copy(dailyStats = testDailyStats1).right(),
+                )
+                .mockGetStatsForRange(
+                    start = (userCreatedAt + 7.days).toString(),
+                    end = (userCreatedAt + 14.days).toString(),
+                    data = stats.copy(dailyStats = testDailyStats2).right(),
+                )
+                .mockGetStatsForRange(
+                    start = (userCreatedAt + 14.days).toString(),
+                    end = (userCreatedAt + 21.days).toString(),
+                    data = stats.copy(dailyStats = testDailyStats3).right(),
+                )
+                .mockGetStatsForRange(
+                    start = (userCreatedAt + 21.days).toString(),
+                    end = (userCreatedAt + 28.days).toString(),
+                    data = stats.copy(dailyStats = testDailyStats4).right(),
+                )
+                .mockGetStatsForRange(
+                    start = (userCreatedAt + 28.days).toString(),
+                    end = currentInstant.toDate().toString(),
+                    data = stats.copy(dailyStats = testDailyStats5).right(),
+                )
+                .callUseCase(batchSize = DatePeriod(days = 7))
+                .resultShouldBe(
+                    StreakRange(
+                        start = LocalDate(2022, 1, 7),
+                        end = LocalDate(2022, 1, 12),
+                    ).right()
+                )
+        }
 }
+
+private val Int.days get() = DatePeriod(days = this)

@@ -34,7 +34,7 @@ class CalculateLongestStreakUC @Inject constructor(
         val userJoinedData = userDetails.createdAt
 
         generateSequence(userJoinedData) { it + batchSize }
-            .takeWhile { it <= currentDay }
+            .takeWhile { it < currentDay }
             .plusElement(currentDay)
             .zipWithNext()
             .toList()

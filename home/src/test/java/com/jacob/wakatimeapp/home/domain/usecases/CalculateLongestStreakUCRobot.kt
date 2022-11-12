@@ -88,11 +88,6 @@ internal class CalculateLongestStreakUCRobot {
         } returns data
     }
 
-    fun verifyHomePageCacheUpdateLongestStreakCalled(count: Int, data: StreakRange? = null) =
-        apply {
-            coVerify(exactly = count) { mockHomePageCache.updateLongestStreak(data ?: any()) }
-        }
-
     fun verifyGetStatsForRangeCalled(count: Int, start: String? = null, end: String? = null) =
         apply {
             coVerify(exactly = count) {
