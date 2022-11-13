@@ -13,6 +13,7 @@ class UpdateCachedHomePageUiData @Inject constructor(
     suspend operator fun invoke(last7DaysStats: Last7DaysStats, streaks: Streaks) {
         homePageCache.updateLast7DaysStats(last7DaysStats)
         homePageCache.updateCurrentStreak(streaks.currentStreak)
+        homePageCache.updateLongestStreak(streaks.longestStreak)
         homePageCache.updateLastRequestTime()
     }
 }

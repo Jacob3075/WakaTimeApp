@@ -7,7 +7,6 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC.CacheValidity.DEFAULT
@@ -32,17 +31,19 @@ class GetCachedHomePageUiDataUC @Inject constructor(
         combine(
             getLast7DaysStats(),
             getHomePageUserDetails(),
-            getStreaks(),
+            getCurrentStreak(),
+            getLongestStreak(),
             homePageCache.getLastRequestTime(),
-        ) { last7DaysStatsEither, userDetails, streaksEither, lastRequestTime ->
+        ) { last7DaysStatsEither, userDetails, currentStreakEither, longestStreakEither, lastRequestTime ->
             if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
 
             either<Error, CachedHomePageUiData?> {
                 val last7DaysStats = last7DaysStatsEither.bind() ?: return@either null
-                val streakRange = streaksEither.bind()
+                val streakRange = currentStreakEither.bind()
+                val longestStreak = longestStreakEither.bind()
                 val streaks = Streaks(
                     currentStreak = streakRange,
-                    longestStreak = StreakRange.ZERO
+                    longestStreak = longestStreak,
                 )
 
                 CachedHomePageUiData(
@@ -62,7 +63,8 @@ class GetCachedHomePageUiDataUC @Inject constructor(
 
     private fun getLast7DaysStats() = homePageCache.getLast7DaysStats()
 
-    private fun getStreaks() = homePageCache.getCurrentStreak()
+    private fun getCurrentStreak() = homePageCache.getCurrentStreak()
+    private fun getLongestStreak() = homePageCache.getLongestStreak()
 
     private fun Instant.isFirstRequestOfDay(): Boolean {
         val lastRequestDate = toLocalDateTime(instantProvider.timeZone).date.toEpochDays()

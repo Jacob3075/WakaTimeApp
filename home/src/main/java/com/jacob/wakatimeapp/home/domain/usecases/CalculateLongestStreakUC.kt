@@ -1,10 +1,10 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.computations.either
+import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
@@ -26,13 +26,14 @@ import kotlinx.datetime.plus
 class CalculateLongestStreakUC @Inject constructor(
     private val homePageNetworkData: HomePageNetworkData,
     private val homePageCache: HomePageCache,
-    private val userDetails: UserDetails,
+    private val authDataStore: AuthDataStore,
     private val instantProvider: InstantProvider,
     dispatcher: CoroutineContext = Dispatchers.IO,
 ) {
     private val ioScope = CoroutineScope(dispatcher)
 
     suspend operator fun invoke(batchSize: DatePeriod = DEFAULT_BATCH_SIZE) = either {
+        val userDetails = authDataStore.getUserDetails().first()
         val cachedLongestStreak = homePageCache.getLongestStreak().first().bind()
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
