@@ -53,8 +53,8 @@ data class Streak(
         other == ZERO -> this
         this in other -> Streak(other.start, other.end)
         other in this -> Streak(start, end)
-        other.start paddedIn this -> Streak(start, other.end)
-        start paddedIn other -> Streak(other.start, end)
+        other.start in padded() -> Streak(start, other.end)
+        start in other.padded() -> Streak(other.start, end)
         else -> {
             Timber.e("Cannot add streaks $this and $other")
             ZERO
@@ -67,11 +67,15 @@ data class Streak(
 
     operator fun compareTo(streak: Streak) = days.compareTo(streak.days)
 
-    private infix fun LocalDate.paddedIn(streak: Streak) =
-        this in (streak.start - oneDay)..(streak.end + oneDay)
+    private fun padded() = Streak(start - oneDay, end + oneDay)
 
+    /**
+     * Checks if 2 streaks can be combined into 1
+     *
+     * NOTE: DOES NOT HANDLE CASE WHERE ONE OF THE STREAKS IS [ZERO], (breaks a test)
+     */
     fun canBeCombinedWith(other: Streak) =
-        !(this == ZERO || other == ZERO || (this + other) == ZERO)
+        this in other || other in this || other.start in padded() || start in other.padded()
 
     companion object {
         private val oneDay = DatePeriod(days = 1)
