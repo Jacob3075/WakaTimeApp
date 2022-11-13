@@ -9,7 +9,7 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
@@ -17,15 +17,15 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 
 @Singleton
-class CalculateCurrentStreakUC @Inject constructor(
+internal class CalculateCurrentStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
     private val instantProvider: InstantProvider,
     private val recalculateLatestStreakUC: RecalculateLatestStreakUC,
 ) {
 
-    suspend operator fun invoke(): Either<Error, StreakRange> = either {
+    suspend operator fun invoke(): Either<Error, Streak> = either {
         val last7DaysStats =
-            homePageCache.getLast7DaysStats().first().bind() ?: return@either StreakRange.ZERO
+            homePageCache.getLast7DaysStats().first().bind() ?: return@either Streak.ZERO
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
         val today = instantProvider.now().toDate()
@@ -37,7 +37,7 @@ class CalculateCurrentStreakUC @Inject constructor(
             .getLatestStreakInRange()
 
         val combinedStreak = currentStreak + recalculatedStreakForLast7Days
-        val failedToCombine = combinedStreak == StreakRange.ZERO
+        val failedToCombine = !currentStreak.canBeCombinedWith(recalculatedStreakForLast7Days)
 
         when {
             endOfCurrentStreakIsYesterday -> whenEndOfCurrentStreakIsYesterday(
@@ -51,7 +51,7 @@ class CalculateCurrentStreakUC @Inject constructor(
     }
 
     private fun whenEndOfCurrentStreakIsYesterday(
-        currentStreak: StreakRange,
+        currentStreak: Streak,
         todaysStats: Time,
     ) = when (todaysStats) {
         Time.ZERO -> currentStreak
@@ -59,7 +59,7 @@ class CalculateCurrentStreakUC @Inject constructor(
     }
 
     private suspend fun whenFailedToCombine(
-        recalculatedStreakForLast7Days: StreakRange,
+        recalculatedStreakForLast7Days: Streak,
     ) = when (recalculatedStreakForLast7Days.days) {
         7 -> recalculateLatestStreakUC.calculate(
             start = instantProvider.now().toDate().minus(8, DateTimeUnit.DAY),

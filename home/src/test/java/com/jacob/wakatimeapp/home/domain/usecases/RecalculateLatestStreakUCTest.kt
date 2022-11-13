@@ -4,7 +4,7 @@ import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.RecalculateLatestStreakUCRobot.Companion.createDailyStats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
@@ -40,7 +40,7 @@ internal class RecalculateLatestStreakUCTest {
                     value = 1,
                     unit = DateTimeUnit.MONTH,
                 )
-                .resultShouldBe(StreakRange.ZERO.right())
+                .resultShouldBe(Streak.ZERO.right())
                 .verifyGetDataForRange(start, end)
         }
 
@@ -71,7 +71,7 @@ internal class RecalculateLatestStreakUCTest {
                     unit = DateTimeUnit.WEEK,
                 )
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = LocalDate(2022, 3, 28),
                         end = start
                     ).right()
@@ -101,7 +101,7 @@ internal class RecalculateLatestStreakUCTest {
                     value = 2,
                     unit = DateTimeUnit.WEEK,
                 )
-                .resultShouldBe(StreakRange.ZERO.right())
+                .resultShouldBe(Streak.ZERO.right())
                 .verifyGetDataForRange(start, end)
         }
 
@@ -189,7 +189,7 @@ internal class RecalculateLatestStreakUCTest {
                     unit = DateTimeUnit.WEEK,
                 )
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = "2022-03-13".toLocalDate(),
                         end = "2022-03-31".toLocalDate()
                     ).right()
@@ -235,7 +235,7 @@ internal class RecalculateLatestStreakUCTest {
                     unit = DateTimeUnit.WEEK,
                 )
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = "2022-03-17".toLocalDate(),
                         end = "2022-03-31".toLocalDate()
                     ).right()
@@ -350,7 +350,7 @@ internal class RecalculateLatestStreakUCTest {
                     unit = DateTimeUnit.MONTH,
                 )
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = end6,
                         end = start1,
                     ).right()

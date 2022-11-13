@@ -4,7 +4,7 @@ import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
-import kotlinx.datetime.DateTimeUnit
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -18,7 +18,8 @@ import timber.log.Timber
 data class CachedHomePageUiData(
     val last7DaysStats: Last7DaysStats,
     val userDetails: HomePageUserDetails,
-    val streaks: Streaks,
+    val longestStreak: Streak,
+    val currentStreak: Streak,
     val isStaleData: Boolean,
 )
 
@@ -41,35 +42,45 @@ data class HomePageUserDetails(
 )
 
 @Serializable
-data class Streaks(
-    val currentStreak: StreakRange,
-    val longestStreak: StreakRange,
-)
-
-@Serializable
-data class StreakRange(
+data class Streak(
     val start: LocalDate,
     val end: LocalDate,
 ) {
-    val days = start.daysUntil(end) + 1
+    val days: Int = if (this == ZERO) 0 else start.daysUntil(end) + 1
 
-    operator fun plus(other: StreakRange): StreakRange = when {
-        end == other.start -> StreakRange(start, other.end)
-        other.end == start -> StreakRange(other.start, end)
-        end == other.start.minus(1, DateTimeUnit.DAY) -> StreakRange(start, other.end)
-        start == other.end.plus(1, DateTimeUnit.DAY) -> StreakRange(other.start, end)
-        start < other.start && end > other.end -> StreakRange(start, end)
-        other.start < start && other.end > end -> StreakRange(other.start, other.end)
-        start < other.start && end > other.start -> StreakRange(start, other.end)
-        start < other.end && end > other.start -> StreakRange(other.start, end)
+    operator fun plus(other: Streak) = when {
+        this == ZERO -> other
+        other == ZERO -> this
+        this in other -> Streak(other.start, other.end)
+        other in this -> Streak(start, end)
+        other.start in padded() -> Streak(start, other.end)
+        start in other.padded() -> Streak(other.start, end)
         else -> {
             Timber.e("Cannot add streaks $this and $other")
             ZERO
         }
     }
 
+    operator fun contains(day: LocalDate) = day in start..end
+
+    operator fun contains(other: Streak) = other.start in this && other.end in this
+
+    operator fun compareTo(streak: Streak) = days.compareTo(streak.days)
+
+    private fun padded() = Streak(start - oneDay, end + oneDay)
+
+    /**
+     * Checks if 2 streaks can be combined into 1
+     *
+     * NOTE: DOES NOT HANDLE CASE WHERE ONE OF THE STREAKS IS [ZERO], (breaks a test)
+     */
+    fun canBeCombinedWith(other: Streak) =
+        this in other || other in this || other.start in padded() || start in other.padded()
+
     companion object {
-        val ZERO = StreakRange(
+        private val oneDay = DatePeriod(days = 1)
+
+        val ZERO = Streak(
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date
         )

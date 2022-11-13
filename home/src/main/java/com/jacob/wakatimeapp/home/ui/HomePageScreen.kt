@@ -31,8 +31,7 @@ import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
-import com.jacob.wakatimeapp.home.domain.models.Streaks
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
@@ -41,6 +40,13 @@ import kotlinx.coroutines.launch
 
 @Composable
 fun HomePageScreen(
+    navigator: HomePageNavigator,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
+) = HomePageScreen(navigator, snackbarHostState, modifier, hiltViewModel())
+
+@Composable
+private fun HomePageScreen(
     navigator: HomePageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
@@ -126,7 +132,8 @@ private fun HomePageLoaded(
             mostUsedLanguage = homePageViewState.last7DaysStats.mostUsedLanguage,
             mostUsedOs = homePageViewState.last7DaysStats.mostUsedOs,
             mostUsedEditor = homePageViewState.last7DaysStats.mostUsedEditor,
-            currentStreak = homePageViewState.streaks.currentStreak,
+            currentStreak = homePageViewState.currentStreak,
+            longestStreak = homePageViewState.longestStreak,
             numberOfDaysWorked = homePageViewState.last7DaysStats.numberOfDaysWorked,
         )
         Spacer(modifier = Modifier.height(spacing.medium))
@@ -160,13 +167,13 @@ private fun HomePageLoading() = WtaAnimation(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun HomePagePreview(
+private fun HomePagePreview(
     @PreviewParameter(HomePagePreviewProvider::class) viewState: HomePageViewState,
 ) = WakaTimeAppTheme {
     HomePageContent(viewState = viewState, toDetailsPage = { })
 }
 
-class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewState>(
+private class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewState>(
     listOf(
         HomePageViewState.Loading,
         HomePageViewState.Error(Error.UnknownError("Something went wrong")),
@@ -183,10 +190,8 @@ class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewS
                 photoUrl = "",
                 fullName = "",
             ),
-            streaks = Streaks(
-                currentStreak = StreakRange.ZERO,
-                longestStreak = StreakRange.ZERO,
-            )
+            currentStreak = Streak.ZERO,
+            longestStreak = Streak.ZERO,
         ),
     )
 )

@@ -7,8 +7,6 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
-import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC.CacheValidity.DEFAULT
 import javax.inject.Inject
@@ -19,7 +17,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
 
 @Singleton
-class GetCachedHomePageUiDataUC @Inject constructor(
+internal class GetCachedHomePageUiDataUC @Inject constructor(
     private val instantProvider: InstantProvider,
     private val homePageCache: HomePageCache,
     private val authDataStore: AuthDataStore,
@@ -30,25 +28,24 @@ class GetCachedHomePageUiDataUC @Inject constructor(
      */
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
         combine(
-            getLast7DaysStats(),
-            getHomePageUserDetails(),
-            getStreaks(),
+            authDataStore.getUserDetails(),
+            homePageCache.getLast7DaysStats(),
+            homePageCache.getCurrentStreak(),
+            homePageCache.getLongestStreak(),
             homePageCache.getLastRequestTime(),
-        ) { last7DaysStatsEither, userDetails, streaksEither, lastRequestTime ->
+        ) { userDetails, last7DaysStatsEither, currentStreakEither, longestStreakEither, lastRequestTime ->
             if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
 
             either<Error, CachedHomePageUiData?> {
                 val last7DaysStats = last7DaysStatsEither.bind() ?: return@either null
-                val streakRange = streaksEither.bind()
-                val streaks = Streaks(
-                    currentStreak = streakRange,
-                    longestStreak = StreakRange.ZERO
-                )
+                val currentStreak = currentStreakEither.bind()
+                val longestStreak = longestStreakEither.bind()
 
                 CachedHomePageUiData(
                     last7DaysStats = last7DaysStats,
                     userDetails = userDetails.toHomePageUserDetails(),
-                    streaks = streaks,
+                    currentStreak = currentStreak,
+                    longestStreak = longestStreak,
                     isStaleData = !validDataInCache(
                         lastRequestTime = lastRequestTime,
                         cacheValidityTime = cacheValidity
@@ -57,12 +54,6 @@ class GetCachedHomePageUiDataUC @Inject constructor(
             }
         }.collect { send(it) }
     }
-
-    private fun getHomePageUserDetails() = authDataStore.getUserDetails()
-
-    private fun getLast7DaysStats() = homePageCache.getLast7DaysStats()
-
-    private fun getStreaks() = homePageCache.getCurrentStreak()
 
     private fun Instant.isFirstRequestOfDay(): Boolean {
         val lastRequestDate = toLocalDateTime(instantProvider.timeZone).date.toEpochDays()

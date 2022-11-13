@@ -6,7 +6,7 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
@@ -25,7 +25,7 @@ import kotlinx.datetime.toLocalDateTime
 internal class CalculateCurrentStreakUCRobot {
     private lateinit var useCase: CalculateCurrentStreakUC
 
-    private var result: Either<Error, StreakRange>? = null
+    private var result: Either<Error, Streak>? = null
 
     private val mockCache: HomePageCache = mockk(relaxUnitFun = true)
     private val mockRecalculateStreak: RecalculateLatestStreakUC = mockk()
@@ -49,13 +49,13 @@ internal class CalculateCurrentStreakUCRobot {
         result = useCase()
     }
 
-    fun resultsShouldBe(expected: Either<Error, StreakRange>) = apply {
+    fun resultsShouldBe(expected: Either<Error, Streak>) = apply {
         result.asClue {
             it shouldBe expected
         }
     }
 
-    fun mockGetCurrentStreak(data: Either<Error, StreakRange>) = apply {
+    fun mockGetCurrentStreak(data: Either<Error, Streak>) = apply {
         coEvery { mockCache.getCurrentStreak() } returns flowOf(data)
     }
 
@@ -63,7 +63,7 @@ internal class CalculateCurrentStreakUCRobot {
         coEvery { mockCache.getLast7DaysStats() } returns flowOf(data)
     }
 
-    fun mockRecalculateStreak(start: LocalDate, result: Either<Error, StreakRange>) = apply {
+    fun mockRecalculateStreak(start: LocalDate, result: Either<Error, Streak>) = apply {
         coEvery { mockRecalculateStreak.calculate(start, any(), any()) } returns result
     }
 

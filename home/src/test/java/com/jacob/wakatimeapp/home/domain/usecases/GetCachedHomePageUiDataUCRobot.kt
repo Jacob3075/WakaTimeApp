@@ -11,7 +11,7 @@ import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.currentDayInstant
 import io.kotest.assertions.arrow.core.shouldBeLeft
 import io.kotest.assertions.arrow.core.shouldBeRight
@@ -29,6 +29,7 @@ import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
 import kotlinx.datetime.Instant
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 
 @OptIn(ExperimentalCoroutinesApi::class)
@@ -43,7 +44,8 @@ internal class GetCachedHomePageUiDataUCRobot {
     private lateinit var last7DaysStatsFlow: MutableSharedFlow<Either<Error, Last7DaysStats?>>
     private lateinit var userDetailsFlow: MutableSharedFlow<UserDetails>
     private lateinit var lastRequestTimeFlow: MutableSharedFlow<Instant>
-    private lateinit var currentStreakFlow: MutableSharedFlow<Either<Error, StreakRange>>
+    private lateinit var currentStreakFlow: MutableSharedFlow<Either<Error, Streak>>
+    private lateinit var longestStreakFlow: MutableSharedFlow<Either<Error, Streak>>
 
     fun buildUseCase(currentInstant: Instant = currentDayInstant) = apply {
         clearMocks(mockHomePageCache, mockAuthDataStore)
@@ -52,6 +54,7 @@ internal class GetCachedHomePageUiDataUCRobot {
         userDetailsFlow = MutableSharedFlow()
         lastRequestTimeFlow = MutableSharedFlow(replay = 1)
         currentStreakFlow = MutableSharedFlow()
+        longestStreakFlow = MutableSharedFlow()
 
         useCase = GetCachedHomePageUiDataUC(
             instantProvider = object : InstantProvider {
@@ -132,6 +135,7 @@ internal class GetCachedHomePageUiDataUCRobot {
         coEvery { mockAuthDataStore.getUserDetails() } returns userDetailsFlow
         coEvery { mockHomePageCache.getLastRequestTime() } returns lastRequestTimeFlow
         coEvery { mockHomePageCache.getCurrentStreak() } returns currentStreakFlow
+        coEvery { mockHomePageCache.getLongestStreak() } returns longestStreakFlow
     }
 
     suspend fun sendLastRequestTime(value: Instant) = apply {
@@ -146,8 +150,12 @@ internal class GetCachedHomePageUiDataUCRobot {
         last7DaysStatsFlow.emit(value)
     }
 
-    suspend fun sendCurrentStreak(value: Either<Error, StreakRange>) = apply {
+    suspend fun sendCurrentStreak(value: Either<Error, Streak>) = apply {
         currentStreakFlow.emit(value)
+    }
+
+    suspend fun sendLongestStreak(value: Either<Nothing, Streak>) = apply {
+        longestStreakFlow.emit(value)
     }
 
     companion object {
@@ -168,7 +176,8 @@ internal class GetCachedHomePageUiDataUCRobot {
          */
         val previousDayInstant = currentDayInstant.minus(1.days)
 
-        val currentStreak = StreakRange.ZERO
+        val currentStreak = Streak.ZERO
+        val longestStreak = Streak.ZERO
 
         val last7DaysStats = Last7DaysStats(
             timeSpentToday = Time.ZERO,
@@ -192,7 +201,7 @@ internal class GetCachedHomePageUiDataUCRobot {
             displayName = "",
             lastProject = "",
             durationsSliceBy = "",
-            createdAt = "",
+            createdAt = LocalDate(2021, 1, 1),
             dateFormat = "",
         )
     }

@@ -7,12 +7,12 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
-import com.jacob.wakatimeapp.home.domain.models.Streaks
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.currentDayInstant
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.currentStreak
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.last7DaysStats
+import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.longestStreak
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.previousDayInstant
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.startOfDay
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.userDetails
@@ -36,6 +36,7 @@ internal class GetCachedHomePageUiDataUCTest {
                 .sendUserDetails(userDetails)
                 .sendLast7DaysStats(last7DaysStats.right())
                 .sendCurrentStreak(currentStreak.right())
+                .sendLongestStreak(longestStreak.right())
                 .withNextItem {
                     itemShouldBeNull()
                 }
@@ -52,6 +53,7 @@ internal class GetCachedHomePageUiDataUCTest {
                 .sendUserDetails(userDetails)
                 .sendLast7DaysStats(last7DaysStats.right())
                 .sendCurrentStreak(currentStreak.right())
+                .sendLongestStreak(longestStreak.right())
                 .withNextItem {
                     itemShouldBeNull()
                 }
@@ -68,6 +70,7 @@ internal class GetCachedHomePageUiDataUCTest {
                 .sendUserDetails(userDetails)
                 .sendLast7DaysStats(last7DaysStats.right())
                 .sendCurrentStreak(currentStreak.right())
+                .sendLongestStreak(longestStreak.right())
                 .withNextItem {
                     itemShouldBeRight()
                         .itemShouldNotBeNull()
@@ -86,6 +89,7 @@ internal class GetCachedHomePageUiDataUCTest {
                 .sendUserDetails(userDetails)
                 .sendLast7DaysStats(last7DaysStats.right())
                 .sendCurrentStreak(currentStreak.right())
+                .sendLongestStreak(longestStreak.right())
                 .withNextItem {
                     itemShouldBeRight()
                         .itemShouldNotBeNull()
@@ -106,6 +110,7 @@ internal class GetCachedHomePageUiDataUCTest {
                 .sendUserDetails(userDetails)
                 .sendLast7DaysStats(networkError)
                 .sendCurrentStreak(databaseError)
+                .sendLongestStreak(longestStreak.right())
                 .withNextItem {
                     itemShouldBeLeft()
                         .itemShouldBe(networkError)
@@ -119,7 +124,8 @@ internal class GetCachedHomePageUiDataUCTest {
             val cachedData = CachedHomePageUiData(
                 userDetails = userDetails.toHomePageUserDetails(),
                 last7DaysStats = last7DaysStats,
-                streaks = Streaks(currentStreak, StreakRange.ZERO),
+                currentStreak = currentStreak,
+                longestStreak = Streak.ZERO,
                 isStaleData = true
             )
             val copy1 = last7DaysStats.copy(timeSpentToday = Time.fromDecimal(2.0f))
@@ -132,6 +138,7 @@ internal class GetCachedHomePageUiDataUCTest {
                 .sendUserDetails(userDetails)
                 .sendLast7DaysStats(last7DaysStats.right())
                 .sendCurrentStreak(currentStreak.right())
+                .sendLongestStreak(longestStreak.right())
                 .withNextItem {
                     itemShouldBeRight()
                         .itemShouldBeNull()
@@ -164,7 +171,8 @@ internal class GetCachedHomePageUiDataUCTest {
                 .sendLast7DaysStats(null.right())
                 .sendLastRequestTime(Instant.DISTANT_PAST)
                 .sendUserDetails(userDetails)
-                .sendCurrentStreak(StreakRange.ZERO.right())
+                .sendCurrentStreak(Streak.ZERO.right())
+                .sendLongestStreak(longestStreak.right())
                 .withNextItem {
                     itemShouldBeRight()
                         .itemShouldBeNull()

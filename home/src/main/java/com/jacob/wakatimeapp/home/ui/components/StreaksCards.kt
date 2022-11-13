@@ -13,12 +13,12 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import kotlinx.datetime.LocalDate
 
 @Composable
 internal fun CurrentStreakCard(
-    currentStreak: StreakRange,
+    currentStreak: Streak,
     gradient: Gradient,
     roundedCornerPercent: Int,
     modifier: Modifier = Modifier,
@@ -65,7 +65,7 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
             CurrentStreakCard(
-                currentStreak = StreakRange(
+                currentStreak = Streak(
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 1, 11)
                 ),
