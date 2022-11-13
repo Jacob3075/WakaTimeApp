@@ -18,8 +18,12 @@ sealed class Error {
             override val statusCode = -1
         }
 
+        data class Timeout(override val message: String) : NetworkErrors() {
+            override val statusCode = -1
+        }
+
         data class GenericError(override val message: String) : NetworkErrors() {
-            override val statusCode: Int = -1
+            override val statusCode = -1
         }
 
         data class ClientError(override val message: String, override val statusCode: Int) :
