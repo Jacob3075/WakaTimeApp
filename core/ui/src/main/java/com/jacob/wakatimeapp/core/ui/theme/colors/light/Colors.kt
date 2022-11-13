@@ -31,7 +31,6 @@ private val lightOutline = Color(0xFF6F797A)
 private val lightInverseOnSurface = Color(0xFFEFF1F1)
 private val lightInverseSurface = Color(0xFF2E3132)
 private val lightInversePrimary = Color(0xFF4FD8EB)
-private val lightShadow = Color(0xFF000000)
 private val lightSurfaceTint = Color(0xFF006874)
 
 internal val LightColors = lightColorScheme(

@@ -98,7 +98,7 @@ internal fun StatsCard(
 
 @WtaPreviews
 @Composable
-fun StatsCardPreview() = WakaTimeAppTheme {
+private fun StatsCardPreview() = WakaTimeAppTheme {
     Surface {
         Row {
             StatsCard(

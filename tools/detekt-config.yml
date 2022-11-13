@@ -626,8 +626,8 @@ style:
     excludeImportStatements: true
     excludeCommentStatements: true
     excludeRawStrings: true
-    excludes: ['**/test/**', '**/*.Test.kt', '**/*.Spec.kt']
-    ignoreAnnotated: ['Test']
+    excludes: [ '**/test/**', '**/*.Test.kt', '**/*.Spec.kt' ]
+    ignoreAnnotated: [ 'Test' ]
   MayBeConst:
     active: true
   ModifierOrder:
@@ -716,7 +716,7 @@ style:
     active: true
   UnusedPrivateMember:
     active: true
-    allowedNames: '(_|ignored|expected|serialVersionUID)'
+    allowedNames: '(_|ignored|expected|serialVersionUID|preview)'
     ignoreAnnotated: [ 'Preview' ]
   UseAnyOrNoneInsteadOfFind:
     active: true

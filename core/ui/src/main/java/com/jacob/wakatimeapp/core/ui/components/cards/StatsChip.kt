@@ -104,7 +104,7 @@ fun StatsChip(
 
 @WtaPreviews
 @Composable
-fun StatsChipPreview() = WakaTimeAppTheme {
+private fun StatsChipPreview() = WakaTimeAppTheme {
     Surface {
         Row(
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
