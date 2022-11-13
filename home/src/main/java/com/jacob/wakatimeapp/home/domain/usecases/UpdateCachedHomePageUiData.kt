@@ -7,7 +7,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 
 @Singleton
-class UpdateCachedHomePageUiData @Inject constructor(
+internal class UpdateCachedHomePageUiData @Inject constructor(
     private val homePageCache: HomePageCache,
 ) {
     suspend operator fun invoke(last7DaysStats: Last7DaysStats, streaks: Streaks) {

@@ -19,7 +19,7 @@ import kotlinx.coroutines.launch
 import timber.log.Timber
 
 @HiltViewModel
-class HomePageViewModel @Inject constructor(
+internal class HomePageViewModel @Inject constructor(
     private val getCachedHomePageUiDataUC: GetCachedHomePageUiDataUC,
     private val getLast7DaysStatsUC: GetLast7DaysStatsUC,
     private val calculateCurrentStreakUC: CalculateCurrentStreakUC,

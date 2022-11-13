@@ -23,7 +23,7 @@ import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 
 @Singleton
-class CalculateLongestStreakUC @Inject constructor(
+internal class CalculateLongestStreakUC @Inject constructor(
     private val homePageNetworkData: HomePageNetworkData,
     private val homePageCache: HomePageCache,
     private val authDataStore: AuthDataStore,

@@ -20,7 +20,7 @@ import retrofit2.Response
 import timber.log.Timber
 
 @Singleton
-class HomePageNetworkData @Inject constructor(
+internal class HomePageNetworkData @Inject constructor(
     private val authTokenProvider: AuthTokenProvider,
     private val homePageAPI: HomePageAPI,
 ) {

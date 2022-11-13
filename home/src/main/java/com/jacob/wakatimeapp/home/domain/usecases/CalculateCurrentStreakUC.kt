@@ -17,7 +17,7 @@ import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 
 @Singleton
-class CalculateCurrentStreakUC @Inject constructor(
+internal class CalculateCurrentStreakUC @Inject constructor(
     private val homePageCache: HomePageCache,
     private val instantProvider: InstantProvider,
     private val recalculateLatestStreakUC: RecalculateLatestStreakUC,

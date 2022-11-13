@@ -15,7 +15,7 @@ import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
 
 @Singleton
-class RecalculateLatestStreakUC @Inject constructor(
+internal class RecalculateLatestStreakUC @Inject constructor(
     private val homePageNetworkData: HomePageNetworkData,
 ) {
     suspend fun calculate(

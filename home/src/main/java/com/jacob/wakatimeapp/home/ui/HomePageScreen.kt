@@ -44,6 +44,13 @@ fun HomePageScreen(
     navigator: HomePageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+) = HomePageScreen(navigator, snackbarHostState, modifier, hiltViewModel())
+
+@Composable
+private fun HomePageScreen(
+    navigator: HomePageNavigator,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
     viewModel: HomePageViewModel = hiltViewModel(),
 ) {
     val snackBarCoroutineScope = rememberCoroutineScope()
@@ -160,13 +167,13 @@ private fun HomePageLoading() = WtaAnimation(
     uiMode = Configuration.UI_MODE_NIGHT_YES
 )
 @Composable
-fun HomePagePreview(
+private fun HomePagePreview(
     @PreviewParameter(HomePagePreviewProvider::class) viewState: HomePageViewState,
 ) = WakaTimeAppTheme {
     HomePageContent(viewState = viewState, toDetailsPage = { })
 }
 
-class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewState>(
+private class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewState>(
     listOf(
         HomePageViewState.Loading,
         HomePageViewState.Error(Error.UnknownError("Something went wrong")),

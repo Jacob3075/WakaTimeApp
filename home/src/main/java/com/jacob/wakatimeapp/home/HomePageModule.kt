@@ -13,16 +13,14 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
-object HomePageModule {
-    @Singleton
-    @Provides
-    fun provideHomePageService(retrofit: Retrofit): HomePageAPI =
-        retrofit.create(HomePageAPI::class.java)
-}
-
-@Module
-@InstallIn(SingletonComponent::class)
-interface HomePageModuleBinds {
+abstract class HomePageModule {
     @Binds
-    fun provideInstantProvider(impl: DefaultInstantProvider): InstantProvider
+    abstract fun provideInstantProvider(impl: DefaultInstantProvider): InstantProvider
+
+    companion object {
+        @Singleton
+        @Provides
+        internal fun provideHomePageService(retrofit: Retrofit) =
+            retrofit.create(HomePageAPI::class.java)
+    }
 }

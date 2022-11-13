@@ -18,7 +18,7 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
 
 @Singleton
-class GetCachedHomePageUiDataUC @Inject constructor(
+internal class GetCachedHomePageUiDataUC @Inject constructor(
     private val instantProvider: InstantProvider,
     private val homePageCache: HomePageCache,
     private val authDataStore: AuthDataStore,
@@ -29,12 +29,12 @@ class GetCachedHomePageUiDataUC @Inject constructor(
      */
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
         combine(
-            getLast7DaysStats(),
-            getHomePageUserDetails(),
-            getCurrentStreak(),
-            getLongestStreak(),
+            authDataStore.getUserDetails(),
+            homePageCache.getLast7DaysStats(),
+            homePageCache.getCurrentStreak(),
+            homePageCache.getLongestStreak(),
             homePageCache.getLastRequestTime(),
-        ) { last7DaysStatsEither, userDetails, currentStreakEither, longestStreakEither, lastRequestTime ->
+        ) { userDetails, last7DaysStatsEither, currentStreakEither, longestStreakEither, lastRequestTime ->
             if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
 
             either<Error, CachedHomePageUiData?> {
@@ -58,13 +58,6 @@ class GetCachedHomePageUiDataUC @Inject constructor(
             }
         }.collect { send(it) }
     }
-
-    private fun getHomePageUserDetails() = authDataStore.getUserDetails()
-
-    private fun getLast7DaysStats() = homePageCache.getLast7DaysStats()
-
-    private fun getCurrentStreak() = homePageCache.getCurrentStreak()
-    private fun getLongestStreak() = homePageCache.getLongestStreak()
 
     private fun Instant.isFirstRequestOfDay(): Boolean {
         val lastRequestDate = toLocalDateTime(instantProvider.timeZone).date.toEpochDays()

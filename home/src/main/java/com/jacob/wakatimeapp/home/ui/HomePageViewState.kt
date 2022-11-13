@@ -5,7 +5,7 @@ import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streaks
 
-sealed class HomePageViewState {
+internal sealed class HomePageViewState {
     data class Loaded(
         val last7DaysStats: Last7DaysStats,
         val userDetails: HomePageUserDetails,
