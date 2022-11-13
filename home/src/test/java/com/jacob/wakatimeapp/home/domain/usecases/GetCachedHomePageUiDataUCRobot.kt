@@ -45,6 +45,7 @@ internal class GetCachedHomePageUiDataUCRobot {
     private lateinit var userDetailsFlow: MutableSharedFlow<UserDetails>
     private lateinit var lastRequestTimeFlow: MutableSharedFlow<Instant>
     private lateinit var currentStreakFlow: MutableSharedFlow<Either<Error, StreakRange>>
+    private lateinit var longestStreakFlow: MutableSharedFlow<Either<Error, StreakRange>>
 
     fun buildUseCase(currentInstant: Instant = currentDayInstant) = apply {
         clearMocks(mockHomePageCache, mockAuthDataStore)
@@ -53,6 +54,7 @@ internal class GetCachedHomePageUiDataUCRobot {
         userDetailsFlow = MutableSharedFlow()
         lastRequestTimeFlow = MutableSharedFlow(replay = 1)
         currentStreakFlow = MutableSharedFlow()
+        longestStreakFlow = MutableSharedFlow()
 
         useCase = GetCachedHomePageUiDataUC(
             instantProvider = object : InstantProvider {
@@ -133,6 +135,7 @@ internal class GetCachedHomePageUiDataUCRobot {
         coEvery { mockAuthDataStore.getUserDetails() } returns userDetailsFlow
         coEvery { mockHomePageCache.getLastRequestTime() } returns lastRequestTimeFlow
         coEvery { mockHomePageCache.getCurrentStreak() } returns currentStreakFlow
+        coEvery { mockHomePageCache.getLongestStreak() } returns longestStreakFlow
     }
 
     suspend fun sendLastRequestTime(value: Instant) = apply {
@@ -149,6 +152,10 @@ internal class GetCachedHomePageUiDataUCRobot {
 
     suspend fun sendCurrentStreak(value: Either<Error, StreakRange>) = apply {
         currentStreakFlow.emit(value)
+    }
+
+    suspend fun sendLongestStreak(value: Either<Nothing, StreakRange>) = apply {
+        longestStreakFlow.emit(value)
     }
 
     companion object {
@@ -170,6 +177,7 @@ internal class GetCachedHomePageUiDataUCRobot {
         val previousDayInstant = currentDayInstant.minus(1.days)
 
         val currentStreak = StreakRange.ZERO
+        val longestStreak = StreakRange.ZERO
 
         val last7DaysStats = Last7DaysStats(
             timeSpentToday = Time.ZERO,

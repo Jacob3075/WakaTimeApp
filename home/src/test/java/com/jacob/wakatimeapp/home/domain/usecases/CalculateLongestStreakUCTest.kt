@@ -28,6 +28,7 @@ internal class CalculateLongestStreakUCTest {
             )
             robot.buildUseCase(dispatcher = UnconfinedTestDispatcher(testScheduler))
                 .mockHomePageCacheGetCurrentStreak(currentStreak.right())
+                .mockGetUserDetails()
                 .mockHomePageCacheGetLongestStreak(
                     StreakRange(
                         start = LocalDate(2022, 1, 1),
@@ -41,6 +42,7 @@ internal class CalculateLongestStreakUCTest {
     @Test
     internal fun `when cache has value for longest streak, then do not recalculate`() = runTest {
         robot.buildUseCase(dispatcher = UnconfinedTestDispatcher(testScheduler))
+            .mockGetUserDetails()
             .mockHomePageCacheGetLongestStreak(
                 StreakRange(
                     start = LocalDate(2022, 1, 1),
@@ -69,9 +71,9 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
+                .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
@@ -90,9 +92,9 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-02-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
+                .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
@@ -116,9 +118,9 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
+                .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
@@ -144,9 +146,9 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
+                .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
@@ -191,9 +193,9 @@ internal class CalculateLongestStreakUCTest {
 
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
+                .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
@@ -230,9 +232,9 @@ internal class CalculateLongestStreakUCTest {
 
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
+                .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
@@ -321,9 +323,9 @@ internal class CalculateLongestStreakUCTest {
 
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                userCreatedAt = userCreatedAt,
                 currentInstant = currentInstant
             )
+                .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(

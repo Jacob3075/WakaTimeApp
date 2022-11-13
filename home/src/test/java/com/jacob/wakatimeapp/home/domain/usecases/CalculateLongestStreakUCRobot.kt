@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import arrow.core.right
+import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Stats
@@ -33,19 +34,19 @@ internal class CalculateLongestStreakUCRobot {
 
     private val mockHomePageNetworkData: HomePageNetworkData = mockk()
     private val mockHomePageCache: HomePageCache = mockk(relaxUnitFun = true)
+    private val mockAuthDataStore: AuthDataStore = mockk(relaxUnitFun = true)
 
     fun buildUseCase(
         currentInstant: Instant = defaultCurrentInstant,
-        userCreatedAt: LocalDate? = null,
         dispatcher: TestDispatcher,
     ) = apply {
-        clearMocks(mockHomePageCache, mockHomePageNetworkData)
+        clearMocks(mockHomePageCache, mockHomePageNetworkData, mockAuthDataStore)
         result = null
 
         calculateLongestStreakUC = CalculateLongestStreakUC(
             homePageNetworkData = mockHomePageNetworkData,
             homePageCache = mockHomePageCache,
-            userDetails = userCreatedAt?.let { USER_DETAILS.copy(createdAt = it) } ?: USER_DETAILS,
+            authDataStore = mockAuthDataStore,
             dispatcher = dispatcher,
             instantProvider = object : InstantProvider {
                 override val timeZone: TimeZone
@@ -64,6 +65,13 @@ internal class CalculateLongestStreakUCRobot {
         result.asClue {
             it shouldBe expected
         }
+    }
+
+    fun mockGetUserDetails(userCreatedAt: LocalDate? = null) = apply {
+        coEvery { mockAuthDataStore.getUserDetails() } returns flowOf(
+            userCreatedAt?.let { USER_DETAILS.copy(createdAt = it) }
+                ?: USER_DETAILS
+        )
     }
 
     fun mockHomePageCacheGetLongestStreak(
