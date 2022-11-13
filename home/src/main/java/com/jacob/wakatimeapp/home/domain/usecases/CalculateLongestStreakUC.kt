@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.computations.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.toDate
+import com.jacob.wakatimeapp.core.models.Error.NetworkErrors.Timeout
 import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
@@ -54,6 +55,11 @@ internal class CalculateLongestStreakUC @Inject constructor(
             .combineStreaks()
             .maxByOrNull(Streak::days)
             ?: Streak.ZERO
+    }.mapLeft {
+        when (it) {
+            is Timeout -> Timeout("Network timed out, try again later")
+            else -> it
+        }
     }
 
     private fun getStreaksInBatchAsync(batchStartEnd: Pair<LocalDate, LocalDate>) = ioScope.async {
