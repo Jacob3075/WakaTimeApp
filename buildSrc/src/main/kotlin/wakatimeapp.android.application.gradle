@@ -5,7 +5,7 @@ plugins {
     id("dagger.hilt.android.plugin")
     id("com.google.devtools.ksp")
 
-    id("wakatimeapp.detekt")
+    id("wakatimeapp.tooling")
 }
 
 android {

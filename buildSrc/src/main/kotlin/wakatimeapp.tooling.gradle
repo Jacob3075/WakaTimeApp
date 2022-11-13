@@ -1,5 +1,6 @@
 plugins {
     id("io.gitlab.arturbosch.detekt")
+      id "com.github.ben-manes.versions"
 }
 
 dependencies {
@@ -21,4 +22,18 @@ tasks.detekt.configure {
         md.outputLocation.set(file("${rootProject.rootDir}/tools/reports/${project.name}-detekt.md"))
     }
     jvmTarget = "11"
+}
+
+def isNonStable = { String version ->
+    def stableKeyword = ['RELEASE', 'FINAL', 'GA'].any { it -> version.toUpperCase().contains(it) }
+    def regex = /^[0-9,.v-]+(-r)?$/
+    return !stableKeyword && !(version ==~ regex)
+}
+
+tasks.named("dependencyUpdates").configure {
+    rejectVersionIf {
+        isNonStable(it.candidate.version)
+    }
+
+    gradleReleaseChannel = "current"
 }

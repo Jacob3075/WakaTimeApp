@@ -35,7 +35,9 @@ dependencies {
 
     implementation("org.jetbrains.kotlin:kotlin-serialization:1.7.20")
     implementation("com.google.devtools.ksp:symbol-processing-api:1.7.10-1.0.6")
+
     implementation("io.gitlab.arturbosch.detekt:detekt-gradle-plugin:1.22.0-RC1")
+    implementation("com.github.ben-manes:gradle-versions-plugin:0.44.0")
 
     // https://github.com/google/dagger/issues/3068#issuecomment-999118496
     implementation("com.squareup:javapoet:1.13.0")
