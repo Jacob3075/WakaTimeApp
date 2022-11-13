@@ -15,7 +15,7 @@ fun GetUserDetailsResDTO.toModel() = UserDetails(
     lastProject = data.lastProject,
     fullName = data.fullName,
     durationsSliceBy = data.durationsSliceBy,
-    createdAt = data.createdAt.toLocalDate(),
+    createdAt = data.createdAt.takeWhile { it != 'T' }.toLocalDate(),
     dateFormat = data.dateFormat,
     photoUrl = "${data.photoUrl}?s=420"
 )

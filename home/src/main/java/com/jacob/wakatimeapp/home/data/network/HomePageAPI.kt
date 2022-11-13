@@ -7,9 +7,9 @@ import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
-import retrofit2.http.Path
+import retrofit2.http.Query
 
-interface HomePageAPI {
+internal interface HomePageAPI {
     @GET("/api/v1/users/current/all_time_since_today")
     suspend fun getData(@Header("Authorization") token: String): Response<AllTimeDataDTO>
 
@@ -19,10 +19,10 @@ interface HomePageAPI {
     @GET("/api/v1/users/current/summaries?range=last_7_days")
     suspend fun getLast7DaysStats(@Header("Authorization") token: String): Response<GetLast7DaysStatsResDTO>
 
-    @GET("/api/v1/users/current/summaries?start={start}&end={end}")
+    @GET("/api/v1/users/current/summaries")
     suspend fun getStatsForRange(
         @Header("Authorization") token: String,
-        @Path("start") start: String,
-        @Path("end") end: String,
+        @Query("start") start: String,
+        @Query("end") end: String,
     ): Response<GetStatsForRangeResDTO>
 }
