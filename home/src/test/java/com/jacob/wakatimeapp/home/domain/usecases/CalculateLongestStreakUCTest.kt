@@ -3,7 +3,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.right
 import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.stats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
@@ -22,7 +22,7 @@ internal class CalculateLongestStreakUCTest {
     @Test
     internal fun `when current streak from cache is greater than previous longest streak, then return current streak`() =
         runTest {
-            val currentStreak = StreakRange(
+            val currentStreak = Streak(
                 start = LocalDate(2022, 4, 1),
                 end = LocalDate(2022, 4, 10)
             )
@@ -30,7 +30,7 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetCurrentStreak(currentStreak.right())
                 .mockGetUserDetails()
                 .mockHomePageCacheGetLongestStreak(
-                    StreakRange(
+                    Streak(
                         start = LocalDate(2022, 1, 1),
                         end = LocalDate(2022, 1, 5)
                     ).right()
@@ -44,20 +44,20 @@ internal class CalculateLongestStreakUCTest {
         robot.buildUseCase(dispatcher = UnconfinedTestDispatcher(testScheduler))
             .mockGetUserDetails()
             .mockHomePageCacheGetLongestStreak(
-                StreakRange(
+                Streak(
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 2, 5)
                 ).right()
             )
             .mockHomePageCacheGetCurrentStreak(
-                StreakRange(
+                Streak(
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 1, 5)
                 ).right()
             )
             .callUseCase(DatePeriod(months = 1))
             .resultShouldBe(
-                StreakRange(
+                Streak(
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 2, 5)
                 ).right()
@@ -136,7 +136,7 @@ internal class CalculateLongestStreakUCTest {
                     ).right(),
                 )
                 .callUseCase(batchSize = DatePeriod(months = 1))
-                .resultShouldBe(StreakRange.ZERO.right())
+                .resultShouldBe(Streak.ZERO.right())
         }
 
     @Test
@@ -162,7 +162,7 @@ internal class CalculateLongestStreakUCTest {
                 )
                 .callUseCase(batchSize = DatePeriod(months = 1))
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = LocalDate(2022, 1, 1),
                         end = LocalDate(2022, 1, 10)
                     ).right()
@@ -207,7 +207,7 @@ internal class CalculateLongestStreakUCTest {
                 )
                 .callUseCase(batchSize = DatePeriod(months = 1))
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = LocalDate(2022, 1, 8),
                         end = LocalDate(2022, 1, 11)
                     ).right()
@@ -254,7 +254,7 @@ internal class CalculateLongestStreakUCTest {
                 )
                 .callUseCase(batchSize = DatePeriod(days = 7))
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = userCreatedAt,
                         end = currentInstant.toDate(),
                     ).right()
@@ -355,7 +355,7 @@ internal class CalculateLongestStreakUCTest {
                 )
                 .callUseCase(batchSize = DatePeriod(days = 7))
                 .resultShouldBe(
-                    StreakRange(
+                    Streak(
                         start = LocalDate(2022, 1, 7),
                         end = LocalDate(2022, 1, 12),
                     ).right()

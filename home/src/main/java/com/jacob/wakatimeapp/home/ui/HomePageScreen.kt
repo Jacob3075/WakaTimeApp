@@ -31,8 +31,7 @@ import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
-import com.jacob.wakatimeapp.home.domain.models.Streaks
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
@@ -133,7 +132,7 @@ private fun HomePageLoaded(
             mostUsedLanguage = homePageViewState.last7DaysStats.mostUsedLanguage,
             mostUsedOs = homePageViewState.last7DaysStats.mostUsedOs,
             mostUsedEditor = homePageViewState.last7DaysStats.mostUsedEditor,
-            currentStreak = homePageViewState.streaks.currentStreak,
+            currentStreak = homePageViewState.currentStreak,
             numberOfDaysWorked = homePageViewState.last7DaysStats.numberOfDaysWorked,
         )
         Spacer(modifier = Modifier.height(spacing.medium))
@@ -190,10 +189,8 @@ private class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomeP
                 photoUrl = "",
                 fullName = "",
             ),
-            streaks = Streaks(
-                currentStreak = StreakRange.ZERO,
-                longestStreak = StreakRange.ZERO,
-            )
+            currentStreak = Streak.ZERO,
+            longestStreak = Streak.ZERO,
         ),
     )
 )

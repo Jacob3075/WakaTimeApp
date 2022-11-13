@@ -12,7 +12,7 @@ import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
@@ -30,7 +30,7 @@ import kotlinx.datetime.TimeZone
 @OptIn(ExperimentalCoroutinesApi::class)
 internal class CalculateLongestStreakUCRobot {
     private lateinit var calculateLongestStreakUC: CalculateLongestStreakUC
-    private var result: Either<Error, StreakRange>? = null
+    private var result: Either<Error, Streak>? = null
 
     private val mockHomePageNetworkData: HomePageNetworkData = mockk()
     private val mockHomePageCache: HomePageCache = mockk(relaxUnitFun = true)
@@ -61,7 +61,7 @@ internal class CalculateLongestStreakUCRobot {
         result = calculateLongestStreakUC(batchSize)
     }
 
-    fun resultShouldBe(expected: Either<Error, StreakRange>) = apply {
+    fun resultShouldBe(expected: Either<Error, Streak>) = apply {
         result.asClue {
             it shouldBe expected
         }
@@ -75,14 +75,14 @@ internal class CalculateLongestStreakUCRobot {
     }
 
     fun mockHomePageCacheGetLongestStreak(
-        data: Either<Error, StreakRange> = StreakRange.ZERO.right(),
+        data: Either<Error, Streak> = Streak.ZERO.right(),
     ) =
         apply {
             coEvery { mockHomePageCache.getLongestStreak() } returns flowOf(data)
         }
 
     fun mockHomePageCacheGetCurrentStreak(
-        data: Either<Error, StreakRange> = StreakRange.ZERO.right(),
+        data: Either<Error, Streak> = Streak.ZERO.right(),
     ) =
         apply {
             coEvery { mockHomePageCache.getCurrentStreak() } returns flowOf(data)

@@ -25,7 +25,7 @@ import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 
 @Composable
 fun OtherDailyStatsSection(
@@ -33,8 +33,8 @@ fun OtherDailyStatsSection(
     mostUsedLanguage: String,
     mostUsedOs: String,
     mostUsedEditor: String,
-    currentStreak: StreakRange,
-    longestStreak: StreakRange = StreakRange.ZERO,
+    currentStreak: Streak,
+    longestStreak: Streak = Streak.ZERO,
     modifier: Modifier = Modifier,
     numberOfDaysWorked: Int,
 ) = Column(
@@ -63,8 +63,8 @@ fun OtherDailyStatsSection(
 
 @Composable
 private fun StreakStats(
-    currentStreak: StreakRange,
-    longestStreak: StreakRange,
+    currentStreak: Streak,
+    longestStreak: Streak,
     numberOfDaysWorked: Int,
 ) {
     val spacing = MaterialTheme.spacing
@@ -156,7 +156,7 @@ fun OtherDailyStatsSectionPreview() = WakaTimeAppTheme {
             mostUsedLanguage = "Kotlin",
             mostUsedOs = "Linux",
             mostUsedEditor = "Android Studio",
-            currentStreak = StreakRange.ZERO,
+            currentStreak = Streak.ZERO,
             modifier = Modifier.padding(horizontal = 8.dp),
             numberOfDaysWorked = 0,
         )

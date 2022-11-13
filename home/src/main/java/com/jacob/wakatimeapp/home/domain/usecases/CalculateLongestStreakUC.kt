@@ -8,7 +8,7 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.Map.Entry
@@ -38,7 +38,7 @@ internal class CalculateLongestStreakUC @Inject constructor(
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
         if (currentStreak > cachedLongestStreak) return@either currentStreak
-        if (cachedLongestStreak != StreakRange.ZERO) return@either cachedLongestStreak
+        if (cachedLongestStreak != Streak.ZERO) return@either cachedLongestStreak
 
         val currentDay = instantProvider.now().toDate(timeZone = instantProvider.timeZone)
         val userJoinedData = userDetails.createdAt
@@ -52,8 +52,8 @@ internal class CalculateLongestStreakUC @Inject constructor(
             .awaitAll()
             .flatMap { it.bind() }
             .combineStreaks()
-            .maxByOrNull(StreakRange::days)
-            ?: StreakRange.ZERO
+            .maxByOrNull(Streak::days)
+            ?: Streak.ZERO
     }
 
     private fun getStreaksInBatchAsync(batchStartEnd: Pair<LocalDate, LocalDate>) = ioScope.async {
@@ -89,11 +89,11 @@ private fun Iterable<Entry<LocalDate, Time>>.groupConsecutive() =
         groups
     }
 
-private fun List<List<Entry<LocalDate, Time>>>.toStreaks(): List<StreakRange> = map {
-    StreakRange(it.first().key, it.last().key)
+private fun List<List<Entry<LocalDate, Time>>>.toStreaks(): List<Streak> = map {
+    Streak(it.first().key, it.last().key)
 }
 
-private fun List<StreakRange>.combineStreaks(): List<StreakRange> =
+private fun List<Streak>.combineStreaks(): List<Streak> =
     if (isEmpty()) this
     else drop(1)
         .fold(mutableListOf(first())) { acc, streakRange ->
@@ -105,7 +105,7 @@ private fun List<StreakRange>.combineStreaks(): List<StreakRange> =
             acc
         }
 
-private fun MutableList<StreakRange>.replaceLast(e: StreakRange) {
+private fun MutableList<Streak>.replaceLast(e: Streak) {
     removeLast()
     add(e)
 }

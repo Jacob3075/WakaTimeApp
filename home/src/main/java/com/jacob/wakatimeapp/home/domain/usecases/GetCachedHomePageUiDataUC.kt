@@ -7,7 +7,6 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
-import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC.CacheValidity.DEFAULT
 import javax.inject.Inject
@@ -39,17 +38,14 @@ internal class GetCachedHomePageUiDataUC @Inject constructor(
 
             either<Error, CachedHomePageUiData?> {
                 val last7DaysStats = last7DaysStatsEither.bind() ?: return@either null
-                val streakRange = currentStreakEither.bind()
+                val currentStreak = currentStreakEither.bind()
                 val longestStreak = longestStreakEither.bind()
-                val streaks = Streaks(
-                    currentStreak = streakRange,
-                    longestStreak = longestStreak,
-                )
 
                 CachedHomePageUiData(
                     last7DaysStats = last7DaysStats,
                     userDetails = userDetails.toHomePageUserDetails(),
-                    streaks = streaks,
+                    currentStreak = currentStreak,
+                    longestStreak = longestStreak,
                     isStaleData = !validDataInCache(
                         lastRequestTime = lastRequestTime,
                         cacheValidityTime = cacheValidity

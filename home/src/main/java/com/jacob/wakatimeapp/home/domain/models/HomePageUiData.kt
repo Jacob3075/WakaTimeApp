@@ -18,7 +18,8 @@ import timber.log.Timber
 data class CachedHomePageUiData(
     val last7DaysStats: Last7DaysStats,
     val userDetails: HomePageUserDetails,
-    val streaks: Streaks,
+    val longestStreak: Streak,
+    val currentStreak: Streak,
     val isStaleData: Boolean,
 )
 
@@ -41,25 +42,19 @@ data class HomePageUserDetails(
 )
 
 @Serializable
-data class Streaks(
-    val currentStreak: StreakRange,
-    val longestStreak: StreakRange,
-)
-
-@Serializable
-data class StreakRange(
+data class Streak(
     val start: LocalDate,
     val end: LocalDate,
 ) {
     val days: Int = if (this == ZERO) 0 else start.daysUntil(end) + 1
 
-    operator fun plus(other: StreakRange) = when {
+    operator fun plus(other: Streak) = when {
         this == ZERO -> other
         other == ZERO -> this
-        this in other -> StreakRange(other.start, other.end)
-        other in this -> StreakRange(start, end)
-        other.start paddedIn this -> StreakRange(start, other.end)
-        start paddedIn other -> StreakRange(other.start, end)
+        this in other -> Streak(other.start, other.end)
+        other in this -> Streak(start, end)
+        other.start paddedIn this -> Streak(start, other.end)
+        start paddedIn other -> Streak(other.start, end)
         else -> {
             Timber.e("Cannot add streaks $this and $other")
             ZERO
@@ -68,20 +63,20 @@ data class StreakRange(
 
     operator fun contains(day: LocalDate) = day in start..end
 
-    operator fun contains(other: StreakRange) = other.start in this && other.end in this
+    operator fun contains(other: Streak) = other.start in this && other.end in this
 
-    operator fun compareTo(streakRange: StreakRange) = days.compareTo(streakRange.days)
+    operator fun compareTo(streak: Streak) = days.compareTo(streak.days)
 
-    private infix fun LocalDate.paddedIn(streakRange: StreakRange) =
-        this in (streakRange.start - oneDay)..(streakRange.end + oneDay)
+    private infix fun LocalDate.paddedIn(streak: Streak) =
+        this in (streak.start - oneDay)..(streak.end + oneDay)
 
-    fun canBeCombinedWith(other: StreakRange) =
+    fun canBeCombinedWith(other: Streak) =
         !(this == ZERO || other == ZERO || (this + other) == ZERO)
 
     companion object {
         private val oneDay = DatePeriod(days = 1)
 
-        val ZERO = StreakRange(
+        val ZERO = Streak(
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date
         )

@@ -5,7 +5,7 @@ import arrow.core.computations.either
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.datetime.DateTimeUnit
@@ -22,9 +22,9 @@ internal class RecalculateLatestStreakUC @Inject constructor(
         start: LocalDate,
         value: Int,
         unit: DateBased,
-    ): Either<Error, StreakRange> = either {
+    ): Either<Error, Streak> = either {
         var nextStart = start
-        var result = StreakRange.ZERO
+        var result = Streak.ZERO
 
         do {
             val end = nextStart.minus(value, unit)

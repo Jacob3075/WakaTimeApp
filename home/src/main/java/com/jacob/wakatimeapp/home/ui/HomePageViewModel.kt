@@ -3,7 +3,6 @@ package com.jacob.wakatimeapp.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.computations.either
-import com.jacob.wakatimeapp.home.domain.models.Streaks
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC
@@ -45,7 +44,8 @@ internal class HomePageViewModel @Inject constructor(
                             _homePageState.value = HomePageViewState.Loaded(
                                 last7DaysStats = cachedData.last7DaysStats,
                                 userDetails = cachedData.userDetails,
-                                streaks = cachedData.streaks,
+                                longestStreak = cachedData.longestStreak,
+                                currentStreak = cachedData.currentStreak,
                             )
                             updateCacheWithNewData().bind()
                         }
@@ -53,7 +53,8 @@ internal class HomePageViewModel @Inject constructor(
                         else -> _homePageState.value = HomePageViewState.Loaded(
                             last7DaysStats = cachedData.last7DaysStats,
                             userDetails = cachedData.userDetails,
-                            streaks = cachedData.streaks,
+                            longestStreak = cachedData.longestStreak,
+                            currentStreak = cachedData.currentStreak,
                         )
                     }
                 }.tapLeft { _homePageState.value = HomePageViewState.Error(it) }
@@ -66,12 +67,10 @@ internal class HomePageViewModel @Inject constructor(
         val streakRange = calculateCurrentStreakUC().bind()
         val longestStreak = calculateLongestStreakUC().bind()
 
-        updateCachedHomePageUiData(
+        updateCachedHomePageUiData.invoke(
             last7DaysStats = last7DaysStats,
-            streaks = Streaks(
-                currentStreak = streakRange,
-                longestStreak = longestStreak,
-            )
+            currentStreak = streakRange,
+            longestStreak = longestStreak,
         )
     }
 }

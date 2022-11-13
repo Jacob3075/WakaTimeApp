@@ -6,7 +6,7 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
@@ -22,7 +22,7 @@ internal class RecalculateLatestStreakUCRobot {
 
     private val mockHomePageNetworkData: HomePageNetworkData = mockk()
 
-    private var result: Either<Error, StreakRange>? = null
+    private var result: Either<Error, Streak>? = null
 
     fun buildService() = apply {
         clearMocks(mockHomePageNetworkData)
@@ -39,7 +39,7 @@ internal class RecalculateLatestStreakUCRobot {
         )
     }
 
-    fun resultShouldBe(expected: Either<Error, StreakRange>) = apply {
+    fun resultShouldBe(expected: Either<Error, Streak>) = apply {
         result.asClue {
             result shouldBe expected
         }

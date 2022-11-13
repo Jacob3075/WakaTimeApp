@@ -12,7 +12,7 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.StreakRange
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.catch
@@ -57,25 +57,25 @@ class HomePageCache @Inject constructor(
 
     fun getCurrentStreak() = getStreak(KEY_CURRENT_STREAK)
 
-    suspend fun updateCurrentStreak(streakRange: StreakRange) {
+    suspend fun updateCurrentStreak(streak: Streak) {
         dataStore.edit {
-            it[KEY_CURRENT_STREAK] = json.encodeToString(streakRange)
+            it[KEY_CURRENT_STREAK] = json.encodeToString(streak)
         }
     }
 
     fun getLongestStreak() = getStreak(KEY_LONGEST_STREAK)
 
-    suspend fun updateLongestStreak(streakRange: StreakRange) {
+    suspend fun updateLongestStreak(streak: Streak) {
         dataStore.edit {
-            it[KEY_LONGEST_STREAK] = json.encodeToString(streakRange)
+            it[KEY_LONGEST_STREAK] = json.encodeToString(streak)
         }
     }
 
     private fun getStreak(key: Preferences.Key<String>) =
-        dataStore.data.map<Preferences, Either<Error, StreakRange>> {
-            val streakRange = it[key]?.let<String, StreakRange>(json::decodeFromString)
-                ?: StreakRange.ZERO
-            streakRange.right()
+        dataStore.data.map<Preferences, Either<Error, Streak>> {
+            val streak = it[key]?.let<String, Streak>(json::decodeFromString)
+                ?: Streak.ZERO
+            streak.right()
         }.catch {
             Timber.e(it)
             emit(DatabaseError.UnknownError(it.message!!, it).left())
