@@ -60,35 +60,34 @@ android {
 
 dependencies {
     // Androidx Core
-    implementation("androidx.core:core-ktx:1.9.0")
-    implementation("androidx.appcompat:appcompat:1.5.1")
-    implementation("androidx.legacy:legacy-support-v4:1.0.0")
-    implementation("com.google.android.material:material:1.7.0")
+    implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.appcompat)
+//    implementation("com.google.android.material:material:1.7.0")
 
-    implementation("org.jetbrains.kotlinx:kotlinx-datetime:0.4.0")
+    implementation(libs.kotlinx.datetime)
 
     // Compose
-    implementation(platform("androidx.compose:compose-bom:2022.10.00"))
-    implementation("androidx.compose.ui:ui")
-    implementation("androidx.compose.material3:material3")
-    implementation("androidx.activity:activity-compose:1.6.1")
+    implementation(platform(libs.androidx.compose.bom))
+    implementation(libs.androidx.compose.ui.core)
+    implementation(libs.androidx.compose.material3)
+    implementation(libs.androidx.activity.compose)
 
-    implementation("androidx.compose.ui:ui-tooling-preview")
-    debugImplementation("androidx.compose.ui:ui-tooling")
-    debugImplementation("androidx.compose.ui:ui-test-manifest")
+    implementation(libs.androidx.compose.ui.tooling.preview)
+    debugImplementation(libs.androidx.compose.ui.tooling)
+    debugImplementation(libs.androidx.compose.ui.testManifest)
 
     // Navigation
-    implementation("io.github.raamcosta.compose-destinations:core:1.6.19-beta")
-    ksp("io.github.raamcosta.compose-destinations:ksp:1.6.19-beta")
+    implementation(libs.raamcosta.compose.destinations.core)
+    ksp(libs.raamcosta.compose.destinations.ksp)
 
     // Hilt
-    implementation("com.google.dagger:hilt-android:2.43.1")
-    kapt("com.google.dagger:hilt-android-compiler:2.43.1")
+    implementation(libs.hilt.android)
+    kapt(libs.hilt.compiler)
 
     // Logging
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.timber)
 
-    implementation("io.arrow-kt:arrow-core:1.0.1")
+    implementation(libs.arrow.kt.core)
 
 }
 
