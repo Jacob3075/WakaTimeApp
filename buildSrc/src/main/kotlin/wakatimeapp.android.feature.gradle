@@ -67,7 +67,7 @@ dependencies {
 
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.testManifest)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     // Hilt
     implementation(libs.hilt.android)
@@ -84,19 +84,19 @@ dependencies {
     implementation(libs.arrow.kt.core)
 
     // Base testing dependencies
-    testImplementation(libs.junit5.api)
-    testRuntimeOnly(libs.junit5.engine)
+    testImplementation(libs.test.junit5.api)
+    testRuntimeOnly(libs.test.junit5.engine)
 
     // Coroutines & Flows
-    testImplementation(libs.kotlinx.coroutines.test)
-    testImplementation(libs.turbine)
+    testImplementation(libs.kotlinx.test.coroutines)
+    testImplementation(libs.test.turbine)
 
     // Mocks
-    testImplementation(libs.mockk)
+    testImplementation(libs.test.mockk)
 
     // Assertions
-    testImplementation(libs.kotest.assertions.core)
-    testImplementation(libs.kotest.assertions.arrow)
+    testImplementation(libs.test.kotest.assertions.core)
+    testImplementation(libs.test.kotest.assertions.arrow)
 
     androidTestImplementation(libs.androidx.test.ext)
 }

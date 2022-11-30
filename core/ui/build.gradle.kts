@@ -29,11 +29,10 @@ dependencies {
 
     implementation(libs.androidx.compose.ui.tooling.preview)
     implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.testManifest)
+    implementation(libs.androidx.compose.ui.test.manifest)
 
     implementation(libs.lottie.compose)
 
-    testImplementation(libs.junit4)
+    testImplementation(libs.test.junit4)
     androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.espresso.core)
 }

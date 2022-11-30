@@ -73,7 +73,7 @@ dependencies {
 
     implementation(libs.androidx.compose.ui.tooling.preview)
     debugImplementation(libs.androidx.compose.ui.tooling)
-    debugImplementation(libs.androidx.compose.ui.testManifest)
+    debugImplementation(libs.androidx.compose.ui.test.manifest)
 
     // Navigation
     implementation(libs.raamcosta.compose.destinations.core)
