@@ -6,22 +6,24 @@ androidGradlePlugin = "7.3.1"
 androidxActivity = "1.6.1"
 androidxAppCompat = "1.5.1"
 
-androidxComposeBom = "2022.11.00"
-androidxComposeCompiler = "1.3.2"
+composeBom = "2022.11.00"
+composeCompiler = "1.3.1"
 
 androidxCore = "1.9.0"
 androidxMaterial = "1.9.0"
 androidxCoreSplashscreen = "1.0.0"
 
-androidxDataStore = "1.0.0"
+dataStore = "1.0.0"
 
 androidxLifecycle = "2.6.0-alpha03"
 
 coil = "2.2.2"
 
 hilt = "2.44"
+hiltNavigationCompose = "1.0.0"
 
 junit4 = "4.13.2"
+junit5 = "5.8.2"
 androidxEspresso = "3.5.0"
 androidxTestCore = "1.5.0"
 androidxTestExt = "1.1.4"
@@ -43,6 +45,10 @@ composeDestinations = "1.7.25-beta"
 arrow = "1.0.1"
 turbine = "0.12.1"
 timber = "5.0.1"
+mockk = "1.13.2"
+
+kotestAssertionsCore = "5.5.0"
+kotestAssertionsArrow = "1.2.5"
 
 [libraries]
 androidx-core-ktx = { module = "androidx.core:core-ktx", version.ref = "androidxCore" }
@@ -52,8 +58,8 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 
-androidx-dataStore-core = { module = "androidx.datastore:datastore", version.ref = "androidxDataStore" }
-androidx-dataStore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "androidxDataStore" }
+androidx-dataStore-core = { module = "androidx.datastore:datastore", version.ref = "dataStore" }
+androidx-dataStore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 
 androidx-lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
@@ -68,8 +74,12 @@ coil-kt-svg = { module = "io.coil-kt:coil-svg", version.ref = "coil" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
+hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 
 junit4 = { module = "junit:junit", version.ref = "junit4" }
+
+junit5-api = { module = "org.junit.jupiter:junit-jupiter-api", version.ref = "junit5" }
+junit5-engine = { module = "org.junit.jupiter:junit-jupiter-engine", version.ref = "junit5" }
 
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
@@ -85,7 +95,7 @@ room-runtime = { module = "androidx.room:room-runtime", version.ref = "room" }
 room-ktx = { module = "androidx.room:room-ktx", version.ref = "room" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "room" }
 
-androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "androidxComposeBom" }
+androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
 androidx-compose-material3 = { module = "androidx.compose.material3:material3" }
 androidx-compose-ui-core = { module = "androidx.compose.ui:ui" }
 androidx-compose-ui-test = { module = "androidx.compose.ui:ui-test-junit4" }
@@ -103,6 +113,11 @@ arrow-kt-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
+
+mockk = { module = "io.mockk:mockk", version.ref = "mockk" }
+
+kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestAssertionsCore" }
+kotest-assertions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotestAssertionsArrow" }
 
 ## Dependencies of the included build-logic
 #android-gradlePlugin = { module = "com.android.tools.build:gradle", version.ref = "androidGradlePlugin" }
