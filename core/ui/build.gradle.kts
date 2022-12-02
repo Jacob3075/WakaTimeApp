@@ -8,7 +8,6 @@ android {
     buildFeatures { compose = true }
     composeOptions { kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get() }
 
-    kotlinOptions { jvmTarget = "11" }
     namespace = "com.jacob.wakatimeapp.core.ui"
 }
 

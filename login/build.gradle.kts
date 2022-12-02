@@ -1,10 +1,16 @@
-import java.util.*
+@file:Suppress("UnstableApiUsage")
+
+import java.util.Properties
 
 plugins {
     id("wakatimeapp.android.feature")
 }
 android {
     namespace = "com.jacob.wakatimeapp.login"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 android.buildTypes.forEach {
@@ -23,11 +29,7 @@ android.buildTypes.forEach {
 }
 
 dependencies {
-    // OAuth
-    implementation("net.openid:appauth:0.11.1")
-
-    // Logging
-    implementation("com.jakewharton.timber:timber:5.0.1")
+    implementation(libs.appAuth)
 }
 
 fun loadPropertiesFile(): Properties {

@@ -12,7 +12,7 @@ buildscript {
 }
 
 plugins {
-    id("com.google.devtools.ksp") version "1.7.10-1.0.6" apply false
+    alias(libs.plugins.ksp) apply false
 }
 
 tasks.register("clean", Delete::class) {

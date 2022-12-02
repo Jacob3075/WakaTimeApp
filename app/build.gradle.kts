@@ -25,7 +25,7 @@ dependencies {
     androidTestImplementation(libs.androidx.test.ext)
     androidTestImplementation(libs.androidx.test.core)
     androidTestImplementation(libs.androidx.test.runner)
-    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
+    //    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
 
     androidTestImplementation(libs.kotlinx.test.coroutines)
     androidTestImplementation(libs.test.truth)
