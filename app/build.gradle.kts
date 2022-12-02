@@ -18,16 +18,4 @@ dependencies {
     implementation(libs.androidx.core.splashscreen)
 
     implementation(libs.kotlinx.serialization.json)
-
-    // Core Testing
-    testImplementation(libs.test.junit4)
-    testImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.ext)
-    androidTestImplementation(libs.androidx.test.core)
-    androidTestImplementation(libs.androidx.test.runner)
-    //    androidTestImplementation(libs.androidx.compose.ui.test.junit4)
-
-    androidTestImplementation(libs.kotlinx.test.coroutines)
-    androidTestImplementation(libs.test.truth)
-    androidTestImplementation(libs.test.mockk)
 }

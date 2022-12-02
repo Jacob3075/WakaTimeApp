@@ -23,12 +23,8 @@ dependencies {
 
     // Compose
     implementation(platform(libs.androidx.compose.bom))
-    implementation(libs.androidx.compose.ui.core)
-    implementation(libs.androidx.compose.material3)
-
-    implementation(libs.androidx.compose.ui.tooling.preview)
-    implementation(libs.androidx.compose.ui.tooling)
-    implementation(libs.androidx.compose.ui.test.manifest)
+    implementation(libs.bundles.compose.core)
+    debugImplementation(libs.bundles.compose.debug)
 
     implementation(libs.lottie.compose)
 

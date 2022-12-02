@@ -41,7 +41,6 @@ appAuth = "0.11.1"
 lottieCompose = "5.0.3"
 detekt = "1.22.0-RC1"
 gradleVersionsPlugin = "0.44.0"
-truth = "1.1.3"
 turbine = "0.12.1"
 mockk = "1.13.2"
 mannodermausAndroidJunit5 = "1.8.2.1"
@@ -60,8 +59,6 @@ androidx-appcompat = { module = "androidx.appcompat:appcompat", version.ref = "a
 
 androidx-activity-compose = { module = "androidx.activity:activity-compose", version.ref = "androidxActivity" }
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashscreen" }
-
-androidx-dataStore-core = { module = "androidx.datastore:datastore", version.ref = "dataStore" }
 androidx-dataStore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 
 androidx-lifecycle-runtimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
@@ -125,10 +122,40 @@ test-mannodermaus-android-junit5 = { module = "de.mannodermaus.gradle.plugins:an
 
 test-turbine = { module = "app.cash.turbine:turbine", version.ref = "turbine" }
 test-mockk = { module = "io.mockk:mockk-android", version.ref = "mockk" }
-test-truth = { module = "com.google.truth:truth", version.ref = "truth" }
 
 test-kotest-assertions-core = { module = "io.kotest:kotest-assertions-core", version.ref = "kotestAssertionsCore" }
 test-kotest-assertions-arrow = { module = "io.kotest.extensions:kotest-assertions-arrow", version.ref = "kotestAssertionsArrow" }
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+
+
+[bundles]
+compose-core = [
+    "androidx-compose-ui-core",
+    "androidx-compose-material3",
+    "androidx-compose-ui-util",
+    "androidx-compose-material-iconsExtended",
+    "androidx-compose-ui-tooling-preview",
+]
+
+compose-debug = [
+    "androidx-compose-ui-tooling",
+    "androidx-compose-ui-test-manifest",
+]
+
+testing-core = [
+    "test-junit5-api",
+    "test-mockk",
+    "test-kotest-assertions-core",
+    "test-kotest-assertions-arrow",
+]
+
+testing-async = [
+    "kotlinx-test-coroutines",
+    "test-turbine",
+]
+
+testing-compose = [
+    "androidx-compose-ui-test-junit4",
+]
