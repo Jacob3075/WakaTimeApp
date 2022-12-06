@@ -8,14 +8,8 @@ android {
 
 dependencies {
     // Image Loading, Charts, Lottie Animations
-    implementation("io.coil-kt:coil-compose:2.2.2")
-    implementation("com.github.PhilJay:MPAndroidChart:v3.1.0")
+    implementation(libs.coil.kt.compose)
+    implementation(libs.philJay.mpAndroidChart)
 
-    implementation("androidx.datastore:datastore-preferences:1.0.0")
-
-    implementation("androidx.room:room-runtime:2.4.3")
-    implementation("androidx.room:room-ktx:2.4.3")
-
-    annotationProcessor("androidx.room:room-compiler:2.4.3")
-    ksp("androidx.room:room-compiler:2.4.3")
+    implementation(libs.androidx.dataStore.preferences)
 }
