@@ -40,5 +40,5 @@ dependencies {
     implementation(libs.gradle.version.plugin)
 
     // https://github.com/google/dagger/issues/3068#issuecomment-999118496
-    //    implementation("com.squareup:javapoet:1.13.0")
+    implementation("com.squareup:javapoet:1.13.0")
 }

@@ -1,9 +1,15 @@
+@file:Suppress("UnstableApiUsage")
+
 plugins {
     id("wakatimeapp.android.application")
 }
 
 android {
     namespace = "com.jacob.wakatimeapp"
+
+    buildFeatures {
+        buildConfig = true
+    }
 }
 
 dependencies {

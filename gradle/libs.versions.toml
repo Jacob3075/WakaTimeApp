@@ -8,46 +8,46 @@ androidxCoreSplashscreen = "1.0.0"
 androidxLifecycle = "2.6.0-alpha03"
 dataStore = "1.0.0"
 
-kotlin = "1.7.10"
+kotlin = "1.7.20" # https://kotlinlang.org/
 kotlinxCoroutines = "1.6.4"
 kotlinxDatetime = "0.4.0"
 kotlinxSerializationJson = "1.4.1"
-ksp = "1.7.10-1.0.6"
+ksp = "1.7.20-1.0.8" # https://goo.gle/ksp
 
 composeBom = "2022.11.00"
-composeCompiler = "1.3.1"
+composeCompiler = "1.3.2" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 
-hilt = "2.44"
+hilt = "2.44.2" # https://github.com/google/dagger
 hiltNavigationCompose = "1.0.0"
 
-okhttp = "4.9.3"
+okhttp = "4.10.0" # https://square.github.io/okhttp/
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "0.8.0"
 
 accompanist = "0.27.0"
 
 junit4 = "4.13.2"
-junit5 = "5.8.2"
+junit5 = "5.9.1" # https://junit.org/junit5/
 androidxEspresso = "3.5.0"
 androidxTestCore = "1.5.0"
 androidxTestExt = "1.1.4"
 androidxTestRunner = "1.4.0"
 
 composeDestinations = "1.7.25-beta"
-arrow = "1.0.1"
+arrow = "1.1.3" # https://github.com/arrow-kt/arrow/
 timber = "5.0.1"
 coil = "2.2.2"
 appAuth = "0.11.1"
-lottieCompose = "5.0.3"
-detekt = "1.22.0-RC1"
+lottieCompose = "5.2.0" # https://github.com/airbnb/lottie-android
+detekt = "1.22.0-RC1" # https://detekt.dev
 gradleVersionsPlugin = "0.44.0"
 turbine = "0.12.1"
-mockk = "1.13.2"
+mockk = "1.13.3" # https://mockk.io
 mannodermausAndroidJunit5 = "1.8.2.1"
 mpAndroidChart = "v3.1.0"
 
-kotestAssertionsCore = "5.5.0"
-kotestAssertionsArrow = "1.2.5"
+kotestAssertionsCore = "5.5.4" # https://detekt.dev
+kotestAssertionsArrow = "1.3.0" # https://github.com/kotest/kotest-extensions-arrow
 
 [libraries]
 google-material = { module = "com.google.android.material:material", version.ref = "androidMaterial" }
