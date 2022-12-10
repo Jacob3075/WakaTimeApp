@@ -29,10 +29,11 @@ object DataModule {
 
     @Singleton
     @Provides
+    @Suppress("InjectDispatcher")
     fun providePreferencesDataStore(@ApplicationContext appContext: Context) =
         PreferenceDataStoreFactory.create(
             scope = CoroutineScope(Dispatchers.IO + SupervisorJob()),
-            produceFile = { appContext.preferencesDataStoreFile(STORE_NAME) }
+            produceFile = { appContext.preferencesDataStoreFile(STORE_NAME) },
         )
 
     @Singleton

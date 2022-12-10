@@ -8,8 +8,8 @@ fun ProjectDTO.toModel() = Project(
     time = Time(
         hours = hours,
         minutes = minutes,
-        decimal = decimal.toFloat()
+        decimal = decimal.toFloat(),
     ),
     name = name,
-    percent = percent
+    percent = percent,
 )
