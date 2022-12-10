@@ -13,6 +13,7 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
+@Suppress("UnnecessaryAbstractClass")
 abstract class HomePageModule {
     @Binds
     abstract fun provideInstantProvider(impl: DefaultInstantProvider): InstantProvider

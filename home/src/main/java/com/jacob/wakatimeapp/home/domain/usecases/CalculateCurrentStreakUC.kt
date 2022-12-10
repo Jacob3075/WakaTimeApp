@@ -42,7 +42,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
         when {
             endOfCurrentStreakIsYesterday -> whenEndOfCurrentStreakIsYesterday(
                 currentStreak,
-                todaysStats
+                todaysStats,
             )
 
             failedToCombine -> whenFailedToCombine(recalculatedStreakForLast7Days).bind()
@@ -58,13 +58,14 @@ internal class CalculateCurrentStreakUC @Inject constructor(
         else -> currentStreak.copy(end = instantProvider.now().toDate())
     }
 
+    @Suppress("MagicNumber")
     private suspend fun whenFailedToCombine(
         recalculatedStreakForLast7Days: Streak,
     ) = when (recalculatedStreakForLast7Days.days) {
         7 -> recalculateLatestStreakUC.calculate(
             start = instantProvider.now().toDate().minus(8, DateTimeUnit.DAY),
             value = 1,
-            unit = DateTimeUnit.MONTH
+            unit = DateTimeUnit.MONTH,
         )
 
         else -> recalculatedStreakForLast7Days.right()

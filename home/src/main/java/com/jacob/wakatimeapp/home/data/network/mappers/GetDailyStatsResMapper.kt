@@ -13,5 +13,5 @@ fun GetDailyStatsResDTO.toModel() = DailyStats(
     mostUsedLanguage = "",
     mostUsedEditor = "",
     mostUsedOs = "",
-    date = data.first().range.date.toLocalDate()
+    date = data.first().range.date.toLocalDate(),
 )

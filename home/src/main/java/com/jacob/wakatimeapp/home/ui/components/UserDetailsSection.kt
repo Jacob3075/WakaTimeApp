@@ -33,7 +33,7 @@ fun UserDetailsSection(
 ) = Row(
     horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
     verticalAlignment = Alignment.CenterVertically,
-    modifier = modifier.fillMaxWidth()
+    modifier = modifier.fillMaxWidth(),
 ) {
     Image(
         painter = rememberAsyncImagePainter(
@@ -44,10 +44,10 @@ fun UserDetailsSection(
                     placeholder(icons.placeholder)
                     fallback(icons.placeholder)
                 }
-                .build()
+                .build(),
         ),
         contentDescription = "Profile image",
-        modifier = Modifier.size(58.dp)
+        modifier = Modifier.size(58.dp),
     )
     Text(
         text = fullName,

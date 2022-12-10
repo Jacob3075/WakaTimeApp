@@ -514,6 +514,8 @@ formatting:
     active: true
   CommentWrapping:
     active: true
+  MultiLineIfElse:
+    active: false
 
 style:
   active: true
@@ -596,7 +598,7 @@ style:
     ignoreAnnotation: true
     ignoreAnnotated: [ 'Preview', 'WtaPreviews' ]
     ignoreNamedArgument: true
-    ignoreEnums: false
+    ignoreEnums: true
     ignoreRanges: false
     ignoreExtensionFunctions: true
   MandatoryBracesIfStatements:

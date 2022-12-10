@@ -82,7 +82,7 @@ data class Streak(
 
         val ZERO = Streak(
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
-            Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date
+            Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
         )
     }
 }
@@ -98,5 +98,5 @@ fun WeeklyStats.toLoadedStateData() = Last7DaysStats(
 
 fun UserDetails.toHomePageUserDetails() = HomePageUserDetails(
     fullName = fullName,
-    photoUrl = photoUrl
+    photoUrl = photoUrl,
 )

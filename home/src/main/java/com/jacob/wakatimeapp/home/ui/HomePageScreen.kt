@@ -62,7 +62,7 @@ private fun HomePageScreen(
         snackBarCoroutineScope.launch {
             snackbarHostState.showSnackbar(
                 message = viewStateError.error.message,
-                duration = SnackbarDuration.Long
+                duration = SnackbarDuration.Long,
             )
         }
     }
@@ -70,7 +70,7 @@ private fun HomePageScreen(
     HomePageContent(
         viewState = viewState,
         toDetailsPage = navigator::toDetailsPage,
-        modifier = modifier
+        modifier = modifier,
     )
 }
 
@@ -104,11 +104,11 @@ private fun HomePageLoaded(
     Column(
         modifier = Modifier
             .padding(horizontal = spacing.medium)
-            .verticalScroll(scrollState)
+            .verticalScroll(scrollState),
     ) {
         UserDetailsSection(
             fullName = homePageViewState.userDetails.fullName,
-            photoUrl = homePageViewState.userDetails.photoUrl
+            photoUrl = homePageViewState.userDetails.photoUrl,
         )
 
         TimeSpentCard(
@@ -117,7 +117,7 @@ private fun HomePageLoaded(
             gradient = MaterialTheme.gradients.facebookMessenger,
             iconId = icons.time,
             roundedCornerPercent = 25,
-            onClick = toDetailsPage
+            onClick = toDetailsPage,
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
@@ -144,14 +144,14 @@ private fun HomePageLoaded(
 private fun HomePageError(errorMessage: HomePageViewState.Error) = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomErrorAnimation,
     text = errorMessage.error.message,
-    animationTestTag = HomePageTestTags.ERROR_ANIMATION_ILLUSTRATION
+    animationTestTag = HomePageTestTags.ERROR_ANIMATION_ILLUSTRATION,
 )
 
 @Composable
 private fun HomePageLoading() = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomLoadingAnimation,
     text = "Loading..",
-    animationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION
+    animationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION,
 )
 
 @Preview(
@@ -164,7 +164,7 @@ private fun HomePageLoading() = WtaAnimation(
     apiLevel = 31,
     showSystemUi = true,
     showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES
+    uiMode = Configuration.UI_MODE_NIGHT_YES,
 )
 @Composable
 private fun HomePagePreview(
@@ -193,5 +193,5 @@ private class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomeP
             currentStreak = Streak.ZERO,
             longestStreak = Streak.ZERO,
         ),
-    )
+    ),
 )

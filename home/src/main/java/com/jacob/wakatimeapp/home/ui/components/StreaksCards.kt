@@ -67,17 +67,17 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
             CurrentStreakCard(
                 currentStreak = Streak(
                     start = LocalDate(2022, 1, 1),
-                    end = LocalDate(2022, 1, 11)
+                    end = LocalDate(2022, 1, 11),
                 ),
                 gradient = MaterialTheme.gradients.purpink,
                 roundedCornerPercent = 20,
-                modifier = Modifier.weight(0.5F)
+                modifier = Modifier.weight(0.5F),
             )
             DaysWorkedInWeek(
                 numberOfDaysWorked = 5,
                 gradient = MaterialTheme.gradients.tealLove,
                 roundedCornerPercent = 20,
-                modifier = Modifier.weight(0.5F)
+                modifier = Modifier.weight(0.5F),
             )
         }
     }

@@ -31,7 +31,7 @@ class RoundedBarChart : BarChart {
     constructor(context: Context, attrs: AttributeSet, defStyle: Int) : super(
         context,
         attrs,
-        defStyle
+        defStyle,
     ) {
         setRadius(5)
     }
@@ -99,7 +99,7 @@ class RoundedBarChart : BarChart {
                 val count = min(
                     ceil((dataSet.entryCount * phaseX).toDouble())
                         .toInt(),
-                    dataSet.entryCount
+                    dataSet.entryCount,
                 )
                 while (i < count) {
                     val e = dataSet.getEntryForIndex(i)
@@ -118,7 +118,7 @@ class RoundedBarChart : BarChart {
                         mBarShadowRectBuffer,
                         mRadius.toFloat(),
                         mRadius.toFloat(),
-                        mShadowPaint
+                        mShadowPaint,
                     )
                     i++
                 }
@@ -157,7 +157,7 @@ class RoundedBarChart : BarChart {
                         buffer.buffer[j + 1],
                         gradientColor.startColor,
                         gradientColor.endColor,
-                        MIRROR
+                        MIRROR,
                     )
                 }
                 if (dataSet.gradientColors != null) {
@@ -168,7 +168,7 @@ class RoundedBarChart : BarChart {
                         buffer.buffer[j + 1],
                         dataSet.getGradientColor(j / 4).startColor,
                         dataSet.getGradientColor(j / 4).endColor,
-                        MIRROR
+                        MIRROR,
                     )
                 }
                 c.drawRoundRect(
@@ -178,7 +178,7 @@ class RoundedBarChart : BarChart {
                     buffer.buffer[j + 3],
                     mRadius.toFloat(),
                     mRadius.toFloat(),
-                    mRenderPaint
+                    mRenderPaint,
                 )
                 if (drawBorder) {
                     c.drawRoundRect(
@@ -188,7 +188,7 @@ class RoundedBarChart : BarChart {
                         buffer.buffer[j + 3],
                         mRadius.toFloat(),
                         mRadius.toFloat(),
-                        mBarBorderPaint
+                        mBarBorderPaint,
                     )
                 }
                 j += 4

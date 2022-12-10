@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.data.network.mappers
+package com.jacob.wakatimeapp.home.data.network.mappers // ktlint-disable filename
 
 import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
@@ -21,14 +21,14 @@ fun GetStatsForRangeResDTO.toModel() = Stats(
             .toLocalDate(),
         endDate = end.takeWhile { it != 'T' }
             .toLocalDate(),
-    )
+    ),
 )
 
 private fun getDailyStatsFromDto(data: List<Data>) = data.map {
     DailyStats(
         timeSpent = Time.createFrom(
             digitalString = it.grandTotal.digital,
-            decimal = it.grandTotal.decimal
+            decimal = it.grandTotal.decimal,
         ),
         mostUsedEditor = it.editors.maxByOrNull(EditorDTO::percent)?.name ?: "NA",
         mostUsedLanguage = it.languages.maxByOrNull(LanguageDTO::percent)?.name ?: "NA",
@@ -36,6 +36,6 @@ private fun getDailyStatsFromDto(data: List<Data>) = data.map {
         date = it.range.date.toLocalDate(),
         projectsWorkedOn = it.projects
             .filterNot(ProjectDTO::isUnknownProject)
-            .map(ProjectDTO::toModel)
+            .map(ProjectDTO::toModel),
     )
 }

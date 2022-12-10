@@ -48,8 +48,8 @@ internal class GetCachedHomePageUiDataUC @Inject constructor(
                     longestStreak = longestStreak,
                     isStaleData = !validDataInCache(
                         lastRequestTime = lastRequestTime,
-                        cacheValidityTime = cacheValidity
-                    )
+                        cacheValidityTime = cacheValidity,
+                    ),
                 )
             }
         }.collect { send(it) }

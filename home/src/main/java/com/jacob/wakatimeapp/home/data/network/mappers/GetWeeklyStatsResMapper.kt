@@ -21,20 +21,20 @@ fun GetLast7DaysStatsResDTO.toModel() = WeeklyStats(
             .toLocalDate(),
         endDate = end.takeWhile { it != 'T' }
             .toLocalDate(),
-    )
+    ),
 )
 
 private fun getDailyStatsFromDto(data: List<Data>) = data.map {
     DailyStats(
         timeSpent = Time.createFrom(
             digitalString = it.grandTotal.digital,
-            decimal = it.grandTotal.decimal
+            decimal = it.grandTotal.decimal,
         ),
         mostUsedEditor = it.editors.maxByOrNull(EditorDTO::percent)?.name ?: "NA",
         mostUsedLanguage = it.languages.maxByOrNull(LanguageDTO::percent)?.name ?: "NA",
         mostUsedOs = it.operatingSystems.maxByOrNull(OperatingSystemDTO::percent)?.name ?: "NA",
         date = it.range.date.toLocalDate(),
         projectsWorkedOn = it.projects.filterNot(ProjectDTO::isUnknownProject)
-            .map(ProjectDTO::toModel)
+            .map(ProjectDTO::toModel),
     )
 }

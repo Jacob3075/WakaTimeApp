@@ -95,21 +95,20 @@ private fun Iterable<Entry<LocalDate, Time>>.groupConsecutive() =
         groups
     }
 
-private fun List<List<Entry<LocalDate, Time>>>.toStreaks(): List<Streak> = map {
+private fun List<List<Entry<LocalDate, Time>>>.toStreaks() = map {
     Streak(it.first().key, it.last().key)
 }
 
-private fun List<Streak>.combineStreaks(): List<Streak> =
-    if (isEmpty()) this
-    else drop(1)
-        .fold(mutableListOf(first())) { acc, streakRange ->
-            val last = acc.last()
-            when (last.canBeCombinedWith(streakRange)) {
-                true -> acc.replaceLast(last + streakRange)
-                false -> acc.add(streakRange)
-            }
-            acc
+private fun List<Streak>.combineStreaks() = if (isEmpty()) this
+else drop(1)
+    .fold(mutableListOf(first())) { acc, streakRange ->
+        val last = acc.last()
+        when (last.canBeCombinedWith(streakRange)) {
+            true -> acc.replaceLast(last + streakRange)
+            false -> acc.add(streakRange)
         }
+        acc
+    }
 
 private fun MutableList<Streak>.replaceLast(e: Streak) {
     removeLast()

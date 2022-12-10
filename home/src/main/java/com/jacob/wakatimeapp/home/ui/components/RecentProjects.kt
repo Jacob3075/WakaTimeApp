@@ -35,19 +35,19 @@ import com.jacob.wakatimeapp.core.ui.theme.spacing
 internal fun RecentProjects(
     projectsWorkedOn: List<Project>,
 ) = Column(
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier.fillMaxWidth(),
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         val typography = MaterialTheme.typography
         Text(text = "Recent Projects", style = typography.sectionTitle)
         Text(
             text = "See All",
             color = MaterialTheme.colorScheme.primary,
-            style = typography.sectionSubtitle
+            style = typography.sectionSubtitle,
         )
     }
     RecentProjectList(
@@ -60,7 +60,7 @@ private fun RecentProjectList(
     projects: List<Project>,
 ) = Column(
     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
-    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sMedium)
+    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
 ) {
     projects.take(n = 3)
         .map { ProjectCardItem(it) }
@@ -77,29 +77,29 @@ private fun ProjectCardItem(project: Project) {
         shape = cardShape,
         shadowElevation = 10.dp,
         tonalElevation = 2.dp,
-        onClick = {}
+        onClick = {},
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
             modifier = Modifier
-                .padding(spacing.medium)
+                .padding(spacing.medium),
         ) {
             Column(
                 Modifier
-                    .weight(1f, fill = true)
+                    .weight(1f, fill = true),
             ) {
                 Text(text = project.name, style = MaterialTheme.typography.cardHeader)
                 Spacer(modifier = Modifier.height(2.dp))
                 Text(
                     text = "${project.time.hours} Hours, ${project.time.minutes} Mins",
-                    style = MaterialTheme.typography.cardSubtitle
+                    style = MaterialTheme.typography.cardSubtitle,
                 )
             }
             Image(
                 painter = painterResource(id = MaterialTheme.assets.icons.arrow),
                 colorFilter = ColorFilter.tint(MaterialTheme.colorScheme.surfaceTint),
-                contentDescription = ""
+                contentDescription = "",
             )
         }
     }
@@ -113,8 +113,8 @@ private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
             projectsWorkedOn = listOf(
                 Project(Time(10, 9, 0f), "Project 1", 75.0),
                 Project(Time(100, 26, 0f), "Project 2", 20.0),
-                Project(Time(5, 15, 0f), "Project 3", 10.0)
-            )
+                Project(Time(5, 15, 0f), "Project 3", 10.0),
+            ),
         )
     }
 }
@@ -128,11 +128,11 @@ private fun ProjectCardItemPreview() = WakaTimeAppTheme {
                 Time(
                     0,
                     0,
-                    0f
+                    0f,
                 ),
                 "Project 1",
-                0.0
-            )
+                0.0,
+            ),
         )
     }
 }
