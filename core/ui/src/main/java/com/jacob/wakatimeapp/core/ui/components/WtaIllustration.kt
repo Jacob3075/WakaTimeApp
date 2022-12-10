@@ -26,17 +26,17 @@ fun WtaIllustration(
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center,
-    modifier = modifier.fillMaxSize()
+    modifier = modifier.fillMaxSize(),
 ) {
     Image(
         painter = painterResource(id = illustration),
         contentDescription = "",
         contentScale = ContentScale.Fit,
-        modifier = Modifier.testTag(illustrationTestTag)
+        modifier = Modifier.testTag(illustrationTestTag),
     )
     Spacer(modifier = Modifier.height(MaterialTheme.spacing.lMedium))
     Text(
         text = text,
-        style = MaterialTheme.typography.titleMedium
+        style = MaterialTheme.typography.titleMedium,
     )
 }

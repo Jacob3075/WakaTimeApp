@@ -499,15 +499,21 @@ formatting:
     active: false
     autoCorrect: true
     layout: '*,java.**,javax.**,kotlin.**,^'
-  TrailingComma:
-    autoCorrect: true
-    allowTrailingComma: true
-    allowTrailingCommaOnCallSite: true
+  BlockCommentInitialStarAlignment:
+    active: true
+  TrailingCommaOnDeclarationSite:
+    active: true
+  TrailingCommaOnCallSite:
+    active: true
   NoWildcardImports:
     active: false
   MaximumLineLength:
     maxLineLength: 120
     ignoreBackTickedIdentifier: true
+  CommentSpacing:
+    active: true
+  CommentWrapping:
+    active: true
 
 style:
   active: true
@@ -588,7 +594,7 @@ style:
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: true
-    ignoreAnnotated: [ 'Preview' ]
+    ignoreAnnotated: [ 'Preview', 'WtaPreviews' ]
     ignoreNamedArgument: true
     ignoreEnums: false
     ignoreRanges: false
@@ -599,7 +605,7 @@ style:
     active: false
   MaxChainedCallsOnSameLine:
     active: true
-    maxChainedCalls: 3
+    maxChainedCalls: 5
   MaxLineLength:
     active: true
     maxLineLength: 120
@@ -698,7 +704,7 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected|serialVersionUID|preview)'
-    ignoreAnnotated: [ 'Preview' ]
+    ignoreAnnotated: [ 'Preview', 'WtaPreviews' ]
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseArrayLiteralsInAnnotations:

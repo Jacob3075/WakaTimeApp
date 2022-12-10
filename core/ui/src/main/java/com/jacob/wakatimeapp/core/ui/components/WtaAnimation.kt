@@ -28,10 +28,10 @@ fun WtaAnimation(
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center,
-    modifier = modifier.fillMaxSize()
+    modifier = modifier.fillMaxSize(),
 ) {
     val composition by rememberLottieComposition(RawRes(animation))
-    Spacer(modifier = Modifier.weight(0.5f))
+    Spacer(modifier = Modifier.weight(weight = 0.5f))
     LottieAnimation(
         composition = composition,
         iterations = LottieConstants.IterateForever,
@@ -41,6 +41,6 @@ fun WtaAnimation(
     Text(
         text = text,
         style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.weight(1f)
+        modifier = Modifier.weight(1f),
     )
 }

@@ -43,15 +43,16 @@ internal fun StatsCard(
     @DrawableRes iconId: Int,
     onClick: () -> Unit,
     roundedCornerPercent: Int = 25,
-    weights: Pair<Float, Float> = Pair(1f, 0.5f),
+    statsTypeWeight: Float = 1f,
+    statsValueWeight: Float = 0.5f,
     iconOffset: Dp = 50.dp,
     iconSize: Dp = 80.dp,
 ) {
     val cardGradient = Brush.horizontalGradient(
         listOf(
             gradient.startColor,
-            gradient.endColor
-        )
+            gradient.endColor,
+        ),
     )
     val cardShape = RoundedCornerShape(roundedCornerPercent)
     Box(
@@ -61,7 +62,7 @@ internal fun StatsCard(
             .clickable { onClick() }
             .fillMaxWidth()
             .background(cardGradient, cardShape)
-            .padding(horizontal = MaterialTheme.spacing.lMedium)
+            .padding(horizontal = MaterialTheme.spacing.lMedium),
     ) {
         Image(
             painter = painterResource(id = iconId),
@@ -69,21 +70,21 @@ internal fun StatsCard(
             contentScale = ContentScale.FillBounds,
             modifier = Modifier
                 .padding(start = iconOffset)
-                .size(iconSize)
+                .size(iconSize),
         )
         Row(
-            verticalAlignment = Alignment.CenterVertically
+            verticalAlignment = Alignment.CenterVertically,
         ) {
             Text(
                 text = statsType,
                 maxLines = 2,
-                modifier = Modifier.weight(weights.first, true),
+                modifier = Modifier.weight(statsTypeWeight, true),
                 style = MaterialTheme.typography.cardContent,
                 color = gradient.onStartColor,
             )
             Text(
                 text = statsValue,
-                modifier = Modifier.weight(weights.second, true),
+                modifier = Modifier.weight(statsValueWeight, true),
                 textAlign = TextAlign.End,
                 style = TextStyle(
                     color = Color.White,
@@ -106,7 +107,7 @@ private fun StatsCardPreview() = WakaTimeAppTheme {
                 statsValue = "Stats Value",
                 gradient = MaterialTheme.gradients.reef,
                 iconId = MaterialTheme.assets.icons.time,
-                onClick = {}
+                onClick = {},
             )
         }
     }

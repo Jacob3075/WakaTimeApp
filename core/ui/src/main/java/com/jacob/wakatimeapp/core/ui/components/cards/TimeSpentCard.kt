@@ -12,8 +12,6 @@ import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 
-// TODO: FIX MAGIC NUMBERS
-
 @Composable
 fun TimeSpentCard(
     statsType: String,
@@ -28,7 +26,7 @@ fun TimeSpentCard(
     gradient = gradient,
     iconId = iconId,
     onClick = onClick,
-    roundedCornerPercent = roundedCornerPercent
+    roundedCornerPercent = roundedCornerPercent,
 )
 
 @WtaPreviews
@@ -41,7 +39,7 @@ private fun TimeSpentCardPreview() = WakaTimeAppTheme {
                 time = Time(42, 22, 0f),
                 gradient = MaterialTheme.gradients.facebookMessenger,
                 iconId = MaterialTheme.assets.icons.time,
-                roundedCornerPercent = 25
+                roundedCornerPercent = 25,
             ) {}
         }
     }

@@ -101,54 +101,54 @@ internal val LightGradients = Gradients(
         startColor = Gradients.flareStart,
         endColor = Gradients.flareEnd,
         onStartColor = onFlareStart,
-        onEndColor = onFlareEnd
+        onEndColor = onFlareEnd,
     ),
     shifter = Gradient(
         startColor = Gradients.shifterStart,
         endColor = Gradients.shifterEnd,
         onStartColor = onShifterStart,
-        onEndColor = onShifterEnd
+        onEndColor = onShifterEnd,
     ),
     quepal = Gradient(
         startColor = Gradients.quepalStart,
         endColor = Gradients.quepalEnd,
         onStartColor = onQuepalStart,
-        onEndColor = onQuepalEnd
+        onEndColor = onQuepalEnd,
     ),
     tealLove = Gradient(
         startColor = Gradients.tealLoveStart,
         endColor = Gradients.tealLoveEnd,
         onStartColor = onTealLoveStart,
-        onEndColor = onTealLoveEnd
+        onEndColor = onTealLoveEnd,
     ),
     facebookMessenger = Gradient(
         startColor = Gradients.facebookMessengerStart,
         endColor = Gradients.facebookMessengerEnd,
         onStartColor = onFacebookMessengerStart,
-        onEndColor = onFacebookMessengerEnd
+        onEndColor = onFacebookMessengerEnd,
     ),
     reef = Gradient(
         startColor = Gradients.reefStart,
         endColor = Gradients.reefEnd,
         onStartColor = onReefStart,
-        onEndColor = onReefEnd
+        onEndColor = onReefEnd,
     ),
     amin = Gradient(
         startColor = Gradients.aminStart,
         endColor = Gradients.aminEnd,
         onStartColor = onAminStart,
-        onEndColor = onAminEnd
+        onEndColor = onAminEnd,
     ),
     neuromancer = Gradient(
         startColor = Gradients.neuromancerStart,
         endColor = Gradients.neuromancerEnd,
         onStartColor = onNeuromancerStart,
-        onEndColor = onNeuromancerEnd
+        onEndColor = onNeuromancerEnd,
     ),
     purpink = Gradient(
         startColor = Gradients.purpinkStart,
         endColor = Gradients.purpinkEnd,
         onStartColor = onPurpinkStart,
-        onEndColor = onPurpinkEnd
-    )
+        onEndColor = onPurpinkEnd,
+    ),
 )

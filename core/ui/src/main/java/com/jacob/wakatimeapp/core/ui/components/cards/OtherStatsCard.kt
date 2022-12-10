@@ -20,5 +20,5 @@ fun OtherStatsCard(
     onClick = onClick,
     roundedCornerPercent = 25,
     iconOffset = 90.dp,
-    iconSize = 70.dp
+    iconSize = 70.dp,
 )

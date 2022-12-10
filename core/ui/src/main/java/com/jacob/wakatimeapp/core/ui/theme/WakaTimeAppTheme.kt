@@ -29,7 +29,7 @@ fun WakaTimeAppTheme(darkTheme: Boolean = isSystemInDarkTheme(), content: @Compo
             colorScheme = colors,
             typography = Typography,
             shapes = Shapes,
-            content = content
+            content = content,
         )
     }
 }

@@ -101,54 +101,54 @@ internal val DarkGradients = Gradients(
         startColor = flareStart,
         endColor = flareEnd,
         onStartColor = onFlareStart,
-        onEndColor = onFlareEnd
+        onEndColor = onFlareEnd,
     ),
     shifter = Gradient(
         startColor = shifterStart,
         endColor = shifterEnd,
         onStartColor = onShifterStart,
-        onEndColor = onShifterEnd
+        onEndColor = onShifterEnd,
     ),
     quepal = Gradient(
         startColor = quepalStart,
         endColor = quepalEnd,
         onStartColor = onQuepalStart,
-        onEndColor = onQuepalEnd
+        onEndColor = onQuepalEnd,
     ),
     tealLove = Gradient(
         startColor = tealLoveStart,
         endColor = tealLoveEnd,
         onStartColor = onTealLoveStart,
-        onEndColor = onTealLoveEnd
+        onEndColor = onTealLoveEnd,
     ),
     facebookMessenger = Gradient(
         startColor = facebookMessengerStart,
         endColor = facebookMessengerEnd,
         onStartColor = onFacebookMessengerStart,
-        onEndColor = onFacebookMessengerEnd
+        onEndColor = onFacebookMessengerEnd,
     ),
     reef = Gradient(
         startColor = reefStart,
         endColor = reefEnd,
         onStartColor = onReefStart,
-        onEndColor = onReefEnd
+        onEndColor = onReefEnd,
     ),
     amin = Gradient(
         startColor = aminStart,
         endColor = aminEnd,
         onStartColor = onAminStart,
-        onEndColor = onAminEnd
+        onEndColor = onAminEnd,
     ),
     neuromancer = Gradient(
         startColor = neuromancerStart,
         endColor = neuromancerEnd,
         onStartColor = onNeuromancerStart,
-        onEndColor = onNeuromancerEnd
+        onEndColor = onNeuromancerEnd,
     ),
     purpink = Gradient(
         startColor = purpinkStart,
         endColor = purpinkEnd,
         onStartColor = onPurpinkStart,
-        onEndColor = onPurpinkEnd
-    )
+        onEndColor = onPurpinkEnd,
+    ),
 )

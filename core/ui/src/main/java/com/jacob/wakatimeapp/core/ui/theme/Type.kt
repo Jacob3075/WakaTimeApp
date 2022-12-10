@@ -51,7 +51,7 @@ val Typography = defaultTypography.let {
 val Typography.button: TextStyle
     get() = bodySmall.copy(
         fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold
+        fontWeight = FontWeight.SemiBold,
     )
 
 val Typography.pageTitle: TextStyle
