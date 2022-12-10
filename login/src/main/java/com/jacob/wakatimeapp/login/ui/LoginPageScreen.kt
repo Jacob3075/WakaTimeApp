@@ -67,7 +67,7 @@ fun LoginPageScreen(
             is LoginPageState.Error -> showSnackBar(
                 viewStateInstance,
                 snackBarCoroutineScope,
-                snackbarHostState
+                snackbarHostState,
             )
 
             else -> Unit
@@ -78,7 +78,8 @@ fun LoginPageScreen(
         viewState = viewState,
         getLoginAuthIntent = viewModel::getAuthIntent,
         authDataNotFound = viewModel::authDataNotFound,
-        exchangeToken = viewModel::exchangeToken
+        exchangeToken = viewModel::exchangeToken,
+        modifier = modifier,
     )
 }
 
@@ -88,22 +89,24 @@ private fun LoginPageContent(
     getLoginAuthIntent: () -> Intent?,
     authDataNotFound: (Intent) -> Unit,
     exchangeToken: (Intent) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     val launcher = authActivityResultLauncher(
         authDataNotFound = authDataNotFound,
-        exchangeToken = exchangeToken
+        exchangeToken = exchangeToken,
     )
 
     when (viewState) {
         is LoginPageState.Idle, is LoginPageState.Error -> LoginPageIdleState(
             getLoginAuthIntent = getLoginAuthIntent,
-            launcher = launcher
+            launcher = launcher,
+            modifier = modifier,
         )
 
         is LoginPageState.Loading -> Box(
-            modifier = Modifier
+            modifier = modifier
                 .fillMaxSize()
-                .gesturesDisabled()
+                .gesturesDisabled(),
         ) {
             CircularProgressIndicator(
                 modifier = Modifier
@@ -124,15 +127,15 @@ private fun showSnackBar(
 ) = snackBarCoroutineScope.launch {
     snackbarHostState.showSnackbar(
         message = viewState.message,
-        duration = SnackbarDuration.Long
+        duration = SnackbarDuration.Long,
     )
 }
 
 @Composable
 private fun LoginPageIdleState(
-    modifier: Modifier = Modifier,
     launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
     getLoginAuthIntent: () -> Intent?,
+    modifier: Modifier = Modifier,
 ) {
     val spacing = MaterialTheme.spacing
 
@@ -143,7 +146,7 @@ private fun LoginPageIdleState(
             .fillMaxSize()
             .statusBarsPadding()
             .padding(top = spacing.small, bottom = spacing.large)
-            .padding(horizontal = spacing.small)
+            .padding(horizontal = spacing.small),
     ) {
         AppTitle()
         LoginButton(onClick = { launcher.launch(getLoginAuthIntent()) })
@@ -186,20 +189,20 @@ private fun LoginButton(
         contentPadding = PaddingValues(),
         modifier = Modifier
             .padding(horizontal = spacing.large)
-            .shadow(elevation = 8.dp, shape = buttonShape, clip = false)
+            .shadow(elevation = 8.dp, shape = buttonShape, clip = false),
     ) {
         Box(
             contentAlignment = Alignment.Center,
             modifier = Modifier
                 .fillMaxWidth()
                 .background(loginButtonGradient, buttonShape)
-                .padding(vertical = spacing.small)
+                .padding(vertical = spacing.small),
         ) {
             Text(
                 text = "Login to Wakatime".uppercase(),
                 style = MaterialTheme.typography.button,
                 color = gradient.onEndColor,
-                modifier = Modifier.padding(spacing.medium)
+                modifier = Modifier.padding(spacing.medium),
             )
         }
     }
@@ -215,7 +218,7 @@ private fun LoginPagePreview(
             viewState = state,
             getLoginAuthIntent = { null },
             authDataNotFound = {},
-            exchangeToken = {}
+            exchangeToken = {},
         )
     }
 }

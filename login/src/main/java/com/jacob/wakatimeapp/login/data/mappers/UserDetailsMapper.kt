@@ -17,5 +17,5 @@ fun GetUserDetailsResDTO.toModel() = UserDetails(
     durationsSliceBy = data.durationsSliceBy,
     createdAt = data.createdAt.takeWhile { it != 'T' }.toLocalDate(),
     dateFormat = data.dateFormat,
-    photoUrl = "${data.photoUrl}?s=420"
+    photoUrl = "${data.photoUrl}?s=420",
 )
