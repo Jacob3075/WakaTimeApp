@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
-import arrow.core.computations.either
+import arrow.core.continuations.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.models.Error.NetworkErrors.Timeout
