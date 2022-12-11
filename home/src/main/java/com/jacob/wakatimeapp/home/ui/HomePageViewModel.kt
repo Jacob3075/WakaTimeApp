@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.computations.either
+import arrow.core.continuations.either
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC

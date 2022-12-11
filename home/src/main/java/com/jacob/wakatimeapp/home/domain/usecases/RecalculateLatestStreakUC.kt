@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
-import arrow.core.computations.either
+import arrow.core.continuations.either
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
