@@ -20,25 +20,6 @@ private val poppinsFontFamily = FontFamily(
     Font(R.font.poppins_black, FontWeight.Black),
 )
 
-private val interFontFamily = FontFamily(
-    Font(R.font.inter_extralight, FontWeight.ExtraLight),
-    Font(R.font.inter_light, FontWeight.Light),
-    Font(R.font.inter_regular, FontWeight.Normal),
-    Font(R.font.inter_medium, FontWeight.Medium),
-    Font(R.font.inter_semibold, FontWeight.SemiBold),
-    Font(R.font.inter_bold, FontWeight.Bold),
-    Font(R.font.inter_extrabold, FontWeight.ExtraBold),
-    Font(R.font.inter_black, FontWeight.Black),
-)
-
-private val latoFontFamily = FontFamily(
-    Font(R.font.lato_thin, FontWeight.Thin),
-    Font(R.font.lato_light, FontWeight.Light),
-    Font(R.font.lato_regular, FontWeight.Normal),
-    Font(R.font.lato_bold, FontWeight.Bold),
-    Font(R.font.lato_black, FontWeight.Black),
-)
-
 val playfairDisplayFontFamily = FontFamily(
     Font(R.font.playfair_display),
 )
@@ -70,7 +51,7 @@ val Typography = defaultTypography.let {
 val Typography.button: TextStyle
     get() = bodySmall.copy(
         fontSize = 16.sp,
-        fontWeight = FontWeight.SemiBold
+        fontWeight = FontWeight.SemiBold,
     )
 
 val Typography.pageTitle: TextStyle

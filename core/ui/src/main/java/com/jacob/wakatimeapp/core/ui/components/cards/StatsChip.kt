@@ -54,7 +54,7 @@ fun StatsChip(
             .fillMaxWidth()
             .clip(shape)
             .clickable(onClick = onClick)
-            .background(gradientBrush, shape)
+            .background(gradientBrush, shape),
     ) {
         Image(
             painter = painterResource(iconId),
@@ -63,10 +63,10 @@ fun StatsChip(
             modifier = Modifier
                 .padding(
                     end = MaterialTheme.spacing.small,
-                    bottom = MaterialTheme.spacing.extraSmall
+                    bottom = MaterialTheme.spacing.extraSmall,
                 )
                 .size(size = 50.dp)
-                .align(Alignment.BottomEnd)
+                .align(Alignment.BottomEnd),
         )
         Column(
             modifier = Modifier
@@ -84,19 +84,19 @@ fun StatsChip(
                     }
                     withStyle(
                         style = MaterialTheme.typography.headlineSmall.copy(
-                            baselineShift = BaselineShift(0.5f)
-                        ).toSpanStyle()
+                            baselineShift = BaselineShift(multiplier = 0.5f),
+                        ).toSpanStyle(),
                     ) {
                         append(" $statsValueSubText")
                     }
                 },
                 color = gradient.onStartColor,
-                modifier = Modifier.removeFontPadding(streakValueTextStyle)
+                modifier = Modifier.removeFontPadding(streakValueTextStyle),
             )
             Text(
                 text = statsType,
                 color = gradient.onStartColor,
-                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light)
+                style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
             )
         }
     }
@@ -104,10 +104,10 @@ fun StatsChip(
 
 @WtaPreviews
 @Composable
-fun StatsChipPreview() = WakaTimeAppTheme {
+private fun StatsChipPreview() = WakaTimeAppTheme {
     Surface {
         Row(
-            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small)
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         ) {
             StatsChip(
                 statsType = "Stats Type",
@@ -127,7 +127,7 @@ fun StatsChipPreview() = WakaTimeAppTheme {
                 iconId = MaterialTheme.assets.icons.time,
                 onClick = {},
                 roundedCornerPercent = 25,
-                modifier = Modifier.weight(1f)
+                modifier = Modifier.weight(1f),
             )
         }
     }

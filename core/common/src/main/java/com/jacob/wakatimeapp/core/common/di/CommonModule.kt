@@ -1,7 +1,6 @@
 package com.jacob.wakatimeapp.core.common.di
 
 import android.content.Context
-import com.jacob.wakatimeapp.core.common.UserSession
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -17,10 +16,7 @@ import net.openid.appauth.AuthorizationService
 object CommonModule {
     @Singleton
     @Provides
-    fun provideUserSession() = UserSession()
-
-    @Singleton
-    @Provides
+    @Suppress("InjectDispatcher")
     fun provideCoroutineContext(): CoroutineContext = Dispatchers.IO
 
     @Singleton

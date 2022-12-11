@@ -1,3 +1,5 @@
+@file:Suppress("ForbiddenComment")
+
 package com.jacob.wakatimeapp.core.ui.theme.assets
 
 import androidx.annotation.DrawableRes
@@ -59,7 +61,8 @@ object Illustrations {
 
     private val loadingIllustrations = listOf(
         loading,
-        intoTheNight
+        intoTheNight,
+        search,
     )
 
     private val noConnectionIllustrations = listOf(
@@ -78,6 +81,7 @@ object Illustrations {
         noData,
         notFound,
         meditation, // FIXME: CHANGE COLOR
+        closedBox,
     )
 
     val randomEmptyIllustration

@@ -34,11 +34,11 @@ fun OtherDailyStatsSection(
     mostUsedOs: String,
     mostUsedEditor: String,
     currentStreak: Streak,
-    longestStreak: Streak = Streak.ZERO,
-    modifier: Modifier = Modifier,
     numberOfDaysWorked: Int,
+    modifier: Modifier = Modifier,
+    longestStreak: Streak = Streak.ZERO,
 ) = Column(
-    modifier = modifier.fillMaxWidth()
+    modifier = modifier.fillMaxWidth(),
 ) {
     val spacing = MaterialTheme.spacing
 
@@ -48,7 +48,7 @@ fun OtherDailyStatsSection(
     StreakStats(
         currentStreak = currentStreak,
         longestStreak = longestStreak,
-        numberOfDaysWorked = numberOfDaysWorked
+        numberOfDaysWorked = numberOfDaysWorked,
     )
 
     Spacer(modifier = Modifier.height(spacing.sMedium))
@@ -72,7 +72,7 @@ private fun StreakStats(
 
     Row(
         modifier = Modifier.height(Min),
-        horizontalArrangement = Arrangement.spacedBy(spacing.small)
+        horizontalArrangement = Arrangement.spacedBy(spacing.small),
     ) {
         CurrentStreakCard(
             currentStreak = longestStreak,
@@ -80,16 +80,16 @@ private fun StreakStats(
             roundedCornerPercent = 10,
             modifier = Modifier
                 .weight(1f)
-                .fillMaxHeight()
+                .fillMaxHeight(),
         )
         Column(
             modifier = Modifier.weight(1f),
-            verticalArrangement = Arrangement.spacedBy(spacing.small)
+            verticalArrangement = Arrangement.spacedBy(spacing.small),
         ) {
             CurrentStreakCard(
                 currentStreak = currentStreak,
                 gradient = gradients.amin,
-                roundedCornerPercent = 20
+                roundedCornerPercent = 20,
             )
             DaysWorkedInWeek(
                 numberOfDaysWorked = numberOfDaysWorked,
@@ -116,7 +116,7 @@ private fun SecondaryStats(
         language = mostUsedLanguage,
         gradient = gradients.quepal,
         iconId = icons.codeFile,
-        onClick = onClick
+        onClick = onClick,
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
@@ -124,7 +124,7 @@ private fun SecondaryStats(
         language = mostUsedOs,
         gradient = gradients.purpink,
         iconId = icons.laptop,
-        onClick = onClick
+        onClick = onClick,
     )
     Spacer(modifier = Modifier.height(spacing.sMedium))
     OtherStatsCard(
@@ -132,7 +132,7 @@ private fun SecondaryStats(
         language = mostUsedEditor,
         gradient = gradients.neuromancer,
         iconId = icons.code,
-        onClick = onClick
+        onClick = onClick,
     )
 }
 
@@ -140,7 +140,7 @@ private fun SecondaryStats(
 private fun SectionHeader() = Row(
     verticalAlignment = Alignment.CenterVertically,
     horizontalArrangement = Arrangement.SpaceBetween,
-    modifier = Modifier.fillMaxWidth()
+    modifier = Modifier.fillMaxWidth(),
 ) {
     val typography = MaterialTheme.typography
     Text(text = "Other Daily Stats", style = typography.sectionTitle)

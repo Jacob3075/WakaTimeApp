@@ -27,7 +27,7 @@ data class Time(
                 decimal = decimal,
                 hours = hours,
                 minutes = minutes,
-                totalSeconds = totalSeconds
+                totalSeconds = totalSeconds,
             )
         }
 

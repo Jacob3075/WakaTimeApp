@@ -50,14 +50,14 @@ fun WeeklyReport(
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier.fillMaxWidth(),
     ) {
         val typography = MaterialTheme.typography
         Text(text = "Weekly Report", style = typography.sectionTitle)
         Text(
             text = "Details",
             color = MaterialTheme.colorScheme.primary,
-            style = typography.sectionSubtitle
+            style = typography.sectionSubtitle,
         )
     }
     WeeklyReportChart(weeklyTimeSpent)
@@ -99,7 +99,7 @@ private fun WeeklyReportChart(weeklyTimeSpent: Map<LocalDate, Time>) {
                 it.data = barData
                 it.xAxis.valueFormatter = XAxisDayFormatter(labels)
                 it.invalidate()
-            }
+            },
         )
     }
 }
@@ -122,7 +122,7 @@ private fun rememberBarData(weeklyStats: Collection<Time>, colorScheme: ColorSch
             BarEntry(
                 index.toFloat(),
                 value.decimal,
-                value
+                value,
             )
         }
         val barDataSet = BarDataSet(entries, "Label").apply {

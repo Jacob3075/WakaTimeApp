@@ -22,5 +22,5 @@ fun HomePage(
     scaffoldState: SnackbarHostState,
 ) = HomePageScreen(
     navigator = homePageNavigator,
-    snackbarHostState = scaffoldState
+    snackbarHostState = scaffoldState,
 )

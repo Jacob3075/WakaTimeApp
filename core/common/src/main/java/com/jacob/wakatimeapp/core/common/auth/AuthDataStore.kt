@@ -40,7 +40,7 @@ class AuthDataStore @Inject constructor(
 
     suspend fun updateAuthState(newAuthState: AuthState?) {
         dataStore.edit {
-            it[KEY_AUTH_STATE] = newAuthState?.jsonSerializeString() ?: ""
+            it[KEY_AUTH_STATE] = newAuthState?.jsonSerializeString().orEmpty()
         }
     }
 

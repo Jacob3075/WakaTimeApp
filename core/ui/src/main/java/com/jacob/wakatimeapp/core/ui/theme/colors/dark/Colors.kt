@@ -31,7 +31,6 @@ private val darkOutline = Color(0xFF899294)
 private val darkInverseOnSurface = Color(0xFF191C1D)
 private val darkInverseSurface = Color(0xFFE1E3E3)
 private val darkInversePrimary = Color(0xFF006874)
-private val darkShadow = Color(0xFF000000)
 private val darkSurfaceTint = Color(0xFF4FD8EB)
 
 internal val DarkColors = darkColorScheme(

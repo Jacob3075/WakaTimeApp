@@ -38,14 +38,14 @@ class LoginPageViewModel @Inject constructor(
 
     private val serviceConfig = AuthorizationServiceConfiguration(
         Uri.parse(Constants.authorizationUrl),
-        Uri.parse(Constants.tokenUrl)
+        Uri.parse(Constants.tokenUrl),
     )
 
     private val authRequest = Builder(
         serviceConfig,
         BuildConfig.CLIENT_ID,
         ResponseTypeValues.CODE,
-        Uri.parse(Constants.redirectUrl)
+        Uri.parse(Constants.redirectUrl),
     ).setScopes(Constants.scope)
         .build()
 
@@ -84,13 +84,13 @@ class LoginPageViewModel @Inject constructor(
 
         authService.performTokenRequest(
             authorizationResponse.createTokenExchangeRequest(),
-            ClientSecretPost(BuildConfig.CLIENT_SECRET)
+            ClientSecretPost(BuildConfig.CLIENT_SECRET),
         ) { tokenResponse, authorizationException ->
             authorizationException?.let(Timber::e)
             viewModelScope.launch {
                 val authState = authTokenProvider.updateAfterTokenResponse(
                     tokenResponse,
-                    authorizationException
+                    authorizationException,
                 )
                 if (authState.isAuthorized) {
                     _viewState.value = LoginPageState.Success

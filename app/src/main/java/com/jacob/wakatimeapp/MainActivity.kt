@@ -28,6 +28,11 @@ import dagger.hilt.android.AndroidEntryPoint
 @ExperimentalMaterial3Api
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
+    /**
+     * `NavGraphs` not being indexed but works when built
+     *
+     * @see [Issue](https://github.com/raamcosta/compose-destinations/issues/314)
+     */
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -37,7 +42,7 @@ class MainActivity : AppCompatActivity() {
                 val snackbarHostState = remember { SnackbarHostState() }
                 Scaffold(
                     snackbarHost = { SnackbarHost(snackbarHostState) },
-                    modifier = Modifier.fillMaxSize()
+                    modifier = Modifier.fillMaxSize(),
                 ) {
                     LockScreenOrientation()
                     DestinationsNavHost(
@@ -45,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                         dependenciesContainerBuilder = {
                             dependency(ApplicationNavigator(navController))
                             dependency(snackbarHostState)
-                        }
+                        },
                     )
                 }
             }
