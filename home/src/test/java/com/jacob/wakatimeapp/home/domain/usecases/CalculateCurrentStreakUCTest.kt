@@ -7,6 +7,7 @@ import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.currentDay
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.last7DaysStats
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.noWeeklyStats
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
@@ -32,7 +33,7 @@ internal class CalculateCurrentStreakUCTest {
         runTest {
             val streak = Streak(
                 start = currentDay.minus(3, DateTimeUnit.DAY),
-                end = currentDay.minus(1, DateTimeUnit.DAY)
+                end = currentDay.minus(1, DateTimeUnit.DAY),
             )
             robot.buildUseCase()
                 .mockGetCurrentStreak(streak.right())
@@ -46,12 +47,12 @@ internal class CalculateCurrentStreakUCTest {
         runTest {
             val streak = Streak(
                 start = currentDay.minus(3, DateTimeUnit.DAY),
-                end = currentDay.minus(1, DateTimeUnit.DAY)
+                end = currentDay.minus(1, DateTimeUnit.DAY),
             )
             robot.buildUseCase()
                 .mockGetCurrentStreak(streak.right())
                 .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right()
+                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right(),
                 )
                 .callUseCase()
                 .resultsShouldBe(streak.copy(end = currentDay).right())
@@ -62,12 +63,12 @@ internal class CalculateCurrentStreakUCTest {
         runTest {
             val streak = Streak(
                 start = currentDay.minus(8, DateTimeUnit.DAY),
-                end = currentDay.minus(4, DateTimeUnit.DAY)
+                end = currentDay.minus(4, DateTimeUnit.DAY),
             )
             robot.buildUseCase()
                 .mockGetCurrentStreak(streak.right())
                 .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = noWeeklyStats).right()
+                    last7DaysStats.copy(weeklyTimeSpent = noWeeklyStats).right(),
                 )
                 .callUseCase()
                 .resultsShouldBe(Streak.ZERO.right())
@@ -78,7 +79,7 @@ internal class CalculateCurrentStreakUCTest {
         runTest {
             val initialStreak = Streak(
                 start = currentDay.minus(8, DateTimeUnit.DAY),
-                end = currentDay.minus(4, DateTimeUnit.DAY)
+                end = currentDay.minus(4, DateTimeUnit.DAY),
             )
 
             val result = Streak(
@@ -89,12 +90,12 @@ internal class CalculateCurrentStreakUCTest {
             val updatedWeeklyStats = continuousWeeklyStats.toMutableMap().also {
                 it[currentDay.minus(3, DateTimeUnit.DAY)] = Time.ZERO
                 it[currentDay.minus(4, DateTimeUnit.DAY)] = Time.ZERO
-            }
+            }.toImmutableMap()
 
             robot.buildUseCase()
                 .mockGetCurrentStreak(initialStreak.right())
                 .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = updatedWeeklyStats).right()
+                    last7DaysStats.copy(weeklyTimeSpent = updatedWeeklyStats).right(),
                 )
                 .callUseCase()
                 .resultsShouldBe(result.right())
@@ -105,7 +106,7 @@ internal class CalculateCurrentStreakUCTest {
         runTest {
             val initialStreak = Streak(
                 start = currentDay.minus(10, DateTimeUnit.DAY),
-                end = currentDay.minus(4, DateTimeUnit.DAY)
+                end = currentDay.minus(4, DateTimeUnit.DAY),
             )
 
             val result = Streak(
@@ -116,7 +117,7 @@ internal class CalculateCurrentStreakUCTest {
             robot.buildUseCase()
                 .mockGetCurrentStreak(initialStreak.right())
                 .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right()
+                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right(),
                 )
                 .callUseCase()
                 .resultsShouldBe(result.right())
@@ -127,7 +128,7 @@ internal class CalculateCurrentStreakUCTest {
         runTest {
             val initialStreak = Streak(
                 start = currentDay.minus(15, DateTimeUnit.DAY),
-                end = currentDay.minus(10, DateTimeUnit.DAY)
+                end = currentDay.minus(10, DateTimeUnit.DAY),
             )
 
             val result = Streak(
@@ -138,7 +139,7 @@ internal class CalculateCurrentStreakUCTest {
             robot.buildUseCase()
                 .mockGetCurrentStreak(initialStreak.right())
                 .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right()
+                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right(),
                 )
                 .mockRecalculateStreak(currentDay.minus(8, DateTimeUnit.DAY), result.right())
                 .callUseCase()

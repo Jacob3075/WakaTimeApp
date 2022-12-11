@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
@@ -14,6 +15,8 @@ import io.mockk.coEvery
 import io.mockk.mockk
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.Instant
@@ -90,7 +93,7 @@ internal class CalculateCurrentStreakUCRobot {
             currentDay.minus(4, DateTimeUnit.DAY) to Time.ZERO,
             currentDay.minus(5, DateTimeUnit.DAY) to Time.ZERO,
             currentDay.minus(6, DateTimeUnit.DAY) to Time.ZERO,
-        )
+        ).toImmutableMap()
 
         val continuousWeeklyStats = mutableMapOf(
             currentDay to Time.fromDecimal(1f),
@@ -100,15 +103,15 @@ internal class CalculateCurrentStreakUCRobot {
             currentDay.minus(4, DateTimeUnit.DAY) to Time.fromDecimal(1f),
             currentDay.minus(5, DateTimeUnit.DAY) to Time.fromDecimal(1f),
             currentDay.minus(6, DateTimeUnit.DAY) to Time.fromDecimal(1f),
-        )
+        ).toImmutableMap()
 
         val last7DaysStats = Last7DaysStats(
             timeSpentToday = Time.ZERO,
-            projectsWorkedOn = listOf(),
-            weeklyTimeSpent = noWeeklyStats,
+            projectsWorkedOn = emptyList<Project>().toImmutableList(),
+            weeklyTimeSpent = noWeeklyStats.toImmutableMap(),
             mostUsedLanguage = "",
             mostUsedEditor = "",
-            mostUsedOs = ""
+            mostUsedOs = "",
         )
     }
 }

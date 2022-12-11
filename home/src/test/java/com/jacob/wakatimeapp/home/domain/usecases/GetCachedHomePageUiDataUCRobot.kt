@@ -5,6 +5,7 @@ import app.cash.turbine.testIn
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
@@ -25,6 +26,8 @@ import kotlin.time.Duration.Companion.days
 import kotlin.time.Duration.Companion.hours
 import kotlin.time.Duration.Companion.minutes
 import kotlin.time.Duration.Companion.seconds
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.MutableSharedFlow
 import kotlinx.coroutines.test.TestScope
@@ -101,7 +104,7 @@ internal class GetCachedHomePageUiDataUCRobot {
     fun itemShouldNotBeNull() = apply {
         item.fold(
             ifLeft = { 1 shouldBe 2 },
-            ifRight = { it.shouldNotBeNull() }
+            ifRight = { it.shouldNotBeNull() },
         )
     }
 
@@ -181,11 +184,11 @@ internal class GetCachedHomePageUiDataUCRobot {
 
         val last7DaysStats = Last7DaysStats(
             timeSpentToday = Time.ZERO,
-            projectsWorkedOn = listOf(),
-            weeklyTimeSpent = mapOf(),
+            projectsWorkedOn = listOf<Project>().toImmutableList(),
+            weeklyTimeSpent = mapOf<LocalDate, Time>().toImmutableMap(),
             mostUsedLanguage = "",
             mostUsedEditor = "",
-            mostUsedOs = ""
+            mostUsedOs = "",
 
         )
 
