@@ -30,10 +30,12 @@ import com.jacob.wakatimeapp.core.ui.theme.cardSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 internal fun RecentProjects(
-    projectsWorkedOn: List<Project>,
+    projectsWorkedOn: ImmutableList<Project>,
 ) = Column(
     modifier = Modifier.fillMaxWidth(),
 ) {
@@ -57,13 +59,12 @@ internal fun RecentProjects(
 
 @Composable
 private fun RecentProjectList(
-    projects: List<Project>,
+    projects: ImmutableList<Project>,
 ) = Column(
     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
 ) {
-    projects.take(n = 3)
-        .map { ProjectCardItem(it) }
+    projects.take(n = 3).map { ProjectCardItem(it) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
@@ -114,7 +115,7 @@ private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
                 Project(Time(10, 9, 0f), "Project 1", 75.0),
                 Project(Time(100, 26, 0f), "Project 2", 20.0),
                 Project(Time(5, 15, 0f), "Project 3", 10.0),
-            ),
+            ).toImmutableList(),
         )
     }
 }

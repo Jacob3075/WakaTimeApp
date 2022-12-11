@@ -11,6 +11,7 @@ import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO.Data
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.toLocalDate
 
 fun GetStatsForRangeResDTO.toModel() = Stats(
@@ -36,6 +37,7 @@ private fun getDailyStatsFromDto(data: List<Data>) = data.map {
         date = it.range.date.toLocalDate(),
         projectsWorkedOn = it.projects
             .filterNot(ProjectDTO::isUnknownProject)
-            .map(ProjectDTO::toModel),
+            .map(ProjectDTO::toModel)
+            .toImmutableList(),
     )
 }

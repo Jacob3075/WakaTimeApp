@@ -10,8 +10,9 @@ dataStore = "1.0.0"
 
 kotlin = "1.7.20" # https://kotlinlang.org/
 kotlinxCoroutines = "1.6.4"
-kotlinxDatetime = "0.4.0"
 kotlinxSerializationJson = "1.4.1"
+kotlinxDatetime = "0.4.0"
+kotlinxCollectionsImmutable = "0.3.5"
 ksp = "1.7.20-1.0.8" # https://goo.gle/ksp
 
 composeBom = "2022.11.00"
@@ -70,8 +71,9 @@ kotlin-plugin-serialization = { module = "org.jetbrains.kotlin:kotlin-serializat
 kotlin-stdlib = { module = "org.jetbrains.kotlin:kotlin-stdlib-jdk8", version.ref = "kotlin" }
 kotlinx-coroutines-android = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-android", version.ref = "kotlinxCoroutines" }
 kotlinx-test-coroutines = { module = "org.jetbrains.kotlinx:kotlinx-coroutines-test", version.ref = "kotlinxCoroutines" }
-kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
 kotlinx-serialization-json = { module = "org.jetbrains.kotlinx:kotlinx-serialization-json", version.ref = "kotlinxSerializationJson" }
+kotlinx-datetime = { module = "org.jetbrains.kotlinx:kotlinx-datetime", version.ref = "kotlinxDatetime" }
+kotlinx-collections-immutable = { module = "org.jetbrains.kotlinx:kotlinx-collections-immutable-jvm", version.ref = "kotlinxCollectionsImmutable" }
 ksp = { module = "com.google.devtools.ksp:symbol-processing-api", version.ref = "ksp" }
 
 androidx-compose-bom = { module = "androidx.compose:compose-bom", version.ref = "composeBom" }
