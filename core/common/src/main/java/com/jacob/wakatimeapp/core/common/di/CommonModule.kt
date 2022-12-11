@@ -7,6 +7,7 @@ import dagger.hilt.InstallIn
 import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
 import net.openid.appauth.AuthorizationService
 
@@ -16,7 +17,7 @@ object CommonModule {
     @Singleton
     @Provides
     @Suppress("InjectDispatcher")
-    fun provideCoroutineContext() = Dispatchers.IO
+    fun provideCoroutineContext(): CoroutineContext = Dispatchers.IO
 
     @Singleton
     @Provides

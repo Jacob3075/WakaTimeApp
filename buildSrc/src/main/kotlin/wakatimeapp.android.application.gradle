@@ -48,7 +48,7 @@ android {
     buildFeatures { compose = true }
     composeOptions { kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get() }
 
-    // Compose Destination config
+    // Compose Destination config (https://github.com/raamcosta/compose-destinations/issues/314)
     applicationVariants.all { variant ->
         kotlin.sourceSets {
             getByName(variant.name) {
