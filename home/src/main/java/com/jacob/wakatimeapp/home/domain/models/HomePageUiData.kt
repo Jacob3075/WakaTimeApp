@@ -4,6 +4,9 @@ import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -26,8 +29,8 @@ data class CachedHomePageUiData(
 @Serializable
 data class Last7DaysStats(
     val timeSpentToday: Time,
-    val projectsWorkedOn: List<Project>,
-    val weeklyTimeSpent: Map<LocalDate, Time>,
+    val projectsWorkedOn: ImmutableList<Project>,
+    val weeklyTimeSpent: ImmutableMap<LocalDate, Time>,
     val mostUsedLanguage: String,
     val mostUsedEditor: String,
     val mostUsedOs: String,
@@ -90,7 +93,7 @@ data class Streak(
 fun WeeklyStats.toLoadedStateData() = Last7DaysStats(
     timeSpentToday = todaysStats.timeSpent,
     projectsWorkedOn = todaysStats.projectsWorkedOn,
-    weeklyTimeSpent = dailyStats.associate { it.date to it.timeSpent },
+    weeklyTimeSpent = dailyStats.associate { it.date to it.timeSpent }.toImmutableMap(),
     mostUsedLanguage = todaysStats.mostUsedLanguage,
     mostUsedEditor = todaysStats.mostUsedEditor,
     mostUsedOs = todaysStats.mostUsedOs,

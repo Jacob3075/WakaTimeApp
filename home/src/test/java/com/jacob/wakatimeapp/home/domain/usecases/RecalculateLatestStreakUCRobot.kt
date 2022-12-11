@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
@@ -13,6 +14,7 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
@@ -57,11 +59,11 @@ internal class RecalculateLatestStreakUCRobot {
         fun createDailyStats(size: Int, days: List<Int>, end: LocalDate) = List(size) {
             DailyStats(
                 timeSpent = if (it in days) Time.fromDecimal(1f) else Time.ZERO,
-                projectsWorkedOn = emptyList(),
+                projectsWorkedOn = emptyList<Project>().toImmutableList(),
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
                 mostUsedOs = "",
-                date = end.plus(it, DateTimeUnit.DAY)
+                date = end.plus(it, DateTimeUnit.DAY),
             )
         }
     }

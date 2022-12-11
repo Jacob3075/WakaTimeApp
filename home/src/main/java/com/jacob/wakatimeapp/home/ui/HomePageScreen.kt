@@ -22,6 +22,7 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
@@ -36,7 +37,10 @@ import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
+import kotlinx.collections.immutable.toImmutableList
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 @Composable
 fun HomePageScreen(
@@ -180,8 +184,8 @@ private class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomeP
         HomePageViewState.Loaded(
             last7DaysStats = Last7DaysStats(
                 timeSpentToday = Time.ZERO,
-                projectsWorkedOn = listOf(),
-                weeklyTimeSpent = mapOf(),
+                projectsWorkedOn = listOf<Project>().toImmutableList(),
+                weeklyTimeSpent = mapOf<LocalDate, Time>().toImmutableMap(),
                 mostUsedLanguage = "",
                 mostUsedEditor = "",
                 mostUsedOs = "",

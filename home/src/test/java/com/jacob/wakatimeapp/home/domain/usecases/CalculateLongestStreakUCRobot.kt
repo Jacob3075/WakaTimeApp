@@ -5,6 +5,7 @@ import arrow.core.right
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
@@ -19,6 +20,7 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestDispatcher
@@ -53,7 +55,7 @@ internal class CalculateLongestStreakUCRobot {
                     get() = TimeZone.UTC
 
                 override fun now() = currentInstant
-            }
+            },
         )
     }
 
@@ -70,7 +72,7 @@ internal class CalculateLongestStreakUCRobot {
     fun mockGetUserDetails(userCreatedAt: LocalDate? = null) = apply {
         coEvery { mockAuthDataStore.getUserDetails() } returns flowOf(
             userCreatedAt?.let { USER_DETAILS.copy(createdAt = it) }
-                ?: USER_DETAILS
+                ?: USER_DETAILS,
         )
     }
 
@@ -96,7 +98,7 @@ internal class CalculateLongestStreakUCRobot {
         coEvery {
             mockHomePageNetworkData.getStatsForRange(
                 start ?: any(),
-                end ?: any()
+                end ?: any(),
             )
         } returns data
     }
@@ -106,7 +108,7 @@ internal class CalculateLongestStreakUCRobot {
             coVerify(exactly = count) {
                 mockHomePageNetworkData.getStatsForRange(
                     start ?: any(),
-                    end ?: any()
+                    end ?: any(),
                 )
             }
         }
@@ -125,31 +127,31 @@ internal class CalculateLongestStreakUCRobot {
             durationsSliceBy = "",
             createdAt = LocalDate(2022, 1, 1),
             dateFormat = "",
-            photoUrl = ""
+            photoUrl = "",
         )
 
         val defaultCurrentInstant = Instant.parse("2022-10-01T00:00:00Z")
 
         val dailyStats = DailyStats(
             timeSpent = Time.fromDecimal(1f),
-            projectsWorkedOn = listOf(),
+            projectsWorkedOn = listOf<Project>().toImmutableList(),
             mostUsedLanguage = "",
             mostUsedEditor = "",
             mostUsedOs = "",
-            date = LocalDate(2022, 1, 1)
+            date = LocalDate(2022, 1, 1),
         )
 
         val stats = Stats(
             totalTime = Time.ZERO,
             dailyStats = List(30) {
                 dailyStats.copy(
-                    date = LocalDate(2022, 1, it + 1)
+                    date = LocalDate(2022, 1, it + 1),
                 )
             },
             range = StatsRange(
                 startDate = LocalDate(1, 1, 1),
                 endDate = LocalDate(1, 1, 1),
-            )
+            ),
         )
     }
 }

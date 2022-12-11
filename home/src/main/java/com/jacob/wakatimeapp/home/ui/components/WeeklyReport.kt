@@ -37,11 +37,15 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import kotlinx.collections.immutable.ImmutableCollection
+import kotlinx.collections.immutable.ImmutableMap
+import kotlinx.collections.immutable.ImmutableSet
+import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.LocalDate
 
 @Composable
 fun WeeklyReport(
-    weeklyTimeSpent: Map<LocalDate, Time>,
+    weeklyTimeSpent: ImmutableMap<LocalDate, Time>,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = modifier.fillMaxWidth(),
@@ -64,7 +68,7 @@ fun WeeklyReport(
 }
 
 @Composable
-private fun WeeklyReportChart(weeklyTimeSpent: Map<LocalDate, Time>) {
+private fun WeeklyReportChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>) {
     val cardShape = RoundedCornerShape(percent = 10)
     val colorScheme = MaterialTheme.colorScheme
 
@@ -105,15 +109,15 @@ private fun WeeklyReportChart(weeklyTimeSpent: Map<LocalDate, Time>) {
 }
 
 @Composable
-private fun rememberLabels(days: Set<LocalDate>): Map<Int, String> = remember {
+private fun rememberLabels(days: ImmutableSet<LocalDate>): ImmutableMap<Int, String> = remember {
     days.mapIndexed { index, value ->
         index to value.getDisplayNameForDay()
-    }
-        .toMap()
+    }.toMap()
+        .toImmutableMap()
 }
 
 @Composable
-private fun rememberBarData(weeklyStats: Collection<Time>, colorScheme: ColorScheme) =
+private fun rememberBarData(weeklyStats: ImmutableCollection<Time>, colorScheme: ColorScheme) =
     remember(key1 = weeklyStats) {
         val onSurface = colorScheme.onSurface.toArgb()
         val barColor = colorScheme.primary.toArgb()
@@ -135,7 +139,7 @@ private fun rememberBarData(weeklyStats: Collection<Time>, colorScheme: ColorSch
         BarData(barDataSet).apply { barWidth = 0.3f }
     }
 
-private fun RoundedBarChart.configureAxis(labels: Map<Int, String>, onSurface: Int) {
+private fun RoundedBarChart.configureAxis(labels: ImmutableMap<Int, String>, onSurface: Int) {
     xAxis.apply {
         setDrawGridLines(false)
         textColor = onSurface
@@ -170,11 +174,11 @@ private fun RoundedBarChart.configureChartProperties() {
 @Composable
 private fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
-        WeeklyReport(emptyMap())
+        WeeklyReport(emptyMap<LocalDate, Time>().toImmutableMap())
     }
 }
 
-private class XAxisDayFormatter(private val labels: Map<Int, String>) : ValueFormatter() {
+private class XAxisDayFormatter(private val labels: ImmutableMap<Int, String>) : ValueFormatter() {
     /**
      * Used to draw axis labels, calls [.getFormattedValue] by default.
      *
