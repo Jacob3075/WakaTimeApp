@@ -17,11 +17,13 @@ dependencyResolutionManagement {
     }
 }
 rootProject.name = "WakatimeApp"
+
 include(":app")
+include(":login")
+include(":home")
+include(":project-list")
+include(":details")
 include(":core")
 include(":core:models")
 include(":core:common")
 include(":core:ui")
-include(":details")
-include(":home")
-include(":login")

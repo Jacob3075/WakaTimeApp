@@ -17,9 +17,10 @@ dependencies {
     implementation(project(":core:common"))
     implementation(project(":core:ui"))
 
-    implementation(project(":details"))
-    implementation(project(":home"))
     implementation(project(":login"))
+    implementation(project(":home"))
+    implementation(project(":project-list"))
+    implementation(project(":details"))
 
     implementation(libs.androidx.core.splashscreen)
 
