@@ -21,7 +21,7 @@ rootProject.name = "WakatimeApp"
 include(":app")
 include(":login")
 include(":home")
-include(":project-list")
+include(":search")
 include(":details")
 include(":core")
 include(":core:models")

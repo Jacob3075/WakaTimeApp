@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.projectlist.data.network
+package com.jacob.wakatimeapp.search.data.network
 
 import arrow.core.Either
 import arrow.core.left
@@ -6,9 +6,9 @@ import arrow.core.right
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.NetworkErrors
-import com.jacob.wakatimeapp.projectlist.data.network.dto.ProjectListDTO
-import com.jacob.wakatimeapp.projectlist.data.network.mappers.ProjectDetails
-import com.jacob.wakatimeapp.projectlist.data.network.mappers.toModel
+import com.jacob.wakatimeapp.search.data.network.dto.ProjectListDTO
+import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
+import com.jacob.wakatimeapp.search.data.network.mappers.toModel
 import java.net.SocketTimeoutException
 import java.net.UnknownHostException
 import javax.inject.Inject
@@ -19,15 +19,15 @@ import retrofit2.Response
 import timber.log.Timber
 
 @Singleton
-internal class ProjectListNetworkData @Inject constructor(
+internal class SearchProjectNetworkData @Inject constructor(
     private val authTokenProvider: AuthTokenProvider,
-    private val projectListAPI: ProjectListAPI,
+    private val searchProjectAPI: SearchProjectAPI,
 ) {
     private val token
         get() = runBlocking { authTokenProvider.getFreshToken().first() }
 
     suspend fun getAllProjects(): Either<Error, List<ProjectDetails>> = try {
-        projectListAPI.getAllProjects("Bearer $token", 0)
+        searchProjectAPI.getAllProjects("Bearer $token", 0)
             .checkResponse()
             .map(ProjectListDTO::toModel)
     } catch (exception: Exception) {

@@ -1,6 +1,6 @@
-package com.jacob.wakatimeapp.projectlist
+package com.jacob.wakatimeapp.search
 
-import com.jacob.wakatimeapp.projectlist.data.network.ProjectListAPI
+import com.jacob.wakatimeapp.search.data.network.SearchProjectAPI
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -10,9 +10,9 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
-object ProjectListModule {
+object SearchProjectModule {
     @Singleton
     @Provides
-    internal fun provideProjectListAPI(retrofit: Retrofit) =
-        retrofit.create(ProjectListAPI::class.java)
+    internal fun provideSearchProjectAPI(retrofit: Retrofit) =
+        retrofit.create(SearchProjectAPI::class.java)
 }

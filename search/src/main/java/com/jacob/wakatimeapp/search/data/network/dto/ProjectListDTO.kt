@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.projectlist.data.network.dto
+package com.jacob.wakatimeapp.search.data.network.dto
 
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable

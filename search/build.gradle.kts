@@ -3,7 +3,7 @@ plugins {
 }
 
 android {
-    namespace = "com.jacob.wakatimeapp.project_list"
+    namespace = "com.jacob.wakatimeapp.search"
 }
 
 dependencies {

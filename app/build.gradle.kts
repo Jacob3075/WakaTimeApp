@@ -19,7 +19,7 @@ dependencies {
 
     implementation(project(":login"))
     implementation(project(":home"))
-    implementation(project(":project-list"))
+    implementation(project(":search"))
     implementation(project(":details"))
 
     implementation(libs.androidx.core.splashscreen)
