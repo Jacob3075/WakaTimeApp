@@ -9,6 +9,7 @@ import com.jacob.wakatimeapp.search.domain.models.ProjectListWithPageNumber
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
 import io.mockk.coEvery
+import io.mockk.coVerify
 import io.mockk.mockk
 
 internal class GetAllProjectsUCRobot {
@@ -32,8 +33,16 @@ internal class GetAllProjectsUCRobot {
         result shouldBe Right(emptyList())
     }
 
+    fun resultShouldBe(data: Either<Error, List<ProjectDetails>>) = apply {
+        result shouldBe data
+    }
+
     fun mockSearchProject(data: Either<Error, ProjectListWithPageNumber>, page: Int = 1) = apply {
         coEvery { mockSearchProjectNetworkData.getProjects(page) } returns data
+    }
+
+    fun verifySearchProject(page: Int = 1, count: Int = 1) = apply {
+        coVerify(exactly = count) { mockSearchProjectNetworkData.getProjects(page) }
     }
 
     companion object {
@@ -41,6 +50,10 @@ internal class GetAllProjectsUCRobot {
             emptyList(),
             1,
             1,
+        )
+
+        val projectDetails = ProjectDetails(
+            name = "name",
         )
     }
 }
