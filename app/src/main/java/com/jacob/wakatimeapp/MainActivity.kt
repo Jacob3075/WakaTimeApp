@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp
 
+import android.annotation.SuppressLint
 import android.app.Activity
 import android.content.Context
 import android.content.ContextWrapper
@@ -33,6 +34,7 @@ class MainActivity : AppCompatActivity() {
      *
      * @see [Issue](https://github.com/raamcosta/compose-destinations/issues/314)
      */
+    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
@@ -48,7 +50,7 @@ class MainActivity : AppCompatActivity() {
                     DestinationsNavHost(
                         navGraph = NavGraphs.root,
                         dependenciesContainerBuilder = {
-                            dependency(ApplicationNavigator(navController))
+                            dependency(ApplicationNavigator(destinationsNavigator))
                             dependency(snackbarHostState)
                         },
                     )
