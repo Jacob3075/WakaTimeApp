@@ -10,7 +10,7 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.currentDayInstant
@@ -39,7 +39,7 @@ import kotlinx.datetime.TimeZone
 internal class GetCachedHomePageUiDataUCRobot {
     private lateinit var useCase: GetCachedHomePageUiDataUC
 
-    private var receiveTurbine: ReceiveTurbine<Either<Error, CachedHomePageUiData?>>? = null
+    private var receiveTurbine: ReceiveTurbine<Either<Error, HomePageUiData?>>? = null
 
     private val mockHomePageCache: HomePageCache = mockk()
     private val mockAuthDataStore: AuthDataStore = mockk()
@@ -86,7 +86,7 @@ internal class GetCachedHomePageUiDataUCRobot {
     }
 
     context (ItemAssertionContext)
-    fun itemShouldBe(expected: Either<Error, CachedHomePageUiData?>) = apply {
+    fun itemShouldBe(expected: Either<Error, HomePageUiData?>) = apply {
         item shouldBe expected
     }
 
@@ -210,6 +210,6 @@ internal class GetCachedHomePageUiDataUCRobot {
     }
 
     interface ItemAssertionContext {
-        val item: Either<Error, CachedHomePageUiData?>
+        val item: Either<Error, HomePageUiData?>
     }
 }

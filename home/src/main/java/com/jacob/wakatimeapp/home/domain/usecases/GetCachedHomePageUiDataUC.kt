@@ -6,7 +6,7 @@ import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.InstantProvider
-import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC.CacheValidity.DEFAULT
 import javax.inject.Inject
@@ -24,7 +24,7 @@ internal class GetCachedHomePageUiDataUC @Inject constructor(
 ) {
 
     /**
-     * @return [CachedHomePageUiData] if there is data for the current day in the cache, otherwise null
+     * @return [HomePageUiData] if there is data for the current day in the cache, otherwise null
      */
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
         combine(
@@ -36,12 +36,12 @@ internal class GetCachedHomePageUiDataUC @Inject constructor(
         ) { userDetails, last7DaysStatsEither, currentStreakEither, longestStreakEither, lastRequestTime ->
             if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
 
-            either<Error, CachedHomePageUiData?> {
+            either<Error, HomePageUiData?> {
                 val last7DaysStats = last7DaysStatsEither.bind() ?: return@either null
                 val currentStreak = currentStreakEither.bind()
                 val longestStreak = longestStreakEither.bind()
 
-                CachedHomePageUiData(
+                HomePageUiData(
                     last7DaysStats = last7DaysStats,
                     userDetails = userDetails.toHomePageUserDetails(),
                     currentStreak = currentStreak,

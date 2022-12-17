@@ -5,7 +5,7 @@ import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.home.domain.models.CachedHomePageUiData
+import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
@@ -23,7 +23,7 @@ import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
 
 @OptIn(ExperimentalCoroutinesApi::class)
-internal class GetCachedHomePageUiDataUCTest {
+internal class GetHomePageUiDataUCTest {
     private val robot = GetCachedHomePageUiDataUCRobot()
 
     @Test
@@ -121,7 +121,7 @@ internal class GetCachedHomePageUiDataUCTest {
     @Test
     internal fun `when last 7 days stats sends multiple emissions, then use case sends multiple values`() =
         runTest {
-            val cachedData = CachedHomePageUiData(
+            val cachedData = HomePageUiData(
                 userDetails = userDetails.toHomePageUserDetails(),
                 last7DaysStats = last7DaysStats,
                 currentStreak = currentStreak,
@@ -187,7 +187,7 @@ internal class GetCachedHomePageUiDataUCTest {
 
     private suspend fun GetCachedHomePageUiDataUCRobot.`when new data is sent, then new item should be emitted with correct values for previous data`(
         newData: Either<Error, Last7DaysStats>,
-        result: CachedHomePageUiData,
+        result: HomePageUiData,
     ) = apply {
         sendLast7DaysStats(newData)
             .withNextItem {
@@ -199,7 +199,7 @@ internal class GetCachedHomePageUiDataUCTest {
 
     private suspend fun GetCachedHomePageUiDataUCRobot.`when new data is sent, then new item should be emitted with correct values for previous data`(
         newData: Instant,
-        result: CachedHomePageUiData,
+        result: HomePageUiData,
     ) = apply {
         sendLastRequestTime(newData)
             .withNextItem {
