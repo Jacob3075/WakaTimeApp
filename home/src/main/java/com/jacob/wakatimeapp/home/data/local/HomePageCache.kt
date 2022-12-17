@@ -10,6 +10,9 @@ import arrow.core.left
 import arrow.core.right
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
+import com.jacob.wakatimeapp.home.data.local.entities.Last7DaysStatsEntity
+import com.jacob.wakatimeapp.home.data.local.mappers.toEntity
+import com.jacob.wakatimeapp.home.data.local.mappers.toModel
 import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
@@ -43,7 +46,8 @@ class HomePageCache @Inject constructor(
     }
 
     fun getLast7DaysStats() = dataStore.data.map {
-        it[KEY_LAST_7_DAYS_STATS]?.let<String, Last7DaysStats>(json::decodeFromString).right()
+        it[KEY_LAST_7_DAYS_STATS]?.let<String, Last7DaysStatsEntity>(json::decodeFromString)
+            ?.toModel().right()
     }.catch<Either<Error, Last7DaysStats?>> {
         Timber.e(it)
         emit(DatabaseError.UnknownError(it.message!!, it).left())
@@ -51,7 +55,7 @@ class HomePageCache @Inject constructor(
 
     suspend fun updateLast7DaysStats(homePageUiData: Last7DaysStats) {
         dataStore.edit {
-            it[KEY_LAST_7_DAYS_STATS] = json.encodeToString(homePageUiData)
+            it[KEY_LAST_7_DAYS_STATS] = json.encodeToString(homePageUiData.toEntity())
         }
     }
 
