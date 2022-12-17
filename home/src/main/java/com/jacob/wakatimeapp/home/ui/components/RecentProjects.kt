@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -36,6 +37,7 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun RecentProjects(
     projectsWorkedOn: ImmutableList<Project>,
+    onClick: () -> Unit,
 ) = Column(
     modifier = Modifier.fillMaxWidth(),
 ) {
@@ -50,6 +52,7 @@ internal fun RecentProjects(
             text = "See All",
             color = MaterialTheme.colorScheme.primary,
             style = typography.sectionSubtitle,
+            modifier = Modifier.clickable(onClick = onClick),
         )
     }
     RecentProjectList(
@@ -116,6 +119,7 @@ private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
                 Project(Time(100, 26, 0f), "Project 2", 20.0),
                 Project(Time(5, 15, 0f), "Project 3", 10.0),
             ).toImmutableList(),
+            onClick = {},
         )
     }
 }
