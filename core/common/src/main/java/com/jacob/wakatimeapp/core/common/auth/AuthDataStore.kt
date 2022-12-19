@@ -7,19 +7,22 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import com.jacob.wakatimeapp.core.common.utils.log
 import com.jacob.wakatimeapp.core.models.UserDetails
 import javax.inject.Inject
+import javax.inject.Singleton
 import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
+import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
 import kotlinx.serialization.encodeToString
 import kotlinx.serialization.json.Json
 import net.openid.appauth.AuthState
 
+@Singleton
 class AuthDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val json: Json,
 ) {
-    fun getUserDetails() = dataStore.data.map { preferences ->
+    val userDetails = dataStore.data.map { preferences ->
         preferences[KEY_USER_DETAILS]?.let<String, UserDetails>(json::decodeFromString)
     }
         .filterNotNull()
@@ -32,15 +35,12 @@ class AuthDataStore @Inject constructor(
         }
     }
 
-    fun getAuthState() = dataStore.data.map {
-        val authStateString = it[KEY_AUTH_STATE] ?: ""
-        when {
-            authStateString.isEmpty() -> AuthState()
-            else -> authStateString.let(AuthState::jsonDeserialize)
-        }
+    suspend fun getAuthState() = dataStore.data.map {
+        it[KEY_AUTH_STATE]?.let(AuthState::jsonDeserialize) ?: AuthState()
     }
-        .distinctUntilChanged()
         .log("authState")
+        .firstOrNull()
+        ?: AuthState()
 
     suspend fun updateAuthState(newAuthState: AuthState?) {
         dataStore.edit {

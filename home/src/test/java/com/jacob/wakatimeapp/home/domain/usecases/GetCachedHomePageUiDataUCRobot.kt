@@ -135,7 +135,7 @@ internal class GetCachedHomePageUiDataUCRobot {
 
     fun mockAllFunctions() = apply {
         coEvery { mockHomePageCache.getLast7DaysStats() } returns last7DaysStatsFlow
-        coEvery { mockAuthDataStore.getUserDetails() } returns userDetailsFlow
+        coEvery { mockAuthDataStore.userDetails } returns userDetailsFlow
         coEvery { mockHomePageCache.getLastRequestTime() } returns lastRequestTimeFlow
         coEvery { mockHomePageCache.getCurrentStreak() } returns currentStreakFlow
         coEvery { mockHomePageCache.getLongestStreak() } returns longestStreakFlow

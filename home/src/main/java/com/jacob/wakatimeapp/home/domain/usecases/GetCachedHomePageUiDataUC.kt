@@ -28,7 +28,7 @@ internal class GetCachedHomePageUiDataUC @Inject constructor(
      */
     operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
         combine(
-            authDataStore.getUserDetails(),
+            authDataStore.userDetails,
             homePageCache.getLast7DaysStats(),
             homePageCache.getCurrentStreak(),
             homePageCache.getLongestStreak(),

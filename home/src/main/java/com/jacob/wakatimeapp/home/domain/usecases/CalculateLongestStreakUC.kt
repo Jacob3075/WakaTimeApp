@@ -34,7 +34,7 @@ internal class CalculateLongestStreakUC @Inject constructor(
     private val ioScope = CoroutineScope(dispatcher)
 
     suspend operator fun invoke(batchSize: DatePeriod = DEFAULT_BATCH_SIZE) = either {
-        val userDetails = authDataStore.getUserDetails().first()
+        val userDetails = authDataStore.userDetails.first()
         val cachedLongestStreak = homePageCache.getLongestStreak().first().bind()
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
