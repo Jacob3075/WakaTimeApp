@@ -4,9 +4,10 @@ import androidx.datastore.core.DataStore
 import androidx.datastore.preferences.core.Preferences
 import androidx.datastore.preferences.core.edit
 import androidx.datastore.preferences.core.stringPreferencesKey
+import com.jacob.wakatimeapp.core.common.utils.log
 import com.jacob.wakatimeapp.core.models.UserDetails
 import javax.inject.Inject
-import kotlinx.coroutines.flow.Flow
+import kotlinx.coroutines.flow.distinctUntilChanged
 import kotlinx.coroutines.flow.filterNotNull
 import kotlinx.coroutines.flow.map
 import kotlinx.serialization.decodeFromString
@@ -18,11 +19,12 @@ class AuthDataStore @Inject constructor(
     private val dataStore: DataStore<Preferences>,
     private val json: Json,
 ) {
-    fun getUserDetails(): Flow<UserDetails> =
-        dataStore.data.map { preferences ->
-            preferences[KEY_USER_DETAILS]?.let<String, UserDetails>(json::decodeFromString)
-        }
-            .filterNotNull()
+    fun getUserDetails() = dataStore.data.map { preferences ->
+        preferences[KEY_USER_DETAILS]?.let<String, UserDetails>(json::decodeFromString)
+    }
+        .filterNotNull()
+        .distinctUntilChanged()
+        .log("userDetails")
 
     suspend fun updateUserDetails(userDetails: UserDetails) {
         dataStore.edit {
@@ -30,13 +32,15 @@ class AuthDataStore @Inject constructor(
         }
     }
 
-    fun getAuthState(): Flow<AuthState> = dataStore.data.map {
+    fun getAuthState() = dataStore.data.map {
         val authStateString = it[KEY_AUTH_STATE] ?: ""
         when {
             authStateString.isEmpty() -> AuthState()
             else -> authStateString.let(AuthState::jsonDeserialize)
         }
     }
+        .distinctUntilChanged()
+        .log("authState")
 
     suspend fun updateAuthState(newAuthState: AuthState?) {
         dataStore.edit {
