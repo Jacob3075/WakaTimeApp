@@ -13,7 +13,7 @@ class ApplicationNavigator(private val navigator: DestinationsNavigator) :
     SearchProjectsNavigator by SearchPageNavigatorImpl(navigator)
 
 class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : LoginPageNavigator {
-    override fun toHomePage() = navigator.navigate(HomePageDestination)
+    override fun toHomePage() = navigator.navigate(SearchProjectsDestination)
 }
 
 class HomePageNavigatorImpl(private val navigator: DestinationsNavigator) : HomePageNavigator {

@@ -1,5 +1,8 @@
 package com.jacob.wakatimeapp.search.ui
 
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
@@ -8,9 +11,11 @@ import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Error
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loaded
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loading
+import com.jacob.wakatimeapp.search.ui.components.ProjectsList
 
 @Composable
 fun SearchProjectsScreen(
@@ -25,13 +30,13 @@ fun SearchProjectsScreen(
 @Composable
 private fun SearchProjectsScreen(
     navigator: SearchProjectsNavigator,
-    viewModel: SearchProjectsViewModel = hiltViewModel(),
     modifier: Modifier = Modifier,
+    viewModel: SearchProjectsViewModel = hiltViewModel(),
 ) {
     val state by viewModel.searchProjectsState.collectAsState()
 
-    when (state) {
-        is Loaded -> TODO()
+    when (val stateInstance = state) {
+        is Loaded -> SearchProjectsLoaded(stateInstance, modifier)
         Loading -> WtaAnimation(
             animation = MaterialTheme.assets.animations.randomLoadingAnimation,
             text = "Loading..",
@@ -39,7 +44,17 @@ private fun SearchProjectsScreen(
 
         is Error -> WtaAnimation(
             animation = MaterialTheme.assets.animations.randomErrorAnimation,
-            text = (state as Error).error.message,
+            text = stateInstance.error.message,
         )
+    }
+}
+
+@Composable
+private fun SearchProjectsLoaded(state: Loaded, modifier: Modifier) {
+    Column(
+        modifier = modifier.statusBarsPadding()
+            .padding(horizontal = MaterialTheme.spacing.medium),
+    ) {
+        ProjectsList(state.projects)
     }
 }
