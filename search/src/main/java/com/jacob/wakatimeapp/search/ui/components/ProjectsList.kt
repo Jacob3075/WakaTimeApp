@@ -16,15 +16,10 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.text.input.TextFieldValue
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.cardHeader
@@ -33,16 +28,7 @@ import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun ProjectsList(projects: List<ProjectDetails>, modifier: Modifier = Modifier) {
-    var textState by remember { mutableStateOf(TextFieldValue("")) }
-    val items = remember(textState) {
-        projects.filter {
-            it.name.contains(
-                textState.text.trim(),
-                ignoreCase = !textState.text.any(Char::isUpperCase),
-            )
-        }
-    }
+internal fun ProjectsList(projects: List<ProjectDetails>, modifier: Modifier = Modifier) =
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
@@ -51,12 +37,10 @@ internal fun ProjectsList(projects: List<ProjectDetails>, modifier: Modifier = M
             bottom = MaterialTheme.spacing.small,
         ),
     ) {
-        item { SearchBar(value = textState, onValueChange = { textState = it }) }
-        items(items, key = { it.name }) { project ->
+        items(projects, key = { it.name }) { project ->
             ProjectListItem(project, modifier = Modifier.animateItemPlacement())
         }
     }
-}
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
