@@ -33,8 +33,7 @@ internal fun ProjectsList(projects: List<ProjectDetails>, modifier: Modifier = M
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
         contentPadding = PaddingValues(
-            top = MaterialTheme.spacing.small,
-            bottom = MaterialTheme.spacing.small,
+            bottom = MaterialTheme.spacing.sMedium,
         ),
     ) {
         items(projects, key = { it.name }) { project ->

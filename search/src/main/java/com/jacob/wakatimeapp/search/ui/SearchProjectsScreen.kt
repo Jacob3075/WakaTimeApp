@@ -1,6 +1,8 @@
 package com.jacob.wakatimeapp.search.ui
 
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.MaterialTheme
@@ -41,7 +43,7 @@ private fun SearchProjectsScreen(
         is Loaded -> SearchProjectsLoaded(
             stateInstance,
             modifier,
-            updateSearchQuery = viewModel::updateSearchQuery
+            updateSearchQuery = viewModel::updateSearchQuery,
         )
 
         Loading -> WtaAnimation(
@@ -64,12 +66,16 @@ private fun SearchProjectsLoaded(
 ) {
     Column(
         modifier = modifier.statusBarsPadding()
-            .padding(horizontal = MaterialTheme.spacing.medium),
+            .padding(
+                horizontal = MaterialTheme.spacing.medium,
+            ),
     ) {
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         SearchBar(
             value = state.searchQuery,
             onValueChange = updateSearchQuery,
         )
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         ProjectsList(state.filteredProjects)
     }
 }
