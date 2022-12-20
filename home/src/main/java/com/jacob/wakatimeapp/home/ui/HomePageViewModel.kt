@@ -2,7 +2,9 @@ package com.jacob.wakatimeapp.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import arrow.core.continuations.either
+import com.jacob.wakatimeapp.core.common.utils.log
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC
@@ -15,7 +17,6 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import timber.log.Timber
 
 @HiltViewModel
 internal class HomePageViewModel @Inject constructor(
@@ -33,32 +34,40 @@ internal class HomePageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch(ioDispatcher) {
-            getCachedHomePageUiDataUC().collect { eitherCachedData ->
-                either {
-                    val cachedData = eitherCachedData.bind()
-                    Timber.d("cachedData: $cachedData")
+            getCachedHomePageUiDataUC().log("cachedData")
+                .collect { eitherCachedData ->
+                    either {
+                        when (eitherCachedData) {
+                            is Either.Left ->
+                                _homePageState.value =
+                                    HomePageViewState.Error(eitherCachedData.value)
 
-                    when {
-                        cachedData == null -> updateCacheWithNewData().bind()
-                        cachedData.isStaleData -> {
-                            _homePageState.value = HomePageViewState.Loaded(
-                                last7DaysStats = cachedData.last7DaysStats,
-                                userDetails = cachedData.userDetails,
-                                longestStreak = cachedData.longestStreak,
-                                currentStreak = cachedData.currentStreak,
-                            )
-                            updateCacheWithNewData().bind()
+                            is Either.Right -> {
+                                val cachedData = eitherCachedData.value
+
+                                when {
+                                    cachedData == null -> updateCacheWithNewData().bind()
+                                    cachedData.isStaleData -> {
+                                        _homePageState.value = HomePageViewState.Loaded(
+                                            last7DaysStats = cachedData.last7DaysStats,
+                                            userDetails = cachedData.userDetails,
+                                            longestStreak = cachedData.longestStreak,
+                                            currentStreak = cachedData.currentStreak,
+                                        )
+                                        updateCacheWithNewData().bind()
+                                    }
+
+                                    else -> _homePageState.value = HomePageViewState.Loaded(
+                                        last7DaysStats = cachedData.last7DaysStats,
+                                        userDetails = cachedData.userDetails,
+                                        longestStreak = cachedData.longestStreak,
+                                        currentStreak = cachedData.currentStreak,
+                                    )
+                                }
+                            }
                         }
-
-                        else -> _homePageState.value = HomePageViewState.Loaded(
-                            last7DaysStats = cachedData.last7DaysStats,
-                            userDetails = cachedData.userDetails,
-                            longestStreak = cachedData.longestStreak,
-                            currentStreak = cachedData.currentStreak,
-                        )
                     }
-                }.tapLeft { _homePageState.value = HomePageViewState.Error(it) }
-            }
+                }
         }
     }
 

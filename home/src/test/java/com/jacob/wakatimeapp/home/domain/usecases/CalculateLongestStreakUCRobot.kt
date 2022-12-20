@@ -70,7 +70,7 @@ internal class CalculateLongestStreakUCRobot {
     }
 
     fun mockGetUserDetails(userCreatedAt: LocalDate? = null) = apply {
-        coEvery { mockAuthDataStore.getUserDetails() } returns flowOf(
+        coEvery { mockAuthDataStore.userDetails } returns flowOf(
             userCreatedAt?.let { USER_DETAILS.copy(createdAt = it) }
                 ?: USER_DETAILS,
         )

@@ -6,6 +6,8 @@ import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.home.ui.HomePageScreen
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
 import com.jacob.wakatimeapp.login.ui.LoginPageScreen
+import com.jacob.wakatimeapp.search.ui.SearchProjectsNavigator
+import com.jacob.wakatimeapp.search.ui.SearchProjectsScreen
 import com.ramcosta.composedestinations.annotation.Destination
 import com.ramcosta.composedestinations.annotation.RootNavGraph
 
@@ -24,3 +26,8 @@ fun HomePage(
     navigator = homePageNavigator,
     snackbarHostState = scaffoldState,
 )
+
+@Composable
+@Destination
+fun SearchProjects(searchProjectsNavigator: SearchProjectsNavigator) =
+    SearchProjectsScreen(navigator = searchProjectsNavigator)

@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
-object SearchProjectModule {
+object SearchProjectsModule {
     @Singleton
     @Provides
     internal fun provideSearchProjectAPI(retrofit: Retrofit) =

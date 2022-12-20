@@ -74,6 +74,7 @@ private fun HomePageScreen(
     HomePageContent(
         viewState = viewState,
         toDetailsPage = navigator::toDetailsPage,
+        toSearchPage = navigator::toSearchPage,
         modifier = modifier,
     )
 }
@@ -82,6 +83,7 @@ private fun HomePageScreen(
 private fun HomePageContent(
     viewState: HomePageViewState,
     toDetailsPage: () -> Unit,
+    toSearchPage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     Column(modifier = modifier.statusBarsPadding()) {
@@ -90,6 +92,7 @@ private fun HomePageContent(
             is HomePageViewState.Loaded -> HomePageLoaded(
                 homePageViewState = viewState,
                 toDetailsPage = toDetailsPage,
+                toSearchPage = toSearchPage,
             )
 
             is HomePageViewState.Error -> HomePageError(viewState)
@@ -101,6 +104,7 @@ private fun HomePageContent(
 private fun HomePageLoaded(
     homePageViewState: HomePageViewState.Loaded,
     toDetailsPage: () -> Unit,
+    toSearchPage: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
     val spacing = MaterialTheme.spacing
@@ -125,7 +129,7 @@ private fun HomePageLoaded(
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
-        RecentProjects(homePageViewState.last7DaysStats.projectsWorkedOn)
+        RecentProjects(homePageViewState.last7DaysStats.projectsWorkedOn, onClick = toSearchPage)
         Spacer(modifier = Modifier.height(spacing.extraSmall))
 
         WeeklyReport(homePageViewState.last7DaysStats.weeklyTimeSpent)
@@ -148,14 +152,12 @@ private fun HomePageLoaded(
 private fun HomePageError(errorMessage: HomePageViewState.Error) = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomErrorAnimation,
     text = errorMessage.error.message,
-    animationTestTag = HomePageTestTags.ERROR_ANIMATION_ILLUSTRATION,
 )
 
 @Composable
 private fun HomePageLoading() = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomLoadingAnimation,
     text = "Loading..",
-    animationTestTag = HomePageTestTags.LOADING_ANIMATION_ILLUSTRATION,
 )
 
 @Preview(
@@ -174,7 +176,7 @@ private fun HomePageLoading() = WtaAnimation(
 private fun HomePagePreview(
     @PreviewParameter(HomePagePreviewProvider::class) viewState: HomePageViewState,
 ) = WakaTimeAppTheme {
-    HomePageContent(viewState = viewState, toDetailsPage = { })
+    HomePageContent(viewState = viewState, toDetailsPage = { }, toSearchPage = { })
 }
 
 private class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewState>(
