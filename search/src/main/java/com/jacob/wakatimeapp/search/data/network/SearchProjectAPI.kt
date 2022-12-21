@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.search.data.network
 
-import com.jacob.wakatimeapp.search.data.network.dto.ProjectListDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header
@@ -11,5 +11,5 @@ internal interface SearchProjectAPI {
     suspend fun getAllProjects(
         @Header("Authorization") token: String,
         @Query("page") pageNumber: Int,
-    ): Response<ProjectListDTO>
+    ): Response<ProjectDetailsDTO>
 }
