@@ -58,3 +58,17 @@ data class OperatingSystemDTO(
     val text: String,
     @SerialName("total_seconds") val totalSeconds: Double,
 )
+
+@Serializable
+data class EntityDTO(
+    val decimal: String,
+    val digital: String,
+    val hours: Int,
+    val minutes: Int,
+    val name: String,
+    val percent: Double,
+    val seconds: Int,
+    val text: String,
+    val type: String,
+    @SerialName("total_seconds") val totalSeconds: Double,
+)
