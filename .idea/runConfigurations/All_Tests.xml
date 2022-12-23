@@ -10,8 +10,7 @@
       </option>
       <option name="taskNames">
         <list>
-          <option value=":home:testDebugUnitTest" />
-          <option value=":search:testDebugUnitTest" />
+          <option value="testDebugUnitTest" />
         </list>
       </option>
       <option name="vmOptions" />

@@ -17,12 +17,7 @@ import kotlinx.datetime.toLocalDate
 fun GetStatsForRangeResDTO.toModel() = Stats(
     totalTime = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
     dailyStats = getDailyStatsFromDto(data),
-    range = StatsRange(
-        startDate = start.takeWhile { it != 'T' }
-            .toLocalDate(),
-        endDate = end.takeWhile { it != 'T' }
-            .toLocalDate(),
-    ),
+    range = StatsRange(startDate = start, endDate = end),
 )
 
 private fun getDailyStatsFromDto(data: List<Data>) = data.map {
