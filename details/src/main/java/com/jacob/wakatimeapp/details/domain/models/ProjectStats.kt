@@ -11,4 +11,24 @@ data class ProjectStats(
     val languages: List<String>,
     val operatingSystems: List<String>,
     val editors: List<String>,
-)
+) {
+    operator fun plus(other: ProjectStats) = ProjectStats(
+        totalTime = totalTime + other.totalTime,
+        dailyProjectStats = dailyProjectStats + other.dailyProjectStats,
+        range = range + other.range,
+        languages = languages + other.languages,
+        operatingSystems = operatingSystems + other.operatingSystems,
+        editors = editors + other.editors,
+    )
+
+    companion object {
+        val ZERO = ProjectStats(
+            totalTime = Time.ZERO,
+            dailyProjectStats = mapOf(),
+            range = StatsRange(startDate = "", endDate = ""),
+            languages = listOf(),
+            operatingSystems = listOf(),
+            editors = listOf(),
+        )
+    }
+}

@@ -14,6 +14,7 @@ data class Time(
     fun formattedPrint() = "${hours}H, ${minutes}M"
 
     fun longFormattedPrint() = "$hours Hours, $minutes Minutes"
+    operator fun plus(other: Time) = fromDecimal(decimal + other.decimal)
 
     companion object {
         val ZERO = Time(0, 0, 0f)
