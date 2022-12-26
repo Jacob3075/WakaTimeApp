@@ -3,9 +3,9 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either.Right
 import arrow.core.continuations.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
-import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.HomePageUiData
 import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC.CacheValidity.DEFAULT

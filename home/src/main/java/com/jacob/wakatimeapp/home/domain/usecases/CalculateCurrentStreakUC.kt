@@ -4,10 +4,10 @@ import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.right
 import com.jacob.wakatimeapp.core.common.toDate
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
-import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject

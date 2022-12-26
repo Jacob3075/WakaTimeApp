@@ -8,13 +8,13 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.common.utils.log
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Error.DatabaseError
 import com.jacob.wakatimeapp.home.data.local.entities.Last7DaysStatsEntity
 import com.jacob.wakatimeapp.home.data.local.mappers.toEntity
 import com.jacob.wakatimeapp.home.data.local.mappers.toModel
-import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.domain
+package com.jacob.wakatimeapp.core.common.utils
 
 import javax.inject.Inject
 import kotlinx.datetime.Clock
