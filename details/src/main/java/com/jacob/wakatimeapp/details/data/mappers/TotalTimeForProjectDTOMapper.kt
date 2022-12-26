@@ -1,8 +1,8 @@
-package com.jacob.wakatimeapp.details.data.mappers
+package com.jacob.wakatimeapp.details.data.mappers // ktlint-disable filename
 
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.details.data.dtos.TotalTimeForProjectDTO
-import kotlinx.datetime.LocalDate
+import com.jacob.wakatimeapp.details.domain.models.TotalProjectTime
 import kotlinx.datetime.toLocalDate
 
 fun TotalTimeForProjectDTO.toModel() = TotalProjectTime(
@@ -10,11 +10,4 @@ fun TotalTimeForProjectDTO.toModel() = TotalProjectTime(
     startDate = data.range.startDate.toLocalDate(),
     percentageCalculated = data.percentCalculated,
     message = data.text,
-)
-
-data class TotalProjectTime(
-    val totalTime: Time,
-    val startDate: LocalDate,
-    val percentageCalculated: Int,
-    val message: String,
 )

@@ -7,10 +7,10 @@ import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.details.data.dtos.DetailedProjectStatsDTO
 import com.jacob.wakatimeapp.details.data.dtos.TotalTimeForProjectDTO
-import com.jacob.wakatimeapp.details.data.mappers.TotalProjectTime
 import com.jacob.wakatimeapp.details.data.mappers.toModel
 import com.jacob.wakatimeapp.details.domain.models.ProjectDetails
 import com.jacob.wakatimeapp.details.domain.models.ProjectStats
+import com.jacob.wakatimeapp.details.domain.models.TotalProjectTime
 import javax.inject.Inject
 import javax.inject.Singleton
 
