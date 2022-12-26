@@ -8,6 +8,7 @@ import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.RecalculateLatestStreakUCRobot.Companion.createDailyStats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
@@ -32,13 +33,12 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(30, emptyList(), end.toLocalDate()),
-                        range = StatsRange(start.toLocalDate(), end.toLocalDate())
-                    ).right()
+                        range = StatsRange(start.toLocalDate(), end.toLocalDate()),
+                    ).right(),
                 )
                 .calculate(
                     start = start.toLocalDate(),
-                    value = 1,
-                    unit = DateTimeUnit.MONTH,
+                    DatePeriod(months = 1),
                 )
                 .resultShouldBe(Streak.ZERO.right())
                 .verifyGetDataForRange(start, end)
@@ -60,21 +60,20 @@ internal class RecalculateLatestStreakUCTest {
                         dailyStats = createDailyStats(
                             size = 15,
                             days = days,
-                            end = end
+                            end = end,
                         ),
-                        range = StatsRange(start, end)
-                    ).right()
+                        range = StatsRange(start, end),
+                    ).right(),
                 )
                 .calculate(
                     start = start,
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
+                    DatePeriod(days = 14),
                 )
                 .resultShouldBe(
                     Streak(
                         start = LocalDate(2022, 3, 28),
-                        end = start
-                    ).right()
+                        end = start,
+                    ).right(),
                 )
                 .verifyGetDataForRange(start.toString(), end.toString())
         }
@@ -93,13 +92,12 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(14, days, end.toLocalDate()),
-                        range = StatsRange(start.toLocalDate(), end.toLocalDate())
-                    ).right()
+                        range = StatsRange(start.toLocalDate(), end.toLocalDate()),
+                    ).right(),
                 )
                 .calculate(
                     start = start.toLocalDate(),
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
+                    DatePeriod(days = 14),
                 )
                 .resultShouldBe(Streak.ZERO.right())
                 .verifyGetDataForRange(start, end)
@@ -122,7 +120,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count, days, end.toLocalDate()),
-                        range = StatsRange(start.toLocalDate(), end.toLocalDate())
+                        range = StatsRange(start.toLocalDate(), end.toLocalDate()),
                     ).right(),
 
                 )
@@ -134,19 +132,18 @@ internal class RecalculateLatestStreakUCTest {
                         dailyStats = createDailyStats(count, emptyList(), end.toLocalDate()),
                         range = StatsRange(
                             start.toLocalDate().minus(1, DateTimeUnit.MONTH),
-                            end.toLocalDate().minus(1, DateTimeUnit.MONTH)
-                        )
-                    ).right()
+                            end.toLocalDate().minus(1, DateTimeUnit.MONTH),
+                        ),
+                    ).right(),
                 )
                 .calculate(
                     start = start.toLocalDate(),
-                    value = 1,
-                    unit = DateTimeUnit.MONTH,
+                    DatePeriod(months = 1),
                 )
                 .verifyGetDataForRange(start, end)
                 .verifyGetDataForRange(
                     secondStart,
-                    secondEnd
+                    secondEnd,
                 )
         }
 
@@ -168,7 +165,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count, days, end),
-                        range = StatsRange(start, end)
+                        range = StatsRange(start, end),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -179,20 +176,19 @@ internal class RecalculateLatestStreakUCTest {
                         dailyStats = createDailyStats(count, days2, secondEnd),
                         range = StatsRange(
                             start.minus(1, DateTimeUnit.MONTH),
-                            end.minus(1, DateTimeUnit.MONTH)
-                        )
-                    ).right()
+                            end.minus(1, DateTimeUnit.MONTH),
+                        ),
+                    ).right(),
                 )
                 .calculate(
                     start = start,
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
+                    DatePeriod(days = 14),
                 )
                 .resultShouldBe(
                     Streak(
                         start = "2022-03-13".toLocalDate(),
-                        end = "2022-03-31".toLocalDate()
-                    ).right()
+                        end = "2022-03-31".toLocalDate(),
+                    ).right(),
                 )
         }
 
@@ -214,7 +210,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count, days, end),
-                        range = StatsRange(start, end)
+                        range = StatsRange(start, end),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -225,20 +221,19 @@ internal class RecalculateLatestStreakUCTest {
                         dailyStats = createDailyStats(count, days2, secondEnd),
                         range = StatsRange(
                             start.minus(1, DateTimeUnit.MONTH),
-                            end.minus(1, DateTimeUnit.MONTH)
-                        )
-                    ).right()
+                            end.minus(1, DateTimeUnit.MONTH),
+                        ),
+                    ).right(),
                 )
                 .calculate(
                     start = start,
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
+                    DatePeriod(days = 14),
                 )
                 .resultShouldBe(
                     Streak(
                         start = "2022-03-17".toLocalDate(),
-                        end = "2022-03-31".toLocalDate()
-                    ).right()
+                        end = "2022-03-31".toLocalDate(),
+                    ).right(),
                 )
         }
 
@@ -287,7 +282,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count1, days1, end1),
-                        range = StatsRange(start1, end1)
+                        range = StatsRange(start1, end1),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -296,7 +291,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count2, days2, end2),
-                        range = StatsRange(start2, end2)
+                        range = StatsRange(start2, end2),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -305,7 +300,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count3, days3, end3),
-                        range = StatsRange(start3, end3)
+                        range = StatsRange(start3, end3),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -314,7 +309,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count4, days4, end4),
-                        range = StatsRange(start4, end4)
+                        range = StatsRange(start4, end4),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -323,7 +318,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count5, days5, end5),
-                        range = StatsRange(start5, end5)
+                        range = StatsRange(start5, end5),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -332,7 +327,7 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count6, days6, end6),
-                        range = StatsRange(start6, end6)
+                        range = StatsRange(start6, end6),
                     ).right(),
                 )
                 .mockGetDataForRange(
@@ -341,19 +336,18 @@ internal class RecalculateLatestStreakUCTest {
                     Stats(
                         totalTime = Time.ZERO,
                         dailyStats = createDailyStats(count7, days7, end7),
-                        range = StatsRange(start7, end7)
+                        range = StatsRange(start7, end7),
                     ).right(),
                 )
                 .calculate(
                     start = start1,
-                    value = 1,
-                    unit = DateTimeUnit.MONTH,
+                    DatePeriod(months = 1),
                 )
                 .resultShouldBe(
                     Streak(
                         start = end6,
                         end = start1,
-                    ).right()
+                    ).right(),
                 )
         }
 }

@@ -13,6 +13,7 @@ import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 
@@ -64,8 +65,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
     ) = when (recalculatedStreakForLast7Days.days) {
         7 -> recalculateLatestStreakUC.calculate(
             start = instantProvider.now().toDate().minus(8, DateTimeUnit.DAY),
-            value = 1,
-            unit = DateTimeUnit.MONTH,
+            batchSize = DatePeriod(months = 1),
         )
 
         else -> recalculatedStreakForLast7Days.right()

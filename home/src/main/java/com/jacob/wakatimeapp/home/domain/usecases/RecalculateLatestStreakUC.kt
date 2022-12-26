@@ -8,8 +8,8 @@ import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
-import kotlinx.datetime.DateTimeUnit.DateBased
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
 import kotlinx.datetime.minus
@@ -20,14 +20,13 @@ internal class RecalculateLatestStreakUC @Inject constructor(
 ) {
     suspend fun calculate(
         start: LocalDate,
-        value: Int,
-        unit: DateBased,
+        batchSize: DatePeriod,
     ): Either<Error, Streak> = either {
         var nextStart = start
         var result = Streak.ZERO
 
         do {
-            val end = nextStart.minus(value, unit)
+            val end = nextStart - batchSize
             val count = end.daysUntil(nextStart) + 1
 
             val latest = getStatsInRange(nextStart, end).bind()

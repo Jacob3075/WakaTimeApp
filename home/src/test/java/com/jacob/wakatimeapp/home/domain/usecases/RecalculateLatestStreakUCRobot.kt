@@ -15,6 +15,7 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
@@ -33,11 +34,10 @@ internal class RecalculateLatestStreakUCRobot {
         useCase = RecalculateLatestStreakUC(mockHomePageNetworkData)
     }
 
-    suspend fun calculate(start: LocalDate, value: Int, unit: DateTimeUnit.DateBased) = apply {
+    suspend fun calculate(start: LocalDate, batchSize: DatePeriod) = apply {
         result = useCase.calculate(
             start,
-            value,
-            unit,
+            batchSize = batchSize,
         )
     }
 
