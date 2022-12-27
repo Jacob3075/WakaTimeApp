@@ -9,14 +9,21 @@ import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
 import com.jacob.wakatimeapp.details.domain.models.ProjectStats
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.CoroutineScope
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
+import kotlinx.coroutines.awaitAll
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.plus
 
 @Singleton
 internal class GetProjectStatsUC @Inject constructor(
+    dispatcher: CoroutineContext = Dispatchers.IO,
     private val projectStatsNetworkData: ProjectDetailsNetworkData,
     private val instantProvider: InstantProvider,
 ) {
+    private val ioScope = CoroutineScope(dispatcher)
 
     suspend operator fun invoke(projectName: String) = either {
         val totalProjectTime = projectStatsNetworkData.getTotalTimeForProject(projectName).bind()
@@ -28,14 +35,17 @@ internal class GetProjectStatsUC @Inject constructor(
             .takeWhile { it < now }
             .plusElement(now)
             .zipWithNext()
-            .toList()
             .map { (start, end) ->
-                projectStatsNetworkData.getStatsForProject(
-                    projectName = projectName,
-                    startDate = start.toString(),
-                    endDate = end.toString(),
-                )
+                ioScope.async {
+                    projectStatsNetworkData.getStatsForProject(
+                        projectName = projectName,
+                        startDate = start.toString(),
+                        endDate = end.toString(),
+                    )
+                }
             }
+            .toList()
+            .awaitAll()
             .map { it.bind() }
             .fold(ProjectStats.ZERO, ProjectStats::plus)
 
