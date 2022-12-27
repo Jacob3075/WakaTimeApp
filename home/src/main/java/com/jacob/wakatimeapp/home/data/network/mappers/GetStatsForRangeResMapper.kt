@@ -6,18 +6,15 @@ import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.mappers.toModel
 import com.jacob.wakatimeapp.core.models.DailyStats
-import com.jacob.wakatimeapp.core.models.Stats
-import com.jacob.wakatimeapp.core.models.StatsRange
+import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO.Data
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.toLocalDate
 
-fun GetStatsForRangeResDTO.toModel() = Stats(
-    totalTime = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
-    dailyStats = getDailyStatsFromDto(data),
-    range = StatsRange(startDate = start, endDate = end),
+fun GetStatsForRangeResDTO.toModel() = DailyStatsAggregate(
+    values = getDailyStatsFromDto(data),
 )
 
 private fun getDailyStatsFromDto(data: List<Data>) = data.map {

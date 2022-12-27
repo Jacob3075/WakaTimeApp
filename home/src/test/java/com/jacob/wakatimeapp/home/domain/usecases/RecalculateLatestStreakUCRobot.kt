@@ -2,9 +2,9 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Project
-import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.models.Streak
@@ -47,9 +47,10 @@ internal class RecalculateLatestStreakUCRobot {
         }
     }
 
-    fun mockGetDataForRange(start: String, end: String, data: Either<Error, Stats>) = apply {
-        coEvery { mockHomePageNetworkData.getStatsForRange(start, end) } returns data
-    }
+    fun mockGetDataForRange(start: String, end: String, data: Either<Error, DailyStatsAggregate>) =
+        apply {
+            coEvery { mockHomePageNetworkData.getStatsForRange(start, end) } returns data
+        }
 
     fun verifyGetDataForRange(start: String, end: String, count: Int = 1) = apply {
         coVerify(exactly = count) { mockHomePageNetworkData.getStatsForRange(start, end) }

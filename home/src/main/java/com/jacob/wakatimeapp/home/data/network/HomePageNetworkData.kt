@@ -4,8 +4,8 @@ import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.core.common.data.BaseNetworkData
 import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.core.models.Stats
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.network.dtos.AllTimeDataDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
@@ -35,7 +35,7 @@ internal class HomePageNetworkData @Inject constructor(
         methodName = ::getData.name,
     ).map(AllTimeDataDTO::toString)
 
-    suspend fun getStatsForRange(start: String, end: String): Either<Error, Stats> =
+    suspend fun getStatsForRange(start: String, end: String): Either<Error, DailyStatsAggregate> =
         makeSafeApiCall(
             apiCall = {
                 homePageAPI.getStatsForRange(
