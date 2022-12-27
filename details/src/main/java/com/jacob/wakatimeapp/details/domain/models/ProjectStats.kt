@@ -2,15 +2,18 @@ package com.jacob.wakatimeapp.details.domain.models
 
 import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.secondarystats.Editors
+import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import kotlinx.datetime.LocalDate
 
 data class ProjectStats(
     val totalTime: Time,
     val dailyProjectStats: Map<LocalDate, Time>,
     val range: StatsRange,
-    val languages: List<String>,
-    val operatingSystems: List<String>,
-    val editors: List<String>,
+    val languages: Languages,
+    val operatingSystems: OperatingSystems,
+    val editors: Editors,
 ) {
     operator fun plus(other: ProjectStats) = ProjectStats(
         totalTime = totalTime + other.totalTime,
@@ -26,9 +29,9 @@ data class ProjectStats(
             totalTime = Time.ZERO,
             dailyProjectStats = mapOf(),
             range = StatsRange.ZERO,
-            languages = listOf(),
-            operatingSystems = listOf(),
-            editors = listOf(),
+            languages = Languages.NONE,
+            operatingSystems = OperatingSystems.NONE,
+            editors = Editors.NONE,
         )
     }
 }
