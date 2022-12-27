@@ -5,12 +5,11 @@ import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.details.data.ProjectDetailsNetworkData
+import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
 import com.jacob.wakatimeapp.details.domain.models.ProjectStats
-import com.jacob.wakatimeapp.details.domain.models.TotalProjectTime
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.datetime.DatePeriod
-import kotlinx.datetime.LocalDate
 import kotlinx.datetime.plus
 
 @Singleton
@@ -25,7 +24,7 @@ internal class GetProjectStatsUC @Inject constructor(
         val batchSize = DatePeriod(months = 6)
         val now = instantProvider.now().toDate()
 
-        generateSequence(totalProjectTime.startDate) { it + batchSize }
+        val projectStats = generateSequence(totalProjectTime.startDate) { it + batchSize }
             .takeWhile { it < now }
             .plusElement(now)
             .zipWithNext()
@@ -39,14 +38,14 @@ internal class GetProjectStatsUC @Inject constructor(
             }
             .map { it.bind() }
             .fold(ProjectStats.ZERO, ProjectStats::plus)
+
+        DetailedProjectStatsUiData(
+            totalProjectTime = totalProjectTime,
+            averageTime = Time.ZERO,
+            dailyProjectStats = projectStats.dailyProjectStats,
+            languages = projectStats.languages,
+            operatingSystems = projectStats.operatingSystems,
+            editors = projectStats.editors,
+        )
     }
 }
-
-data class Something(
-    val totalProjectTime: TotalProjectTime,
-    val averageTime: Time,
-    val dailyProjectStats: Map<LocalDate, Time>,
-    val languages: List<String>,
-    val operatingSystems: List<String>,
-    val editors: List<String>,
-)

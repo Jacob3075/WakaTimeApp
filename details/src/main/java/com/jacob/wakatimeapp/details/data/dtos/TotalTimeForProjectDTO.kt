@@ -16,7 +16,7 @@ data class TotalTimeForProjectDTO(
         val text: String,
         val timeout: Int,
         @SerialName("is_up_to_date") val isUpToDate: Boolean,
-        @SerialName("percent_calculated") val percentCalculated: Int,
+        @SerialName("percent_calculated") val percentCalculated: Int?,
         @SerialName("total_seconds") val totalSeconds: Double,
     ) {
         @Serializable

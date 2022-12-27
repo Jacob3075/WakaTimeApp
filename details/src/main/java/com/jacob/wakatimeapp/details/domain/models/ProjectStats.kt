@@ -25,7 +25,7 @@ data class ProjectStats(
         val ZERO = ProjectStats(
             totalTime = Time.ZERO,
             dailyProjectStats = mapOf(),
-            range = StatsRange(startDate = "", endDate = ""),
+            range = StatsRange.ZERO,
             languages = listOf(),
             operatingSystems = listOf(),
             editors = listOf(),

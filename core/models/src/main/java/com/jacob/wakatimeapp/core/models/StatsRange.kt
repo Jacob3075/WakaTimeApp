@@ -1,6 +1,9 @@
 package com.jacob.wakatimeapp.core.models
 
+import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.TimeZone
+import kotlinx.datetime.toLocalDate
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
@@ -15,7 +18,14 @@ data class StatsRange(
     )
 
     constructor(startDate: String, endDate: String) : this(
-        startDate = startDate.toLocalDateTime().date,
-        endDate = endDate.toLocalDateTime().date,
+        startDate = startDate.takeWhile { it != 'T' }.toLocalDate(),
+        endDate = endDate.takeWhile { it != 'T' }.toLocalDate(),
     )
+
+    companion object {
+        val ZERO = StatsRange(
+            startDate = Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
+            endDate = Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
+        )
+    }
 }
