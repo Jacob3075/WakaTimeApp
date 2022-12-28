@@ -1,17 +1,15 @@
 package com.jacob.wakatimeapp.core.models.secondarystats
 
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.models.secondarystats.SecondaryStats.Companion.mergeDuplicates
-import com.jacob.wakatimeapp.core.models.secondarystats.SecondaryStats.Companion.topNAndCombineOthers
 
 data class Editor(override val name: String, override val time: Time) : SecondaryStat<Editor> {
 
-    override fun uncheckPlus(other: Editor) = copy(time = time + other.time)
+    constructor(entry: Map.Entry<String, Time>) : this(entry.key, entry.value)
+
+    override fun uncheckedPlus(other: Editor) = copy(time = time + other.time)
 }
 
-data class Editors(override val values: List<Editor>) : SecondaryStats<Editor> {
-
-    override val mostUsed = values.mostUsed()
+class Editors(values: List<Editor>) : SecondaryStats<Editor>(values.mergeDuplicates(::Editor)) {
 
     override fun plus(other: SecondaryStats<Editor>) = Editors(values + other.values)
 
@@ -22,7 +20,5 @@ data class Editors(override val values: List<Editor>) : SecondaryStats<Editor> {
 
     companion object {
         val NONE = Editors(emptyList())
-        fun createFrom(values: List<Editor>) =
-            Editors(values.mergeDuplicates { Editor(it.key, it.value) })
     }
 }

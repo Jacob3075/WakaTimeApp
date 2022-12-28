@@ -3,24 +3,22 @@ package com.jacob.wakatimeapp.core.models.secondarystats
 import com.jacob.wakatimeapp.core.models.Time
 
 /**
- * Need to add generics to [SecondaryStat] to be able to use [uncheckPlus] function without casting
+ * Need to add generics to [SecondaryStat] to be able to use [uncheckedPlus] function without casting
  *
  * [Source](https://stackoverflow.com/a/47796513/13181948)
  */
 interface SecondaryStat<T : SecondaryStat<T>> {
     val name: String
     val time: Time
-    fun uncheckPlus(other: T): T
+    fun uncheckedPlus(other: T): T
 }
 
-interface SecondaryStats<T : SecondaryStat<T>> {
-    val values: List<T>
-    val mostUsed: T
+abstract class SecondaryStats<T : SecondaryStat<T>>(val values: List<T>) {
+    val mostUsed get() = values.maxBy { it.time.totalSeconds }
 
-    operator fun plus(other: SecondaryStats<T>): SecondaryStats<T>
-    fun topNAndCombineOthers(n: Int): SecondaryStats<T>
+    abstract operator fun plus(other: SecondaryStats<T>): SecondaryStats<T>
 
-    fun List<T>.mostUsed() = this.maxBy { it.time.decimal }
+    abstract fun topNAndCombineOthers(n: Int): SecondaryStats<T>
 
     companion object {
         @JvmStatic
@@ -39,7 +37,7 @@ interface SecondaryStats<T : SecondaryStat<T>> {
 
             val topN = values.subList(0, n + 1)
             val others = values.drop(n)
-                .reduce(SecondaryStat<T>::uncheckPlus)
+                .reduce(SecondaryStat<T>::uncheckedPlus)
 
             return creation(topN + others)
         }
