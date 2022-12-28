@@ -7,7 +7,7 @@ internal class SecondaryStatsRobot {
     private lateinit var model: SecondaryStats<Language>
 
     fun createModel(list: List<Language>) = apply {
-        model = Languages.from(list)
+        model = Languages(list)
     }
 
     fun resultValuesShouldBe(emptyList: List<Language>) = apply {

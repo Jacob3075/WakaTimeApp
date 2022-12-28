@@ -35,14 +35,14 @@ internal class SecondaryStatsTest {
     @Test
     internal fun `when adding 2 models without duplicate stats, then values should be added without merging`() {
         modelRobot.createModel(LANGUAGES)
-            .addModel(Languages.from(LANGUAGES_ALT))
+            .addModel(Languages(LANGUAGES_ALT))
             .resultValuesShouldBe(LANGUAGES + LANGUAGES_ALT)
     }
 
     @Test
     internal fun `when adding 2 models with duplicate stats, then values should be merged and added`() {
         modelRobot.createModel(LANGUAGES)
-            .addModel(Languages.from(LANGUAGES + LANGUAGES_ALT))
+            .addModel(Languages(LANGUAGES + LANGUAGES_ALT))
             .resultValuesShouldBe(
                 LANGUAGES.map { it.copy(time = it.time * 2) } + LANGUAGES_ALT,
             )

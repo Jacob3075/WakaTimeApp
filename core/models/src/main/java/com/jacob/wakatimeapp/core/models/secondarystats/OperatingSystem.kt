@@ -10,19 +10,15 @@ data class OperatingSystem(override val name: String, override val time: Time) :
     override fun copyStat(name: String, time: Time) = copy(name = name, time = time)
 }
 
-sealed class OperatingSystems : SecondaryStats<OperatingSystem> {
-    private data class OperatingSystemsHolder(override val values: List<OperatingSystem>) :
-        OperatingSystems()
+class OperatingSystems(values: List<OperatingSystem>) : SecondaryStats<OperatingSystem> {
+    override val values: List<OperatingSystem> = values.mergeDuplicates(::OperatingSystem)
 
     override fun plus(other: SecondaryStats<OperatingSystem>) =
-        from(values + other.values)
+        OperatingSystems(values + other.values)
 
-    override fun copyStats(values: List<OperatingSystem>) = from(values)
+    override fun copyStats(values: List<OperatingSystem>) = OperatingSystems(values)
 
     companion object {
-        fun from(values: List<OperatingSystem>): OperatingSystems =
-            OperatingSystemsHolder(values.mergeDuplicates(::OperatingSystem))
-
-        val NONE = from(emptyList())
+        val NONE = OperatingSystems(emptyList())
     }
 }
