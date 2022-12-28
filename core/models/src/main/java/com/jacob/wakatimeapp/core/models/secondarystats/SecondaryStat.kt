@@ -3,7 +3,7 @@ package com.jacob.wakatimeapp.core.models.secondarystats
 import com.jacob.wakatimeapp.core.models.Time
 
 /**
- * Need to add generics to [SecondaryStat] to be able to use [uncheckedPlus] function without casting
+ * Need to add generics to [SecondaryStat] to be able to still have correct subtypes
  *
  * [Source](https://stackoverflow.com/a/47796513/13181948)
  */
@@ -14,12 +14,13 @@ interface SecondaryStat<T : SecondaryStat<T>> {
     fun copyStat(name: String = this.name, time: Time = this.time): T
 }
 
-abstract class SecondaryStats<T : SecondaryStat<T>>(val values: List<T>) {
+interface SecondaryStats<T : SecondaryStat<T>> {
+    val values: List<T>
     val mostUsed get() = values.maxBy { it.time.totalSeconds }
 
-    abstract operator fun plus(other: SecondaryStats<T>): SecondaryStats<T>
+    operator fun plus(other: SecondaryStats<T>): SecondaryStats<T>
 
-    abstract fun copy(values: List<T> = this.values): SecondaryStats<T>
+    fun copyStats(values: List<T> = this.values): SecondaryStats<T>
 
     fun topNAndCombineOthers(n: Int): SecondaryStats<T> {
         if (values.size <= n) return this
@@ -29,12 +30,10 @@ abstract class SecondaryStats<T : SecondaryStat<T>>(val values: List<T>) {
             .reduce(::reducer)
             .copyStat(name = "Others")
 
-        return copy(values = topN + others)
+        return copyStats(values = topN + others)
     }
 
     private fun reducer(acc: T, other: T) = acc.copyStat(time = acc.time + other.time)
-
-    override fun toString() = "${javaClass.simpleName}(values=$values)"
 
     companion object {
         @JvmStatic
