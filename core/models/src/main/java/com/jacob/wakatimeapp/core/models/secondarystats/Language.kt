@@ -9,14 +9,21 @@ data class Language(override val name: String, override val time: Time) : Second
     override fun copyStat(name: String, time: Time) = copy(name = name, time = time)
 }
 
-class Languages(values: List<Language>) : SecondaryStats<Language> {
-    override val values: List<Language> = values.mergeDuplicates(::Language)
+/**
+ * Need to wrap data class in a sealed class to be able to use a data class with private constructor
+ *
+ * [Source](https://youtrack.jetbrains.com/issue/KT-11914/Confusing-data-class-copy-with-private-constructor)
+ */
+sealed class Languages : SecondaryStats<Language> {
+    private data class LanguagesHolder(override val values: List<Language>) : Languages()
 
-    override fun plus(other: SecondaryStats<Language>) = Languages(values + other.values)
-
-    override fun copyStats(values: List<Language>) = Languages(values = values)
+    override fun plus(other: SecondaryStats<Language>) = from(values + other.values)
+    override fun copyStats(values: List<Language>) = from(values = values)
 
     companion object {
-        val NONE = Languages(emptyList())
+        fun from(values: List<Language>): Languages =
+            LanguagesHolder(values.mergeDuplicates(::Language))
+
+        val NONE = from(emptyList())
     }
 }

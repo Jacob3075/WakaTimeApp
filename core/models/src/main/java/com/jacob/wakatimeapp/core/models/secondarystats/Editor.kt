@@ -10,14 +10,17 @@ data class Editor(override val name: String, override val time: Time) : Secondar
     override fun copyStat(name: String, time: Time) = copy(name = name, time = time)
 }
 
-class Editors(values: List<Editor>) : SecondaryStats<Editor> {
-    override val values: List<Editor> = values.mergeDuplicates(::Editor)
+sealed class Editors : SecondaryStats<Editor> {
+    private data class EditorsHolder(override val values: List<Editor>) : Editors()
 
-    override fun plus(other: SecondaryStats<Editor>) = Editors(values + other.values)
+    override fun plus(other: SecondaryStats<Editor>) = from(values + other.values)
 
-    override fun copyStats(values: List<Editor>) = Editors(values)
+    override fun copyStats(values: List<Editor>) = from(values)
 
     companion object {
-        val NONE = Editors(emptyList())
+        fun from(values: List<Editor>): Editors =
+            EditorsHolder(values.mergeDuplicates(::Editor))
+
+        val NONE = from(emptyList())
     }
 }
