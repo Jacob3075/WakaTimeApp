@@ -10,7 +10,8 @@ import com.jacob.wakatimeapp.core.models.Time
 interface SecondaryStat<T : SecondaryStat<T>> {
     val name: String
     val time: Time
-    fun uncheckedPlus(other: T): T
+
+    fun copyStat(name: String = this.name, time: Time = this.time): T
 }
 
 abstract class SecondaryStats<T : SecondaryStat<T>>(val values: List<T>) {
@@ -18,7 +19,22 @@ abstract class SecondaryStats<T : SecondaryStat<T>>(val values: List<T>) {
 
     abstract operator fun plus(other: SecondaryStats<T>): SecondaryStats<T>
 
-    abstract fun topNAndCombineOthers(n: Int): SecondaryStats<T>
+    abstract fun copy(values: List<T> = this.values): SecondaryStats<T>
+
+    fun topNAndCombineOthers(n: Int): SecondaryStats<T> {
+        if (values.size <= n) return this
+
+        val topN = values.subList(0, n)
+        val others = values.drop(n)
+            .reduce(::reducer)
+            .copyStat(name = "Others")
+
+        return copy(values = topN + others)
+    }
+
+    private fun reducer(acc: T, other: T) = acc.copyStat(time = acc.time + other.time)
+
+    override fun toString() = "${javaClass.simpleName}(values=$values)"
 
     companion object {
         @JvmStatic
@@ -27,20 +43,6 @@ abstract class SecondaryStats<T : SecondaryStat<T>>(val values: List<T>) {
         ) = groupingBy(SecondaryStat<T>::name)
             .fold(Time.ZERO, Time::plus)
             .map(param)
-
-        @JvmStatic
-        fun <T : SecondaryStat<T>> SecondaryStats<T>.topNAndCombineOthers(
-            n: Int,
-            creation: (List<T>) -> SecondaryStats<T>,
-        ): SecondaryStats<T> {
-            if (values.size <= n) return this
-
-            val topN = values.subList(0, n + 1)
-            val others = values.drop(n)
-                .reduce(SecondaryStat<T>::uncheckedPlus)
-
-            return creation(topN + others)
-        }
     }
 }
 

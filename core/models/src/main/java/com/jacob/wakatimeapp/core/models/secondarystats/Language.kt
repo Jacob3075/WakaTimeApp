@@ -5,7 +5,7 @@ import com.jacob.wakatimeapp.core.models.Time
 data class Language(override val name: String, override val time: Time) : SecondaryStat<Language> {
     constructor(entry: Map.Entry<String, Time>) : this(entry.key, entry.value)
 
-    override fun uncheckedPlus(other: Language) = copy(time = time + other.time)
+    override fun copyStat(name: String, time: Time) = copy(name = name, time = time)
 }
 
 class Languages(values: List<Language>) :
@@ -13,10 +13,7 @@ class Languages(values: List<Language>) :
 
     override fun plus(other: SecondaryStats<Language>) = Languages(values + other.values)
 
-    override fun topNAndCombineOthers(n: Int) = topNAndCombineOthers(
-        n = n,
-        creation = ::Languages,
-    )
+    override fun copy(values: List<Language>) = Languages(values)
 
     companion object {
         val NONE = Languages(emptyList())
