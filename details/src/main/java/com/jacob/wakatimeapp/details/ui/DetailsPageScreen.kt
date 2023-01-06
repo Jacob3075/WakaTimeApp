@@ -20,6 +20,7 @@ fun DetailsPageScreen(
 )
 
 @Composable
+@Suppress("UNUSED_PARAMETER")
 private fun DetailsPageScreen(
     navigator: DetailsPageNavigator,
     viewModel: DetailsPageViewModel,

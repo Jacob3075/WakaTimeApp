@@ -125,6 +125,7 @@ complexity:
   LongMethod:
     active: true
     threshold: 60
+    excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**' ]
   LongParameterList:
     active: true
     functionThreshold: 9
@@ -298,6 +299,7 @@ exceptions:
       - 'Throwable'
 
 naming:
+  excludes: [ '**/build/**' ]
   active: true
   BooleanPropertyNaming:
     active: false
@@ -495,6 +497,7 @@ formatting:
   active: true
   android: true
   autoCorrect: true
+  excludes: [ '**/build/**' ]
   ImportOrdering:
     active: false
     autoCorrect: true
@@ -518,6 +521,7 @@ formatting:
     active: false
 
 style:
+  excludes: [ '**/build/**' ]
   active: true
   CanBeNonNullable:
     active: false
@@ -608,6 +612,7 @@ style:
   MaxChainedCallsOnSameLine:
     active: true
     maxChainedCalls: 5
+    excludes: [ '**/test/**', '**/*.Test.kt', '**/*.Spec.kt' ]
   MaxLineLength:
     active: true
     maxLineLength: 120

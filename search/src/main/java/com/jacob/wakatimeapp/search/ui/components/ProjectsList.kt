@@ -25,10 +25,11 @@ import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.cardHeader
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
+import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun ProjectsList(projects: List<ProjectDetails>, modifier: Modifier = Modifier) =
+internal fun ProjectsList(projects: ImmutableList<ProjectDetails>, modifier: Modifier = Modifier) =
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),

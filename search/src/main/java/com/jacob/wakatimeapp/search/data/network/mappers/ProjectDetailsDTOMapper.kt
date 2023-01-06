@@ -1,3 +1,5 @@
+@file:Suppress("Filename") // ktlint-disable filename
+
 package com.jacob.wakatimeapp.search.data.network.mappers // ktlint-disable filename
 
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO

@@ -126,7 +126,7 @@ internal class GetHomePageUiDataUCTest {
                 last7DaysStats = last7DaysStats,
                 currentStreak = currentStreak,
                 longestStreak = Streak.ZERO,
-                isStaleData = true
+                isStaleData = true,
             )
             val copy1 = last7DaysStats.copy(timeSpentToday = Time.fromDecimal(2.0f))
             val copy2 = last7DaysStats.copy(timeSpentToday = Time.fromDecimal(3.0f))
@@ -145,19 +145,19 @@ internal class GetHomePageUiDataUCTest {
                 }
                 .`when new data is sent, then new item should be emitted with correct values for previous data`(
                     currentDayInstant - 20.minutes,
-                    cachedData
+                    cachedData,
                 )
                 .`when new data is sent, then new item should be emitted with correct values for previous data`(
                     copy1.right(),
-                    cachedData.copy(last7DaysStats = copy1)
+                    cachedData.copy(last7DaysStats = copy1),
                 )
                 .`when new data is sent, then new item should be emitted with correct values for previous data`(
                     currentDayInstant,
-                    cachedData.copy(last7DaysStats = copy1, isStaleData = false)
+                    cachedData.copy(last7DaysStats = copy1, isStaleData = false),
                 )
                 .`when new data is sent, then new item should be emitted with correct values for previous data`(
                     copy2.right(),
-                    cachedData.copy(last7DaysStats = copy2, isStaleData = false)
+                    cachedData.copy(last7DaysStats = copy2, isStaleData = false),
                 )
                 .expectNoMoreItems()
         }

@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.right
-import com.jacob.wakatimeapp.core.common.toDate
+import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats

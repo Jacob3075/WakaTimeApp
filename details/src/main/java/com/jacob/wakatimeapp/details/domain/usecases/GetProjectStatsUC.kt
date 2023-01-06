@@ -1,8 +1,8 @@
 package com.jacob.wakatimeapp.details.domain.usecases
 
 import arrow.core.continuations.either
-import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
+import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.details.data.ProjectDetailsNetworkData
 import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData

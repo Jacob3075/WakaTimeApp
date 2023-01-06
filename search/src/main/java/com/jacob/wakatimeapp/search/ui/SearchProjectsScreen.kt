@@ -20,6 +20,7 @@ import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loaded
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loading
 import com.jacob.wakatimeapp.search.ui.components.ProjectsList
 import com.jacob.wakatimeapp.search.ui.components.SearchBar
+import kotlinx.collections.immutable.toImmutableList
 
 @Composable
 fun SearchProjectsScreen(
@@ -32,6 +33,7 @@ fun SearchProjectsScreen(
 )
 
 @Composable
+@Suppress("UNUSED_PARAMETER")
 private fun SearchProjectsScreen(
     navigator: SearchProjectsNavigator,
     modifier: Modifier = Modifier,
@@ -61,7 +63,7 @@ private fun SearchProjectsScreen(
 @Composable
 private fun SearchProjectsLoaded(
     state: Loaded,
-    modifier: Modifier,
+    modifier: Modifier = Modifier,
     updateSearchQuery: (TextFieldValue) -> Unit,
 ) {
     Column(
@@ -76,6 +78,6 @@ private fun SearchProjectsLoaded(
             onValueChange = updateSearchQuery,
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        ProjectsList(state.filteredProjects)
+        ProjectsList(state.filteredProjects.toImmutableList())
     }
 }

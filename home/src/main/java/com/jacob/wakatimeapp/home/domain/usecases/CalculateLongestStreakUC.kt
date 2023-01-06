@@ -2,8 +2,8 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.continuations.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
-import com.jacob.wakatimeapp.core.common.toDate
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
+import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error.NetworkErrors.Timeout
 import com.jacob.wakatimeapp.core.models.Time
