@@ -70,6 +70,28 @@ internal class SecondaryStatsTest {
                 ),
             )
     }
+
+    @Test
+    internal fun `when getting most used language when stats are empty, then return null`() {
+        modelRobot.createModel(emptyList())
+            .getMostUsedShouldReturn(null)
+    }
+
+    @Test
+    internal fun `when getting most used stat and there are no stats with the same time, then return stat with most time`() {
+        modelRobot.createModel(LANGUAGES + LANGUAGES_ALT)
+            .getMostUsedShouldReturn(LANGUAGES[0])
+    }
+
+    @Test
+    internal fun `when getting most used stat and there are stats with same time, then return first in list`() {
+        val randomLanguage = Language("something", Time.fromDecimal(8f))
+        modelRobot.createModel(LANGUAGES + listOf(randomLanguage))
+            .getMostUsedShouldReturn(LANGUAGES[0])
+
+        modelRobot.createModel(listOf(randomLanguage) + LANGUAGES)
+            .getMostUsedShouldReturn(randomLanguage)
+    }
 }
 
 private operator fun Time.times(i: Int) = Time.fromDecimal(this.decimal * i)

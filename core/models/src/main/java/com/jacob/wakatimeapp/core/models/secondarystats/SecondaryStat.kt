@@ -16,7 +16,7 @@ interface SecondaryStat<T : SecondaryStat<T>> {
 
 interface SecondaryStats<T : SecondaryStat<T>> {
     val values: List<T>
-    val mostUsed get() = values.maxBy { it.time.totalSeconds }
+    val mostUsed get() = values.maxByOrNull { it.time.totalSeconds }
 
     operator fun plus(other: SecondaryStats<T>): SecondaryStats<T>
 

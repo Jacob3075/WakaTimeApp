@@ -22,6 +22,10 @@ internal class SecondaryStatsRobot {
         model.topNAndCombineOthers(i).values shouldBe languagesNoDuplicates
     }
 
+    fun getMostUsedShouldReturn(language: Language?) = apply {
+        model.mostUsed shouldBe language
+    }
+
     companion object {
         val LANGUAGES = listOf(
             Language("Kotlin", Time.fromDecimal(8.0f)),
