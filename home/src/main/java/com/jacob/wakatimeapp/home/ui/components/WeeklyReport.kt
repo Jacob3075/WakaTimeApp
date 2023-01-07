@@ -31,7 +31,7 @@ import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
 import com.github.mikephil.charting.formatter.ValueFormatter
-import com.jacob.wakatimeapp.core.common.getDisplayNameForDay
+import com.jacob.wakatimeapp.core.common.utils.getDisplayNameForDay
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle

@@ -15,7 +15,5 @@ data class ProjectDTO(
     val text: String,
     @SerialName("total_seconds") val totalSeconds: Double,
 ) {
-
-    fun isUnknownProject() =
-        name == "Unknown Project"
+    val isUnknownProject = name == "Unknown Project"
 }

@@ -1,11 +1,11 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.Either
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
-import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import io.kotest.assertions.asClue
@@ -67,7 +67,7 @@ internal class CalculateCurrentStreakUCRobot {
     }
 
     fun mockRecalculateStreak(start: LocalDate, result: Either<Error, Streak>) = apply {
-        coEvery { mockRecalculateStreak.calculate(start, any(), any()) } returns result
+        coEvery { mockRecalculateStreak.calculate(start, any()) } returns result
     }
 
     internal companion object {

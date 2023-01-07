@@ -3,16 +3,17 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either
 import arrow.core.continuations.either
 import arrow.core.right
-import com.jacob.wakatimeapp.core.common.toDate
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
+import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
-import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 
@@ -64,8 +65,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
     ) = when (recalculatedStreakForLast7Days.days) {
         7 -> recalculateLatestStreakUC.calculate(
             start = instantProvider.now().toDate().minus(8, DateTimeUnit.DAY),
-            value = 1,
-            unit = DateTimeUnit.MONTH,
+            batchSize = DatePeriod(months = 1),
         )
 
         else -> recalculatedStreakForLast7Days.right()

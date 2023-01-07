@@ -1,11 +1,18 @@
+@file:Suppress("Filename") // ktlint-disable filename
+
 package com.jacob.wakatimeapp.search.data.network.mappers // ktlint-disable filename
 
-import androidx.compose.runtime.Stable
-import com.jacob.wakatimeapp.search.data.network.dto.ProjectDetailsDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
+import com.jacob.wakatimeapp.search.domain.models.ProjectListWithPageNumber
 
-fun ProjectDetailsDTO.toModel() = ProjectDetails(name = this.name)
+fun ProjectDetailsDTO.toModel() = data.map { ProjectDetails(name = it.name) }
 
-@Stable
+fun ProjectDetailsDTO.toModelWithPageNumber() = ProjectListWithPageNumber(
+    projectList = this.toModel(),
+    pageNumber = page,
+    totalPageCount = totalPages,
+)
+
 data class ProjectDetails(
     val name: String,
 )

@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.right
-import com.jacob.wakatimeapp.core.common.toDate
+import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats
@@ -24,7 +24,7 @@ internal class CalculateLongestStreakUCTest {
         runTest {
             val currentStreak = Streak(
                 start = LocalDate(2022, 4, 1),
-                end = LocalDate(2022, 4, 10)
+                end = LocalDate(2022, 4, 10),
             )
             robot.buildUseCase(dispatcher = UnconfinedTestDispatcher(testScheduler))
                 .mockHomePageCacheGetCurrentStreak(currentStreak.right())
@@ -32,8 +32,8 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak(
                     Streak(
                         start = LocalDate(2022, 1, 1),
-                        end = LocalDate(2022, 1, 5)
-                    ).right()
+                        end = LocalDate(2022, 1, 5),
+                    ).right(),
                 )
                 .callUseCase(DatePeriod(months = 1))
                 .resultShouldBe(currentStreak.right())
@@ -46,21 +46,21 @@ internal class CalculateLongestStreakUCTest {
             .mockHomePageCacheGetLongestStreak(
                 Streak(
                     start = LocalDate(2022, 1, 1),
-                    end = LocalDate(2022, 2, 5)
-                ).right()
+                    end = LocalDate(2022, 2, 5),
+                ).right(),
             )
             .mockHomePageCacheGetCurrentStreak(
                 Streak(
                     start = LocalDate(2022, 1, 1),
-                    end = LocalDate(2022, 1, 5)
-                ).right()
+                    end = LocalDate(2022, 1, 5),
+                ).right(),
             )
             .callUseCase(DatePeriod(months = 1))
             .resultShouldBe(
                 Streak(
                     start = LocalDate(2022, 1, 1),
-                    end = LocalDate(2022, 2, 5)
-                ).right()
+                    end = LocalDate(2022, 2, 5),
+                ).right(),
             )
     }
 
@@ -71,7 +71,7 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                currentInstant = currentInstant
+                currentInstant = currentInstant,
             )
                 .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
@@ -92,7 +92,7 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-02-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                currentInstant = currentInstant
+                currentInstant = currentInstant,
             )
                 .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
@@ -118,7 +118,7 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                currentInstant = currentInstant
+                currentInstant = currentInstant,
             )
                 .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
@@ -127,10 +127,10 @@ internal class CalculateLongestStreakUCTest {
                     start = userCreatedAt.toString(),
                     end = currentInstant.toDate().toString(),
                     data = stats.copy(
-                        dailyStats = List(30) {
+                        values = List(30) {
                             dailyStats.copy(
                                 timeSpent = Time.ZERO,
-                                date = userCreatedAt + it.days
+                                date = userCreatedAt + it.days,
                             )
                         },
                     ).right(),
@@ -146,7 +146,7 @@ internal class CalculateLongestStreakUCTest {
             val currentInstant = Instant.parse("2022-01-10T00:00:00Z")
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                currentInstant = currentInstant
+                currentInstant = currentInstant,
             )
                 .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
@@ -155,7 +155,7 @@ internal class CalculateLongestStreakUCTest {
                     start = userCreatedAt.toString(),
                     end = currentInstant.toDate().toString(),
                     data = stats.copy(
-                        dailyStats = List(10) {
+                        values = List(10) {
                             dailyStats.copy(date = userCreatedAt + it.days)
                         },
                     ).right(),
@@ -164,8 +164,8 @@ internal class CalculateLongestStreakUCTest {
                 .resultShouldBe(
                     Streak(
                         start = LocalDate(2022, 1, 1),
-                        end = LocalDate(2022, 1, 10)
-                    ).right()
+                        end = LocalDate(2022, 1, 10),
+                    ).right(),
                 )
         }
 
@@ -193,7 +193,7 @@ internal class CalculateLongestStreakUCTest {
 
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                currentInstant = currentInstant
+                currentInstant = currentInstant,
             )
                 .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
@@ -202,15 +202,15 @@ internal class CalculateLongestStreakUCTest {
                     start = userCreatedAt.toString(),
                     end = currentInstant.toDate().toString(),
                     data = stats.copy(
-                        dailyStats = testDailyStats,
+                        values = testDailyStats,
                     ).right(),
                 )
                 .callUseCase(batchSize = DatePeriod(months = 1))
                 .resultShouldBe(
                     Streak(
                         start = LocalDate(2022, 1, 8),
-                        end = LocalDate(2022, 1, 11)
-                    ).right()
+                        end = LocalDate(2022, 1, 11),
+                    ).right(),
                 )
         }
 
@@ -232,7 +232,7 @@ internal class CalculateLongestStreakUCTest {
 
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                currentInstant = currentInstant
+                currentInstant = currentInstant,
             )
                 .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
@@ -240,24 +240,24 @@ internal class CalculateLongestStreakUCTest {
                 .mockGetStatsForRange(
                     start = userCreatedAt.toString(),
                     end = (userCreatedAt + 7.days).toString(),
-                    data = stats.copy(dailyStats = testDailyStats1).right(),
+                    data = stats.copy(values = testDailyStats1).right(),
                 )
                 .mockGetStatsForRange(
                     start = (userCreatedAt + 7.days).toString(),
                     end = (userCreatedAt + 14.days).toString(),
-                    data = stats.copy(dailyStats = testDailyStats2).right(),
+                    data = stats.copy(values = testDailyStats2).right(),
                 )
                 .mockGetStatsForRange(
                     start = (userCreatedAt + 14.days).toString(),
                     end = (userCreatedAt + 21.days).toString(),
-                    data = stats.copy(dailyStats = testDailyStats3).right(),
+                    data = stats.copy(values = testDailyStats3).right(),
                 )
                 .callUseCase(batchSize = DatePeriod(days = 7))
                 .resultShouldBe(
                     Streak(
                         start = userCreatedAt,
                         end = currentInstant.toDate(),
-                    ).right()
+                    ).right(),
                 )
         }
 
@@ -323,7 +323,7 @@ internal class CalculateLongestStreakUCTest {
 
             robot.buildUseCase(
                 dispatcher = UnconfinedTestDispatcher(testScheduler),
-                currentInstant = currentInstant
+                currentInstant = currentInstant,
             )
                 .mockGetUserDetails(userCreatedAt = userCreatedAt)
                 .mockHomePageCacheGetLongestStreak()
@@ -331,34 +331,34 @@ internal class CalculateLongestStreakUCTest {
                 .mockGetStatsForRange(
                     start = userCreatedAt.toString(),
                     end = (userCreatedAt + 7.days).toString(),
-                    data = stats.copy(dailyStats = testDailyStats1).right(),
+                    data = stats.copy(values = testDailyStats1).right(),
                 )
                 .mockGetStatsForRange(
                     start = (userCreatedAt + 7.days).toString(),
                     end = (userCreatedAt + 14.days).toString(),
-                    data = stats.copy(dailyStats = testDailyStats2).right(),
+                    data = stats.copy(values = testDailyStats2).right(),
                 )
                 .mockGetStatsForRange(
                     start = (userCreatedAt + 14.days).toString(),
                     end = (userCreatedAt + 21.days).toString(),
-                    data = stats.copy(dailyStats = testDailyStats3).right(),
+                    data = stats.copy(values = testDailyStats3).right(),
                 )
                 .mockGetStatsForRange(
                     start = (userCreatedAt + 21.days).toString(),
                     end = (userCreatedAt + 28.days).toString(),
-                    data = stats.copy(dailyStats = testDailyStats4).right(),
+                    data = stats.copy(values = testDailyStats4).right(),
                 )
                 .mockGetStatsForRange(
                     start = (userCreatedAt + 28.days).toString(),
                     end = currentInstant.toDate().toString(),
-                    data = stats.copy(dailyStats = testDailyStats5).right(),
+                    data = stats.copy(values = testDailyStats5).right(),
                 )
                 .callUseCase(batchSize = DatePeriod(days = 7))
                 .resultShouldBe(
                     Streak(
                         start = LocalDate(2022, 1, 7),
                         end = LocalDate(2022, 1, 12),
-                    ).right()
+                    ).right(),
                 )
         }
 }

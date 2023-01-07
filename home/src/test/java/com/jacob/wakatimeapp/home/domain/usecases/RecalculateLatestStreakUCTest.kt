@@ -1,13 +1,12 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.right
-import com.jacob.wakatimeapp.core.models.Stats
-import com.jacob.wakatimeapp.core.models.StatsRange
-import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.RecalculateLatestStreakUCRobot.Companion.createDailyStats
 import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
+import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.daysUntil
@@ -25,23 +24,16 @@ internal class RecalculateLatestStreakUCTest {
             val start = "2022-03-01"
             val end = "2022-02-01"
 
-            robot.buildService()
-                .mockGetDataForRange(
-                    start,
-                    end,
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(30, emptyList(), end.toLocalDate()),
-                        range = StatsRange(start.toLocalDate(), end.toLocalDate())
-                    ).right()
-                )
-                .calculate(
-                    start = start.toLocalDate(),
-                    value = 1,
-                    unit = DateTimeUnit.MONTH,
-                )
-                .resultShouldBe(Streak.ZERO.right())
-                .verifyGetDataForRange(start, end)
+            robot.buildService().mockGetDataForRange(
+                start,
+                end,
+                DailyStatsAggregate(
+                    values = createDailyStats(30, emptyList(), end.toLocalDate()),
+                ).right(),
+            ).calculate(
+                start = start.toLocalDate(),
+                DatePeriod(months = 1),
+            ).resultShouldBe(Streak.ZERO.right()).verifyGetDataForRange(start, end)
         }
 
     @Test
@@ -51,32 +43,19 @@ internal class RecalculateLatestStreakUCTest {
             val start = LocalDate(2022, 3, 31)
             val end = LocalDate(2022, 3, 17)
 
-            robot.buildService()
-                .mockGetDataForRange(
-                    start.toString(),
-                    end.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(
-                            size = 15,
-                            days = days,
-                            end = end
-                        ),
-                        range = StatsRange(start, end)
-                    ).right()
-                )
-                .calculate(
-                    start = start,
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
-                )
-                .resultShouldBe(
-                    Streak(
-                        start = LocalDate(2022, 3, 28),
-                        end = start
-                    ).right()
-                )
-                .verifyGetDataForRange(start.toString(), end.toString())
+            robot.buildService().mockGetDataForRange(
+                start.toString(),
+                end.toString(),
+                DailyStatsAggregate(values = createDailyStats(size = 15, days, end)).right(),
+            ).calculate(
+                start = start,
+                DatePeriod(days = 14),
+            ).resultShouldBe(
+                Streak(
+                    start = LocalDate(2022, 3, 28),
+                    end = start,
+                ).right(),
+            ).verifyGetDataForRange(start.toString(), end.toString())
         }
 
     @Test
@@ -86,23 +65,14 @@ internal class RecalculateLatestStreakUCTest {
             val start = "2022-03-31"
             val end = "2022-03-17"
 
-            robot.buildService()
-                .mockGetDataForRange(
-                    start,
-                    end,
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(14, days, end.toLocalDate()),
-                        range = StatsRange(start.toLocalDate(), end.toLocalDate())
-                    ).right()
-                )
-                .calculate(
-                    start = start.toLocalDate(),
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
-                )
-                .resultShouldBe(Streak.ZERO.right())
-                .verifyGetDataForRange(start, end)
+            robot.buildService().mockGetDataForRange(
+                start,
+                end,
+                DailyStatsAggregate(values = createDailyStats(14, days, end.toLocalDate())).right(),
+            ).calculate(
+                start = start.toLocalDate(),
+                DatePeriod(days = 14),
+            ).resultShouldBe(Streak.ZERO.right()).verifyGetDataForRange(start, end)
         }
 
     @Test
@@ -115,39 +85,25 @@ internal class RecalculateLatestStreakUCTest {
             val secondStart = end.toLocalDate().minus(1, DateTimeUnit.DAY).toString()
             val secondEnd = secondStart.toLocalDate().minus(1, DateTimeUnit.MONTH).toString()
 
-            robot.buildService()
-                .mockGetDataForRange(
-                    start,
-                    end,
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days, end.toLocalDate()),
-                        range = StatsRange(start.toLocalDate(), end.toLocalDate())
-                    ).right(),
-
-                )
-                .mockGetDataForRange(
-                    secondStart,
-                    secondEnd,
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, emptyList(), end.toLocalDate()),
-                        range = StatsRange(
-                            start.toLocalDate().minus(1, DateTimeUnit.MONTH),
-                            end.toLocalDate().minus(1, DateTimeUnit.MONTH)
-                        )
-                    ).right()
-                )
-                .calculate(
-                    start = start.toLocalDate(),
-                    value = 1,
-                    unit = DateTimeUnit.MONTH,
-                )
-                .verifyGetDataForRange(start, end)
-                .verifyGetDataForRange(
-                    secondStart,
-                    secondEnd
-                )
+            robot.buildService().mockGetDataForRange(
+                start,
+                end,
+                DailyStatsAggregate(
+                    values = createDailyStats(count, days, end.toLocalDate()),
+                ).right(),
+            ).mockGetDataForRange(
+                secondStart,
+                secondEnd,
+                DailyStatsAggregate(
+                    values = createDailyStats(count, emptyList(), end.toLocalDate()),
+                ).right(),
+            ).calculate(
+                start = start.toLocalDate(),
+                DatePeriod(months = 1),
+            ).verifyGetDataForRange(start, end).verifyGetDataForRange(
+                secondStart,
+                secondEnd,
+            )
         }
 
     @Test
@@ -161,39 +117,23 @@ internal class RecalculateLatestStreakUCTest {
             val secondEnd = LocalDate(2022, 3, 2)
             val days2 = listOf(0, 1, 2, 3, 8, 9, 11, 12, 13, 14)
 
-            robot.buildService()
-                .mockGetDataForRange(
-                    start.toString(),
-                    end.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days, end),
-                        range = StatsRange(start, end)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    secondStart.toString(),
-                    secondEnd.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days2, secondEnd),
-                        range = StatsRange(
-                            start.minus(1, DateTimeUnit.MONTH),
-                            end.minus(1, DateTimeUnit.MONTH)
-                        )
-                    ).right()
-                )
-                .calculate(
-                    start = start,
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
-                )
-                .resultShouldBe(
-                    Streak(
-                        start = "2022-03-13".toLocalDate(),
-                        end = "2022-03-31".toLocalDate()
-                    ).right()
-                )
+            robot.buildService().mockGetDataForRange(
+                start.toString(),
+                end.toString(),
+                DailyStatsAggregate(values = createDailyStats(count, days, end)).right(),
+            ).mockGetDataForRange(
+                secondStart.toString(),
+                secondEnd.toString(),
+                DailyStatsAggregate(values = createDailyStats(count, days2, secondEnd)).right(),
+            ).calculate(
+                start = start,
+                DatePeriod(days = 14),
+            ).resultShouldBe(
+                Streak(
+                    start = "2022-03-13".toLocalDate(),
+                    end = "2022-03-31".toLocalDate(),
+                ).right(),
+            )
         }
 
     @Test
@@ -207,39 +147,23 @@ internal class RecalculateLatestStreakUCTest {
             val secondEnd = LocalDate(2022, 3, 2)
             val days2 = listOf(0, 1, 2, 3, 8, 9, 11, 12, 13)
 
-            robot.buildService()
-                .mockGetDataForRange(
-                    start.toString(),
-                    end.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days, end),
-                        range = StatsRange(start, end)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    secondStart.toString(),
-                    secondEnd.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count, days2, secondEnd),
-                        range = StatsRange(
-                            start.minus(1, DateTimeUnit.MONTH),
-                            end.minus(1, DateTimeUnit.MONTH)
-                        )
-                    ).right()
-                )
-                .calculate(
-                    start = start,
-                    value = 2,
-                    unit = DateTimeUnit.WEEK,
-                )
-                .resultShouldBe(
-                    Streak(
-                        start = "2022-03-17".toLocalDate(),
-                        end = "2022-03-31".toLocalDate()
-                    ).right()
-                )
+            robot.buildService().mockGetDataForRange(
+                start.toString(),
+                end.toString(),
+                DailyStatsAggregate(values = createDailyStats(count, days, end)).right(),
+            ).mockGetDataForRange(
+                secondStart.toString(),
+                secondEnd.toString(),
+                DailyStatsAggregate(values = createDailyStats(count, days2, secondEnd)).right(),
+            ).calculate(
+                start = start,
+                DatePeriod(days = 14),
+            ).resultShouldBe(
+                Streak(
+                    start = "2022-03-17".toLocalDate(),
+                    end = "2022-03-31".toLocalDate(),
+                ).right(),
+            )
         }
 
     @Test
@@ -280,80 +204,42 @@ internal class RecalculateLatestStreakUCTest {
             val count7 = end7.daysUntil(start7) + 1
             val days7 = emptyList<Int>()
 
-            robot.buildService()
-                .mockGetDataForRange(
-                    start1.toString(),
-                    end1.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count1, days1, end1),
-                        range = StatsRange(start1, end1)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    start2.toString(),
-                    end2.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count2, days2, end2),
-                        range = StatsRange(start2, end2)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    start3.toString(),
-                    end3.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count3, days3, end3),
-                        range = StatsRange(start3, end3)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    start4.toString(),
-                    end4.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count4, days4, end4),
-                        range = StatsRange(start4, end4)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    start5.toString(),
-                    end5.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count5, days5, end5),
-                        range = StatsRange(start5, end5)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    start6.toString(),
-                    end6.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count6, days6, end6),
-                        range = StatsRange(start6, end6)
-                    ).right(),
-                )
-                .mockGetDataForRange(
-                    start7.toString(),
-                    end7.toString(),
-                    Stats(
-                        totalTime = Time.ZERO,
-                        dailyStats = createDailyStats(count7, days7, end7),
-                        range = StatsRange(start7, end7)
-                    ).right(),
-                )
-                .calculate(
-                    start = start1,
-                    value = 1,
-                    unit = DateTimeUnit.MONTH,
-                )
-                .resultShouldBe(
-                    Streak(
-                        start = end6,
-                        end = start1,
-                    ).right()
-                )
+            robot.buildService().mockGetDataForRange(
+                start1.toString(),
+                end1.toString(),
+                DailyStatsAggregate(values = createDailyStats(count1, days1, end1)).right(),
+            ).mockGetDataForRange(
+                start2.toString(),
+                end2.toString(),
+                DailyStatsAggregate(values = createDailyStats(count2, days2, end2)).right(),
+            ).mockGetDataForRange(
+                start3.toString(),
+                end3.toString(),
+                DailyStatsAggregate(values = createDailyStats(count3, days3, end3)).right(),
+            ).mockGetDataForRange(
+                start4.toString(),
+                end4.toString(),
+                DailyStatsAggregate(values = createDailyStats(count4, days4, end4)).right(),
+            ).mockGetDataForRange(
+                start5.toString(),
+                end5.toString(),
+                DailyStatsAggregate(values = createDailyStats(count5, days5, end5)).right(),
+            ).mockGetDataForRange(
+                start6.toString(),
+                end6.toString(),
+                DailyStatsAggregate(values = createDailyStats(count6, days6, end6)).right(),
+            ).mockGetDataForRange(
+                start7.toString(),
+                end7.toString(),
+                DailyStatsAggregate(values = createDailyStats(count7, days7, end7)).right(),
+            ).calculate(
+                start = start1,
+                DatePeriod(months = 1),
+            ).resultShouldBe(
+                Streak(
+                    start = end6,
+                    end = start1,
+                ).right(),
+            )
         }
 }

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.common
+package com.jacob.wakatimeapp.core.common.utils
 
 import java.time.format.TextStyle.SHORT
 import java.util.Locale

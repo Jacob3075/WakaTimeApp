@@ -1,6 +1,9 @@
 package com.jacob.wakatimeapp.core.common.di
 
 import android.content.Context
+import com.jacob.wakatimeapp.core.common.utils.DefaultInstantProvider
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -13,14 +16,22 @@ import net.openid.appauth.AuthorizationService
 
 @Module
 @InstallIn(SingletonComponent::class)
-object CommonModule {
-    @Singleton
-    @Provides
-    @Suppress("InjectDispatcher")
-    fun provideCoroutineContext(): CoroutineContext = Dispatchers.IO
+@Suppress("UnnecessaryAbstractClass")
+abstract class CommonModule {
 
-    @Singleton
-    @Provides
-    fun provideAuthorizationService(@ApplicationContext context: Context) =
-        AuthorizationService(context)
+    @Binds
+    abstract fun provideInstantProvider(impl: DefaultInstantProvider): InstantProvider
+
+    companion object {
+
+        @Singleton
+        @Provides
+        @Suppress("InjectDispatcher")
+        fun provideCoroutineContext(): CoroutineContext = Dispatchers.IO
+
+        @Singleton
+        @Provides
+        fun provideAuthorizationService(@ApplicationContext context: Context) =
+            AuthorizationService(context)
+    }
 }

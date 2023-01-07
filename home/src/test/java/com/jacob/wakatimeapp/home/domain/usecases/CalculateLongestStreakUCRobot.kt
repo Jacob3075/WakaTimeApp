@@ -3,16 +3,15 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either
 import arrow.core.right
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.DailyStats
+import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Project
-import com.jacob.wakatimeapp.core.models.Stats
-import com.jacob.wakatimeapp.core.models.StatsRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
-import com.jacob.wakatimeapp.home.domain.InstantProvider
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
@@ -93,7 +92,7 @@ internal class CalculateLongestStreakUCRobot {
     fun mockGetStatsForRange(
         start: String? = null,
         end: String? = null,
-        data: Either<Error, Stats>,
+        data: Either<Error, DailyStatsAggregate>,
     ) = apply {
         coEvery {
             mockHomePageNetworkData.getStatsForRange(
@@ -141,17 +140,12 @@ internal class CalculateLongestStreakUCRobot {
             date = LocalDate(2022, 1, 1),
         )
 
-        val stats = Stats(
-            totalTime = Time.ZERO,
-            dailyStats = List(30) {
+        val stats = DailyStatsAggregate(
+            values = List(30) {
                 dailyStats.copy(
                     date = LocalDate(2022, 1, it + 1),
                 )
             },
-            range = StatsRange(
-                startDate = LocalDate(1, 1, 1),
-                endDate = LocalDate(1, 1, 1),
-            ),
         )
     }
 }
