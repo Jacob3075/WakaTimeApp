@@ -45,9 +45,9 @@ private fun SearchProjectsScreen(
     when (val stateInstance = state) {
         is Loaded -> SearchProjectsLoaded(
             state = stateInstance,
-            modifier = modifier,
             updateSearchQuery = viewModel::updateSearchQuery,
             onProjectItemClicked = { navigator.toProjectDetailsPage(it.name) },
+            modifier = modifier,
         )
 
         Loading -> WtaAnimation(
@@ -65,15 +65,14 @@ private fun SearchProjectsScreen(
 @Composable
 private fun SearchProjectsLoaded(
     state: Loaded,
-    modifier: Modifier = Modifier,
     updateSearchQuery: (TextFieldValue) -> Unit,
     onProjectItemClicked: (ProjectDetails) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.statusBarsPadding()
-            .padding(
-                horizontal = MaterialTheme.spacing.medium,
-            ),
+        modifier = modifier
+            .statusBarsPadding()
+            .padding(horizontal = MaterialTheme.spacing.medium),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         SearchBar(
