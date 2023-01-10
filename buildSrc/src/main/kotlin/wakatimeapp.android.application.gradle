@@ -3,7 +3,6 @@ plugins {
     id "kotlin-android"
     id "org.jetbrains.kotlin.kapt"
     id "dagger.hilt.android.plugin"
-    id "com.google.devtools.ksp"
 
     id "wakatimeapp.tooling"
 }
@@ -72,7 +71,6 @@ dependencies {
 
     // Navigation
     implementation(libs.raamcosta.compose.destinations.core)
-    ksp(libs.raamcosta.compose.destinations.ksp)
 
     // Hilt
     implementation(libs.hilt.android)

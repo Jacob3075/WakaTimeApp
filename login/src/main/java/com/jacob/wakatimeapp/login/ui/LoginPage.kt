@@ -45,11 +45,13 @@ import com.jacob.wakatimeapp.core.ui.theme.button
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.pageTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
 
 @Composable
-fun LoginPageScreen(
+@Destination
+fun LoginPage(
     loginPageNavigator: LoginPageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,

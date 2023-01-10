@@ -37,13 +37,15 @@ import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun HomePageScreen(
+@Destination
+fun HomePage(
     navigator: HomePageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,

@@ -8,9 +8,11 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
-fun DetailsPageScreen(
+@Destination(navArgsDelegate = DetailsPageNavArgs::class)
+fun DetailsPage(
     navigator: DetailsPageNavigator,
     modifier: Modifier = Modifier,
 ) = DetailsPageScreen(

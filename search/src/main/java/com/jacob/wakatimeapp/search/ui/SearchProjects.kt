@@ -21,9 +21,11 @@ import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loaded
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loading
 import com.jacob.wakatimeapp.search.ui.components.ProjectsList
 import com.jacob.wakatimeapp.search.ui.components.SearchBar
+import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
-fun SearchProjectsScreen(
+@Destination
+fun SearchProjects(
     navigator: SearchProjectsNavigator,
     modifier: Modifier = Modifier,
 ) = SearchProjectsScreen(
