@@ -25,7 +25,11 @@ class HomePageNavigatorImpl(private val navigator: DestinationsNavigator) : Home
 }
 
 class SearchPageNavigatorImpl(private val navigator: DestinationsNavigator) :
-    SearchProjectsNavigator
+    SearchProjectsNavigator {
+    override fun toProjectDetailsPage(name: String) {
+        TODO("")
+    }
+}
 
 class DetailsPageNavigatorImpl(private val navigator: DestinationsNavigator) :
     DetailsPageNavigator

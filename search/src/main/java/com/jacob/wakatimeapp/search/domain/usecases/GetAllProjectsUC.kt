@@ -1,18 +1,17 @@
 package com.jacob.wakatimeapp.search.domain.usecases
 
-import arrow.core.Either
 import arrow.core.raise.either
-import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.search.data.network.SearchProjectNetworkData
 import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.collections.immutable.toImmutableList
 
 @Singleton
 internal class GetAllProjectsUC @Inject constructor(
     private val searchProjectNetworkData: SearchProjectNetworkData,
 ) {
-    suspend operator fun invoke(): Either<Error, List<ProjectDetails>> = either {
+    suspend operator fun invoke() = either {
         var page = 1
         val projects = mutableListOf<ProjectDetails>()
 
@@ -26,6 +25,6 @@ internal class GetAllProjectsUC @Inject constructor(
             ++page
         } while (true)
 
-        projects
+        projects.toImmutableList()
     }
 }
