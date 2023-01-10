@@ -45,6 +45,15 @@ android {
 
     buildFeatures { compose = true }
     composeOptions { kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get() }
+
+    // Compose Destination config (https://github.com/raamcosta/compose-destinations/issues/314)
+    libraryVariants.all { variant ->
+        kotlin.sourceSets {
+            getByName(variant.name) {
+                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
+            }
+        }
+    }
 }
 
 dependencies {
@@ -65,6 +74,10 @@ dependencies {
     implementation(libs.bundles.compose.core)
     debugImplementation(libs.bundles.compose.debug)
 
+    // Navigation
+    implementation(libs.raamcosta.compose.destinations.core)
+    ksp(libs.raamcosta.compose.destinations.ksp)
+
     // Hilt
     implementation(libs.hilt.android)
     implementation(libs.hilt.navigation.compose)
@@ -84,4 +97,8 @@ dependencies {
 
 kapt {
     correctErrorTypes = true
+}
+
+ksp {
+    arg("compose-destinations.mode", "destinations")
 }
