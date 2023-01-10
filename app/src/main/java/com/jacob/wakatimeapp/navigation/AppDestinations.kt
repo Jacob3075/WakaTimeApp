@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.navigation
 
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
+import com.jacob.wakatimeapp.details.ui.DetailsPageNavArgs
 import com.jacob.wakatimeapp.details.ui.DetailsPageNavigator
 import com.jacob.wakatimeapp.details.ui.DetailsPageScreen
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
@@ -35,5 +36,5 @@ fun SearchProjects(searchProjectsNavigator: SearchProjectsNavigator) =
     SearchProjectsScreen(navigator = searchProjectsNavigator)
 
 @Composable
-@Destination
+@Destination(navArgsDelegate = DetailsPageNavArgs::class)
 fun DetailsPage(navigator: DetailsPageNavigator) = DetailsPageScreen(navigator = navigator)
