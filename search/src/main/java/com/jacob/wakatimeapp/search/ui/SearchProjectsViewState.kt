@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.search.ui
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
+import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 
 sealed class SearchProjectsViewState {
     object Loading : SearchProjectsViewState()

@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.search.data.network.SearchProjectNetworkData
-import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
+import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import javax.inject.Inject
 import javax.inject.Singleton
 

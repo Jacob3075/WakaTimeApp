@@ -4,7 +4,7 @@ import arrow.core.Either
 import arrow.core.Either.Right
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.search.data.network.SearchProjectNetworkData
-import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
+import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import com.jacob.wakatimeapp.search.domain.models.ProjectListWithPageNumber
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks
