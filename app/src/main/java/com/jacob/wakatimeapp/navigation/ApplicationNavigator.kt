@@ -20,14 +20,14 @@ class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : Log
 }
 
 class HomePageNavigatorImpl(private val navigator: DestinationsNavigator) : HomePageNavigator {
-    override fun toDetailsPage() = navigator.navigate(DetailsPageDestination)
+    override fun toDetailsPage() = navigator.navigate(DetailsPageDestination(projectName = ""))
     override fun toSearchPage() = navigator.navigate(SearchProjectsDestination)
 }
 
 class SearchPageNavigatorImpl(private val navigator: DestinationsNavigator) :
     SearchProjectsNavigator {
     override fun toProjectDetailsPage(name: String) {
-        TODO("")
+        navigator.navigate(DetailsPageDestination(projectName = name))
     }
 }
 
