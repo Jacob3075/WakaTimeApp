@@ -1,12 +1,12 @@
 package com.jacob.wakatimeapp.navigation
 
 import com.jacob.wakatimeapp.details.ui.DetailsPageNavigator
+import com.jacob.wakatimeapp.details.ui.destinations.DetailsPageDestination
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
+import com.jacob.wakatimeapp.home.ui.destinations.HomePageDestination
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
-import com.jacob.wakatimeapp.navigation.destinations.DetailsPageDestination
-import com.jacob.wakatimeapp.navigation.destinations.HomePageDestination
-import com.jacob.wakatimeapp.navigation.destinations.SearchProjectsDestination
 import com.jacob.wakatimeapp.search.ui.SearchProjectsNavigator
+import com.jacob.wakatimeapp.search.ui.destinations.SearchProjectsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
 class ApplicationNavigator(private val navigator: DestinationsNavigator) :

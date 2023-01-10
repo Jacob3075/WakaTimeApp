@@ -228,6 +228,7 @@ empty-blocks:
     active: true
 
 exceptions:
+  excludes: [ '**/build/**' ]
   active: true
   ExceptionRaisedInUnexpectedLocation:
     active: true
