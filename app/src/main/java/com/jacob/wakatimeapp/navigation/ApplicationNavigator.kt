@@ -12,23 +12,22 @@ import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 class ApplicationNavigator(private val navigator: DestinationsNavigator) :
     HomePageNavigator by HomePageNavigatorImpl(navigator),
     LoginPageNavigator by LoginPageNavigatorImpl(navigator),
-    SearchProjectsNavigator by SearchPageNavigatorImpl(navigator),
-    DetailsPageNavigator by DetailsPageNavigatorImpl(navigator)
+    DetailsPageNavigator by DetailsPageNavigatorImpl(navigator),
+    SearchProjectsNavigator {
+
+    override fun toProjectDetailsPage(projectName: String) =
+        navigator.navigate(DetailsPageDestination(projectName = projectName))
+}
 
 class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : LoginPageNavigator {
     override fun toHomePage() = navigator.navigate(HomePageDestination)
 }
 
 class HomePageNavigatorImpl(private val navigator: DestinationsNavigator) : HomePageNavigator {
-    override fun toDetailsPage() = navigator.navigate(DetailsPageDestination(projectName = ""))
-    override fun toSearchPage() = navigator.navigate(SearchProjectsDestination)
-}
+    override fun toProjectDetailsPage(projectName: String) =
+        error("Should not be called, implemented in ApplicationNavigator should be used")
 
-class SearchPageNavigatorImpl(private val navigator: DestinationsNavigator) :
-    SearchProjectsNavigator {
-    override fun toProjectDetailsPage(name: String) {
-        navigator.navigate(DetailsPageDestination(projectName = name))
-    }
+    override fun toSearchPage() = navigator.navigate(SearchProjectsDestination)
 }
 
 class DetailsPageNavigatorImpl(private val navigator: DestinationsNavigator) :
