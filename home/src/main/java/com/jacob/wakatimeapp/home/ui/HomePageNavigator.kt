@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.home.ui
 
 interface HomePageNavigator {
-    fun toDetailsPage()
+    fun toProjectDetailsPage(projectName: String)
     fun toSearchPage()
 }

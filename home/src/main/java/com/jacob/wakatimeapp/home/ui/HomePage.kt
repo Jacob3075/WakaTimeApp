@@ -75,7 +75,7 @@ private fun HomePageScreen(
 
     HomePageContent(
         viewState = viewState,
-        toDetailsPage = navigator::toDetailsPage,
+        toDetailsPage = navigator::toProjectDetailsPage,
         toSearchPage = navigator::toSearchPage,
         modifier = modifier,
     )
@@ -84,7 +84,7 @@ private fun HomePageScreen(
 @Composable
 private fun HomePageContent(
     viewState: HomePageViewState,
-    toDetailsPage: () -> Unit,
+    toDetailsPage: (String) -> Unit,
     toSearchPage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -105,7 +105,7 @@ private fun HomePageContent(
 @Composable
 private fun HomePageLoaded(
     homePageViewState: HomePageViewState.Loaded,
-    toDetailsPage: () -> Unit,
+    toDetailsPage: (String) -> Unit,
     toSearchPage: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
@@ -127,11 +127,15 @@ private fun HomePageLoaded(
             gradient = MaterialTheme.gradients.facebookMessenger,
             iconId = icons.time,
             roundedCornerPercent = 25,
-            onClick = toDetailsPage,
+            onClick = {},
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
-        RecentProjects(homePageViewState.last7DaysStats.projectsWorkedOn, onClick = toSearchPage)
+        RecentProjects(
+            homePageViewState.last7DaysStats.projectsWorkedOn,
+            onSeeAllClicked = toSearchPage,
+            onProjectClicked = toDetailsPage,
+        )
         Spacer(modifier = Modifier.height(spacing.extraSmall))
 
         WeeklyReport(homePageViewState.last7DaysStats.weeklyTimeSpent)
