@@ -601,7 +601,7 @@ style:
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: true
-    ignoreAnnotated: [ 'Preview', 'WtaPreviews' ]
+    ignoreAnnotated: [ 'Preview', 'WtaPreviews'. 'WtaComponentPreviews', 'WtaDevicePreviews' ]
     ignoreNamedArgument: true
     ignoreEnums: true
     ignoreRanges: false

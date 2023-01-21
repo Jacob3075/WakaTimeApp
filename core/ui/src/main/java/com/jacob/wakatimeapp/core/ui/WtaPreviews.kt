@@ -14,6 +14,8 @@ import androidx.compose.ui.tooling.preview.Preview
     uiMode = Configuration.UI_MODE_NIGHT_YES or Configuration.UI_MODE_TYPE_NORMAL,
     group = "component",
 )
+annotation class WtaComponentPreviews
+
 @Preview(
     name = "Full Device Light ",
     showBackground = true,
@@ -28,4 +30,8 @@ import androidx.compose.ui.tooling.preview.Preview
     showSystemUi = true,
     group = "full",
 )
+annotation class WtaDevicePreviews
+
+@WtaComponentPreviews
+@WtaDevicePreviews
 annotation class WtaPreviews

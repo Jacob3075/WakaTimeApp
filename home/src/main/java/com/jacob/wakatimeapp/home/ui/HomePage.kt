@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.home.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -17,13 +16,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.ui.WtaDevicePreviews
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
@@ -166,18 +165,7 @@ private fun HomePageLoading() = WtaAnimation(
     text = "Loading..",
 )
 
-@Preview(
-    apiLevel = 31,
-    showSystemUi = true,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
-)
-@Preview(
-    apiLevel = 31,
-    showSystemUi = true,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@WtaDevicePreviews
 @Composable
 private fun HomePagePreview(
     @PreviewParameter(HomePagePreviewProvider::class) viewState: HomePageViewState,
