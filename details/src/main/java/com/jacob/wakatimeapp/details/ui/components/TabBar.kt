@@ -15,24 +15,29 @@ import androidx.compose.ui.unit.dp
 import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.PagerState
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
 @OptIn(ExperimentalPagerApi::class)
 @Composable
-fun TabBar(pagerState: PagerState, pages: List<Tabs>) {
+internal fun TabBar(
+    pagerState: PagerState,
+    pages: ImmutableList<Tabs>,
+    modifier: Modifier = Modifier,
+) {
     val scope = rememberCoroutineScope()
     ScrollableTabRow(
         selectedTabIndex = pagerState.currentPage,
         contentColor = MaterialTheme.colorScheme.onSurface,
         divider = { },
         edgePadding = 0.dp,
-        modifier = Modifier.fillMaxWidth(),
+        modifier = modifier.fillMaxWidth(),
     ) {
         pages.forEachIndexed { index, tab ->
             val isSelected = pagerState.currentPage == index
             Tab(
                 selected = isSelected,
-                onClick = { scope.launch { pagerState.animateScrollToPage(index) } }
+                onClick = { scope.launch { pagerState.animateScrollToPage(index) } },
             ) {
                 Text(
                     text = tab.title,

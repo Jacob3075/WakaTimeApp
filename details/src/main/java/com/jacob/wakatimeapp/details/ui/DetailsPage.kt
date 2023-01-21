@@ -31,6 +31,7 @@ import com.jacob.wakatimeapp.details.ui.components.TabBar
 import com.jacob.wakatimeapp.details.ui.components.Tabs
 import com.jacob.wakatimeapp.details.ui.components.TimeTab
 import com.ramcosta.composedestinations.annotation.Destination
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
 
 @Composable
@@ -91,7 +92,7 @@ private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded) {
         Tabs.Languages,
         Tabs.Editors,
         Tabs.OperatingSystems,
-    )
+    ).toImmutableList()
 
     Column {
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))

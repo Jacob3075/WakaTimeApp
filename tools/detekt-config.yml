@@ -601,7 +601,7 @@ style:
     ignoreConstantDeclaration: true
     ignoreCompanionObjectPropertyDeclaration: true
     ignoreAnnotation: true
-    ignoreAnnotated: [ 'Preview', 'WtaPreviews'. 'WtaComponentPreviews', 'WtaDevicePreviews' ]
+    ignoreAnnotated: [ 'Preview', 'WtaPreviews', 'WtaComponentPreviews', 'WtaDevicePreviews' ]
     ignoreNamedArgument: true
     ignoreEnums: true
     ignoreRanges: false
@@ -712,7 +712,7 @@ style:
   UnusedPrivateMember:
     active: true
     allowedNames: '(_|ignored|expected|serialVersionUID|preview)'
-    ignoreAnnotated: [ 'Preview', 'WtaPreviews' ]
+    ignoreAnnotated: [ 'Preview', 'WtaPreviews', 'WtaComponentPreviews', 'WtaDevicePreviews' ]
   UseAnyOrNoneInsteadOfFind:
     active: true
   UseArrayLiteralsInAnnotations:

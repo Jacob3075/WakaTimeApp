@@ -62,6 +62,6 @@ private fun DetailsPageHeaderPreview(
 private class DetailPageHeaderPreviewProvider : CollectionPreviewParameterProvider<String>(
     listOf(
         "Project Name",
-        "Some very long project name"
+        "Some very long project name",
     ),
 )
