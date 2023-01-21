@@ -25,6 +25,7 @@ internal class DetailsPageViewModel @Inject constructor(
         viewModelScope.launch {
             val data = getProjectStatsUC(args.projectName)
             Timber.w(data.toString())
+            _viewState.value = DetailsPageViewState.Loaded(args.projectName)
         }
     }
 }
