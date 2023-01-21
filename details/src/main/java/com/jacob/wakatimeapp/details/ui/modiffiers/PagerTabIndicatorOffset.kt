@@ -30,13 +30,13 @@ fun Modifier.pagerTabIndicatorOffset(
         fraction > 0 && nextTab != null -> lerp(
             currentTab.width,
             nextTab.width,
-            fraction
+            fraction,
         ).roundToPx()
 
         fraction < 0 && previousTab != null -> lerp(
             currentTab.width,
             previousTab.width,
-            -fraction
+            -fraction,
         ).roundToPx()
 
         else -> currentTab.width.roundToPx()
@@ -46,13 +46,13 @@ fun Modifier.pagerTabIndicatorOffset(
         fraction > 0 && nextTab != null -> lerp(
             currentTab.left,
             nextTab.left,
-            fraction
+            fraction,
         ).roundToPx()
 
         fraction < 0 && previousTab != null -> lerp(
             currentTab.left,
             previousTab.left,
-            -fraction
+            -fraction,
         ).roundToPx()
 
         else -> currentTab.left.roundToPx()
@@ -63,14 +63,14 @@ fun Modifier.pagerTabIndicatorOffset(
             minWidth = indicatorWidth,
             maxWidth = indicatorWidth,
             minHeight = 0,
-            maxHeight = constraints.maxHeight
-        )
+            maxHeight = constraints.maxHeight,
+        ),
     )
 
     return@layout layout(constraints.maxWidth, maxOf(placeable.height, constraints.minHeight)) {
         placeable.placeRelative(
             indicatorOffset,
-            maxOf(constraints.minHeight - placeable.height, 0)
+            maxOf(constraints.minHeight - placeable.height, 0),
         )
     }
 }
