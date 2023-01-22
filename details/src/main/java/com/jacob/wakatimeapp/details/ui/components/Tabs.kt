@@ -6,11 +6,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 
 @Composable
-internal fun TimeTab(modifier: Modifier = Modifier) {
-    Text("Time", modifier = modifier.fillMaxSize())
-}
-
-@Composable
 internal fun LanguagesTab(modifier: Modifier = Modifier) {
     Text("Languages", modifier = modifier.fillMaxSize())
 }
