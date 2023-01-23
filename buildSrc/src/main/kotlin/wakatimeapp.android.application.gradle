@@ -49,11 +49,7 @@ android {
 
     // Compose Destination config (https://github.com/raamcosta/compose-destinations/issues/314)
     applicationVariants.all { variant ->
-        kotlin.sourceSets {
-            getByName(variant.name) {
-                kotlin.srcDir("build/generated/ksp/${variant.name}/kotlin")
-            }
-        }
+        addJavaSourceFoldersToModel(new File(buildDir, "generated/ksp/$name/kotlin"))
     }
 }
 
