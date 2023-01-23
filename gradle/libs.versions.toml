@@ -18,6 +18,8 @@ ksp = "1.8.21-1.0.11" # https://goo.gle/ksp
 composeBom = "2023.05.01" # https://developer.android.com/jetpack/androidx/releases/compose
 composeCompiler = "1.4.7" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 
+accompanistPager = "0.28.0"
+
 hilt = "2.46" # https://github.com/google/dagger
 hiltNavigationCompose = "1.0.0"
 
@@ -34,7 +36,7 @@ androidxTestCore = "1.5.0"
 androidxTestExt = "1.1.5" # https://developer.android.com/testing
 androidxTestRunner = "1.5.2"
 
-composeDestinations = "1.7.25-beta"
+composeDestinations = "1.7.33-beta" # https://github.com/raamcosta/compose-destinations
 arrow = "1.1.5" # https://github.com/arrow-kt/arrow/
 timber = "5.0.1"
 coil = "2.3.0" # https://github.com/coil-kt/coil
@@ -85,6 +87,9 @@ androidx-compose-ui-util = { module = "androidx.compose.ui:ui-util" }
 androidx-compose-material-iconsExtended = { module = "androidx.compose.material:material-icons-extended" }
 androidx-compose-ui-test-junit4 = { module = "androidx.compose.ui:ui-test-junit4" }
 androidx-compose-ui-test-manifest = { module = "androidx.compose.ui:ui-test-manifest" }
+
+accompanist-pager = { module = "com.google.accompanist:accompanist-pager", version.ref = "accompanistPager" }
+accompanist-pager-indicators = { module = "com.google.accompanist:accompanist-pager-indicators", version.ref = "accompanistPager" }
 
 hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt" }
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
