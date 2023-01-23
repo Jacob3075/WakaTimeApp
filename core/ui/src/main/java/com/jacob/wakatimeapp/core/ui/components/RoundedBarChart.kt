@@ -1,6 +1,6 @@
 @file:Suppress("MagicNumber", "ComplexMethod", "LongMethod", "LoopWithTooManyJumpStatements")
 
-package com.jacob.wakatimeapp.home.ui.components
+package com.jacob.wakatimeapp.core.ui.components
 
 import android.content.Context
 import android.graphics.Canvas
