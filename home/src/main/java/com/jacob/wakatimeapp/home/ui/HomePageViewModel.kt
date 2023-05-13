@@ -5,6 +5,7 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import arrow.core.continuations.either
 import com.jacob.wakatimeapp.core.common.utils.log
+import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC
@@ -76,12 +77,12 @@ internal class HomePageViewModel @Inject constructor(
     private suspend fun updateCacheWithNewData() = either {
         val last7DaysStats = getLast7DaysStatsUC().bind()
         val streakRange = calculateCurrentStreakUC().bind()
-        val longestStreak = calculateLongestStreakUC().bind()
+        //        val longestStreak = calculateLongestStreakUC().bind()
 
         updateCachedHomePageUiData.invoke(
             last7DaysStats = last7DaysStats,
             currentStreak = streakRange,
-            longestStreak = longestStreak,
+            longestStreak = Streak.ZERO,
         )
     }
 }
