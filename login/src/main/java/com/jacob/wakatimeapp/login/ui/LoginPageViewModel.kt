@@ -61,6 +61,7 @@ class LoginPageViewModel @Inject constructor(
      * token is available
      */
     private fun updateUserDetails() {
+        _viewState.value = LoginPageState.Loading
         viewModelScope.launch {
             _viewState.value = authTokenProvider.getFreshToken()
                 .filterNotNull()
