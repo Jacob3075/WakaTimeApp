@@ -15,8 +15,7 @@ class UpdateUserDetailsUC @Inject constructor(
     suspend operator fun invoke(token: String) = try {
         val userDetailsResponse = loginPageAPI.getUserDetails("Bearer $token")
         if (userDetailsResponse.isSuccessful) {
-            val userDetails = userDetailsResponse.body()!!
-                .toModel()
+            val userDetails = userDetailsResponse.body()!!.toModel()
             authDataStore.updateUserDetails(userDetails)
         }
         LoginPageState.Success
