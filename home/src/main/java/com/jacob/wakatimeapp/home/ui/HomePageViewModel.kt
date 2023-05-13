@@ -36,34 +36,36 @@ internal class HomePageViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             getCachedHomePageUiDataUC().log("cachedData")
                 .collect { eitherCachedData ->
-                    either {
-                        when (eitherCachedData) {
-                            is Either.Left ->
-                                _homePageState.value =
-                                    HomePageViewState.Error(eitherCachedData.value)
+                    when (eitherCachedData) {
+                        is Either.Left ->
+                            _homePageState.value = HomePageViewState.Error(eitherCachedData.value)
 
-                            is Either.Right -> {
-                                val cachedData = eitherCachedData.value
+                        is Either.Right -> {
+                            val cachedData = eitherCachedData.value
 
-                                when {
-                                    cachedData == null -> updateCacheWithNewData().bind()
-                                    cachedData.isStaleData -> {
-                                        _homePageState.value = HomePageViewState.Loaded(
-                                            last7DaysStats = cachedData.last7DaysStats,
-                                            userDetails = cachedData.userDetails,
-                                            longestStreak = cachedData.longestStreak,
-                                            currentStreak = cachedData.currentStreak,
-                                        )
-                                        updateCacheWithNewData().bind()
-                                    }
+                            when {
+                                cachedData == null -> updateCacheWithNewData().onLeft {
+                                    _homePageState.value = HomePageViewState.Error(it)
+                                }
 
-                                    else -> _homePageState.value = HomePageViewState.Loaded(
+                                cachedData.isStaleData -> {
+                                    _homePageState.value = HomePageViewState.Loaded(
                                         last7DaysStats = cachedData.last7DaysStats,
                                         userDetails = cachedData.userDetails,
                                         longestStreak = cachedData.longestStreak,
                                         currentStreak = cachedData.currentStreak,
                                     )
+                                    updateCacheWithNewData().onLeft {
+                                        _homePageState.value = HomePageViewState.Error(it)
+                                    }
                                 }
+
+                                else -> _homePageState.value = HomePageViewState.Loaded(
+                                    last7DaysStats = cachedData.last7DaysStats,
+                                    userDetails = cachedData.userDetails,
+                                    longestStreak = cachedData.longestStreak,
+                                    currentStreak = cachedData.currentStreak,
+                                )
                             }
                         }
                     }
