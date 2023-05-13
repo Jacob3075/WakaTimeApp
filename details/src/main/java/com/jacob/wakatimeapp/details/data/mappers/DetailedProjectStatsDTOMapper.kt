@@ -32,7 +32,7 @@ fun DetailedProjectStatsDTO.toModel(): ProjectStats {
         .let(::OperatingSystems)
 
     return ProjectStats(
-        totalTime = Time.fromDecimal(cummulativeTotal.decimal.toFloat()),
+        totalTime = Time.fromDecimal(cumulativeTotal.decimal.toFloat()),
         dailyProjectStats = dailyStats,
         range = StatsRange(startDate = start, endDate = end),
         languages = languages,

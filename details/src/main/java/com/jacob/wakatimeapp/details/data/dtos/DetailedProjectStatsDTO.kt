@@ -21,7 +21,7 @@ data class DetailedProjectStatsDTO(
     val end: String,
     val start: String,
     @SerialName("available_branches") val availableBranches: List<String>,
-    @SerialName("cummulative_total") val cummulativeTotal: CumulativeTotalDTO,
+    @SerialName("cumulative_total") val cumulativeTotal: CumulativeTotalDTO,
 ) {
     @Serializable
     data class Data(

@@ -18,7 +18,7 @@ data class GetDailyStatsResDTO(
     val data: List<Data>,
     val end: String,
     val start: String,
-    @SerialName("cummulative_total") val cumulativeTotal: CumulativeTotalDTO,
+    @SerialName("cumulative_total") val cumulativeTotal: CumulativeTotalDTO,
 ) {
     @Serializable
     data class Data(

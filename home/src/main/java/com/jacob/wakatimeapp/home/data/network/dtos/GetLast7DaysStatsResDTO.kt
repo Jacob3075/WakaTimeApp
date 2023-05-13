@@ -18,7 +18,7 @@ data class GetLast7DaysStatsResDTO(
     val data: List<Data>,
     val end: String,
     val start: String,
-    val cumulativeTotal: CumulativeTotalDTO,
+    @SerialName("cumulative_total") val cumulativeTotal: CumulativeTotalDTO,
 ) {
 
     @Serializable

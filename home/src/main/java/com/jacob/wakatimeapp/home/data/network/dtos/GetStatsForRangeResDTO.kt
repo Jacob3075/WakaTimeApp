@@ -18,7 +18,7 @@ data class GetStatsForRangeResDTO(
     val data: List<Data>,
     val start: String,
     val end: String,
-    @SerialName("cummulative_total") val cumulativeTotal: CumulativeTotalDTO,
+    @SerialName("cumulative_total") val cumulativeTotal: CumulativeTotalDTO,
 ) {
 
     @Serializable
