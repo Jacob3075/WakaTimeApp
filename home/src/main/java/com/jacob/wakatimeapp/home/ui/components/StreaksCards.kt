@@ -17,15 +17,16 @@ import com.jacob.wakatimeapp.home.domain.models.Streak
 import kotlinx.datetime.LocalDate
 
 @Composable
-internal fun CurrentStreakCard(
-    currentStreak: Streak,
+internal fun StreakCard(
+    text: String,
+    streak: Streak,
     gradient: Gradient,
     roundedCornerPercent: Int,
     modifier: Modifier = Modifier,
 ) {
     StatsChip(
-        statsType = "Current Streak",
-        statsValue = "${currentStreak.days}",
+        statsType = text,
+        statsValue = "${if (streak == Streak.ZERO) 0 else streak.days}",
         statsValueSubText = "days",
         gradient = gradient,
         iconId = MaterialTheme.assets.icons.time,
@@ -46,7 +47,7 @@ internal fun DaysWorkedInWeek(
     modifier: Modifier = Modifier,
 ) {
     StatsChip(
-        statsType = "Current Streak",
+        statsType = "Days Worked in Week",
         statsValue = "$numberOfDaysWorked",
         statsValueSubText = "/7 days",
         gradient = gradient,
@@ -64,8 +65,9 @@ private fun CurrentStreakCardPreview() = WakaTimeAppTheme {
         Row(
             horizontalArrangement = Arrangement.spacedBy(10.dp),
         ) {
-            CurrentStreakCard(
-                currentStreak = Streak(
+            StreakCard(
+                text = "Current Streak",
+                streak = Streak(
                     start = LocalDate(2022, 1, 1),
                     end = LocalDate(2022, 1, 11),
                 ),

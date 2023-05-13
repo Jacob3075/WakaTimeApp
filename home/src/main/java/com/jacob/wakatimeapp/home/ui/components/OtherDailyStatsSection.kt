@@ -74,8 +74,9 @@ private fun StreakStats(
         modifier = Modifier.height(Min),
         horizontalArrangement = Arrangement.spacedBy(spacing.small),
     ) {
-        CurrentStreakCard(
-            currentStreak = longestStreak,
+        StreakCard(
+            text = "TO BE DECIDED LATER...",
+            streak = longestStreak,
             gradient = gradients.flare,
             roundedCornerPercent = 10,
             modifier = Modifier
@@ -86,8 +87,9 @@ private fun StreakStats(
             modifier = Modifier.weight(1f),
             verticalArrangement = Arrangement.spacedBy(spacing.small),
         ) {
-            CurrentStreakCard(
-                currentStreak = currentStreak,
+            StreakCard(
+                text = "Current Streak",
+                streak = currentStreak,
                 gradient = gradients.amin,
                 roundedCornerPercent = 20,
             )
