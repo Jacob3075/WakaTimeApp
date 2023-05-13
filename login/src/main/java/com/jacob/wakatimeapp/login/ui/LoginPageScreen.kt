@@ -60,7 +60,6 @@ fun LoginPageScreen(
     LaunchedEffect(viewState) {
         when (val viewStateInstance = viewState) {
             is LoginPageState.Success -> {
-                viewModel.updateUserDetails()
                 loginPageNavigator.toHomePage()
             }
 

@@ -51,7 +51,7 @@ class LoginPageViewModel @Inject constructor(
 
     init {
         val authToken = authTokenProvider.current
-        if (authToken.isAuthorized) _viewState.value = LoginPageState.Success
+        if (authToken.isAuthorized) updateUserDetails()
     }
 
     /**
@@ -60,9 +60,9 @@ class LoginPageViewModel @Inject constructor(
      * Must be called from UI before navigating to the next screen so that a fresh
      * token is available
      */
-    fun updateUserDetails() {
+    private fun updateUserDetails() {
         viewModelScope.launch {
-            authTokenProvider.getFreshToken()
+            _viewState.value = authTokenProvider.getFreshToken()
                 .filterNotNull()
                 .first()
                 .let { updateUserDetailsUC(it) }
@@ -93,7 +93,7 @@ class LoginPageViewModel @Inject constructor(
                     authorizationException,
                 )
                 if (authState.isAuthorized) {
-                    _viewState.value = LoginPageState.Success
+                    updateUserDetails()
                 } else {
                     _viewState.value = LoginPageState.Error("Failed to login")
                 }

@@ -9,6 +9,10 @@
         <option value="no-wildcard-imports" />
         <option value="trailing-comma" />
         <option value="max-line-length" />
+        <option value="trailing-comma-on-call-site" />
+        <option value="trailing-comma-on-call-site" />
+        <option value="trailing-comma-on-declaration-site" />
+        <option value="trailing-comma-on-declaration-site" />
       </list>
     </disabledRules>
   </component>
