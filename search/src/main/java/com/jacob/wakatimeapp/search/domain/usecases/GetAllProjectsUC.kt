@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.search.domain.usecases
 
-import arrow.core.continuations.either
+import arrow.core.raise.either
 import com.jacob.wakatimeapp.search.data.network.SearchProjectNetworkData
 import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import javax.inject.Inject
