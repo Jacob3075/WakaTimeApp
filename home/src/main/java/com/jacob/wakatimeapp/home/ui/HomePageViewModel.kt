@@ -3,7 +3,7 @@ package com.jacob.wakatimeapp.home.ui
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
-import arrow.core.continuations.either
+import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.utils.log
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC

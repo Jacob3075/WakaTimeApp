@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
-import arrow.core.continuations.either
+import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.common.utils.toDate
@@ -99,16 +99,19 @@ private fun List<List<Entry<LocalDate, Time>>>.toStreaks() = map {
     Streak(it.first().key, it.last().key)
 }
 
-private fun List<Streak>.combineStreaks() = if (isEmpty()) this
-else drop(1)
-    .fold(mutableListOf(first())) { acc, streakRange ->
-        val last = acc.last()
-        when (last.canBeCombinedWith(streakRange)) {
-            true -> acc.replaceLast(last + streakRange)
-            false -> acc.add(streakRange)
+private fun List<Streak>.combineStreaks() = if (isEmpty()) {
+    this
+} else {
+    drop(1)
+        .fold(mutableListOf(first())) { acc, streakRange ->
+            val last = acc.last()
+            when (last.canBeCombinedWith(streakRange)) {
+                true -> acc.replaceLast(last + streakRange)
+                false -> acc.add(streakRange)
+            }
+            acc
         }
-        acc
-    }
+}
 
 private fun MutableList<Streak>.replaceLast(e: Streak) {
     removeLast()
