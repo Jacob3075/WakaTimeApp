@@ -8,7 +8,6 @@
     </option>
     <option name="commitMessageValidationEnabledOverride">
       <BoolValueOverride>
-        <option name="enabled" value="true" />
         <option name="value" value="true" />
       </BoolValueOverride>
     </option>

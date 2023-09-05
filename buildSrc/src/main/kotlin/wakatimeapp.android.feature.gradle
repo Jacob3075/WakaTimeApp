@@ -11,11 +11,11 @@ plugins {
 }
 
 android {
-    compileSdk = 33
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26
-        targetSdk = 33
+        targetSdk = 34
 
         testInstrumentationRunner = "com.jacob.wakatimeapp.HiltTestRunner"
         vectorDrawables { useSupportLibrary = true }
