@@ -4,8 +4,8 @@ plugins {
 }
 
 dependencies {
-    detektPlugins("com.twitter.compose.rules:detekt:0.0.26") // https://github.com/twitter/compose-rules/
-    detektPlugins("io.gitlab.arturbosch.detekt:detekt-formatting:1.22.0") // https://detekt.dev
+    detektPlugins(libs.detekt) // https://github.com/twitter/compose-rules/
+    detektPlugins(libs.detekt.formatting) // https://detekt.dev
 }
 
 detekt {
