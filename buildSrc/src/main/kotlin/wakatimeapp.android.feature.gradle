@@ -45,11 +45,6 @@ android {
 
     buildFeatures { compose = true }
     composeOptions { kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get() }
-
-    // Compose Destination config (https://github.com/raamcosta/compose-destinations/issues/314)
-    libraryVariants.all { variant ->
-        addJavaSourceFoldersToModel(new File(buildDir, "generated/ksp/$name/kotlin"))
-    }
 }
 
 dependencies {
