@@ -60,7 +60,7 @@ fun LoginPage(
     val snackBarCoroutineScope = rememberCoroutineScope()
     LaunchedEffect(viewState) {
         when (val viewStateInstance = viewState) {
-            is LoginPageState.Success -> loginPageNavigator.toHomePage()
+            is LoginPageState.Success -> loginPageNavigator.toExtractUserDataPage()
 
             is LoginPageState.Error -> showSnackBar(
                 viewStateInstance,
