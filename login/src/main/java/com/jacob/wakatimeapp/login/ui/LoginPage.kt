@@ -13,12 +13,10 @@ import androidx.compose.foundation.layout.PaddingValues
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.ButtonDefaults
-import androidx.compose.material3.CircularProgressIndicator
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration
 import androidx.compose.material3.SnackbarHostState
@@ -39,8 +37,9 @@ import androidx.compose.ui.tooling.preview.PreviewParameterProvider
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
-import com.jacob.wakatimeapp.core.ui.modifiers.gesturesDisabled
+import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.button
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.pageTitle
@@ -102,21 +101,17 @@ private fun LoginPageContent(
             modifier = modifier,
         )
 
-        is LoginPageState.Loading -> Box(
-            modifier = modifier
-                .fillMaxSize()
-                .gesturesDisabled(),
-        ) {
-            CircularProgressIndicator(
-                modifier = Modifier
-                    .align(Alignment.Center)
-                    .size(60.dp),
-            )
-            LoginPageIdleState(getLoginAuthIntent = getLoginAuthIntent, launcher = launcher)
-        }
-
+        is LoginPageState.Loading -> LoginPageLoading()
         else -> Unit
     }
+}
+
+@Composable
+private fun LoginPageLoading() {
+    WtaAnimation(
+        animation = MaterialTheme.assets.animations.randomLoadingAnimation,
+        text = "Loading..",
+    )
 }
 
 private fun showSnackBar(
