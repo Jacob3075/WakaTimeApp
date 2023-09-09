@@ -1,15 +1,13 @@
 @file: Suppress("MagicNumber")
 
-package com.jacob.wakatimeapp.home.ui.components
+package com.jacob.wakatimeapp.details.ui.components
 
-import android.content.res.Configuration
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams
+import android.view.ViewGroup.LayoutParams
+import android.widget.LinearLayout
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.aspectRatio
-import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.ColorScheme
@@ -18,15 +16,13 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
-import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.viewinterop.AndroidView
 import com.github.mikephil.charting.animation.Easing
 import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
+import com.github.mikephil.charting.components.XAxis
 import com.github.mikephil.charting.data.BarData
 import com.github.mikephil.charting.data.BarDataSet
 import com.github.mikephil.charting.data.BarEntry
@@ -34,9 +30,6 @@ import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jacob.wakatimeapp.core.common.utils.getDisplayNameForDay
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.components.RoundedBarChart
-import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
-import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import kotlinx.collections.immutable.ImmutableCollection
 import kotlinx.collections.immutable.ImmutableMap
@@ -45,31 +38,29 @@ import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun WeeklyReport(
-    weeklyTimeSpent: ImmutableMap<LocalDate, Time>,
-    modifier: Modifier = Modifier,
-) = Column(
-    modifier = modifier.fillMaxWidth(),
-    verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.extraSmall),
-) {
-    Row(
-        verticalAlignment = Alignment.CenterVertically,
-        horizontalArrangement = Arrangement.SpaceBetween,
-        modifier = Modifier.fillMaxWidth(),
+internal fun TimeTab(modifier: Modifier = Modifier) {
+    Column(
+        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        modifier = modifier.fillMaxSize(),
     ) {
-        val typography = MaterialTheme.typography
-        Text(text = "Weekly Report", style = typography.sectionTitle)
-        Text(
-            text = "Details",
-            color = MaterialTheme.colorScheme.primary,
-            style = typography.sectionSubtitle,
-        )
+        RecentTimeSpentChart(emptyMap<LocalDate, Time>().toImmutableMap())
+        QuickStatsCards()
+        ProjectHistory()
     }
-    WeeklyReportChart(weeklyTimeSpent)
 }
 
 @Composable
-private fun WeeklyReportChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>) {
+private fun QuickStatsCards() {
+    Text(text = "Quick Stats Cards")
+}
+
+@Composable
+private fun ProjectHistory() {
+    Text(text = "Project History")
+}
+
+@Composable
+private fun RecentTimeSpentChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>) {
     val cardShape = RoundedCornerShape(percent = 10)
     val colorScheme = MaterialTheme.colorScheme
 
@@ -91,7 +82,10 @@ private fun WeeklyReportChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>) {
             modifier = Modifier.padding(spacing.small),
             factory = {
                 RoundedBarChart(it).apply {
-                    layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
+                    layoutParams = LinearLayout.LayoutParams(
+                        LayoutParams.MATCH_PARENT,
+                        LayoutParams.MATCH_PARENT,
+                    )
                     data = barData
 
                     configureChartProperties()
@@ -119,7 +113,7 @@ private fun rememberLabels(days: ImmutableSet<LocalDate>): ImmutableMap<Int, Str
 
 @Composable
 private fun rememberBarData(weeklyStats: ImmutableCollection<Time>, colorScheme: ColorScheme) =
-    remember(key1 = weeklyStats) {
+    remember(weeklyStats) {
         val onSurface = colorScheme.onSurface.toArgb()
         val barColor = colorScheme.primary.toArgb()
 
@@ -144,7 +138,7 @@ private fun RoundedBarChart.configureAxis(labels: ImmutableMap<Int, String>, onS
     xAxis.apply {
         setDrawGridLines(false)
         textColor = onSurface
-        position = BOTTOM
+        position = XAxis.XAxisPosition.BOTTOM
         valueFormatter = XAxisDayFormatter(labels)
     }
     axisLeft.apply {
@@ -169,14 +163,6 @@ private fun RoundedBarChart.configureChartProperties() {
     description.isEnabled = false
     legend.isEnabled = false
     animateY(3000, Easing.EaseInOutBack)
-}
-
-@Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
-@Composable
-private fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
-    Surface {
-        WeeklyReport(emptyMap<LocalDate, Time>().toImmutableMap())
-    }
 }
 
 private class XAxisDayFormatter(private val labels: ImmutableMap<Int, String>) : ValueFormatter() {

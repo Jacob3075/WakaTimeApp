@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.home.ui
 
-import android.content.res.Configuration
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
@@ -17,13 +16,13 @@ import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.ui.WtaDevicePreviews
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
@@ -37,13 +36,15 @@ import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
 import com.jacob.wakatimeapp.home.ui.components.WeeklyReport
+import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
 
 @Composable
-fun HomePageScreen(
+@Destination
+fun HomePage(
     navigator: HomePageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
@@ -73,7 +74,7 @@ private fun HomePageScreen(
 
     HomePageContent(
         viewState = viewState,
-        toDetailsPage = navigator::toDetailsPage,
+        toDetailsPage = navigator::toProjectDetailsPage,
         toSearchPage = navigator::toSearchPage,
         modifier = modifier,
     )
@@ -82,7 +83,7 @@ private fun HomePageScreen(
 @Composable
 private fun HomePageContent(
     viewState: HomePageViewState,
-    toDetailsPage: () -> Unit,
+    toDetailsPage: (String) -> Unit,
     toSearchPage: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
@@ -103,7 +104,7 @@ private fun HomePageContent(
 @Composable
 private fun HomePageLoaded(
     homePageViewState: HomePageViewState.Loaded,
-    toDetailsPage: () -> Unit,
+    toDetailsPage: (String) -> Unit,
     toSearchPage: () -> Unit = {},
 ) {
     val scrollState = rememberScrollState()
@@ -125,11 +126,15 @@ private fun HomePageLoaded(
             gradient = MaterialTheme.gradients.facebookMessenger,
             iconId = icons.time,
             roundedCornerPercent = 25,
-            onClick = toDetailsPage,
+            onClick = {},
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
-        RecentProjects(homePageViewState.last7DaysStats.projectsWorkedOn, onClick = toSearchPage)
+        RecentProjects(
+            homePageViewState.last7DaysStats.projectsWorkedOn,
+            onSeeAllClicked = toSearchPage,
+            onProjectClicked = toDetailsPage,
+        )
         Spacer(modifier = Modifier.height(spacing.extraSmall))
 
         WeeklyReport(homePageViewState.last7DaysStats.weeklyTimeSpent)
@@ -160,18 +165,7 @@ private fun HomePageLoading() = WtaAnimation(
     text = "Loading..",
 )
 
-@Preview(
-    apiLevel = 31,
-    showSystemUi = true,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_NO or Configuration.UI_MODE_TYPE_NORMAL,
-)
-@Preview(
-    apiLevel = 31,
-    showSystemUi = true,
-    showBackground = true,
-    uiMode = Configuration.UI_MODE_NIGHT_YES,
-)
+@WtaDevicePreviews
 @Composable
 private fun HomePagePreview(
     @PreviewParameter(HomePagePreviewProvider::class) viewState: HomePageViewState,

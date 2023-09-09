@@ -15,15 +15,17 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Error
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loaded
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loading
 import com.jacob.wakatimeapp.search.ui.components.ProjectsList
 import com.jacob.wakatimeapp.search.ui.components.SearchBar
-import kotlinx.collections.immutable.toImmutableList
+import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
-fun SearchProjectsScreen(
+@Destination
+fun SearchProjects(
     navigator: SearchProjectsNavigator,
     modifier: Modifier = Modifier,
 ) = SearchProjectsScreen(
@@ -33,7 +35,6 @@ fun SearchProjectsScreen(
 )
 
 @Composable
-@Suppress("UNUSED_PARAMETER")
 private fun SearchProjectsScreen(
     navigator: SearchProjectsNavigator,
     modifier: Modifier = Modifier,
@@ -43,9 +44,10 @@ private fun SearchProjectsScreen(
 
     when (val stateInstance = state) {
         is Loaded -> SearchProjectsLoaded(
-            stateInstance,
-            modifier,
+            state = stateInstance,
             updateSearchQuery = viewModel::updateSearchQuery,
+            onProjectItemClicked = { navigator.toProjectDetailsPage(it.name) },
+            modifier = modifier,
         )
 
         Loading -> WtaAnimation(
@@ -63,14 +65,14 @@ private fun SearchProjectsScreen(
 @Composable
 private fun SearchProjectsLoaded(
     state: Loaded,
-    modifier: Modifier = Modifier,
     updateSearchQuery: (TextFieldValue) -> Unit,
+    onProjectItemClicked: (ProjectDetails) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     Column(
-        modifier = modifier.statusBarsPadding()
-            .padding(
-                horizontal = MaterialTheme.spacing.medium,
-            ),
+        modifier = modifier
+            .statusBarsPadding()
+            .padding(horizontal = MaterialTheme.spacing.medium),
     ) {
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
         SearchBar(
@@ -78,6 +80,6 @@ private fun SearchProjectsLoaded(
             onValueChange = updateSearchQuery,
         )
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.medium))
-        ProjectsList(state.filteredProjects.toImmutableList())
+        ProjectsList(projects = state.filteredProjects, onProjectItemClicked = onProjectItemClicked)
     }
 }

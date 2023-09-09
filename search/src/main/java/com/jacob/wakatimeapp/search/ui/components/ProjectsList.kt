@@ -24,12 +24,16 @@ import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.cardHeader
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
+import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import kotlinx.collections.immutable.ImmutableList
 
 @OptIn(ExperimentalFoundationApi::class)
 @Composable
-internal fun ProjectsList(projects: ImmutableList<ProjectDetails>, modifier: Modifier = Modifier) =
+internal fun ProjectsList(
+    projects: ImmutableList<ProjectDetails>,
+    onProjectItemClicked: (ProjectDetails) -> Unit,
+    modifier: Modifier = Modifier,
+) =
     LazyColumn(
         modifier = modifier.fillMaxSize(),
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.medium),
@@ -38,20 +42,28 @@ internal fun ProjectsList(projects: ImmutableList<ProjectDetails>, modifier: Mod
         ),
     ) {
         items(projects, key = { it.name }) { project ->
-            ProjectListItem(project, modifier = Modifier.animateItemPlacement())
+            ProjectListItem(
+                project = project,
+                modifier = Modifier.animateItemPlacement(),
+                onClick = onProjectItemClicked,
+            )
         }
     }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProjectListItem(project: ProjectDetails, modifier: Modifier = Modifier) {
+private fun ProjectListItem(
+    project: ProjectDetails,
+    modifier: Modifier = Modifier,
+    onClick: (ProjectDetails) -> Unit,
+) {
     val spacing = MaterialTheme.spacing
     Surface(
         modifier = modifier.fillMaxWidth(),
         shape = RoundedCornerShape(percent = 25),
         shadowElevation = 8.dp,
         tonalElevation = 2.dp,
-        onClick = {},
+        onClick = { onClick(project) },
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,

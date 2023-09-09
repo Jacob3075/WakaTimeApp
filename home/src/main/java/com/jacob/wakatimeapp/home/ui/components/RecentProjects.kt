@@ -37,7 +37,8 @@ import kotlinx.collections.immutable.toImmutableList
 @Composable
 internal fun RecentProjects(
     projectsWorkedOn: ImmutableList<Project>,
-    onClick: () -> Unit,
+    onSeeAllClicked: () -> Unit,
+    onProjectClicked: (String) -> Unit,
 ) = Column(
     modifier = Modifier.fillMaxWidth(),
 ) {
@@ -52,27 +53,29 @@ internal fun RecentProjects(
             text = "See All",
             color = MaterialTheme.colorScheme.primary,
             style = typography.sectionSubtitle,
-            modifier = Modifier.clickable(onClick = onClick),
+            modifier = Modifier.clickable(onClick = onSeeAllClicked),
         )
     }
     RecentProjectList(
         projects = projectsWorkedOn,
+        onProjectClicked = onProjectClicked,
     )
 }
 
 @Composable
 private fun RecentProjectList(
     projects: ImmutableList<Project>,
+    onProjectClicked: (String) -> Unit,
 ) = Column(
     modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small),
     verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
 ) {
-    projects.take(n = 3).map { ProjectCardItem(it) }
+    projects.take(n = 3).map { ProjectCardItem(it, onClick = onProjectClicked) }
 }
 
 @OptIn(ExperimentalMaterial3Api::class)
 @Composable
-private fun ProjectCardItem(project: Project) {
+private fun ProjectCardItem(project: Project, onClick: (String) -> Unit) {
     val cardShape = RoundedCornerShape(percent = 25)
     val spacing = MaterialTheme.spacing
     Surface(
@@ -81,7 +84,7 @@ private fun ProjectCardItem(project: Project) {
         shape = cardShape,
         shadowElevation = 10.dp,
         tonalElevation = 2.dp,
-        onClick = {},
+        onClick = { onClick(project.name) },
     ) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
@@ -119,7 +122,8 @@ private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
                 Project(Time(100, 26, 0f), "Project 2", 20.0),
                 Project(Time(5, 15, 0f), "Project 3", 10.0),
             ).toImmutableList(),
-            onClick = {},
+            onSeeAllClicked = {},
+            onProjectClicked = {},
         )
     }
 }
@@ -129,15 +133,12 @@ private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
 private fun ProjectCardItemPreview() = WakaTimeAppTheme {
     Surface {
         ProjectCardItem(
-            Project(
-                Time(
-                    0,
-                    0,
-                    0f,
-                ),
+            project = Project(
+                Time.ZERO,
                 "Project 1",
                 0.0,
             ),
+            onClick = {},
         )
     }
 }

@@ -1,12 +1,14 @@
 package com.jacob.wakatimeapp.search.ui
 
 import androidx.compose.ui.text.input.TextFieldValue
-import com.jacob.wakatimeapp.search.data.network.mappers.ProjectDetails
+import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
+import kotlinx.collections.immutable.ImmutableList
+import kotlinx.collections.immutable.toImmutableList
 
 sealed class SearchProjectsViewState {
     object Loading : SearchProjectsViewState()
     data class Loaded(
-        val projects: List<ProjectDetails>,
+        val projects: ImmutableList<ProjectDetails>,
         val searchQuery: TextFieldValue = TextFieldValue(""),
     ) : SearchProjectsViewState() {
         val filteredProjects = projects.filter {
@@ -14,7 +16,7 @@ sealed class SearchProjectsViewState {
                 searchQuery.text.trim(),
                 ignoreCase = !searchQuery.text.any(Char::isUpperCase),
             )
-        }
+        }.toImmutableList()
     }
 
     data class Error(val error: com.jacob.wakatimeapp.core.models.Error) : SearchProjectsViewState()

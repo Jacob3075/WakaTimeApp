@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.details.ui
 
+import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.details.domain.usecases.GetProjectStatsUC
@@ -12,15 +13,19 @@ import timber.log.Timber
 
 @HiltViewModel
 internal class DetailsPageViewModel @Inject constructor(
+    savedStateHandle: SavedStateHandle,
     private val getProjectStatsUC: GetProjectStatsUC,
 ) : ViewModel() {
+    private val args = savedStateHandle.navArgs<DetailsPageNavArgs>()
+
     private val _viewState = MutableStateFlow<DetailsPageViewState>(DetailsPageViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
     init {
         viewModelScope.launch {
-            val data = getProjectStatsUC("WakaTimeApp.Compose")
+            val data = getProjectStatsUC(args.projectName)
             Timber.w(data.toString())
+            _viewState.value = DetailsPageViewState.Loaded(args.projectName)
         }
     }
 }

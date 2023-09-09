@@ -1,3 +1,5 @@
 package com.jacob.wakatimeapp.search.ui
 
-interface SearchProjectsNavigator
+interface SearchProjectsNavigator {
+    fun toProjectDetailsPage(projectName: String)
+}
