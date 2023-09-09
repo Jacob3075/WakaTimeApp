@@ -19,12 +19,12 @@ android.buildTypes.forEach {
     it.buildConfigField(
         type = "String",
         name = "CLIENT_ID",
-        value = "\"${properties.getProperty("CLIENT_ID")}\""
+        value = "\"${properties.getProperty("CLIENT_ID")}\"",
     )
     it.buildConfigField(
         type = "String",
         name = "CLIENT_SECRET",
-        value = "\"${properties.getProperty("CLIENT_SECRET")}\""
+        value = "\"${properties.getProperty("CLIENT_SECRET")}\"",
     )
 }
 
