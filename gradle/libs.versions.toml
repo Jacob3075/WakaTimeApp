@@ -33,13 +33,13 @@ androidxTestExt = "1.1.5" # https://developer.android.com/testing
 androidxTestRunner = "1.5.2"
 
 composeDestinations = "1.9.51" # https://github.com/raamcosta/compose-destinations
-arrow = "1.2.0" # https://github.com/arrow-kt/arrow/
+arrow = "1.2.1" # https://github.com/arrow-kt/arrow/
 timber = "5.0.1" # https://github.com/JakeWharton/timber
 coil = "2.4.0" # https://github.com/coil-kt/coil
 appAuth = "0.11.1" # https://github.com/openid/AppAuth-Android
 lottieCompose = "6.1.0" # https://github.com/airbnb/lottie-android
 detekt = "1.23.1" # https://detekt.dev
-gradleVersionsPlugin = "0.47.0" # https://github.com/ben-manes/gradle-versions-plugin
+gradleVersionsPlugin = "0.48.0" # https://github.com/ben-manes/gradle-versions-plugin
 turbine = "0.13.0" # https://github.com/cashapp/turbine/
 mockk = "1.13.7" # https://mockk.io
 mannodermausAndroidJunit5 = "1.9.3.0" # https://github.com/mannodermaus/android-junit5
