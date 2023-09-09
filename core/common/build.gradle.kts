@@ -1,5 +1,6 @@
 plugins {
     id("wakatimeapp.android.library")
+    id("com.google.devtools.ksp")
 }
 
 android {
@@ -23,4 +24,13 @@ dependencies {
     implementation(platform(libs.okhttp.bom))
     implementation(libs.okhttp.core)
     implementation(libs.okhttp.logging)
+
+    // Room
+    implementation(libs.room.runtime)
+    implementation(libs.room.ktx)
+    ksp(libs.room.compiler)
+}
+
+kapt {
+    correctErrorTypes = true
 }

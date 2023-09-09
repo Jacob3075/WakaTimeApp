@@ -15,7 +15,6 @@ import kotlinx.coroutines.runBlocking
 import retrofit2.Response
 import timber.log.Timber
 
-@Suppress("UnnecessaryAbstractClass")
 abstract class BaseNetworkData(private val authTokenProvider: AuthTokenProvider) {
     protected val token
         get() = runBlocking { authTokenProvider.getFreshToken().first() }
