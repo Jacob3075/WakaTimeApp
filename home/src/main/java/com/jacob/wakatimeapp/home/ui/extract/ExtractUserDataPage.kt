@@ -17,7 +17,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.platform.LocalDensity
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
@@ -41,7 +40,6 @@ private fun ExtractUserDataScreen(
     viewModel: ExtractUseDataViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.extractPageState.collectAsState()
-    val localDensity = LocalDensity.current
 
     Column(
         modifier = modifier
@@ -61,9 +59,7 @@ private fun ExtractUserDataScreen(
         ) {
             when (it) {
                 is ExtractPageViewState.Idle -> {
-                    CreateAndDownloadExtract(
-                        createExtract = viewModel::createExtract,
-                    )
+                    CreateAndDownloadExtract(viewModel::createExtract)
                     LoadExtractFromFile()
                 }
 

@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.home.ui.extract.components
 
+import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -13,6 +14,7 @@ import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.ProgressIndicatorDefaults.ProgressAnimationSpec
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -52,6 +54,17 @@ internal fun AnimatedProgressButton(
     val spacing = MaterialTheme.spacing
     val roundedCornerShape = RoundedCornerShape(percent = 50)
 
+    val progress = remember {
+        Animatable(0f)
+    }
+
+    LaunchedEffect(progressValue) {
+        progress.animateTo(
+            targetValue = progressValue,
+            animationSpec = ProgressAnimationSpec,
+        )
+    }
+
     Column(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
@@ -70,7 +83,7 @@ internal fun AnimatedProgressButton(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(progressValue)
+                    .fillMaxWidth(progress.value)
                     .fillMaxHeight()
                     .background(color = MaterialTheme.colorScheme.primary),
             ) {
