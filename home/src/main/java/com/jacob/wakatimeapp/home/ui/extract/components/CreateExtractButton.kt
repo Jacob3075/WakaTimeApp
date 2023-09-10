@@ -1,7 +1,5 @@
 package com.jacob.wakatimeapp.home.ui.extract.components
 
-import androidx.compose.animation.core.Animatable
-import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
@@ -11,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
-import androidx.compose.foundation.layout.offset
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.Button
@@ -28,10 +25,6 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.LayoutCoordinates
-import androidx.compose.ui.layout.onGloballyPositioned
-import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
@@ -41,14 +34,12 @@ import kotlinx.coroutines.delay
 @Composable
 internal fun CreateAndDownloadExtract(
     createExtract: () -> Unit,
-    updateButtonHeight: (LayoutCoordinates) -> Unit,
+    modifier: Modifier = Modifier,
 ) {
     // Create element height in dp state
     Button(
         onClick = createExtract,
-        modifier = Modifier
-            .fillMaxWidth()
-            .onGloballyPositioned(updateButtonHeight),
+        modifier = modifier.fillMaxWidth(),
     ) {
         Text(text = "Create Extract")
     }
@@ -56,21 +47,10 @@ internal fun CreateAndDownloadExtract(
 
 @Composable
 internal fun AnimatedProgressButton(
-    columnHeightDp: Dp,
     progressValue: Float,
 ) {
+    val spacing = MaterialTheme.spacing
     val roundedCornerShape = RoundedCornerShape(percent = 50)
-    val pxToMove = with(LocalDensity.current) { 15.dp.toPx() }
-    val animatePosition = remember {
-        Animatable(0f)
-    }
-
-    LaunchedEffect(Unit) {
-        animatePosition.animateTo(
-            targetValue = pxToMove,
-            animationSpec = tween(durationMillis = 200),
-        )
-    }
 
     Column(
         verticalArrangement = Arrangement.Center,
@@ -78,9 +58,8 @@ internal fun AnimatedProgressButton(
     ) {
         Box(
             modifier = Modifier
-                .offset(x = 0.dp, y = animatePosition.value.dp)
                 .fillMaxWidth()
-                .height(columnHeightDp)
+                .height(spacing.large)
                 .background(color = Color.Transparent)
                 .border(
                     width = 1.dp,
@@ -91,14 +70,14 @@ internal fun AnimatedProgressButton(
         ) {
             Box(
                 modifier = Modifier
-                    .fillMaxWidth(progressValue / 100f)
+                    .fillMaxWidth(progressValue)
                     .fillMaxHeight()
                     .background(color = MaterialTheme.colorScheme.primary),
             ) {
             }
         }
-        Spacer(modifier = Modifier.height(MaterialTheme.spacing.sMedium))
-        Text(text = "Creating Extract", modifier = Modifier.offset(0.dp, animatePosition.value.dp))
+        Spacer(modifier = Modifier.height(spacing.sMedium))
+        Text(text = "Creating Extract....")
     }
 }
 
@@ -111,7 +90,7 @@ private fun CreateAndDownloadExtractPreview() {
                 .fillMaxWidth()
                 .padding(16.dp),
         ) {
-            CreateAndDownloadExtract(createExtract = {}, updateButtonHeight = {})
+            CreateAndDownloadExtract(createExtract = {})
         }
     }
 }
@@ -128,10 +107,7 @@ private fun CreateAndDownloadExtractPreviewWithValue() {
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 50.dp),
         ) {
-            CreateAndDownloadExtract(
-                createExtract = { progressValue = 0.5f },
-                updateButtonHeight = {},
-            )
+            CreateAndDownloadExtract(createExtract = { progressValue = 0.5f })
         }
     }
 }
@@ -143,12 +119,12 @@ fun AnimatedProgressButtonPreview() {
 
     LaunchedEffect(Unit) {
         while (true) {
-            while (progressValue < 100) {
-                progressValue++
-                delay(50)
+            while (progressValue < 1f) {
+                progressValue += 0.02f
+                delay(1000)
             }
 
-            if (progressValue >= 100f) {
+            if (progressValue >= 1f) {
                 progressValue = 0f
             }
         }
@@ -161,7 +137,7 @@ fun AnimatedProgressButtonPreview() {
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 50.dp),
         ) {
-            AnimatedProgressButton(50.dp, progressValue)
+            AnimatedProgressButton(progressValue)
         }
     }
 }

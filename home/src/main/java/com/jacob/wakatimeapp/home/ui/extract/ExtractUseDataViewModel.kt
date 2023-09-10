@@ -15,6 +15,6 @@ internal class ExtractUseDataViewModel @Inject constructor() : ViewModel() {
     }
 
     fun createExtract() {
-        TODO("Not yet implemented")
+        _extractPageState.value = ExtractPageViewState.CreatingExtract(0.1f)
     }
 }

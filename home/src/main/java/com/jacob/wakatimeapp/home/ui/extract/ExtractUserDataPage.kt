@@ -1,5 +1,11 @@
 package com.jacob.wakatimeapp.home.ui.extract
 
+import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.fadeIn
+import androidx.compose.animation.fadeOut
+import androidx.compose.animation.slideInVertically
+import androidx.compose.animation.slideOutVertically
+import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.fillMaxSize
@@ -10,12 +16,8 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalDensity
-import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
@@ -39,7 +41,6 @@ private fun ExtractUserDataScreen(
     viewModel: ExtractUseDataViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.extractPageState.collectAsState()
-    var buttonHeight by remember { mutableStateOf(0.dp) }
     val localDensity = LocalDensity.current
 
     Column(
@@ -50,33 +51,36 @@ private fun ExtractUserDataScreen(
         verticalArrangement = Arrangement.Center,
     ) {
         TransferringAnimation()
-        when (viewState) {
-            is ExtractPageViewState.Idle -> {
-                CreateAndDownloadExtract(
-                    createExtract = viewModel::createExtract,
-                    updateButtonHeight = {
-                        buttonHeight = with(localDensity) { it.size.height.toDp() }
-                    },
-                )
-                LoadExtractFromFile()
-            }
+        AnimatedContent(
+            targetState = viewState,
+            label = "",
+            transitionSpec = {
+                (slideInVertically { height -> height } + fadeIn()) togetherWith
+                    slideOutVertically { height -> -height } + fadeOut()
+            },
+        ) {
+            when (it) {
+                is ExtractPageViewState.Idle -> {
+                    CreateAndDownloadExtract(
+                        createExtract = viewModel::createExtract,
+                    )
+                    LoadExtractFromFile()
+                }
 
-            is ExtractPageViewState.CreatingExtract -> {
-                // show progress bar for creating extract
-                AnimatedProgressButton(buttonHeight, 0f)
-            }
+                is ExtractPageViewState.CreatingExtract -> { // show progress bar for creating extract
+                    AnimatedProgressButton((viewState as ExtractPageViewState.CreatingExtract).progress)
+                }
 
-            else -> Unit
+                else -> Unit
+            }
         }
     }
 }
 
 @Composable
-private fun TransferringAnimation() {
-    // animation showing transferring or copying data
+private fun TransferringAnimation() { // animation showing transferring or copying data
 }
 
 @Composable
-private fun LoadExtractFromFile() {
-    // open file picker to select extract
+private fun LoadExtractFromFile() { // open file picker to select extract
 }
