@@ -1,5 +1,5 @@
 package com.jacob.wakatimeapp.home.ui.extract
 
-interface ExtractUserDataNavigator {
+fun interface ExtractUserDataNavigator {
     fun toHomePage()
 }
