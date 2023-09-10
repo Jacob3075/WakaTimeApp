@@ -3,8 +3,11 @@ package com.jacob.wakatimeapp.home.ui.extract.components
 import androidx.compose.animation.core.Animatable
 import androidx.compose.animation.core.tween
 import androidx.compose.foundation.background
+import androidx.compose.foundation.border
+import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
@@ -21,44 +24,42 @@ import androidx.compose.runtime.mutableFloatStateOf
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.layout.LayoutCoordinates
 import androidx.compose.ui.layout.onGloballyPositioned
 import androidx.compose.ui.platform.LocalDensity
 import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.spacing
 import kotlinx.coroutines.delay
 
 @Composable
-internal fun CreateAndDownloadExtract(progressValue: Float?, createExtract: () -> Unit) {
+internal fun CreateAndDownloadExtract(
+    createExtract: () -> Unit,
+    updateButtonHeight: (LayoutCoordinates) -> Unit,
+) {
     // Create element height in dp state
-    val localDensity = LocalDensity.current
-    var columnHeightDp by remember { mutableStateOf(0.dp) }
-
-    if (progressValue == null) {
-        Button(
-            onClick = createExtract,
-            modifier = Modifier
-                .fillMaxWidth()
-                .onGloballyPositioned { coordinates ->
-                    columnHeightDp = with(localDensity) { coordinates.size.height.toDp() }
-                },
-        ) {
-            Text(text = "Create Extract")
-        }
-    } else {
-        AnimatedProgressButton(columnHeightDp, progressValue)
+    Button(
+        onClick = createExtract,
+        modifier = Modifier
+            .fillMaxWidth()
+            .onGloballyPositioned(updateButtonHeight),
+    ) {
+        Text(text = "Create Extract")
     }
 }
 
 @Composable
-private fun AnimatedProgressButton(
+internal fun AnimatedProgressButton(
     columnHeightDp: Dp,
     progressValue: Float,
 ) {
+    val roundedCornerShape = RoundedCornerShape(percent = 50)
     val pxToMove = with(LocalDensity.current) { 15.dp.toPx() }
     val animatePosition = remember {
         Animatable(0f)
@@ -71,21 +72,33 @@ private fun AnimatedProgressButton(
         )
     }
 
-    Box(
-        modifier = Modifier
-            .offset(x = 0.dp, y = animatePosition.value.dp)
-            .fillMaxWidth()
-            .height(columnHeightDp)
-            .background(color = Color.Transparent)
-            .clip(RoundedCornerShape(percent = 50)),
+    Column(
+        verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         Box(
             modifier = Modifier
-                .fillMaxWidth(progressValue / 100f)
-                .fillMaxHeight()
-                .background(color = MaterialTheme.colorScheme.primary),
+                .offset(x = 0.dp, y = animatePosition.value.dp)
+                .fillMaxWidth()
+                .height(columnHeightDp)
+                .background(color = Color.Transparent)
+                .border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                    shape = roundedCornerShape,
+                )
+                .clip(roundedCornerShape),
         ) {
+            Box(
+                modifier = Modifier
+                    .fillMaxWidth(progressValue / 100f)
+                    .fillMaxHeight()
+                    .background(color = MaterialTheme.colorScheme.primary),
+            ) {
+            }
         }
+        Spacer(modifier = Modifier.height(MaterialTheme.spacing.sMedium))
+        Text(text = "Creating Extract", modifier = Modifier.offset(0.dp, animatePosition.value.dp))
     }
 }
 
@@ -98,7 +111,7 @@ private fun CreateAndDownloadExtractPreview() {
                 .fillMaxWidth()
                 .padding(16.dp),
         ) {
-            CreateAndDownloadExtract(progressValue = null) {}
+            CreateAndDownloadExtract(createExtract = {}, updateButtonHeight = {})
         }
     }
 }
@@ -115,9 +128,10 @@ private fun CreateAndDownloadExtractPreviewWithValue() {
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 50.dp),
         ) {
-            CreateAndDownloadExtract(progressValue) {
-                progressValue = 0.5f
-            }
+            CreateAndDownloadExtract(
+                createExtract = { progressValue = 0.5f },
+                updateButtonHeight = {},
+            )
         }
     }
 }
