@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.navigation
 
+import androidx.navigation.navOptions
 import com.jacob.wakatimeapp.details.ui.DetailsPageNavigator
 import com.jacob.wakatimeapp.details.ui.destinations.DetailsPageDestination
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
@@ -7,6 +8,7 @@ import com.jacob.wakatimeapp.home.ui.destinations.ExtractUserDataPageDestination
 import com.jacob.wakatimeapp.home.ui.destinations.HomePageDestination
 import com.jacob.wakatimeapp.home.ui.extract.ExtractUserDataNavigator
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
+import com.jacob.wakatimeapp.login.ui.destinations.LoginPageDestination
 import com.jacob.wakatimeapp.search.ui.SearchProjectsNavigator
 import com.jacob.wakatimeapp.search.ui.destinations.SearchProjectsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
@@ -28,7 +30,10 @@ class ExtractUserDataNavigatorImpl(private val navigator: DestinationsNavigator)
 }
 
 class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : LoginPageNavigator {
-    override fun toExtractUserDataPage() = navigator.navigate(ExtractUserDataPageDestination)
+    override fun toExtractUserDataPage() = navigator.navigate(
+        ExtractUserDataPageDestination,
+        navOptions = navOptions { popUpTo(LoginPageDestination.route) { inclusive = true } },
+    )
 }
 
 class HomePageNavigatorImpl(private val navigator: DestinationsNavigator) : HomePageNavigator {
