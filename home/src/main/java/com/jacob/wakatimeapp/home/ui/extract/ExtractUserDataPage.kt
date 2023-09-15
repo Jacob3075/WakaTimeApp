@@ -1,7 +1,11 @@
 package com.jacob.wakatimeapp.home.ui.extract
 
 import androidx.compose.animation.AnimatedContent
+import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
+import androidx.compose.animation.ContentTransform
+import androidx.compose.animation.EnterTransition
+import androidx.compose.animation.ExitTransition
 import androidx.compose.animation.core.EaseInOut
 import androidx.compose.animation.core.tween
 import androidx.compose.animation.fadeIn
@@ -32,6 +36,7 @@ import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.home.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
+import timber.log.Timber
 
 const val AnimationDuration = 250
 
@@ -63,25 +68,9 @@ private fun ExtractUserDataScreen(
         AnimatedContent(
             targetState = viewState,
             label = "",
-            transitionSpec = {
-                (
-                    slideIntoContainer(
-                        towards = SlideDirection.Up,
-                        animationSpec = tween(
-                            durationMillis = AnimationDuration,
-                            easing = EaseInOut,
-                        ),
-                    ) + fadeIn(tween(durationMillis = AnimationDuration, easing = EaseInOut))
-                    ) togetherWith
-                    slideOutOfContainer(
-                        towards = SlideDirection.Up,
-                        animationSpec = tween(
-                            durationMillis = AnimationDuration,
-                            easing = EaseInOut,
-                        ),
-                    ) + fadeOut(tween(durationMillis = AnimationDuration, easing = EaseInOut))
-            },
+            transitionSpec = { createTransitionSpec() },
             modifier = Modifier.padding(vertical = MaterialTheme.spacing.large),
+            contentKey = { viewState.javaClass },
         ) {
             when (it) {
                 is ExtractPageViewState.Idle -> {
@@ -97,6 +86,32 @@ private fun ExtractUserDataScreen(
             }
         }
     }
+}
+
+private fun AnimatedContentTransitionScope<ExtractPageViewState>.createTransitionSpec(): ContentTransform {
+    Timber.e("initialState: $initialState, targetState: $targetState")
+    if (initialState is ExtractPageViewState.CreatingExtract && targetState is ExtractPageViewState.CreatingExtract) {
+        Timber.e("inside")
+        return ContentTransform(
+            EnterTransition.None,
+            ExitTransition.None,
+        )
+    }
+
+    return slideIntoContainer(
+        towards = SlideDirection.Up,
+        animationSpec = tween(
+            durationMillis = AnimationDuration,
+            easing = EaseInOut,
+        ),
+    ) + fadeIn(tween(durationMillis = AnimationDuration, easing = EaseInOut)) togetherWith
+        slideOutOfContainer(
+            towards = SlideDirection.Up,
+            animationSpec = tween(
+                durationMillis = AnimationDuration,
+                easing = EaseInOut,
+            ),
+        ) + fadeOut(tween(durationMillis = AnimationDuration, easing = EaseInOut))
 }
 
 @Composable
