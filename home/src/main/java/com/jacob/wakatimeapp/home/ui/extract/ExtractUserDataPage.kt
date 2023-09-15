@@ -1,15 +1,11 @@
 package com.jacob.wakatimeapp.home.ui.extract
 
+import com.jacob.wakatimeapp.home.ui.extract.ExtractPageViewState as ViewState
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
-import androidx.compose.animation.ContentTransform
-import androidx.compose.animation.EnterTransition
-import androidx.compose.animation.ExitTransition
-import androidx.compose.animation.core.EaseInOut
+import androidx.compose.animation.core.LinearEasing
 import androidx.compose.animation.core.tween
-import androidx.compose.animation.fadeIn
-import androidx.compose.animation.fadeOut
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
@@ -27,6 +23,7 @@ import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
 import androidx.compose.runtime.setValue
+import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
@@ -36,9 +33,8 @@ import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.home.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
-import timber.log.Timber
 
-const val AnimationDuration = 250
+internal const val AnimationDuration = 250
 
 @Composable
 @Destination
@@ -63,56 +59,44 @@ private fun ExtractUserDataScreen(
             .statusBarsPadding()
             .padding(horizontal = MaterialTheme.spacing.medium),
         verticalArrangement = Arrangement.Center,
+        horizontalAlignment = Alignment.CenterHorizontally,
     ) {
         TransferringAnimation()
         AnimatedContent(
             targetState = viewState,
             label = "",
-            transitionSpec = { createTransitionSpec() },
+            transitionSpec = { createContentTransform() },
             modifier = Modifier.padding(vertical = MaterialTheme.spacing.large),
-            contentKey = { viewState.javaClass },
+            contentKey = { it.javaClass },
         ) {
             when (it) {
-                is ExtractPageViewState.Idle -> {
-                    CreateAndDownloadExtract(viewModel::createExtract)
+                is ViewState.Idle -> {
+                    CreateExtractButton(viewModel::createExtract)
                     LoadExtractFromFile()
                 }
 
-                is ExtractPageViewState.CreatingExtract -> { // show progress bar for creating extract
-                    AnimatedProgressBar((viewState as ExtractPageViewState.CreatingExtract).progress)
-                }
-
+                is ViewState.CreatingExtract -> AnimatedProgressBar(it.progress)
+                is ViewState.ExtractCreated -> DownloadExtractButton(downloadExtract = viewModel::downloadExtract)
                 else -> Unit
             }
         }
     }
 }
 
-private fun AnimatedContentTransitionScope<ExtractPageViewState>.createTransitionSpec(): ContentTransform {
-    Timber.e("initialState: $initialState, targetState: $targetState")
-    if (initialState is ExtractPageViewState.CreatingExtract && targetState is ExtractPageViewState.CreatingExtract) {
-        Timber.e("inside")
-        return ContentTransform(
-            EnterTransition.None,
-            ExitTransition.None,
-        )
-    }
-
-    return slideIntoContainer(
+private fun AnimatedContentTransitionScope<ViewState>.createContentTransform() =
+    slideIntoContainer(
         towards = SlideDirection.Up,
         animationSpec = tween(
             durationMillis = AnimationDuration,
-            easing = EaseInOut,
+            easing = LinearEasing,
         ),
-    ) + fadeIn(tween(durationMillis = AnimationDuration, easing = EaseInOut)) togetherWith
-        slideOutOfContainer(
-            towards = SlideDirection.Up,
-            animationSpec = tween(
-                durationMillis = AnimationDuration,
-                easing = EaseInOut,
-            ),
-        ) + fadeOut(tween(durationMillis = AnimationDuration, easing = EaseInOut))
-}
+    ) togetherWith slideOutOfContainer(
+        towards = SlideDirection.Up,
+        animationSpec = tween(
+            durationMillis = AnimationDuration,
+            easing = LinearEasing,
+        ),
+    )
 
 @Composable
 private fun TransferringAnimation() { // animation showing transferring or copying data
@@ -123,16 +107,25 @@ private fun LoadExtractFromFile() { // open file picker to select extract
 }
 
 @Composable
-private fun CreateAndDownloadExtract(
+private fun CreateExtractButton(
     createExtract: () -> Unit,
     modifier: Modifier = Modifier,
+) = Button(
+    onClick = createExtract,
+    modifier = modifier.fillMaxWidth(),
 ) {
-    Button(
-        onClick = createExtract,
-        modifier = modifier.fillMaxWidth(),
-    ) {
-        Text(text = "Create Extract")
-    }
+    Text(text = "Create Extract")
+}
+
+@Composable
+private fun DownloadExtractButton(
+    downloadExtract: () -> Unit,
+    modifier: Modifier = Modifier,
+) = Button(
+    onClick = downloadExtract,
+    modifier = modifier.fillMaxWidth(),
+) {
+    Text(text = "Download Extract")
 }
 
 @WtaComponentPreviews
@@ -144,7 +137,7 @@ private fun CreateAndDownloadExtractPreview() {
                 .fillMaxWidth()
                 .padding(16.dp),
         ) {
-            CreateAndDownloadExtract(createExtract = {})
+            CreateExtractButton(createExtract = {})
         }
     }
 }
@@ -161,7 +154,7 @@ private fun CreateAndDownloadExtractPreviewWithValue() {
                 .padding(horizontal = 16.dp)
                 .padding(bottom = 50.dp),
         ) {
-            CreateAndDownloadExtract(createExtract = { progressValue = 0.5f })
+            CreateExtractButton(createExtract = { progressValue = 0.5f })
         }
     }
 }

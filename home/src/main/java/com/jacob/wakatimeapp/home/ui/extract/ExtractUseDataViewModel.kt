@@ -23,12 +23,17 @@ internal class ExtractUseDataViewModel @Inject constructor() : ViewModel() {
                 _extractPageState.value = ExtractPageViewState.CreatingExtract(progress)
 
                 if (progress >= 1f) {
-//                    _extractPageState.value = ExtractPageViewState.ExtractCreated
+                    delay(1000)
+                    _extractPageState.value = ExtractPageViewState.ExtractCreated
                     break
                 }
 
                 delay(1000)
             }
         }
+    }
+
+    fun downloadExtract() {
+        TODO("Not yet implemented")
     }
 }
