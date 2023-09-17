@@ -1,39 +1,85 @@
 package com.jacob.wakatimeapp.home.ui.extract
 
+import com.jacob.wakatimeapp.home.ui.extract.ExtractPageViewState as ViewState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.raise.either
+import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.async
 import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
 
 @HiltViewModel
-internal class ExtractUseDataViewModel @Inject constructor() : ViewModel() {
-    private val _extractPageState =
-        MutableStateFlow<ExtractPageViewState>(ExtractPageViewState.Idle)
+internal class ExtractUseDataViewModel @Inject constructor(
+    private val homePageNetworkData: HomePageNetworkData,
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO,
+) : ViewModel() {
+    private val _extractPageState = MutableStateFlow<ViewState>(ViewState.Idle)
     val extractPageState = _extractPageState.asStateFlow()
 
     fun createExtract() {
-        viewModelScope.launch {
-            var progress = 0f
-            while (true) {
-                progress += 0.2f
-                _extractPageState.value = ExtractPageViewState.CreatingExtract(progress)
+        viewModelScope.launch(ioDispatcher) {
+            either {
+                val extractCreationProgress = homePageNetworkData.createExtract().bind()
+                _extractPageState.value =
+                    ViewState.CreatingExtract(extractCreationProgress.percentComplete)
 
-                if (progress >= 1f) {
-                    delay(1000)
-                    _extractPageState.value = ExtractPageViewState.ExtractCreated
-                    break
+                async {
+                    monitorExtractCreationProgress(extractCreationProgress.id)
                 }
-
-                delay(1000)
             }
         }
     }
 
+    private suspend fun monitorExtractCreationProgress(id: String) = either {
+        while (true) {
+            val extractCreationProgress = homePageNetworkData.getExtractCreationProgress(id).bind()
+
+            when {
+                extractCreationProgress.isProcessing -> {
+                    if (extractCreationProgress.percentComplete == CompletedPercentage) {
+                        delay(AnimationDuration.toLong())
+                        _extractPageState.value = ViewState.ExtractCreated
+                        break
+                    }
+
+                    _extractPageState.value =
+                        ViewState.CreatingExtract(extractCreationProgress.percentComplete)
+                }
+
+                extractCreationProgress.isStuck -> {
+                    _extractPageState.value = ViewState.Error(
+                        Error.UnknownError("Extract creation process is stuck: ${extractCreationProgress.status}"),
+                    )
+                    break
+                }
+
+                extractCreationProgress.hasFailed -> {
+                    _extractPageState.value = ViewState.Error(
+                        Error.UnknownError("Error while trying to create extract: ${extractCreationProgress.status}"),
+                    )
+                    break
+                }
+            }
+
+            delay(ProgressPollingDelay)
+        }
+    }.mapLeft { error -> _extractPageState.value = ViewState.Error(error) }
+
     fun downloadExtract() {
         TODO("Not yet implemented")
+    }
+
+    internal companion object Constants {
+        const val AnimationDuration = 250
+        const val CompletedPercentage = 100.0
+        const val ProgressPollingDelay = 1500L
     }
 }

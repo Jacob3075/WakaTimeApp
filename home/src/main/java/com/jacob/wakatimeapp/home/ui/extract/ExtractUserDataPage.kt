@@ -31,10 +31,9 @@ import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
+import com.jacob.wakatimeapp.home.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
 import com.jacob.wakatimeapp.home.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
-
-internal const val AnimationDuration = 250
 
 @Composable
 @Destination

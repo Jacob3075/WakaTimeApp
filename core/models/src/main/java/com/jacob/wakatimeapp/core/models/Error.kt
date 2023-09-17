@@ -9,6 +9,7 @@ sealed class Error {
     sealed class DomainError : Error() {
         data class InvalidData(override val message: String) : DomainError()
         data class DataRangeTooLarge(override val message: String) : DomainError()
+        data class UnknownError(override val message: String) : DomainError()
     }
 
     sealed class NetworkErrors : Error() {
@@ -52,5 +53,8 @@ sealed class Error {
             DatabaseError()
     }
 
-    data class UnknownError(override val message: String, val error: Throwable? = null) : Error()
+    data class UnknownError(
+        override val message: String,
+        override val exception: Throwable? = null,
+    ) : Error()
 }

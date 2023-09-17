@@ -6,7 +6,7 @@ internal data class ExtractCreationProgress(
     val hasFailed: Boolean,
     val isProcessing: Boolean,
     val isStuck: Boolean,
-    val percentComplete: Double,
+    val percentComplete: Float,
     val id: String,
     val expires: String,
     val status: String,
