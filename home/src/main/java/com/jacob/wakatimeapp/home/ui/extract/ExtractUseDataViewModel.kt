@@ -79,7 +79,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
 
     internal companion object Constants {
         const val AnimationDuration = 250
-        const val CompletedPercentage = 100.0
+        const val CompletedPercentage = 100.0f
         const val ProgressPollingDelay = 1500L
     }
 }
