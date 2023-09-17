@@ -2,13 +2,10 @@
 <project version="4">
   <component name="deploymentTargetDropDown">
     <value>
-      <entry key="All Tests">
+      <entry key="AnimatedProgressBarPreview - Light Mode">
         <State />
       </entry>
-      <entry key="WakaTimeApp.Compose [dependancyUpdates]">
-        <State />
-      </entry>
-      <entry key="WakaTimeApp.Compose [dependencyUpdates]">
+      <entry key="AnimatedProgressBarPreview2">
         <State />
       </entry>
       <entry key="app">

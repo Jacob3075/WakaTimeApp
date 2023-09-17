@@ -29,11 +29,6 @@ import dagger.hilt.android.AndroidEntryPoint
 @ExperimentalMaterial3Api
 @AndroidEntryPoint
 class MainActivity : AppCompatActivity() {
-    /**
-     * `NavGraphs` not being indexed but works when built
-     *
-     * @see [Issue](https://github.com/raamcosta/compose-destinations/issues/314)
-     */
     @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)

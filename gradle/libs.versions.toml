@@ -23,6 +23,9 @@ accompanistPager = "0.32.0"
 hilt = "2.48" # https://github.com/google/dagger
 hiltNavigationCompose = "1.0.0"
 
+roomCompiler = "2.5.2"
+roomKtx = "2.5.2"
+
 okhttp = "4.11.0" # https://square.github.io/okhttp/
 retrofit = "2.9.0"
 retrofitKotlinxSerializationJson = "1.0.0" # https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter/
@@ -96,6 +99,10 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-android-plugin-gradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+
+room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
+room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
+room-ktx = { module = "androidx.room:room-ktx", version.ref = "roomKtx" }
 
 coil-kt = { module = "io.coil-kt:coil", version.ref = "coil" }
 coil-kt-compose = { module = "io.coil-kt:coil-compose", version.ref = "coil" }

@@ -1,6 +1,7 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="KtlintProjectConfiguration">
+    <enableKtlint>false</enableKtlint>
     <androidMode>true</androidMode>
     <treatAsErrors>false</treatAsErrors>
     <disabledRules>
@@ -13,6 +14,7 @@
         <option value="trailing-comma-on-call-site" />
         <option value="trailing-comma-on-declaration-site" />
         <option value="trailing-comma-on-declaration-site" />
+        <option value="argument-list-wrapping" />
       </list>
     </disabledRules>
   </component>
