@@ -14,7 +14,7 @@ import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO.Data
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.toLocalDate
 
-fun GetLast7DaysStatsResDTO.toModel() = WeeklyStats(
+internal fun GetLast7DaysStatsResDTO.toModel() = WeeklyStats(
     totalTime = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
     dailyStats = getDailyStatsFromDto(data),
     range = StatsRange(startDate = start, endDate = end),
