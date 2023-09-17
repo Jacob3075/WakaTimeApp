@@ -1,10 +1,13 @@
 package com.jacob.wakatimeapp.home.data.network
 
 import com.jacob.wakatimeapp.home.data.network.dtos.AllTimeDataDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.CreateExtractReqDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.CreateExtractResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import retrofit2.Response
+import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.Query
@@ -25,4 +28,10 @@ internal interface HomePageAPI {
         @Query("start") start: String,
         @Query("end") end: String,
     ): Response<GetStatsForRangeResDTO>
+
+    @GET("/api/v1/users/current/summaries")
+    suspend fun createExtract(
+        @Header("Authorization") token: String,
+        @Body body: CreateExtractReqDTO,
+    ): Response<CreateExtractResDTO>
 }
