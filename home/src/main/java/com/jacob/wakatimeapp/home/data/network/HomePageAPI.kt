@@ -10,6 +10,8 @@ import retrofit2.Response
 import retrofit2.http.Body
 import retrofit2.http.GET
 import retrofit2.http.Header
+import retrofit2.http.POST
+import retrofit2.http.Path
 import retrofit2.http.Query
 
 internal interface HomePageAPI {
@@ -29,9 +31,15 @@ internal interface HomePageAPI {
         @Query("end") end: String,
     ): Response<GetStatsForRangeResDTO>
 
-    @GET("/api/v1/users/current/summaries")
+    @POST("/api/v1/users/current/summaries")
     suspend fun createExtract(
         @Header("Authorization") token: String,
         @Body body: CreateExtractReqDTO,
+    ): Response<CreateExtractResDTO>
+
+    @GET("/api/v1/users/current/summaries/{id}")
+    suspend fun getExtractCreationProgress(
+        @Header("Authorization") token: String,
+        @Path("id") id: String,
     ): Response<CreateExtractResDTO>
 }

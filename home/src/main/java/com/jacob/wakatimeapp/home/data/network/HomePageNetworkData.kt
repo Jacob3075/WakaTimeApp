@@ -8,10 +8,13 @@ import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.network.dtos.AllTimeDataDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.CreateExtractReqDTO
+import com.jacob.wakatimeapp.home.data.network.dtos.CreateExtractResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import com.jacob.wakatimeapp.home.data.network.mappers.toModel
+import com.jacob.wakatimeapp.home.domain.models.ExtractCreationProgress
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -46,4 +49,25 @@ internal class HomePageNetworkData @Inject constructor(
             },
             methodName = ::getStatsForRange.name,
         ).map(GetStatsForRangeResDTO::toModel)
+
+    suspend fun createExtract(): Either<Error, ExtractCreationProgress> = makeSafeApiCall(
+        apiCall = {
+            homePageAPI.createExtract(
+                "Bearer $token",
+                body = CreateExtractReqDTO(""),
+            )
+        },
+        methodName = ::createExtract.name,
+    ).map(CreateExtractResDTO::toModel)
+
+    suspend fun getExtractCreationProgress(id: String): Either<Error, ExtractCreationProgress> =
+        makeSafeApiCall(
+            apiCall = {
+                homePageAPI.getExtractCreationProgress(
+                    "Bearer $token",
+                    id = id,
+                )
+            },
+            methodName = ::getExtractCreationProgress.name,
+        ).map(CreateExtractResDTO::toModel)
 }
