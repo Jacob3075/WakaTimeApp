@@ -111,6 +111,7 @@ private fun LoginPageLoading() {
     WtaAnimation(
         animation = MaterialTheme.assets.animations.randomLoadingAnimation,
         text = "Loading..",
+        modifier = Modifier.fillMaxSize(),
     )
 }
 

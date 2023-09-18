@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.home.ui
 
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
@@ -157,12 +158,14 @@ private fun HomePageLoaded(
 private fun HomePageError(errorMessage: HomePageViewState.Error) = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomErrorAnimation,
     text = errorMessage.error.message,
+    modifier = Modifier.fillMaxSize(),
 )
 
 @Composable
 private fun HomePageLoading() = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomLoadingAnimation,
     text = "Loading..",
+    modifier = Modifier.fillMaxSize(),
 )
 
 @WtaDevicePreviews

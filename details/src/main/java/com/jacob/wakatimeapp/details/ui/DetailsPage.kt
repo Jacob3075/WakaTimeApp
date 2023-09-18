@@ -122,10 +122,12 @@ private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded) {
 private fun DetailsPageError(errorMessage: DetailsPageViewState.Error) = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomErrorAnimation,
     text = errorMessage.error.message,
+    speed = 1f,
 )
 
 @Composable
 private fun DetailsPageLoading() = WtaAnimation(
     animation = MaterialTheme.assets.animations.randomLoadingAnimation,
     text = "Loading..",
+    speed = 1f,
 )
