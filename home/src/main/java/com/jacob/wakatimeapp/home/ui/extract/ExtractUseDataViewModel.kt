@@ -25,6 +25,24 @@ internal class ExtractUseDataViewModel @Inject constructor(
     private val _extractPageState = MutableStateFlow<ViewState>(ViewState.Idle)
     val extractPageState = _extractPageState.asStateFlow()
 
+    fun demo() {
+        viewModelScope.launch(ioDispatcher) {
+            var progress = 0f
+            while (true) {
+                delay(1000)
+                progress += 0.2f
+
+                _extractPageState.value = ViewState.CreatingExtract(progress)
+
+                if (progress == 1f) {
+                    delay(1000)
+                    _extractPageState.value = ViewState.ExtractCreated
+                    break
+                }
+            }
+        }
+    }
+
     fun createExtract() {
         viewModelScope.launch(ioDispatcher) {
             either {
@@ -76,7 +94,9 @@ internal class ExtractUseDataViewModel @Inject constructor(
     }.mapLeft { error -> _extractPageState.value = ViewState.Error(error) }
 
     fun downloadExtract() {
-        TODO("Not yet implemented")
+    }
+
+    fun listExtracts() {
     }
 
     internal companion object Constants {
