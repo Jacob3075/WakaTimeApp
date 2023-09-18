@@ -15,13 +15,13 @@ internal data class CreateExtractResDTO(
     @Serializable
     internal data class Data(
         @SerialName("created_at") val createdAt: String,
-        @SerialName("download_url") val downloadUrl: String,
+        @SerialName("download_url") val downloadUrl: String?,
         @SerialName("has_failed") val hasFailed: Boolean,
         @SerialName("is_processing") val isProcessing: Boolean,
         @SerialName("is_stuck") val isStuck: Boolean,
         @SerialName("percent_complete") val percentComplete: Double,
         val id: String,
-        val expires: String,
+        val expires: String?,
         val status: String,
         val type: String,
     )

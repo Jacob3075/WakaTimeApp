@@ -28,7 +28,9 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
+import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.assets.Animations
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.home.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
@@ -76,6 +78,11 @@ private fun ExtractUserDataScreen(
 
                 is ViewState.CreatingExtract -> AnimatedProgressBar(it.progress)
                 is ViewState.ExtractCreated -> DownloadExtractButton(downloadExtract = viewModel::downloadExtract)
+                is ViewState.Error -> WtaAnimation(
+                    animation = Animations.randomErrorAnimation,
+                    text = (viewState as ViewState.Error).error.toString(),
+                )
+
                 else -> Unit
             }
         }

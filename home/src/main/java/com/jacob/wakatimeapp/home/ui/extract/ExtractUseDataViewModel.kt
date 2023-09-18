@@ -15,6 +15,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @HiltViewModel
 internal class ExtractUseDataViewModel @Inject constructor(
@@ -28,13 +29,14 @@ internal class ExtractUseDataViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             either {
                 val extractCreationProgress = homePageNetworkData.createExtract().bind()
+                Timber.d("Extract creation progress: ${extractCreationProgress.id}")
                 _extractPageState.value =
                     ViewState.CreatingExtract(extractCreationProgress.percentComplete)
 
                 async {
                     monitorExtractCreationProgress(extractCreationProgress.id)
                 }
-            }
+            }.mapLeft { error -> _extractPageState.value = ViewState.Error(error) }
         }
     }
 

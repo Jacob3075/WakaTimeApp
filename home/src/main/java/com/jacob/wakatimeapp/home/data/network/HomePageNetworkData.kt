@@ -54,7 +54,7 @@ internal class HomePageNetworkData @Inject constructor(
         apiCall = {
             homePageAPI.createExtract(
                 "Bearer $token",
-                body = CreateExtractReqDTO(""),
+                body = CreateExtractReqDTO("daily"),
             )
         },
         methodName = ::createExtract.name,

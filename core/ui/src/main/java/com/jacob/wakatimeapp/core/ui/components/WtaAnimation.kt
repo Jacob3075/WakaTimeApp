@@ -34,6 +34,7 @@ fun WtaAnimation(
         composition = composition,
         iterations = LottieConstants.IterateForever,
         modifier = Modifier.weight(2f),
+        enableMergePaths = true,
     )
     Spacer(modifier = Modifier.height(MaterialTheme.spacing.lMedium))
     Text(

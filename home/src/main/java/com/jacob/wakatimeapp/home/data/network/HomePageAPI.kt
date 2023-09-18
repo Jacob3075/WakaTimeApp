@@ -31,13 +31,13 @@ internal interface HomePageAPI {
         @Query("end") end: String,
     ): Response<GetStatsForRangeResDTO>
 
-    @POST("/api/v1/users/current/summaries")
+    @POST("/api/v1/users/current/data_dumps")
     suspend fun createExtract(
         @Header("Authorization") token: String,
         @Body body: CreateExtractReqDTO,
     ): Response<CreateExtractResDTO>
 
-    @GET("/api/v1/users/current/summaries/{id}")
+    @GET("/api/v1/users/current/data_dumps/{id}")
     suspend fun getExtractCreationProgress(
         @Header("Authorization") token: String,
         @Path("id") id: String,

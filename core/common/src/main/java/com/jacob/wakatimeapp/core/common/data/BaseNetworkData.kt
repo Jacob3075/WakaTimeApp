@@ -30,8 +30,12 @@ abstract class BaseNetworkData(private val authTokenProvider: AuthTokenProvider)
     }
 }
 
-private fun <T> Response<T>.checkResponse(): Either<Error, T> =
-    if (isSuccessful) body()!!.right() else NetworkErrors.create(message(), code()).left()
+private fun <T> Response<T>.checkResponse(): Either<Error, T> {
+    return if (isSuccessful) body()!!.right() else NetworkErrors.create(
+        errorBody()?.string() ?: "",
+        code(),
+    ).left()
+}
 
 private fun handleNetworkException(
     exception: Throwable,
