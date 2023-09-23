@@ -83,7 +83,6 @@ internal class HomePageNetworkData @Inject constructor(
         makeSafeApiCall(
             apiCall = {
                 homePageAPI.downloadExtract(
-                    "Bearer $token",
                     downloadUrl,
                 )
             },

@@ -1,12 +1,15 @@
 package com.jacob.wakatimeapp.home.ui.extract
 
+import com.jacob.wakatimeapp.core.models.Error.DomainError.UnknownError as UnknownDomainError
 import com.jacob.wakatimeapp.home.ui.extract.ExtractPageViewState as ViewState
 import android.app.Application
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
+import com.jacob.wakatimeapp.home.domain.models.ExtractCreationProgress
 import dagger.hilt.android.lifecycle.HiltViewModel
 import java.io.FileOutputStream
 import java.io.InputStream
@@ -18,6 +21,7 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDateTime
 import okhttp3.ResponseBody
 import timber.log.Timber
 
@@ -41,7 +45,20 @@ internal class ExtractUseDataViewModel @Inject constructor(
 
                 if (progress == 1f) {
                     delay(1000)
-                    _extractPageState.value = ViewState.ExtractCreated
+                    _extractPageState.value = ViewState.ExtractCreated(
+                        ExtractCreationProgress(
+                            createdAt = LocalDateTime(0, 0, 0, 0, 0, 0, 0),
+                            downloadUrl = "",
+                            hasFailed = false,
+                            isProcessing = false,
+                            isStuck = false,
+                            percentComplete = 100.0F,
+                            id = "",
+                            expires = null,
+                            status = "",
+                            type = "",
+                        ),
+                    )
                     break
                 }
             }
@@ -73,7 +90,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
                         ViewState.CreatingExtract(extractCreationProgress.percentComplete)
 
                 extractCreationProgress.status == CompletedStatusString -> {
-                    _extractPageState.value = ViewState.ExtractCreated
+                    _extractPageState.value = ViewState.ExtractCreated(extractCreationProgress)
                     break
                 }
 
@@ -96,40 +113,70 @@ internal class ExtractUseDataViewModel @Inject constructor(
         }
     }.mapLeft { error -> _extractPageState.value = ViewState.Error(error) }
 
-    fun downloadExtract(downloadUrl: String) {
+    fun downloadExtract(extractCreationProgress: ExtractCreationProgress) {
+        val downloadUrl = extractCreationProgress.downloadUrl ?: run {
+            Timber.e("downloadUrl is null for id: ${extractCreationProgress.id}")
+            return
+        }
+
         val downloadLocation = application.filesDir.absolutePath + "WakaTimeExtract.json"
+
         Timber.d("Download location: $downloadLocation")
         viewModelScope.launch(ioDispatcher) {
             either {
                 val downloadExtract = homePageNetworkData.downloadExtract(downloadUrl).bind()
-                saveFile(downloadExtract, downloadLocation)
-            }
+                val filePath = saveFile(downloadExtract, downloadLocation).bind()
+                // TODO: PARSE JSON FILE INTO DTOs
+                // TODO: SAVE TO DB
+                // TODO: DELETE FILE
+            }.mapLeft { _extractPageState.value = ViewState.Error(it) }
         }
     }
 
-    fun listExtracts() {
+    fun downloadExistingExtract() {
+        viewModelScope.launch(ioDispatcher) {
+            either {
+                val firstOrNull = homePageNetworkData.getCreatedExtracts()
+                    .bind()
+                    .sortedBy(ExtractCreationProgress::createdAt)
+                    .firstOrNull()
+                    ?: run {
+                        _extractPageState.value =
+                            ViewState.Error(Error.UnknownError("No extracts found, try creating one now"))
+                        return@either
+                    }
+
+                Timber.d("found extract: $firstOrNull")
+                async {
+                    monitorExtractCreationProgress(firstOrNull.id)
+                }
+            }.mapLeft { error -> _extractPageState.value = ViewState.Error(error) }
+        }
     }
 
-    private fun saveFile(body: ResponseBody, pathWhereYouWantToSaveFile: String): String {
+    private fun saveFile(
+        body: ResponseBody,
+        pathWhereYouWantToSaveFile: String,
+    ): Either<UnknownDomainError, String> {
         var input: InputStream? = null
-        try {
+        return Either.catch {
             input = body.byteStream()
             val fos = FileOutputStream(pathWhereYouWantToSaveFile)
             fos.use { output ->
                 val buffer = ByteArray(BufferSize)
                 var read: Int
-                while (input.read(buffer).also { read = it } != -1) {
+                while (input!!.read(buffer).also { read = it } != -1) {
                     output.write(buffer, 0, read)
                 }
                 output.flush()
             }
-            return pathWhereYouWantToSaveFile
-        } catch (exception: Exception) {
-            Timber.tag("saveFile").e(exception)
-        } finally {
+            input!!.close()
+            pathWhereYouWantToSaveFile
+        }.mapLeft { error ->
             input?.close()
+            Timber.tag("saveFile").e("Error while downloading extract, error: $error")
+            UnknownDomainError("Could not download extract, error: $error")
         }
-        return ""
     }
 
     internal companion object Constants {

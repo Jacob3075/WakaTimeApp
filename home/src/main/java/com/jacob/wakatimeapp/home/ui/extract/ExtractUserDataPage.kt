@@ -86,13 +86,13 @@ private fun ExtractUserDataScreen(
             when (it) {
                 is ViewState.Idle, is ViewState.Error -> IdleContent(
                     createExtract = viewModel::createExtract,
-                    listExtract = viewModel::listExtracts,
+                    downloadExistingExtract = viewModel::downloadExistingExtract,
                     loadFromFile = viewModel::demo,
                 )
 
                 is ViewState.CreatingExtract -> AnimatedProgressBar(it.progress)
                 is ViewState.ExtractCreated -> Button(
-                    onClick = { viewModel.downloadExtract() },
+                    onClick = { viewModel.downloadExtract(it.createdExtract) },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "Download Extract")
@@ -108,7 +108,7 @@ private fun ExtractUserDataScreen(
 private fun IdleContent(
     createExtract: () -> Unit,
     loadFromFile: () -> Unit,
-    listExtract: () -> Unit,
+    downloadExistingExtract: () -> Unit,
 ) = Column(
     modifier = Modifier.fillMaxWidth(),
     verticalArrangement = Arrangement.Center,
@@ -120,7 +120,7 @@ private fun IdleContent(
     ) { Text(text = "Create Extract") }
 
     OutlinedButton(
-        onClick = listExtract,
+        onClick = downloadExistingExtract,
         modifier = Modifier.fillMaxWidth(),
     ) { Text(text = "Download Existing Extract") }
 

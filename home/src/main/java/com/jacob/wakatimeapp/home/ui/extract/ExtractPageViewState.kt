@@ -8,7 +8,7 @@ internal sealed class ExtractPageViewState {
 
     data class CreatingExtract(val progress: Float) : ExtractPageViewState()
 
-    data object ExtractCreated : ExtractPageViewState()
+    data class ExtractCreated(val createdExtract: ExtractCreationProgress) : ExtractPageViewState()
 
     data class ListExtracts(val extracts: List<ExtractCreationProgress>) : ExtractPageViewState()
 

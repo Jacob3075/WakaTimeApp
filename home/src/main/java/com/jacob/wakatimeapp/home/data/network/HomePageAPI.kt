@@ -47,7 +47,7 @@ internal interface HomePageAPI {
         @Path("id") id: String,
     ): Response<CreateExtractResDTO>
 
-    @GET("/api/v1/users/current/data_dumps/")
+    @GET("/api/v1/users/current/data_dumps")
     suspend fun getCreatedExtracts(
         @Header("Authorization") token: String,
     ): Response<CreatedExtractResDTO>
@@ -55,7 +55,6 @@ internal interface HomePageAPI {
     @GET()
     @Streaming
     suspend fun downloadExtract(
-        @Header("Authorization") token: String,
         @Url downloadUrl: String,
     ): Response<ResponseBody>
 
