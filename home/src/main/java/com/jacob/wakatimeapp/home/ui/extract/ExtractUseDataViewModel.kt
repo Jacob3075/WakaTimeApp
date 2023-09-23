@@ -63,15 +63,13 @@ internal class ExtractUseDataViewModel @Inject constructor(
             val extractCreationProgress = homePageNetworkData.getExtractCreationProgress(id).bind()
 
             when {
-                extractCreationProgress.isProcessing -> {
-                    if (extractCreationProgress.percentComplete == CompletedPercentage) {
-                        delay(AnimationDuration.toLong())
-                        _extractPageState.value = ViewState.ExtractCreated
-                        break
-                    }
-
+                extractCreationProgress.isProcessing ->
                     _extractPageState.value =
                         ViewState.CreatingExtract(extractCreationProgress.percentComplete)
+
+                extractCreationProgress.status == CompletedStatusString -> {
+                    _extractPageState.value = ViewState.ExtractCreated
+                    break
                 }
 
                 extractCreationProgress.isStuck -> {
@@ -101,7 +99,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
 
     internal companion object Constants {
         const val AnimationDuration = 250
-        const val CompletedPercentage = 100.0f
         const val ProgressPollingDelay = 1500L
+        const val CompletedStatusString = "Completed"
     }
 }
