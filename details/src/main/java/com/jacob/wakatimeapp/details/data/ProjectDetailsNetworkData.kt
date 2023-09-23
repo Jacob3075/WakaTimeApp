@@ -23,7 +23,7 @@ internal class ProjectDetailsNetworkData @Inject constructor(
         makeSafeApiCall(
             apiCall = {
                 projectDetailsPageAPI.getProjectDetails(
-                    token = "Bearer $token",
+                    it,
                     projectName = projectName,
                 )
             },
@@ -37,7 +37,7 @@ internal class ProjectDetailsNetworkData @Inject constructor(
     ): Either<Error, ProjectStats> = makeSafeApiCall(
         apiCall = {
             projectDetailsPageAPI.getStatsForProject(
-                "Bearer $token",
+                it,
                 projectName = projectName,
                 start = startDate,
                 end = endDate,
@@ -50,7 +50,7 @@ internal class ProjectDetailsNetworkData @Inject constructor(
         makeSafeApiCall(
             apiCall = {
                 projectDetailsPageAPI.getTotalTimeForProject(
-                    "Bearer $token",
+                    it,
                     projectName = name,
                 )
             },
