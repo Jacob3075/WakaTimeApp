@@ -2,7 +2,9 @@ package com.jacob.wakatimeapp.core.models.secondarystats
 
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.secondarystats.SecondaryStats.Companion.mergeDuplicates
+import kotlinx.serialization.Serializable
 
+@Serializable
 data class Language(override val name: String, override val time: Time) : SecondaryStat<Language> {
     constructor(entry: Map.Entry<String, Time>) : this(entry.key, entry.value)
 

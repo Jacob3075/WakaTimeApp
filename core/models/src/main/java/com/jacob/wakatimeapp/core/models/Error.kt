@@ -33,6 +33,10 @@ sealed class Error {
         data class ServerError(override val message: String, override val statusCode: Int) :
             NetworkErrors()
 
+        override fun errorDisplayMessage(): String {
+            return "$message, status code: $statusCode exception=${exception?.message ?: "none"})"
+        }
+
         companion object {
             @Suppress("MagicNumber")
             fun create(message: String, code: Int? = null): NetworkErrors = when (code) {
@@ -57,4 +61,8 @@ sealed class Error {
         override val message: String,
         override val exception: Throwable? = null,
     ) : Error()
+
+    open fun errorDisplayMessage(): String {
+        return "$message, exception=${exception?.message ?: "none"})"
+    }
 }
