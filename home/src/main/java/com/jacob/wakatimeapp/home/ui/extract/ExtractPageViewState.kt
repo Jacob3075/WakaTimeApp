@@ -10,9 +10,7 @@ internal sealed class ExtractPageViewState {
 
     data class ExtractCreated(val createdExtract: ExtractCreationProgress) : ExtractPageViewState()
 
-    data class ListExtracts(val extracts: List<ExtractCreationProgress>) : ExtractPageViewState()
-
-    data class DownloadingExtract(val progress: Float) : ExtractPageViewState()
+    data object DownloadingExtract : ExtractPageViewState()
 
     data class Error(val error: CoreModelsError) : ExtractPageViewState()
 

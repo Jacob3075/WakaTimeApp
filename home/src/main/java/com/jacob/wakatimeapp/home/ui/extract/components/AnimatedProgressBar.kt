@@ -30,9 +30,11 @@ import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import java.util.Locale
 import kotlinx.coroutines.delay
 
 @Composable
+@Suppress("MagicNumber")
 internal fun AnimatedProgressBar(progressValue: Float) {
     val roundedCornerShape = RoundedCornerShape(percent = 50)
     val spacing = MaterialTheme.spacing
@@ -61,7 +63,8 @@ internal fun AnimatedProgressBar(progressValue: Float) {
             }
         }
         Spacer(modifier = Modifier.height(spacing.sMedium))
-        Text(text = "Creating Extract....")
+        val formattedProgress = String.format(Locale.getDefault(), "%.2f", progressValue * 100)
+        Text(text = "Creating Extract.... ($formattedProgress%)")
     }
 }
 

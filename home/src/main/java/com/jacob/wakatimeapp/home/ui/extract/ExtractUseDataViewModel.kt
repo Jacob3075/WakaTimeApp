@@ -4,7 +4,6 @@ import com.jacob.wakatimeapp.home.ui.extract.ExtractPageViewState as ViewState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.raise.either
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.models.ExtractCreationProgress
@@ -18,7 +17,6 @@ import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
-import kotlinx.serialization.json.Json
 import timber.log.Timber
 
 @HiltViewModel
@@ -87,6 +85,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
 
         viewModelScope.launch(ioDispatcher) {
             either {
+                _extractPageState.value = ViewState.DownloadingExtract
                 val downloadExtract = homePageNetworkData.downloadExtract(downloadUrl).bind()
                 val fileContents = downloadExtract.bytes()
                 loadExtracted(fileContents)
@@ -115,16 +114,9 @@ internal class ExtractUseDataViewModel @Inject constructor(
     }
 
     fun loadExtracted(bytes: ByteArray?) {
-        bytes ?: run {
-            _extractPageState.value =
-                ViewState.Error(Error.UnknownError("Could not load data from extract"))
-            return
-        }
-        val extractedDataDTO = Json.decodeFromString<ExtractedDataDTO>(String(bytes))
-
         viewModelScope.launch(ioDispatcher) {
             either {
-                loadExtractedDataIntoDbUC.invoke(extractedDataDTO).bind()
+                loadExtractedDataIntoDbUC(bytes).bind()
                 _extractPageState.value = ViewState.ExtractLoaded
             }.mapLeft { error -> _extractPageState.value = ViewState.Error(error) }
         }

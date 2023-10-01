@@ -75,11 +75,7 @@ internal class HomePageNetworkData @Inject constructor(
 
     suspend fun downloadExtract(downloadUrl: String): Either<Error, ResponseBody> =
         makeSafeApiCall(
-            apiCall = {
-                homePageAPI.downloadExtract(
-                    downloadUrl,
-                )
-            },
+            apiCall = { homePageAPI.downloadExtract(downloadUrl) },
             methodName = ::getExtractCreationProgress.name,
         )
 }

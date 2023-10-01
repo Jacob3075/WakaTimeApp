@@ -81,7 +81,7 @@ private fun ExtractUserDataScreen(
             when (it) {
                 is ViewState.Error -> ExtractStateAnimation(
                     Animations.randomErrorAnimation,
-                    it.error.toString(),
+                    it.error.errorDisplayMessage(),
                 )
 
                 else -> ExtractStateAnimation(Animations.randomDataTransferAnimations, "")
@@ -110,6 +110,8 @@ private fun ExtractUserDataScreen(
                     Text(text = "Download Extract")
                 }
 
+                is ViewState.DownloadingExtract -> Text(text = "Downloading Extract...")
+                is ViewState.ExtractLoaded -> Text(text = "Extract Loaded")
                 else -> Unit
             }
         }
