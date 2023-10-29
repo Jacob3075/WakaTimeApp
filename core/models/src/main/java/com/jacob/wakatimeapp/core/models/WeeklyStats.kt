@@ -5,6 +5,6 @@ import kotlinx.collections.immutable.ImmutableList
 data class WeeklyStats(
     val totalTime: Time,
     val dailyStats: ImmutableList<DailyStats>,
-    val range: StatsRange,
+    val range: Range,
     val todaysStats: DailyStats = dailyStats.last(),
 )

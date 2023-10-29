@@ -6,7 +6,7 @@ import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.mappers.toModel
 import com.jacob.wakatimeapp.core.models.DailyStats
-import com.jacob.wakatimeapp.core.models.StatsRange
+import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
@@ -17,7 +17,7 @@ import kotlinx.datetime.toLocalDate
 internal fun GetLast7DaysStatsResDTO.toModel() = WeeklyStats(
     totalTime = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
     dailyStats = getDailyStatsFromDto(data),
-    range = StatsRange(startDate = start, endDate = end),
+    range = Range(startDate = start, endDate = end),
 )
 
 private fun getDailyStatsFromDto(data: List<Data>) = data.map {

@@ -7,7 +7,7 @@ import com.jacob.wakatimeapp.core.common.data.mappers.fromDto
 import com.jacob.wakatimeapp.core.models.Branch
 import com.jacob.wakatimeapp.core.models.Machine
 import com.jacob.wakatimeapp.core.models.ProjectStats
-import com.jacob.wakatimeapp.core.models.StatsRange
+import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.details.data.dtos.DetailedProjectStatsDTO
 import com.jacob.wakatimeapp.details.data.dtos.DetailedProjectStatsDTO.Data
@@ -47,7 +47,7 @@ fun DetailedProjectStatsDTO.toModel(name: String): ProjectStats {
         name = name,
         totalTime = Time.fromDecimal(cumulativeTotal.decimal.toFloat()),
         dailyProjectStats = dailyStats,
-        range = StatsRange(startDate = start, endDate = end),
+        range = Range(startDate = start, endDate = end),
         languages = languages,
         operatingSystems = operatingSystems,
         editors = editors,

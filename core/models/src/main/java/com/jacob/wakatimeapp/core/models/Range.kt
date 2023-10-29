@@ -8,11 +8,11 @@ import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class StatsRange(
+data class Range(
     val startDate: LocalDate,
     val endDate: LocalDate,
 ) {
-    operator fun plus(other: StatsRange) = StatsRange(
+    operator fun plus(other: Range) = Range(
         startDate = minOf(startDate, other.startDate),
         endDate = maxOf(endDate, other.endDate),
     )
@@ -23,7 +23,7 @@ data class StatsRange(
     )
 
     companion object {
-        val ZERO = StatsRange(
+        val ZERO = Range(
             startDate = Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
             endDate = Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
         )
