@@ -14,22 +14,22 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-data class GetDailyStatsResDTO(
-    val data: List<Data>,
-    val end: String,
-    val start: String,
-    @SerialName("cumulative_total") val cumulativeTotal: CumulativeTotalDTO,
+internal data class GetDailyStatsResDTO(
+    internal val data: List<Data>,
+    internal val end: String,
+    internal val start: String,
+    @SerialName("cumulative_total") internal val cumulativeTotal: CumulativeTotalDTO,
 ) {
     @Serializable
-    data class Data(
-        val categories: List<CategoryDTO>,
-        val dependencies: List<DependencyDTO>,
-        val editors: List<EditorDTO>,
-        val languages: List<LanguageDTO>,
-        val machines: List<MachineDTO>,
-        val projects: List<ProjectDTO>,
-        val range: RangeDTO,
-        @SerialName("grand_total") val grandTotal: GrandTotalDTO,
-        @SerialName("operating_systems") val operatingSystems: List<OperatingSystemDTO>,
+    internal data class Data(
+        internal val categories: List<CategoryDTO>,
+        internal val dependencies: List<DependencyDTO>,
+        internal val editors: List<EditorDTO>,
+        internal val languages: List<LanguageDTO>,
+        internal val machines: List<MachineDTO>,
+        internal val projects: List<ProjectDTO>,
+        internal val range: RangeDTO,
+        @SerialName("grand_total") internal val grandTotal: GrandTotalDTO,
+        @SerialName("operating_systems") internal val operatingSystems: List<OperatingSystemDTO>,
     )
 }

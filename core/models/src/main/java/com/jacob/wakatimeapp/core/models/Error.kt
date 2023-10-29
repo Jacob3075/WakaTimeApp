@@ -9,6 +9,7 @@ sealed class Error {
     sealed class DomainError : Error() {
         data class InvalidData(override val message: String) : DomainError()
         data class DataRangeTooLarge(override val message: String) : DomainError()
+        data class UnknownError(override val message: String) : DomainError()
     }
 
     sealed class NetworkErrors : Error() {
@@ -32,6 +33,10 @@ sealed class Error {
         data class ServerError(override val message: String, override val statusCode: Int) :
             NetworkErrors()
 
+        override fun errorDisplayMessage(): String {
+            return "$message, status code: $statusCode exception=${exception?.message ?: "none"})"
+        }
+
         companion object {
             @Suppress("MagicNumber")
             fun create(message: String, code: Int? = null): NetworkErrors = when (code) {
@@ -52,5 +57,12 @@ sealed class Error {
             DatabaseError()
     }
 
-    data class UnknownError(override val message: String, val error: Throwable? = null) : Error()
+    data class UnknownError(
+        override val message: String,
+        override val exception: Throwable? = null,
+    ) : Error()
+
+    open fun errorDisplayMessage(): String {
+        return "$message, exception=${exception?.message ?: "none"})"
+    }
 }

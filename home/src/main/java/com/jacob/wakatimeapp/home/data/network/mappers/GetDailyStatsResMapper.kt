@@ -8,7 +8,7 @@ import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.toLocalDate
 
-fun GetDailyStatsResDTO.toModel() = DailyStats(
+internal fun GetDailyStatsResDTO.toModel() = DailyStats(
     timeSpent = Time.createFrom(cumulativeTotal.digital, cumulativeTotal.decimal),
     projectsWorkedOn = data.first().projects.map(ProjectDTO::toModel).toImmutableList(),
     mostUsedLanguage = "",

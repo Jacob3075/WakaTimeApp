@@ -63,10 +63,15 @@ class LoginPageViewModel @Inject constructor(
     private fun updateUserDetails() {
         _viewState.value = LoginPageState.Loading
         viewModelScope.launch {
-            _viewState.value = authTokenProvider.getFreshToken()
-                .filterNotNull()
-                .first()
-                .let { updateUserDetailsUC(it) }
+            try {
+                _viewState.value = authTokenProvider.getFreshToken()
+                    .filterNotNull()
+                    .first()
+                    .let { updateUserDetailsUC(it) }
+            } catch (e: Exception) {
+                Timber.e("could not re-login: $e")
+                _viewState.value = LoginPageState.Error("Could not login, try again")
+            }
         }
     }
 

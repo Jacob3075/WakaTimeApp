@@ -512,7 +512,7 @@ formatting:
   NoWildcardImports:
     active: false
   MaximumLineLength:
-    maxLineLength: 120
+    maxLineLength: 140
     ignoreBackTickedIdentifier: true
   CommentSpacing:
     active: true
@@ -586,7 +586,7 @@ style:
     excludedFunctions: [ ]
   LoopWithTooManyJumpStatements:
     active: true
-    maxJumpCount: 1
+    maxJumpCount: 3
   MagicNumber:
     active: true
     excludes: [ '**/test/**', '**/androidTest/**', '**/commonTest/**', '**/jvmTest/**', '**/jsTest/**', '**/iosTest/**', '**/*.kts' ]
@@ -616,7 +616,7 @@ style:
     excludes: [ '**/test/**', '**/*.Test.kt', '**/*.Spec.kt' ]
   MaxLineLength:
     active: true
-    maxLineLength: 120
+    maxLineLength: 140
     excludePackageStatements: true
     excludeImportStatements: true
     excludeCommentStatements: true

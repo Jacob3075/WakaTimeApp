@@ -3,7 +3,9 @@ package com.jacob.wakatimeapp.core.common.di
 import android.content.Context
 import androidx.datastore.preferences.core.PreferenceDataStoreFactory
 import androidx.datastore.preferences.preferencesDataStoreFile
+import androidx.room.Room
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore.Companion.STORE_NAME
+import com.jacob.wakatimeapp.core.common.data.local.AppDatabase
 import com.jakewharton.retrofit2.converter.kotlinx.serialization.asConverterFactory
 import dagger.Module
 import dagger.Provides
@@ -64,6 +66,18 @@ object DataModule {
         .baseUrl(BASE_URL)
         .client(okHttpClient)
         .build()
+
+    @Singleton
+    @Provides
+    internal fun provideApplicationDatabase(@ApplicationContext applicationContext: Context) = Room.databaseBuilder(
+        applicationContext,
+        AppDatabase::class.java,
+        "wakatime.db",
+    ).build()
+
+    @Singleton
+    @Provides
+    fun provideWakaTimeDb(appDatabase: AppDatabase) = appDatabase.applicationDao()
 
     private const val BASE_URL = "https://wakatime.com/"
 }

@@ -4,7 +4,6 @@ import androidx.annotation.RawRes as XmlRawRes
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.height
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Text
@@ -23,10 +22,11 @@ fun WtaAnimation(
     @XmlRawRes animation: Int,
     text: String,
     modifier: Modifier = Modifier,
+    speed: Float = 1f,
 ) = Column(
     horizontalAlignment = Alignment.CenterHorizontally,
     verticalArrangement = Arrangement.Center,
-    modifier = modifier.fillMaxSize(),
+    modifier = modifier,
 ) {
     val composition by rememberLottieComposition(RawRes(animation))
     Spacer(modifier = Modifier.weight(weight = 0.5f))
@@ -34,11 +34,14 @@ fun WtaAnimation(
         composition = composition,
         iterations = LottieConstants.IterateForever,
         modifier = Modifier.weight(2f),
+        speed = speed,
     )
     Spacer(modifier = Modifier.height(MaterialTheme.spacing.lMedium))
-    Text(
-        text = text,
-        style = MaterialTheme.typography.titleMedium,
-        modifier = Modifier.weight(1f),
-    )
+    if (text.isNotBlank()) {
+        Text(
+            text = text,
+            style = MaterialTheme.typography.titleMedium,
+            modifier = Modifier.weight(1f),
+        )
+    }
 }

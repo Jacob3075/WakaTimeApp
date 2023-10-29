@@ -16,22 +16,26 @@ import retrofit2.Response
 import timber.log.Timber
 
 abstract class BaseNetworkData(private val authTokenProvider: AuthTokenProvider) {
-    protected val token
+    private val token
         get() = runBlocking { authTokenProvider.getFreshToken().first() }
 
     protected suspend fun <T> makeSafeApiCall(
-        apiCall: suspend () -> Response<T>,
+        apiCall: suspend (String) -> Response<T>,
         methodName: String,
     ): Either<Error, T> = try {
-        apiCall().checkResponse()
+        apiCall("Bearer $token").checkResponse()
     } catch (exception: Exception) {
         Timber.e(exception)
         handleNetworkException(exception, methodName)
     }
 }
 
-private fun <T> Response<T>.checkResponse(): Either<Error, T> =
-    if (isSuccessful) body()!!.right() else NetworkErrors.create(message(), code()).left()
+private fun <T> Response<T>.checkResponse(): Either<Error, T> {
+    return if (isSuccessful) body()!!.right() else NetworkErrors.create(
+        errorBody()?.string() ?: "",
+        code(),
+    ).left()
+}
 
 private fun handleNetworkException(
     exception: Throwable,

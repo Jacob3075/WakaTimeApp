@@ -118,7 +118,7 @@ internal class CalculateLongestStreakUCRobot {
             email = "",
             id = "",
             timeout = 0,
-            timezone = "",
+            timezone = TimeZone.currentSystemDefault(),
             username = "",
             displayName = "",
             lastProject = "",

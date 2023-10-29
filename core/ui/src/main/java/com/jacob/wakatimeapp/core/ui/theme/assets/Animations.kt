@@ -115,6 +115,40 @@ object Animations {
     @RawRes
     private val tumbleweed = raw.tumbleweed_rolling
 
+    /**
+     * Note: Need to view from collection, direct link does not work for some reason.
+     * [Source](https://lottiefiles.com/animations/cloud-file-access-male-qUtUwFHikB)
+     */
+    @RawRes
+    private val cloudFileAccess = raw.cloud_file_access
+
+    /**
+     * Note: Need to view from collection, direct link does not work for some reason.
+     * [Source](https://lottiefiles.com/animations/cloud-reporting-syncing-female-txDx0gf1L8)
+     */
+    @RawRes
+    private val cloudReporting = raw.cloud_reporting
+
+    /**
+     * Note: Need to view from collection, direct link does not work for some reason.
+     * [Source](https://lottiefiles.com/animations/big-data-centre-isomatric-animation-json-qR4Mn2mMjL)
+     */
+    @RawRes
+    private val dataCenter = raw.data_center
+
+    /**
+     * Note: Need to view from collection, direct link does not work for some reason.
+     * [Source](https://lottiefiles.com/animations/network-folder-female-5gZ430mXWb)
+     */
+    @RawRes
+    private val networkFolder = raw.network_folder
+
+    /**
+     * [Source](https://lottiefiles.com/animations/transfer-files-2GvcNPrxhZ)
+     */
+    @RawRes
+    private val transferFiles = raw.transfer_files
+
     private val emptyAnimations = listOf(
         emptyBox1,
         empty,
@@ -145,6 +179,14 @@ object Animations {
         noMobileInternet,
     )
 
+    private val dataAnimations = listOf(
+//        cloudFileAccess,
+//        cloudReporting,
+//        dataCenter,
+//        networkFolder,
+        transferFiles,
+    )
+
     val randomLoadingAnimation
         @RawRes get() = loadingAnimations.random()
 
@@ -156,4 +198,7 @@ object Animations {
 
     val randomNoDataAnimation
         @RawRes get() = noDataAnimations.random()
+
+    val randomDataTransferAnimations
+        @RawRes get() = dataAnimations.random()
 }

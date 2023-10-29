@@ -1,6 +1,9 @@
 package com.jacob.wakatimeapp.home.ui.extract
 
 import com.jacob.wakatimeapp.home.ui.extract.ExtractPageViewState as ViewState
+import androidx.activity.compose.rememberLauncherForActivityResult
+import androidx.activity.result.contract.ActivityResultContracts
+import androidx.annotation.RawRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
 import androidx.compose.animation.AnimatedContentTransitionScope.SlideDirection
@@ -9,32 +12,30 @@ import androidx.compose.animation.core.tween
 import androidx.compose.animation.togetherWith
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.fillMaxHeight
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
+import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.unit.dp
+import androidx.compose.ui.platform.LocalContext
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
-import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
+import com.jacob.wakatimeapp.core.ui.theme.assets.Animations
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
+import com.jacob.wakatimeapp.home.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
 import com.jacob.wakatimeapp.home.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
-
-internal const val AnimationDuration = 250
 
 @Composable
 @Destination
@@ -52,6 +53,15 @@ private fun ExtractUserDataScreen(
     viewModel: ExtractUseDataViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.extractPageState.collectAsState()
+    val context = LocalContext.current
+
+    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+        val item = context.contentResolver.openInputStream(it!!)
+        val bytes = item?.readBytes()
+        item?.close()
+
+        viewModel.loadExtracted(bytes)
+    }
 
     Column(
         modifier = modifier
@@ -61,100 +71,98 @@ private fun ExtractUserDataScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        TransferringAnimation()
         AnimatedContent(
             targetState = viewState,
             label = "",
             transitionSpec = { createContentTransform() },
-            modifier = Modifier.padding(vertical = MaterialTheme.spacing.large),
+            modifier = Modifier,
+            contentKey = { it is ViewState.Error },
+        ) {
+            when (it) {
+                is ViewState.Error -> ExtractStateAnimation(
+                    Animations.randomErrorAnimation,
+                    it.error.errorDisplayMessage(),
+                )
+
+                else -> ExtractStateAnimation(Animations.randomDataTransferAnimations, "")
+            }
+        }
+
+        AnimatedContent(
+            targetState = viewState,
+            label = "",
+            transitionSpec = { createContentTransform() },
+            modifier = Modifier,
             contentKey = { it.javaClass },
         ) {
             when (it) {
-                is ViewState.Idle -> {
-                    CreateExtractButton(viewModel::createExtract)
-                    LoadExtractFromFile()
-                }
+                is ViewState.Idle, is ViewState.Error -> IdleContent(
+                    createExtract = viewModel::createExtract,
+                    downloadExistingExtract = viewModel::downloadExistingExtract,
+                    filePicker = { launcher.launch("application/json") },
+                )
 
                 is ViewState.CreatingExtract -> AnimatedProgressBar(it.progress)
-                is ViewState.ExtractCreated -> DownloadExtractButton(downloadExtract = viewModel::downloadExtract)
-                else -> Unit
+                is ViewState.ExtractCreated -> Button(
+                    onClick = { viewModel.downloadExtract(it.createdExtract) },
+                    modifier = Modifier.fillMaxWidth(),
+                ) {
+                    Text(text = "Download Extract")
+                }
+
+                is ViewState.DownloadingExtract -> Text(text = "Downloading Extract...")
+                is ViewState.ExtractLoaded -> Text(text = "Extract Loaded")
             }
         }
     }
 }
 
-private fun AnimatedContentTransitionScope<ViewState>.createContentTransform() =
-    slideIntoContainer(
-        towards = SlideDirection.Up,
-        animationSpec = tween(
-            durationMillis = AnimationDuration,
-            easing = LinearEasing,
-        ),
-    ) togetherWith slideOutOfContainer(
-        towards = SlideDirection.Up,
-        animationSpec = tween(
-            durationMillis = AnimationDuration,
-            easing = LinearEasing,
-        ),
-    )
-
 @Composable
-private fun TransferringAnimation() { // animation showing transferring or copying data
-}
-
-@Composable
-private fun LoadExtractFromFile() { // open file picker to select extract
-}
-
-@Composable
-private fun CreateExtractButton(
+private fun IdleContent(
     createExtract: () -> Unit,
-    modifier: Modifier = Modifier,
-) = Button(
-    onClick = createExtract,
-    modifier = modifier.fillMaxWidth(),
+    filePicker: () -> Unit,
+    downloadExistingExtract: () -> Unit,
+) = Column(
+    modifier = Modifier.fillMaxWidth(),
+    verticalArrangement = Arrangement.Center,
+    horizontalAlignment = Alignment.CenterHorizontally,
 ) {
-    Text(text = "Create Extract")
+    Button(
+        onClick = createExtract,
+        modifier = Modifier.fillMaxWidth(),
+    ) { Text(text = "Create Extract") }
+
+    OutlinedButton(
+        onClick = downloadExistingExtract,
+        modifier = Modifier.fillMaxWidth(),
+    ) { Text(text = "Download Existing Extract") }
+
+    OutlinedButton(
+        onClick = filePicker,
+        modifier = Modifier.fillMaxWidth(),
+    ) { Text(text = "Load Extract From File") }
 }
 
 @Composable
-private fun DownloadExtractButton(
-    downloadExtract: () -> Unit,
-    modifier: Modifier = Modifier,
-) = Button(
-    onClick = downloadExtract,
-    modifier = modifier.fillMaxWidth(),
-) {
-    Text(text = "Download Extract")
-}
+private fun ExtractStateAnimation(@RawRes animationResourceId: Int, text: String) = WtaAnimation(
+    animation = animationResourceId,
+    text = text,
+    speed = 0.7f,
+    modifier = Modifier
+        .fillMaxWidth(1f)
+        .fillMaxHeight(fraction = 0.5f),
+)
 
-@WtaComponentPreviews
-@Composable
-private fun CreateAndDownloadExtractPreview() {
-    WakaTimeAppTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(16.dp),
-        ) {
-            CreateExtractButton(createExtract = {})
-        }
-    }
-}
-
-@WtaComponentPreviews
-@Composable
-private fun CreateAndDownloadExtractPreviewWithValue() {
-    var progressValue: Float? by remember { mutableStateOf(null) }
-
-    WakaTimeAppTheme {
-        Column(
-            modifier = Modifier
-                .fillMaxWidth()
-                .padding(horizontal = 16.dp)
-                .padding(bottom = 50.dp),
-        ) {
-            CreateExtractButton(createExtract = { progressValue = 0.5f })
-        }
-    }
-}
+private fun AnimatedContentTransitionScope<ViewState>.createContentTransform() = slideIntoContainer(
+    towards = SlideDirection.Up,
+    animationSpec = tween(
+        durationMillis = AnimationDuration,
+        easing = LinearEasing,
+    ),
+) togetherWith slideOutOfContainer(
+    towards = SlideDirection.Up,
+    animationSpec = tween(
+        durationMillis = AnimationDuration,
+        easing = LinearEasing,
+    ),
+)

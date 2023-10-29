@@ -10,5 +10,8 @@ import kotlinx.datetime.toLocalDateTime
 fun Instant.toDate(timeZone: TimeZone = TimeZone.currentSystemDefault()) =
     toLocalDateTime(timeZone).date
 
+fun Instant.toDateTime(timeZone: TimeZone = TimeZone.currentSystemDefault()) =
+    toLocalDateTime(timeZone)
+
 fun LocalDate.getDisplayNameForDay(): String =
     dayOfWeek.getDisplayName(SHORT, Locale.getDefault())

@@ -17,7 +17,7 @@ internal class SearchProjectNetworkData @Inject constructor(
 ) : BaseNetworkData(authTokenProvider) {
     suspend fun getProjects(pageNumber: Int): Either<Error, ProjectListWithPageNumber> =
         makeSafeApiCall(
-            apiCall = { searchProjectAPI.getAllProjects(token = "Bearer $token", pageNumber) },
+            apiCall = { searchProjectAPI.getAllProjects(it, pageNumber) },
             methodName = ::getProjects.name,
         ).map(ProjectDetailsDTO::toModelWithPageNumber)
 }

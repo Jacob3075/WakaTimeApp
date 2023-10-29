@@ -3,10 +3,10 @@ package com.jacob.wakatimeapp.details.domain.usecases
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.common.utils.toDate
+import com.jacob.wakatimeapp.core.models.ProjectStats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.details.data.ProjectDetailsNetworkData
 import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
-import com.jacob.wakatimeapp.details.domain.models.ProjectStats
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.coroutines.CoroutineContext

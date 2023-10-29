@@ -13,7 +13,7 @@ import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO.Data
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.toLocalDate
 
-fun GetStatsForRangeResDTO.toModel() = DailyStatsAggregate(
+internal fun GetStatsForRangeResDTO.toModel() = DailyStatsAggregate(
     values = getDailyStatsFromDto(data),
 )
 

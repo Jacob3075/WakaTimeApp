@@ -4,7 +4,17 @@ import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 
 @Serializable
-class DependencyDTO
+data class DependencyDTO(
+    val decimal: String,
+    val digital: String,
+    val hours: Int,
+    val minutes: Int,
+    val name: String,
+    val percent: Double,
+    val seconds: Int,
+    val text: String,
+    @SerialName("total_seconds") val totalSeconds: Double,
+)
 
 @Serializable
 data class EditorDTO(
@@ -70,5 +80,18 @@ data class EntityDTO(
     val seconds: Int,
     val text: String,
     val type: String,
+    @SerialName("total_seconds") val totalSeconds: Double,
+)
+
+@Serializable
+data class CategoryDTO(
+    val decimal: String,
+    val digital: String,
+    val hours: Int,
+    val minutes: Int,
+    val name: String,
+    val percent: Double,
+    val seconds: Int,
+    val text: String,
     @SerialName("total_seconds") val totalSeconds: Double,
 )

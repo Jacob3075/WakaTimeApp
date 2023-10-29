@@ -4,7 +4,7 @@ import arrow.core.Either
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Project
-import com.jacob.wakatimeapp.core.models.StatsRange
+import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.WeeklyStats
 import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
@@ -51,7 +51,7 @@ internal class GetLast7DaysStatsUCRobot {
         val weeklyStats = WeeklyStats(
             totalTime = Time.ZERO,
             dailyStats = listOf<DailyStats>().toImmutableList(),
-            range = StatsRange(
+            range = Range(
                 startDate = todaysDate,
                 endDate = todaysDate,
             ),
