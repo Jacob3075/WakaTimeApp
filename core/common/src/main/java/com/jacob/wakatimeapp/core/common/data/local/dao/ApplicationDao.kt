@@ -8,12 +8,16 @@ import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.common.data.mappers.toEntity
+import com.jacob.wakatimeapp.core.models.Range
 import kotlinx.datetime.LocalDate
 
 @Dao
 interface ApplicationDao {
     @Query("SELECT * FROM DayEntity WHERE date = :date")
     suspend fun getStatsForDay(date: LocalDate): List<DayEntity>
+
+    @Query("SELECT min(date) as startDate, max(date) as endDate FROM DayEntity")
+    suspend fun getDateRangeInDb(): Range?
 
     @Query("SELECT * FROM ProjectPerDay WHERE name = :name")
     suspend fun getStatsForProject(name: String): List<ProjectPerDay>

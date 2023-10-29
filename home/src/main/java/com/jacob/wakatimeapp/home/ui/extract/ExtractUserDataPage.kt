@@ -112,7 +112,6 @@ private fun ExtractUserDataScreen(
 
                 is ViewState.DownloadingExtract -> Text(text = "Downloading Extract...")
                 is ViewState.ExtractLoaded -> Text(text = "Extract Loaded")
-                else -> Unit
             }
         }
     }

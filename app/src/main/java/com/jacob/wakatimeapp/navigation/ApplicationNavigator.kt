@@ -8,6 +8,7 @@ import com.jacob.wakatimeapp.home.ui.destinations.ExtractUserDataPageDestination
 import com.jacob.wakatimeapp.home.ui.destinations.HomePageDestination
 import com.jacob.wakatimeapp.home.ui.extract.ExtractUserDataNavigator
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
+import com.jacob.wakatimeapp.login.ui.destinations.LoadingPageDestination
 import com.jacob.wakatimeapp.login.ui.destinations.LoginPageDestination
 import com.jacob.wakatimeapp.search.ui.SearchProjectsNavigator
 import com.jacob.wakatimeapp.search.ui.destinations.SearchProjectsDestination
@@ -26,13 +27,26 @@ class ApplicationNavigator(private val navigator: DestinationsNavigator) :
 
 class ExtractUserDataNavigatorImpl(private val navigator: DestinationsNavigator) :
     ExtractUserDataNavigator {
-    override fun toHomePage() = navigator.navigate(HomePageDestination)
+    override fun toHomePageFromExtractUserData() = navigator.navigate(
+        HomePageDestination,
+        navOptions = navOptions { popUpTo(ExtractUserDataPageDestination.route) { inclusive = true } },
+    )
 }
 
 class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : LoginPageNavigator {
     override fun toExtractUserDataPage() = navigator.navigate(
         ExtractUserDataPageDestination,
         navOptions = navOptions { popUpTo(LoginPageDestination.route) { inclusive = true } },
+    )
+
+    override fun toLoginPage() = navigator.navigate(
+        LoginPageDestination,
+        navOptions = navOptions { popUpTo(LoadingPageDestination.route) { inclusive = true } },
+    )
+
+    override fun toHomePageFromLoading() = navigator.navigate(
+        HomePageDestination,
+        navOptions = navOptions { popUpTo(LoadingPageDestination.route) { inclusive = true } },
     )
 }
 
