@@ -1,9 +1,9 @@
-package com.jacob.wakatimeapp.home.data.network.mappers
+package com.jacob.wakatimeapp.login.data.mappers
 
 import com.jacob.wakatimeapp.core.common.utils.toDateTime
-import com.jacob.wakatimeapp.home.data.network.dtos.CreateExtractResDTO
-import com.jacob.wakatimeapp.home.data.network.dtos.CreatedExtractResDTO
-import com.jacob.wakatimeapp.home.domain.models.ExtractCreationProgress
+import com.jacob.wakatimeapp.login.data.dtos.CreateExtractResDTO
+import com.jacob.wakatimeapp.login.data.dtos.CreatedExtractResDTO
+import com.jacob.wakatimeapp.login.domain.models.ExtractCreationProgress
 import kotlinx.datetime.Instant
 
 internal fun CreateExtractResDTO.toModel() = ExtractCreationProgress(

@@ -1,13 +1,13 @@
-package com.jacob.wakatimeapp.home.ui.extract
+package com.jacob.wakatimeapp.login.ui.extract
 
-import com.jacob.wakatimeapp.home.ui.extract.ExtractPageViewState as ViewState
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState as ViewState
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
-import com.jacob.wakatimeapp.home.domain.models.ExtractCreationProgress
-import com.jacob.wakatimeapp.home.domain.usecases.LoadExtractedDataIntoDbUC
+import com.jacob.wakatimeapp.login.data.LoginPageNetworkData
+import com.jacob.wakatimeapp.login.domain.models.ExtractCreationProgress
+import com.jacob.wakatimeapp.login.domain.usecases.LoadExtractedDataIntoDbUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
@@ -21,7 +21,7 @@ import timber.log.Timber
 
 @HiltViewModel
 internal class ExtractUseDataViewModel @Inject constructor(
-    private val homePageNetworkData: HomePageNetworkData,
+    private val loginPageNetworkData: LoginPageNetworkData,
     private val loadExtractedDataIntoDbUC: LoadExtractedDataIntoDbUC,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO,
 ) : ViewModel() {
@@ -31,7 +31,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
     fun createExtract() {
         viewModelScope.launch(ioDispatcher) {
             either {
-                val extractCreationProgress = homePageNetworkData.createExtract().bind()
+                val extractCreationProgress = loginPageNetworkData.createExtract().bind()
                 Timber.d("Extract creation progress: ${extractCreationProgress.id}")
                 _extractPageState.value =
                     ViewState.CreatingExtract(extractCreationProgress.percentComplete)
@@ -46,7 +46,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
     private suspend fun monitorExtractCreationProgress(id: String) {
         either {
             while (true) {
-                val extractCreationProgress = homePageNetworkData.getExtractCreationProgress(id).bind()
+                val extractCreationProgress = loginPageNetworkData.getExtractCreationProgress(id).bind()
 
                 when {
                     extractCreationProgress.isProcessing ->
@@ -86,7 +86,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
         viewModelScope.launch(ioDispatcher) {
             either {
                 _extractPageState.value = ViewState.DownloadingExtract
-                val downloadExtract = homePageNetworkData.downloadExtract(downloadUrl).bind()
+                val downloadExtract = loginPageNetworkData.downloadExtract(downloadUrl).bind()
                 val fileContents = downloadExtract.bytes()
                 loadExtracted(fileContents)
             }.mapLeft { _extractPageState.value = ViewState.Error(it) }
@@ -96,7 +96,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
     fun downloadExistingExtract() {
         viewModelScope.launch(ioDispatcher) {
             either {
-                val firstOrNull = homePageNetworkData.getCreatedExtracts()
+                val firstOrNull = loginPageNetworkData.getCreatedExtracts()
                     .bind()
                     .sortedBy(ExtractCreationProgress::createdAt)
                     .firstOrNull()

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.domain.models
+package com.jacob.wakatimeapp.login.domain.models
 
 import kotlinx.datetime.LocalDateTime
 

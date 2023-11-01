@@ -54,6 +54,18 @@ fun LoginPage(
     loginPageNavigator: LoginPageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+) = LoginPage(
+    loginPageNavigator = loginPageNavigator,
+    snackbarHostState = snackbarHostState,
+    modifier = modifier,
+    viewModel = hiltViewModel(),
+)
+
+@Composable
+private fun LoginPage(
+    loginPageNavigator: LoginPageNavigator,
+    snackbarHostState: SnackbarHostState,
+    modifier: Modifier = Modifier,
     viewModel: LoginPageViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()

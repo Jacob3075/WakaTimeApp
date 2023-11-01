@@ -7,17 +7,12 @@ import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.WeeklyStats
-import com.jacob.wakatimeapp.home.data.network.dtos.CreateExtractReqDTO
-import com.jacob.wakatimeapp.home.data.network.dtos.CreateExtractResDTO
-import com.jacob.wakatimeapp.home.data.network.dtos.CreatedExtractResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetDailyStatsResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetLast7DaysStatsResDTO
 import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import com.jacob.wakatimeapp.home.data.network.mappers.toModel
-import com.jacob.wakatimeapp.home.domain.models.ExtractCreationProgress
 import javax.inject.Inject
 import javax.inject.Singleton
-import okhttp3.ResponseBody
 
 @Singleton
 internal class HomePageNetworkData @Inject constructor(
@@ -45,37 +40,4 @@ internal class HomePageNetworkData @Inject constructor(
             },
             methodName = ::getStatsForRange.name,
         ).map(GetStatsForRangeResDTO::toModel)
-
-    suspend fun createExtract(): Either<Error, ExtractCreationProgress> = makeSafeApiCall(
-        apiCall = {
-            homePageAPI.createExtract(
-                it,
-                body = CreateExtractReqDTO("daily"),
-            )
-        },
-        methodName = ::createExtract.name,
-    ).map(CreateExtractResDTO::toModel)
-
-    suspend fun getExtractCreationProgress(id: String): Either<Error, ExtractCreationProgress> =
-        makeSafeApiCall(
-            apiCall = {
-                homePageAPI.getExtractCreationProgress(
-                    it,
-                    id = id,
-                )
-            },
-            methodName = ::getExtractCreationProgress.name,
-        ).map(CreateExtractResDTO::toModel)
-
-    suspend fun getCreatedExtracts(): Either<Error, List<ExtractCreationProgress>> =
-        makeSafeApiCall(
-            apiCall = { homePageAPI.getCreatedExtracts(it) },
-            methodName = ::getExtractCreationProgress.name,
-        ).map(CreatedExtractResDTO::toModel)
-
-    suspend fun downloadExtract(downloadUrl: String): Either<Error, ResponseBody> =
-        makeSafeApiCall(
-            apiCall = { homePageAPI.downloadExtract(downloadUrl) },
-            methodName = ::getExtractCreationProgress.name,
-        )
 }

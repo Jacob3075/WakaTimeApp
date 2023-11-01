@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.ui.extract
+package com.jacob.wakatimeapp.login.ui.extract
 
 fun interface ExtractUserDataNavigator {
     fun toHomePageFromExtractUserData()

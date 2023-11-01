@@ -10,7 +10,7 @@ import retrofit2.Retrofit
 
 @Module
 @InstallIn(SingletonComponent::class)
-object LoginPageModule {
+internal object LoginPageModule {
     @Singleton
     @Provides
     fun provideLoginPageService(retrofit: Retrofit): LoginPageAPI =

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.domain.usecases
+package com.jacob.wakatimeapp.login.domain.usecases
 
 import arrow.core.Either
 import arrow.core.left

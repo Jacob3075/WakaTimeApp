@@ -1,14 +1,16 @@
-package com.jacob.wakatimeapp.login.usecases
+package com.jacob.wakatimeapp.login.domain.usecases
 
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.login.data.LoginPageAPI
 import com.jacob.wakatimeapp.login.data.mappers.toModel
 import com.jacob.wakatimeapp.login.ui.LoginPageState
 import javax.inject.Inject
+import javax.inject.Singleton
 import retrofit2.HttpException
 import timber.log.Timber
 
-class UpdateUserDetailsUC @Inject constructor(
+@Singleton
+internal class UpdateUserDetailsUC @Inject constructor(
     private val loginPageAPI: LoginPageAPI,
     private val authDataStore: AuthDataStore,
 ) {

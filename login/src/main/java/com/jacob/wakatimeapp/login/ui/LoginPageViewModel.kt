@@ -8,7 +8,7 @@ import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.core.common.Constants
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.login.BuildConfig
-import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
+import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.flow.MutableStateFlow
@@ -27,7 +27,7 @@ import net.openid.appauth.ResponseTypeValues
 import timber.log.Timber
 
 @HiltViewModel
-class LoginPageViewModel @Inject constructor(
+internal class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val authTokenProvider: AuthTokenProvider,
