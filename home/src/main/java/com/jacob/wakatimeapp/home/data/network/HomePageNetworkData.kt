@@ -13,6 +13,7 @@ import com.jacob.wakatimeapp.home.data.network.dtos.GetStatsForRangeResDTO
 import com.jacob.wakatimeapp.home.data.network.mappers.toModel
 import javax.inject.Inject
 import javax.inject.Singleton
+import kotlinx.datetime.LocalDate
 
 @Singleton
 internal class HomePageNetworkData @Inject constructor(
@@ -29,13 +30,13 @@ internal class HomePageNetworkData @Inject constructor(
         methodName = ::getStatsForToday.name,
     ).map(GetDailyStatsResDTO::toModel)
 
-    suspend fun getStatsForRange(start: String, end: String): Either<Error, DailyStatsAggregate> =
+    suspend fun getStatsForRange(start: LocalDate, end: LocalDate): Either<Error, DailyStatsAggregate> =
         makeSafeApiCall(
             apiCall = {
                 homePageAPI.getStatsForRange(
                     it,
-                    start = start,
-                    end = end,
+                    start = start.toString(),
+                    end = end.toString(),
                 )
             },
             methodName = ::getStatsForRange.name,

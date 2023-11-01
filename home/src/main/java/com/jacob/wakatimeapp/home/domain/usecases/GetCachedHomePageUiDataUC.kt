@@ -57,8 +57,7 @@ internal class GetCachedHomePageUiDataUC @Inject constructor(
 
     private fun Instant.isFirstRequestOfDay(): Boolean {
         val lastRequestDate = toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
-        val currentDate =
-            instantProvider.now().toLocalDateTime(instantProvider.timeZone).date.toEpochDays()
+        val currentDate = instantProvider.date().toEpochDays()
         return currentDate - lastRequestDate >= 1
     }
 

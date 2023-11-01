@@ -47,12 +47,12 @@ internal class RecalculateLatestStreakUCRobot {
         }
     }
 
-    fun mockGetDataForRange(start: String, end: String, data: Either<Error, DailyStatsAggregate>) =
+    fun mockGetDataForRange(start: LocalDate, end: LocalDate, data: Either<Error, DailyStatsAggregate>) =
         apply {
             coEvery { mockHomePageNetworkData.getStatsForRange(start, end) } returns data
         }
 
-    fun verifyGetDataForRange(start: String, end: String, count: Int = 1) = apply {
+    fun verifyGetDataForRange(start: LocalDate, end: LocalDate, count: Int = 1) = apply {
         coVerify(exactly = count) { mockHomePageNetworkData.getStatsForRange(start, end) }
     }
 

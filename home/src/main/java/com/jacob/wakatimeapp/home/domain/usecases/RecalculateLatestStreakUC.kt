@@ -39,7 +39,7 @@ internal class RecalculateLatestStreakUC @Inject constructor(
     }
 
     private suspend fun getStatsInRange(start: LocalDate, end: LocalDate) =
-        homePageNetworkData.getStatsForRange(start.toString(), end.toString())
+        homePageNetworkData.getStatsForRange(start, end)
             .map { stats ->
                 stats.values
                     .associate { it.date to it.timeSpent }

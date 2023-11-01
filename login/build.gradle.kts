@@ -30,6 +30,10 @@ android.buildTypes.forEach {
 
 dependencies {
     implementation(libs.appAuth)
+
+    implementation(libs.androidx.work.runtime.ktx)
+
+    implementation(libs.androidx.hilt.work)
 }
 
 fun loadPropertiesFile(): Properties {

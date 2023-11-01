@@ -20,7 +20,6 @@ import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.coroutines.test.TestDispatcher
 import kotlinx.datetime.DatePeriod
@@ -28,7 +27,6 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class CalculateLongestStreakUCRobot {
     private lateinit var calculateLongestStreakUC: CalculateLongestStreakUC
     private var result: Either<Error, Streak>? = null
@@ -90,8 +88,8 @@ internal class CalculateLongestStreakUCRobot {
         }
 
     fun mockGetStatsForRange(
-        start: String? = null,
-        end: String? = null,
+        start: LocalDate? = null,
+        end: LocalDate? = null,
         data: Either<Error, DailyStatsAggregate>,
     ) = apply {
         coEvery {
@@ -102,7 +100,7 @@ internal class CalculateLongestStreakUCRobot {
         } returns data
     }
 
-    fun verifyGetStatsForRangeCalled(count: Int, start: String? = null, end: String? = null) =
+    fun verifyGetStatsForRangeCalled(count: Int, start: LocalDate? = null, end: LocalDate? = null) =
         apply {
             coVerify(exactly = count) {
                 mockHomePageNetworkData.getStatsForRange(

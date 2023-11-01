@@ -3,7 +3,6 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
-import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error.NetworkErrors.Timeout
 import com.jacob.wakatimeapp.core.models.Time
@@ -41,7 +40,7 @@ internal class CalculateLongestStreakUC @Inject constructor(
         if (currentStreak > cachedLongestStreak) return@either currentStreak
         if (cachedLongestStreak != Streak.ZERO) return@either cachedLongestStreak
 
-        val currentDay = instantProvider.now().toDate(timeZone = instantProvider.timeZone)
+        val currentDay = instantProvider.date()
         val userJoinedData = userDetails.createdAt
 
         generateSequence(userJoinedData) { it + batchSize }
@@ -64,8 +63,8 @@ internal class CalculateLongestStreakUC @Inject constructor(
 
     private fun getStreaksInBatchAsync(batchStartEnd: Pair<LocalDate, LocalDate>) = ioScope.async {
         homePageNetworkData.getStatsForRange(
-            start = batchStartEnd.first.toString(),
-            end = batchStartEnd.second.toString(),
+            start = batchStartEnd.first,
+            end = batchStartEnd.second,
         ).map {
             it.groupConsecutiveDaysWithStats()
                 .filter(List<Entry<LocalDate, Time>>::isNotEmpty)

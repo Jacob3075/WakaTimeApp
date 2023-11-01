@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.login.ui.loading
 
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
@@ -16,18 +15,15 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Destination
 fun LoadingPage(
     loginPageNavigator: LoginPageNavigator,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) = LoadingPageContent(
     loginPageNavigator = loginPageNavigator,
-    snackbarHostState = snackbarHostState,
     modifier = modifier,
 )
 
 @Composable
-internal fun LoadingPageContent(
+private fun LoadingPageContent(
     loginPageNavigator: LoginPageNavigator,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: LoadingPageViewModel = hiltViewModel(),
 ) {
@@ -42,5 +38,6 @@ internal fun LoadingPageContent(
             else -> Unit
         }
     }
-    WtaAnimation(animation = Animations.randomLoadingAnimation, text = "Loading...")
+
+    WtaAnimation(animation = Animations.randomLoadingAnimation, text = "Loading...", modifier = modifier)
 }

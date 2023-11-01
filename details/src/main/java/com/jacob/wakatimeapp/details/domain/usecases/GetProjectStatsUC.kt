@@ -2,7 +2,6 @@ package com.jacob.wakatimeapp.details.domain.usecases
 
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
-import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.ProjectStats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.details.data.ProjectDetailsNetworkData
@@ -29,7 +28,7 @@ internal class GetProjectStatsUC @Inject constructor(
         val totalProjectTime = projectStatsNetworkData.getTotalTimeForProject(projectName).bind()
 
         val batchSize = DatePeriod(months = 6)
-        val now = instantProvider.now().toDate()
+        val now = instantProvider.date()
 
         val projectStats = generateSequence(totalProjectTime.startDate) { it + batchSize }
             .takeWhile { it < now }
