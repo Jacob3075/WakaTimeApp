@@ -45,7 +45,7 @@ data class ExtractedDataDTO(
                 val percent: Double,
                 val seconds: Int,
                 val text: String,
-                @SerialName("total_seconds") val totalSeconds: Double,
+                @SerialName("total_seconds") val totalSeconds: Long,
             )
         }
     }

@@ -5,6 +5,7 @@ import com.jacob.wakatimeapp.core.common.data.dtos.CumulativeTotalDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.DependencyDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.EntityDTO
+import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO.DayDTO.ProjectDTO.BranchDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.GrandTotalDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.MachineDTO
@@ -35,18 +36,5 @@ data class DetailedProjectStatsDTO(
         val range: RangeDTO,
         @SerialName("operating_systems") val operatingSystems: List<OperatingSystemDTO>,
         @SerialName("grand_total") val grandTotal: GrandTotalDTO,
-    ) {
-        @Serializable
-        data class BranchDTO(
-            val decimal: String,
-            val digital: String,
-            val hours: Int,
-            val minutes: Int,
-            val name: String,
-            val percent: Double,
-            val seconds: Int,
-            val text: String,
-            @SerialName("total_seconds") val totalSeconds: Double,
-        )
-    }
+    )
 }

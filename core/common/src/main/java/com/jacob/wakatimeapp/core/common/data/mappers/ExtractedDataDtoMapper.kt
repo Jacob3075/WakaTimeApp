@@ -18,7 +18,7 @@ fun DayDTO.toEntity() = DayEntity(
     machines = this.machines.map { machine ->
         Machine(
             name = machine.name,
-            time = Time.fromDecimal(machine.totalSeconds.toFloat()),
+            time = Time.fromTotalSeconds(machine.totalSeconds),
         )
     },
 )
@@ -27,13 +27,13 @@ fun ProjectDTO.toEntity(dayId: Long): ProjectPerDay {
     val branches = branches.map { branch ->
         com.jacob.wakatimeapp.core.models.Branch(
             name = branch.name,
-            time = Time.fromDecimal(branch.totalSeconds.toFloat()),
+            time = Time.fromTotalSeconds(branch.totalSeconds),
         )
     }
     val machines = machines.map { machine ->
         Machine(
             name = machine.name,
-            time = Time.fromDecimal(machine.totalSeconds.toFloat()),
+            time = Time.fromTotalSeconds(machine.totalSeconds),
         )
     }
 

@@ -54,8 +54,8 @@ data class Streak(
     operator fun plus(other: Streak) = when {
         this == ZERO -> other
         other == ZERO -> this
-        this in other -> Streak(other.start, other.end)
-        other in this -> Streak(start, end)
+        this in other -> other
+        other in this -> this
         other.start in padded() -> Streak(start, other.end)
         start in other.padded() -> Streak(other.start, end)
         else -> {

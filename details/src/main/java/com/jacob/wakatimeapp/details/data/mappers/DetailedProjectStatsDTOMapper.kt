@@ -15,7 +15,7 @@ import kotlinx.datetime.toLocalDate
 
 fun DetailedProjectStatsDTO.toModel(name: String): ProjectStats {
     val dailyStats = data.associate {
-        it.range.date.toLocalDate() to Time.fromDecimal(it.grandTotal.decimal.toFloat())
+        it.range.date.toLocalDate() to Time.fromTotalSeconds(it.grandTotal.totalSeconds)
     }
 
     val editors = data.flatMap(Data::editors)
@@ -31,7 +31,7 @@ fun DetailedProjectStatsDTO.toModel(name: String): ProjectStats {
         .map { branch ->
             Branch(
                 name = branch.name,
-                time = Time.fromDecimal(branch.totalSeconds.toFloat()),
+                time = Time.fromTotalSeconds(branch.totalSeconds),
             )
         }
 
@@ -39,13 +39,13 @@ fun DetailedProjectStatsDTO.toModel(name: String): ProjectStats {
         .map { machine ->
             Machine(
                 name = machine.name,
-                time = Time.fromDecimal(machine.totalSeconds.toFloat()),
+                time = Time.fromTotalSeconds(machine.totalSeconds),
             )
         }
 
     return ProjectStats(
         name = name,
-        totalTime = Time.fromDecimal(cumulativeTotal.decimal.toFloat()),
+        totalTime = Time.fromTotalSeconds(cumulativeTotal.seconds),
         dailyProjectStats = dailyStats,
         range = Range(startDate = start, endDate = end),
         languages = languages,

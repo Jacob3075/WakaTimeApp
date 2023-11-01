@@ -10,4 +10,5 @@ data class DailyStats(
     val mostUsedEditor: String,
     val mostUsedOs: String,
     val date: LocalDate,
-)
+) {
+}
