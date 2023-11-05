@@ -1,19 +1,19 @@
-package com.jacob.wakatimeapp.details.data.mappers // ktlint-disable filename
+package com.jacob.wakatimeapp.login.data.mappers
 
 import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
 import com.jacob.wakatimeapp.core.common.data.mappers.fromDto
-import com.jacob.wakatimeapp.core.models.Branch
-import com.jacob.wakatimeapp.core.models.Machine
-import com.jacob.wakatimeapp.core.models.ProjectStats
+import com.jacob.wakatimeapp.core.common.data.mappers.toModel
+import com.jacob.wakatimeapp.core.models.AggregateProjectStatsForRange
+import com.jacob.wakatimeapp.core.models.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.details.data.dtos.DetailedProjectStatsDTO
-import com.jacob.wakatimeapp.details.data.dtos.DetailedProjectStatsDTO.Data
+import com.jacob.wakatimeapp.login.data.dtos.DetailedProjectStatsDTO
+import com.jacob.wakatimeapp.login.data.dtos.DetailedProjectStatsDTO.Data
 import kotlinx.datetime.toLocalDate
 
-fun DetailedProjectStatsDTO.toModel(name: String): ProjectStats {
+fun DetailedProjectStatsDTO.toDetailedProjectStatsInRangeModel(name: String): AggregateProjectStatsForRange {
     val dailyStats = data.associate {
         it.range.date.toLocalDate() to Time.fromTotalSeconds(it.grandTotal.totalSeconds)
     }
@@ -27,23 +27,10 @@ fun DetailedProjectStatsDTO.toModel(name: String): ProjectStats {
     val operatingSystems = data.flatMap(Data::operatingSystems)
         .let(List<OperatingSystemDTO>::fromDto)
 
-    val branches = data.flatMap(Data::branches)
-        .map { branch ->
-            Branch(
-                name = branch.name,
-                time = Time.fromTotalSeconds(branch.totalSeconds),
-            )
-        }
+    val branches = data.flatMap(Data::branches).toModel()
+    val machines = data.flatMap(Data::machines).toModel()
 
-    val machines = data.flatMap(Data::machines)
-        .map { machine ->
-            Machine(
-                name = machine.name,
-                time = Time.fromTotalSeconds(machine.totalSeconds),
-            )
-        }
-
-    return ProjectStats(
+    return AggregateProjectStatsForRange(
         name = name,
         totalTime = Time.fromTotalSeconds(cumulativeTotal.seconds),
         dailyProjectStats = dailyStats,
@@ -53,5 +40,18 @@ fun DetailedProjectStatsDTO.toModel(name: String): ProjectStats {
         editors = editors,
         branches = branches,
         machines = machines,
+    )
+}
+
+fun DetailedProjectStatsDTO.toDetailedProjectStatsForDayModel(name: String) = data.map {
+    DetailedProjectStatsForDay(
+        name = name,
+        date = it.range.date.toLocalDate(),
+        totalTime = Time.fromTotalSeconds(it.grandTotal.totalSeconds),
+        languages = it.languages.toModel(),
+        editors = it.editors.toModel(),
+        operatingSystems = it.operatingSystems.toModel(),
+        branches = it.branches.toModel(),
+        machines = it.machines.toModel(),
     )
 }

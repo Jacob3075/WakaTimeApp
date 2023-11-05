@@ -1,5 +1,7 @@
 package com.jacob.wakatimeapp.login.data
 
+import com.jacob.wakatimeapp.login.data.dtos.DetailedProjectStatsDTO
+import com.jacob.wakatimeapp.login.data.dtos.GetStatsForRangeResDTO
 import com.jacob.wakatimeapp.login.data.dtos.GetUserDetailsResDTO
 import okhttp3.ResponseBody
 import retrofit2.Response
@@ -8,6 +10,7 @@ import retrofit2.http.GET
 import retrofit2.http.Header
 import retrofit2.http.POST
 import retrofit2.http.Path
+import retrofit2.http.Query
 import retrofit2.http.Streaming
 import retrofit2.http.Url
 
@@ -38,4 +41,22 @@ internal interface LoginPageAPI {
         @Url downloadUrl: String,
     ): Response<ResponseBody>
 
+    /**
+     * @param start date format in yyyy-MM-dd
+     * @param end date format in yyyy-MM-dd
+     */
+    @GET("/api/v1/users/current/summaries")
+    suspend fun getStatsForRange(
+        @Header("Authorization") token: String,
+        @Query("start") start: String,
+        @Query("end") end: String,
+    ): Response<GetStatsForRangeResDTO>
+
+    @GET("/api/v1/users/current/summaries")
+    suspend fun getStatsForProject(
+        @Header("Authorization") token: String,
+        @Query("project") projectName: String,
+        @Query("start") start: String,
+        @Query("end") end: String,
+    ): Response<DetailedProjectStatsDTO>
 }

@@ -6,7 +6,7 @@ import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 
-data class ProjectStats(
+data class AggregateProjectStatsForRange(
     val name: String,
     val totalTime: Time,
     val dailyProjectStats: Map<LocalDate, Time>,
@@ -17,7 +17,7 @@ data class ProjectStats(
     val branches: List<Branch>,
     val machines: List<Machine>,
 ) {
-    operator fun plus(other: ProjectStats) = ProjectStats(
+    operator fun plus(other: AggregateProjectStatsForRange) = AggregateProjectStatsForRange(
         name = name,
         totalTime = totalTime + other.totalTime,
         dailyProjectStats = dailyProjectStats + other.dailyProjectStats,
@@ -30,7 +30,7 @@ data class ProjectStats(
     )
 
     companion object {
-        val ZERO = ProjectStats(
+        val ZERO = AggregateProjectStatsForRange(
             name = "",
             totalTime = Time.ZERO,
             dailyProjectStats = mapOf(),

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.details.data.dtos
+package com.jacob.wakatimeapp.login.data.dtos
 
 import com.jacob.wakatimeapp.core.common.data.dtos.CategoryDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.CumulativeTotalDTO

@@ -8,6 +8,8 @@ import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.common.data.mappers.toEntity
+import com.jacob.wakatimeapp.core.models.DetailedDailyStats
+import com.jacob.wakatimeapp.core.models.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.core.models.Range
 import kotlinx.datetime.LocalDate
 
@@ -37,4 +39,38 @@ interface ApplicationDao {
                 .let { projectsPerDays -> insertProjectStatsForDay(projectsPerDays) }
         }
     }
+
+    @Transaction
+    suspend fun insertStatesForDay(detailedDailyStats: List<DetailedDailyStats>) {
+        detailedDailyStats.forEach {
+            val dayId = insertStatesForDay(it.toEntity())
+            it.projects
+                .map { project -> project.toEntity(dayId) }
+                .let { projectsPerDays -> insertProjectStatsForDay(projectsPerDays) }
+        }
+    }
 }
+
+fun DetailedProjectStatsForDay.toEntity(dayId: Long): ProjectPerDay {
+    return ProjectPerDay(
+        projectPerDayId = 0,
+        dayIdFk = dayId,
+        name = name,
+        grandTotal = totalTime,
+        editors = editors,
+        languages = languages,
+        operatingSystems = operatingSystems,
+        branches = branches,
+        machines = machines,
+    )
+}
+
+private fun DetailedDailyStats.toEntity() = DayEntity(
+    dayId = 0,
+    date = date,
+    grandTotal = timeSpent,
+    editors = editors,
+    languages = languages,
+    operatingSystems = operatingSystems,
+    machines = emptyList(),
+)
