@@ -6,6 +6,6 @@ import kotlinx.serialization.Serializable
 data class CumulativeTotalDTO(
     val decimal: String,
     val digital: String,
-    val seconds: Long,
+    val seconds: Double,
     val text: String,
 )

@@ -7,7 +7,7 @@ data class Time(
     val hours: Int,
     val minutes: Int,
     val decimal: Float,
-    val totalSeconds: Long = calculateTotalSeconds(hours.toLong(), minutes.toLong()),
+    val totalSeconds: Double = calculateTotalSeconds(hours.toLong(), minutes.toLong()),
 ) {
     fun toMinutes(): Int = (hours * MINUTES_IN_HOURS) + minutes
 
@@ -20,12 +20,12 @@ data class Time(
     companion object {
         val ZERO = Time(0, 0, 0f)
 
-        fun fromTotalSeconds(totalSeconds: Long): Time {
+        fun fromTotalSeconds(totalSeconds: Double): Time {
             val hours = totalSeconds / (SECONDS_IN_MINUTES * MINUTES_IN_HOURS)
             val minutes = (totalSeconds % (SECONDS_IN_MINUTES * MINUTES_IN_HOURS)) / MINUTES_IN_HOURS
             val decimal = hours + (minutes.toFloat() / MINUTES_IN_HOURS)
             return Time(
-                decimal = decimal,
+                decimal = decimal.toFloat(),
                 hours = hours.toInt(),
                 minutes = minutes.toInt(),
                 totalSeconds = totalSeconds,
@@ -51,8 +51,8 @@ data class Time(
             return Time(hours, minutes, decimal.toFloat())
         }
 
-        private fun calculateTotalSeconds(hours: Long, minutes: Long): Long =
-            (hours * MINUTES_IN_HOURS * SECONDS_IN_MINUTES) + (minutes * SECONDS_IN_MINUTES)
+        private fun calculateTotalSeconds(hours: Long, minutes: Long): Double =
+            (hours * MINUTES_IN_HOURS * SECONDS_IN_MINUTES) + (minutes * SECONDS_IN_MINUTES).toDouble()
 
         private const val MINUTES_IN_HOURS = 60
         private const val SECONDS_IN_MINUTES = 60

@@ -10,5 +10,5 @@ data class GrandTotalDTO(
     val hours: Int,
     val minutes: Int,
     val text: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )

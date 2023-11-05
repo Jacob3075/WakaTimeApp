@@ -13,7 +13,7 @@ data class DependencyDTO(
     val percent: Double,
     val seconds: Int,
     val text: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
 
 @Serializable
@@ -26,7 +26,7 @@ data class EditorDTO(
     val percent: Double,
     val seconds: Int,
     val text: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
 
 @Serializable
@@ -39,7 +39,7 @@ data class LanguageDTO(
     val percent: Double,
     val seconds: Int,
     val text: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
 
 @Serializable
@@ -53,7 +53,7 @@ data class MachineDTO(
     val seconds: Int,
     val text: String,
     @SerialName("machine_name_id") val machineNameId: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
 
 @Serializable
@@ -66,7 +66,7 @@ data class BranchDTO(
     val percent: Double,
     val seconds: Int,
     val text: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
 
 @Serializable
@@ -79,7 +79,7 @@ data class OperatingSystemDTO(
     val percent: Double,
     val seconds: Int,
     val text: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
 
 @Serializable
@@ -93,7 +93,7 @@ data class EntityDTO(
     val seconds: Int,
     val text: String,
     val type: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
 
 @Serializable
@@ -106,5 +106,5 @@ data class CategoryDTO(
     val percent: Double,
     val seconds: Int,
     val text: String,
-    @SerialName("total_seconds") val totalSeconds: Long,
+    @SerialName("total_seconds") val totalSeconds: Double,
 )
