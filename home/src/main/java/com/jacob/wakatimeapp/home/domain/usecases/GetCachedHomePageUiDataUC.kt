@@ -11,7 +11,6 @@ import com.jacob.wakatimeapp.home.domain.models.toHomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUC.CacheValidity.DEFAULT
 import javax.inject.Inject
 import javax.inject.Singleton
-import kotlinx.coroutines.flow.channelFlow
 import kotlinx.coroutines.flow.combine
 import kotlinx.datetime.Instant
 import kotlinx.datetime.toLocalDateTime
@@ -26,33 +25,31 @@ internal class GetCachedHomePageUiDataUC @Inject constructor(
     /**
      * @return [HomePageUiData] if there is data for the current day in the cache, otherwise null
      */
-    operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = channelFlow {
-        combine(
-            authDataStore.userDetails,
-            homePageCache.getLast7DaysStats(),
-            homePageCache.getCurrentStreak(),
-            homePageCache.getLongestStreak(),
-            homePageCache.getLastRequestTime(),
-        ) { userDetails, last7DaysStatsEither, currentStreakEither, longestStreakEither, lastRequestTime ->
-            if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
+    operator fun invoke(cacheValidity: CacheValidity = DEFAULT) = combine(
+        authDataStore.userDetails,
+        homePageCache.getLast7DaysStats(),
+        homePageCache.getCurrentStreak(),
+        homePageCache.getLongestStreak(),
+        homePageCache.getLastRequestTime(),
+    ) { userDetails, last7DaysStatsEither, currentStreakEither, longestStreakEither, lastRequestTime ->
+        if (lastRequestTime.isFirstRequestOfDay()) return@combine Right(null)
 
-            either<Error, HomePageUiData?> {
-                val last7DaysStats = last7DaysStatsEither.bind() ?: return@either null
-                val currentStreak = currentStreakEither.bind()
-                val longestStreak = longestStreakEither.bind()
+        either<Error, HomePageUiData?> {
+            val last7DaysStats = last7DaysStatsEither.bind() ?: return@either null
+            val currentStreak = currentStreakEither.bind()
+            val longestStreak = longestStreakEither.bind()
 
-                HomePageUiData(
-                    last7DaysStats = last7DaysStats,
-                    userDetails = userDetails.toHomePageUserDetails(),
-                    currentStreak = currentStreak,
-                    longestStreak = longestStreak,
-                    isStaleData = !validDataInCache(
-                        lastRequestTime = lastRequestTime,
-                        cacheValidityTime = cacheValidity,
-                    ),
-                )
-            }
-        }.collect { send(it) }
+            HomePageUiData(
+                last7DaysStats = last7DaysStats,
+                userDetails = userDetails.toHomePageUserDetails(),
+                currentStreak = currentStreak,
+                longestStreak = longestStreak,
+                isStaleData = !validDataInCache(
+                    lastRequestTime = lastRequestTime,
+                    cacheValidityTime = cacheValidity,
+                ),
+            )
+        }
     }
 
     private fun Instant.isFirstRequestOfDay(): Boolean {

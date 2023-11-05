@@ -1,12 +1,17 @@
 package com.jacob.wakatimeapp.login.ui.loading
 
 import com.jacob.wakatimeapp.core.models.Error as CoreModelsError
-import androidx.lifecycle.ViewModel
+import android.app.Application
+import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import androidx.work.PeriodicWorkRequestBuilder
+import androidx.work.WorkManager
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserStatsInDbUC
+import com.jacob.wakatimeapp.login.work.PeriodicUpdateUserDataWorker
 import dagger.hilt.android.lifecycle.HiltViewModel
+import java.util.concurrent.TimeUnit.DAYS
 import javax.inject.Inject
 import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
@@ -16,10 +21,11 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 internal class LoadingPageViewModel @Inject constructor(
+    application: Application,
     private val authTokenProvider: AuthTokenProvider,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO,
     private val updateUserStatsInDbUC: UpdateUserStatsInDbUC,
-) : ViewModel() {
+) : AndroidViewModel(application) {
     private val _viewState = MutableStateFlow<LoadingPageViewState>(LoadingPageViewState.Loading)
     val viewState = _viewState.asStateFlow()
 
@@ -38,7 +44,16 @@ internal class LoadingPageViewModel @Inject constructor(
     }
 
     private fun resetUpdateStatsWorker() {
+        val workManager = WorkManager.getInstance(getApplication<Application>().applicationContext)
+        workManager.cancelAllWorkByTag(PeriodicUpdateUserDataWorker.WORK_NAME)
 
+        val periodicWorkRequestBuilder = PeriodicWorkRequestBuilder<PeriodicUpdateUserDataWorker>(
+            PeriodicUpdateUserDataWorker.WORK_INTERVAL_IN_DAYS,
+            DAYS,
+        ).addTag(PeriodicUpdateUserDataWorker.WORK_NAME)
+            .build()
+
+        workManager.enqueue(periodicWorkRequestBuilder)
     }
 
     private fun updateStatsInDB() {

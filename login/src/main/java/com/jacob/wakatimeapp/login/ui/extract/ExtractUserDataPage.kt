@@ -32,7 +32,6 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets.Animations
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
 import com.jacob.wakatimeapp.login.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
 import com.jacob.wakatimeapp.login.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
@@ -40,14 +39,14 @@ import com.ramcosta.composedestinations.annotation.Destination
 @Composable
 @Destination
 fun ExtractUserDataPage(
-    navigator: LoginPageNavigator,
+    navigator: ExtractUserDataNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) = ExtractUserDataScreen(navigator, snackbarHostState, modifier, hiltViewModel())
 
 @Composable
 private fun ExtractUserDataScreen(
-    navigator: LoginPageNavigator,
+    navigator: ExtractUserDataNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ExtractUseDataViewModel = hiltViewModel(),
@@ -111,7 +110,7 @@ private fun ExtractUserDataScreen(
                 }
 
                 is ViewState.DownloadingExtract -> Text(text = "Downloading Extract...")
-                is ViewState.ExtractLoaded -> Text(text = "Extract Loaded")
+                is ViewState.ExtractLoaded -> navigator.toHomePageFromExtractUserData()
             }
         }
     }

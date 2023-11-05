@@ -21,6 +21,7 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
     private val loginPaeNetworkData: LoginPageNetworkData,
     private val instantProvider: InstantProvider,
 ) {
+    // TODO: SET AND CHECK LAST UPDATE TIME SIMILAR TO HOW HOME PAGE CACHE WORKS
     suspend operator fun invoke() = either {
         val rangeInDb = wakaTimeAppDB.getDateRangeInDb().bind()
         val newRange = Range(rangeInDb.endDate, instantProvider.date())

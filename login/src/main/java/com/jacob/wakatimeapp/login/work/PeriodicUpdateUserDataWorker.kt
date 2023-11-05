@@ -29,6 +29,6 @@ internal class PeriodicUpdateUserDataWorker @AssistedInject constructor(
 
     companion object {
         const val WORK_NAME = "PeriodicUpdateUserDataWorker"
-        const val WORK_INTERVAL_IN_DAYS = 7
+        const val WORK_INTERVAL_IN_DAYS = 7L
     }
 }
