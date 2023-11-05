@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.core.models
 
 import kotlinx.serialization.Serializable
 
+// TODO: ADD TESTS
 @Serializable
 data class Time(
     val hours: Int,
@@ -21,12 +22,12 @@ data class Time(
         val ZERO = Time(0, 0, 0f)
 
         fun fromTotalSeconds(totalSeconds: Double): Time {
-            val hours = totalSeconds / (SECONDS_IN_MINUTES * MINUTES_IN_HOURS)
+            val hours = (totalSeconds / (SECONDS_IN_MINUTES * MINUTES_IN_HOURS)).toInt()
             val minutes = (totalSeconds % (SECONDS_IN_MINUTES * MINUTES_IN_HOURS)) / MINUTES_IN_HOURS
-            val decimal = hours + (minutes.toFloat() / MINUTES_IN_HOURS)
+            val decimal = hours + (minutes / MINUTES_IN_HOURS)
             return Time(
                 decimal = decimal.toFloat(),
-                hours = hours.toInt(),
+                hours = hours,
                 minutes = minutes.toInt(),
                 totalSeconds = totalSeconds,
             )
