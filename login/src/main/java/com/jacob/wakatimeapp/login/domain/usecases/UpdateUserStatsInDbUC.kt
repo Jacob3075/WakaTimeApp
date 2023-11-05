@@ -22,7 +22,7 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
     private val instantProvider: InstantProvider,
 ) {
     suspend operator fun invoke() = either {
-        val rangeInDb = wakaTimeAppDB.getDateRangeInDb() ?: return@either
+        val rangeInDb = wakaTimeAppDB.getDateRangeInDb().bind()
         val newRange = Range(rangeInDb.endDate, instantProvider.date())
 
         if (newRange.startDate < newRange.endDate.minus(DatePeriod(days = 14))) {

@@ -2,8 +2,8 @@
 
 package com.jacob.wakatimeapp.core.common.data.mappers
 
+import com.jacob.wakatimeapp.core.common.data.dtos.BranchDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO.DayDTO.ProjectDTO.BranchDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.MachineDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
@@ -50,14 +50,14 @@ fun List<LanguageDTO>.fromDto() = map(LanguageDTO::toModel).let(::Languages)
 
 fun List<OperatingSystemDTO>.fromDto() = map(OperatingSystemDTO::toModel).let(::OperatingSystems)
 
-fun List<BranchDTO>.toModel() = map { branch ->
+fun List<BranchDTO>.toBranch() = map { branch ->
     Branch(
         name = branch.name,
         time = Time.fromTotalSeconds(branch.totalSeconds),
     )
 }
 
-fun List<MachineDTO>.toModel() = map { machine ->
+fun List<MachineDTO>.toMachine() = map { machine ->
     Machine(
         name = machine.name,
         time = Time.fromTotalSeconds(machine.totalSeconds),

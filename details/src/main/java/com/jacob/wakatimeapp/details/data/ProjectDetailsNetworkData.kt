@@ -4,13 +4,11 @@ import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.core.common.data.BaseNetworkData
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
-import com.jacob.wakatimeapp.core.models.AggregateProjectStatsForRange
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.details.data.dtos.TotalTimeForProjectDTO
 import com.jacob.wakatimeapp.details.data.mappers.toModel
 import com.jacob.wakatimeapp.details.domain.models.ProjectDetails
 import com.jacob.wakatimeapp.details.domain.models.TotalProjectTime
-import com.jacob.wakatimeapp.login.data.mappers.toModel
 import javax.inject.Inject
 import javax.inject.Singleton
 
@@ -30,21 +28,21 @@ internal class ProjectDetailsNetworkData @Inject constructor(
             methodName = ::getDetailsForProject.name,
         ).map(ProjectDetailsDTO::toModel)
 
-    suspend fun getStatsForProject(
-        projectName: String,
-        startDate: String,
-        endDate: String,
-    ): Either<Error, AggregateProjectStatsForRange> = makeSafeApiCall(
-        apiCall = {
-            projectDetailsPageAPI.getStatsForProject(
-                it,
-                projectName = projectName,
-                start = startDate,
-                end = endDate,
-            )
-        },
-        methodName = ::getStatsForProject.name,
-    ).map { it.toModel(projectName) }
+//    suspend fun getStatsForProject(
+//        projectName: String,
+//        startDate: String,
+//        endDate: String,
+//    ): Either<Error, AggregateProjectStatsForRange> = makeSafeApiCall(
+//        apiCall = {
+//            projectDetailsPageAPI.getStatsForProject(
+//                it,
+//                projectName = projectName,
+//                start = startDate,
+//                end = endDate,
+//            )
+//        },
+//        methodName = ::getStatsForProject.name,
+//    )
 
     suspend fun getTotalTimeForProject(name: String): Either<Error, TotalProjectTime> =
         makeSafeApiCall(

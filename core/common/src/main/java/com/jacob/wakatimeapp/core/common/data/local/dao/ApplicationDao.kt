@@ -19,7 +19,7 @@ interface ApplicationDao {
     suspend fun getStatsForDay(date: LocalDate): List<DayEntity>
 
     @Query("SELECT min(date) as startDate, max(date) as endDate FROM DayEntity")
-    suspend fun getDateRangeInDb(): Range?
+    suspend fun getDateRangeInDb(): Range
 
     @Query("SELECT * FROM ProjectPerDay WHERE name = :name")
     suspend fun getStatsForProject(name: String): List<ProjectPerDay>

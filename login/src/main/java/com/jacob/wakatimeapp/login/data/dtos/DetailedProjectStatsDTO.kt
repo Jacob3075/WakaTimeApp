@@ -1,11 +1,11 @@
 package com.jacob.wakatimeapp.login.data.dtos
 
+import com.jacob.wakatimeapp.core.common.data.dtos.BranchDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.CategoryDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.CumulativeTotalDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.DependencyDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.EntityDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO.DayDTO.ProjectDTO.BranchDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.GrandTotalDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.MachineDTO
