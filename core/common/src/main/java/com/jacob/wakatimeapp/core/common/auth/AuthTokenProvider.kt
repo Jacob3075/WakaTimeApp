@@ -60,4 +60,8 @@ class AuthTokenProvider @Inject constructor(
     }
         .filterNotNull()
         .take(1)
+
+    fun logout() = runBlocking {
+        update(AuthState())
+    }
 }

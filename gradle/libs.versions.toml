@@ -7,6 +7,7 @@ androidMaterial = "1.9.0" # https://github.com/material-components/material-comp
 androidxCoreSplashscreen = "1.0.1" # https://developer.android.com/jetpack/androidx/releases/core
 androidxLifecycle = "2.6.1"
 dataStore = "1.0.0"
+workRuntimeKtx = "2.8.1"
 
 kotlin = "1.9.10" # https://kotlinlang.org/
 kotlinxCoroutines = "1.7.3" # https://github.com/Kotlin/kotlinx.coroutines
@@ -22,6 +23,7 @@ accompanistPager = "0.32.0"
 
 hilt = "2.48" # https://github.com/google/dagger
 hiltNavigationCompose = "1.0.0"
+hiltWork = "1.0.0"
 
 roomCompiler = "2.5.2"
 roomKtx = "2.5.2"
@@ -68,6 +70,8 @@ androidx-activity-compose = { module = "androidx.activity:activity-compose", ver
 androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", version.ref = "androidxCoreSplashscreen" }
 androidx-dataStore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 
+androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+
 androidx-lifecycle-runtimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
 androidx-lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
 androidx-lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
@@ -99,6 +103,7 @@ hilt-android = { module = "com.google.dagger:hilt-android", version.ref = "hilt"
 hilt-compiler = { module = "com.google.dagger:hilt-android-compiler", version.ref = "hilt" }
 hilt-navigation-compose = { module = "androidx.hilt:hilt-navigation-compose", version.ref = "hiltNavigationCompose" }
 hilt-android-plugin-gradle = { module = "com.google.dagger:hilt-android-gradle-plugin", version.ref = "hilt" }
+androidx-hilt-work = { module = "androidx.hilt:hilt-work", version.ref = "hiltWork" }
 
 room-runtime = { module = "androidx.room:room-runtime", version.ref = "roomCompiler" }
 room-compiler = { module = "androidx.room:room-compiler", version.ref = "roomCompiler" }
