@@ -57,6 +57,19 @@ data class MachineDTO(
 )
 
 @Serializable
+data class BranchDTO(
+    val decimal: String,
+    val digital: String,
+    val hours: Int,
+    val minutes: Int,
+    val name: String,
+    val percent: Double,
+    val seconds: Int,
+    val text: String,
+    @SerialName("total_seconds") val totalSeconds: Double,
+)
+
+@Serializable
 data class OperatingSystemDTO(
     val decimal: String,
     val digital: String,

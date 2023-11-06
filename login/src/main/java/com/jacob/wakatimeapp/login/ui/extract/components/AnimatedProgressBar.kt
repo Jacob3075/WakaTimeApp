@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.home.ui.extract.components
+package com.jacob.wakatimeapp.login.ui.extract.components
 
 import androidx.compose.animation.core.Animatable
 import androidx.compose.foundation.background

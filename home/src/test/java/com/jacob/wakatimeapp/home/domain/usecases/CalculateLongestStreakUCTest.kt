@@ -77,8 +77,8 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
-                    start = userCreatedAt.toString(),
-                    end = currentInstant.toDate().toString(),
+                    start = userCreatedAt,
+                    end = currentInstant.toDate(),
                     data = stats.right(),
                 )
                 .callUseCase(batchSize = DatePeriod(months = 1))
@@ -98,13 +98,13 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
-                    start = userCreatedAt.toString(),
-                    end = LocalDate(2022, 2, 1).toString(),
+                    start = userCreatedAt,
+                    end = LocalDate(2022, 2, 1),
                     data = stats.right(),
                 )
                 .mockGetStatsForRange(
-                    start = LocalDate(2022, 2, 1).toString(),
-                    end = currentInstant.toDate().toString(),
+                    start = LocalDate(2022, 2, 1),
+                    end = currentInstant.toDate(),
                     data = stats.right(),
                 )
                 .callUseCase(batchSize = DatePeriod(months = 1))
@@ -124,8 +124,8 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
-                    start = userCreatedAt.toString(),
-                    end = currentInstant.toDate().toString(),
+                    start = userCreatedAt,
+                    end = currentInstant.toDate(),
                     data = stats.copy(
                         values = List(30) {
                             dailyStats.copy(
@@ -152,8 +152,8 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
-                    start = userCreatedAt.toString(),
-                    end = currentInstant.toDate().toString(),
+                    start = userCreatedAt,
+                    end = currentInstant.toDate(),
                     data = stats.copy(
                         values = List(10) {
                             dailyStats.copy(date = userCreatedAt + it.days)
@@ -199,8 +199,8 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
-                    start = userCreatedAt.toString(),
-                    end = currentInstant.toDate().toString(),
+                    start = userCreatedAt,
+                    end = currentInstant.toDate(),
                     data = stats.copy(
                         values = testDailyStats,
                     ).right(),
@@ -238,18 +238,18 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
-                    start = userCreatedAt.toString(),
-                    end = (userCreatedAt + 7.days).toString(),
+                    start = userCreatedAt,
+                    end = (userCreatedAt + 7.days),
                     data = stats.copy(values = testDailyStats1).right(),
                 )
                 .mockGetStatsForRange(
-                    start = (userCreatedAt + 7.days).toString(),
-                    end = (userCreatedAt + 14.days).toString(),
+                    start = (userCreatedAt + 7.days),
+                    end = (userCreatedAt + 14.days),
                     data = stats.copy(values = testDailyStats2).right(),
                 )
                 .mockGetStatsForRange(
-                    start = (userCreatedAt + 14.days).toString(),
-                    end = (userCreatedAt + 21.days).toString(),
+                    start = (userCreatedAt + 14.days),
+                    end = (userCreatedAt + 21.days),
                     data = stats.copy(values = testDailyStats3).right(),
                 )
                 .callUseCase(batchSize = DatePeriod(days = 7))
@@ -329,28 +329,28 @@ internal class CalculateLongestStreakUCTest {
                 .mockHomePageCacheGetLongestStreak()
                 .mockHomePageCacheGetCurrentStreak()
                 .mockGetStatsForRange(
-                    start = userCreatedAt.toString(),
-                    end = (userCreatedAt + 7.days).toString(),
+                    start = userCreatedAt,
+                    end = (userCreatedAt + 7.days),
                     data = stats.copy(values = testDailyStats1).right(),
                 )
                 .mockGetStatsForRange(
-                    start = (userCreatedAt + 7.days).toString(),
-                    end = (userCreatedAt + 14.days).toString(),
+                    start = (userCreatedAt + 7.days),
+                    end = (userCreatedAt + 14.days),
                     data = stats.copy(values = testDailyStats2).right(),
                 )
                 .mockGetStatsForRange(
-                    start = (userCreatedAt + 14.days).toString(),
-                    end = (userCreatedAt + 21.days).toString(),
+                    start = (userCreatedAt + 14.days),
+                    end = (userCreatedAt + 21.days),
                     data = stats.copy(values = testDailyStats3).right(),
                 )
                 .mockGetStatsForRange(
-                    start = (userCreatedAt + 21.days).toString(),
-                    end = (userCreatedAt + 28.days).toString(),
+                    start = (userCreatedAt + 21.days),
+                    end = (userCreatedAt + 28.days),
                     data = stats.copy(values = testDailyStats4).right(),
                 )
                 .mockGetStatsForRange(
-                    start = (userCreatedAt + 28.days).toString(),
-                    end = currentInstant.toDate().toString(),
+                    start = (userCreatedAt + 28.days),
+                    end = currentInstant.toDate(),
                     data = stats.copy(values = testDailyStats5).right(),
                 )
                 .callUseCase(batchSize = DatePeriod(days = 7))

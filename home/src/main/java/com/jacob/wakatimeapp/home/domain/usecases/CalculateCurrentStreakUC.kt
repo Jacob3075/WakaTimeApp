@@ -4,7 +4,6 @@ import arrow.core.Either
 import arrow.core.raise.either
 import arrow.core.right
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
-import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
@@ -29,7 +28,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
             homePageCache.getLast7DaysStats().first().bind() ?: return@either Streak.ZERO
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
-        val today = instantProvider.now().toDate()
+        val today = instantProvider.date()
         val todaysStats = last7DaysStats.weeklyTimeSpent[today] ?: Time.ZERO
 
         val endOfCurrentStreakIsYesterday = currentStreak.end == today.minus(1, DateTimeUnit.DAY)
@@ -56,7 +55,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
         todaysStats: Time,
     ) = when (todaysStats) {
         Time.ZERO -> currentStreak
-        else -> currentStreak.copy(end = instantProvider.now().toDate())
+        else -> currentStreak.copy(end = instantProvider.date())
     }
 
     @Suppress("MagicNumber")
@@ -64,7 +63,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
         recalculatedStreakForLast7Days: Streak,
     ) = when (recalculatedStreakForLast7Days.days) {
         7 -> recalculateLatestStreakUC.calculate(
-            start = instantProvider.now().toDate().minus(8, DateTimeUnit.DAY),
+            start = instantProvider.date().minus(8, DateTimeUnit.DAY),
             batchSize = DatePeriod(months = 1),
         )
 

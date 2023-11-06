@@ -1,7 +1,6 @@
 package com.jacob.wakatimeapp.details.data
 
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
-import com.jacob.wakatimeapp.details.data.dtos.DetailedProjectStatsDTO
 import com.jacob.wakatimeapp.details.data.dtos.TotalTimeForProjectDTO
 import retrofit2.Response
 import retrofit2.http.GET
@@ -15,13 +14,13 @@ internal interface ProjectDetailsPageAPI {
         @Query("q") projectName: String,
     ): Response<ProjectDetailsDTO>
 
-    @GET("/api/v1/users/current/summaries")
-    suspend fun getStatsForProject(
-        @Header("Authorization") token: String,
-        @Query("project") projectName: String,
-        @Query("start") start: String,
-        @Query("end") end: String,
-    ): Response<DetailedProjectStatsDTO>
+//    @GET("/api/v1/users/current/summaries")
+//    suspend fun getStatsForProject(
+//        @Header("Authorization") token: String,
+//        @Query("project") projectName: String,
+//        @Query("start") start: String,
+//        @Query("end") end: String,
+//    ): Response<DetailedProjectStatsDTO>
 
     @GET("/api/v1/users/current/all_time_since_today")
     suspend fun getTotalTimeForProject(

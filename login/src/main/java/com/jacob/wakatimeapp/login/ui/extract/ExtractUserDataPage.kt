@@ -1,6 +1,6 @@
-package com.jacob.wakatimeapp.home.ui.extract
+package com.jacob.wakatimeapp.login.ui.extract
 
-import com.jacob.wakatimeapp.home.ui.extract.ExtractPageViewState as ViewState
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState as ViewState
 import androidx.activity.compose.rememberLauncherForActivityResult
 import androidx.activity.result.contract.ActivityResultContracts
 import androidx.annotation.RawRes
@@ -32,22 +32,21 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets.Animations
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import com.jacob.wakatimeapp.home.ui.HomePageNavigator
-import com.jacob.wakatimeapp.home.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
-import com.jacob.wakatimeapp.home.ui.extract.components.AnimatedProgressBar
+import com.jacob.wakatimeapp.login.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
+import com.jacob.wakatimeapp.login.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
 
 @Composable
 @Destination
 fun ExtractUserDataPage(
-    navigator: HomePageNavigator,
+    navigator: ExtractUserDataNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
 ) = ExtractUserDataScreen(navigator, snackbarHostState, modifier, hiltViewModel())
 
 @Composable
 private fun ExtractUserDataScreen(
-    navigator: HomePageNavigator,
+    navigator: ExtractUserDataNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ExtractUseDataViewModel = hiltViewModel(),
@@ -111,7 +110,7 @@ private fun ExtractUserDataScreen(
                 }
 
                 is ViewState.DownloadingExtract -> Text(text = "Downloading Extract...")
-                is ViewState.ExtractLoaded -> Text(text = "Extract Loaded")
+                is ViewState.ExtractLoaded -> navigator.toHomePageFromExtractUserData()
             }
         }
     }

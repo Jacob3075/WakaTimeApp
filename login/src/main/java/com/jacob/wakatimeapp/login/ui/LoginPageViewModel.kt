@@ -5,12 +5,16 @@ import android.content.Intent
 import android.net.Uri
 import androidx.lifecycle.AndroidViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.Constants
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.login.BuildConfig
-import com.jacob.wakatimeapp.login.usecases.UpdateUserDetailsUC
+import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
+import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserStatsInDbUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
+import kotlin.coroutines.CoroutineContext
+import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -27,10 +31,12 @@ import net.openid.appauth.ResponseTypeValues
 import timber.log.Timber
 
 @HiltViewModel
-class LoginPageViewModel @Inject constructor(
+internal class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val authTokenProvider: AuthTokenProvider,
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO,
+    private val updateUserStatsInDbUC: UpdateUserStatsInDbUC,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
     private val _viewState: MutableStateFlow<LoginPageState> = MutableStateFlow(LoginPageState.Idle)
@@ -51,7 +57,19 @@ class LoginPageViewModel @Inject constructor(
 
     init {
         val authToken = authTokenProvider.current
-        if (authToken.isAuthorized) updateUserDetails()
+        if (authToken.isAuthorized) {
+            updateUserDetails()
+            updateStatsInDB()
+        }
+    }
+
+    private fun updateStatsInDB() {
+        viewModelScope.launch(ioDispatcher) {
+            when (val result = updateUserStatsInDbUC()) {
+                is Either.Left -> _viewState.value = LoginPageState.Error(result.value.errorDisplayMessage())
+                is Either.Right -> _viewState.value = LoginPageState.Success
+            }
+        }
     }
 
     /**
@@ -62,7 +80,7 @@ class LoginPageViewModel @Inject constructor(
      */
     private fun updateUserDetails() {
         _viewState.value = LoginPageState.Loading
-        viewModelScope.launch {
+        viewModelScope.launch(ioDispatcher) {
             try {
                 _viewState.value = authTokenProvider.getFreshToken()
                     .filterNotNull()

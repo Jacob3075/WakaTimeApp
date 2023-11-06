@@ -1,7 +1,7 @@
-package com.jacob.wakatimeapp.home.ui.extract
+package com.jacob.wakatimeapp.login.ui.extract
 
 import com.jacob.wakatimeapp.core.models.Error as CoreModelsError
-import com.jacob.wakatimeapp.home.domain.models.ExtractCreationProgress
+import com.jacob.wakatimeapp.login.domain.models.ExtractCreationProgress
 
 internal sealed class ExtractPageViewState {
     data object Idle : ExtractPageViewState()

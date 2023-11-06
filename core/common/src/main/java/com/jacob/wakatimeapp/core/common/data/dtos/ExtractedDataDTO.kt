@@ -34,20 +34,7 @@ data class ExtractedDataDTO(
             val name: String,
             @SerialName("grand_total") val grandTotal: GrandTotalDTO,
             @SerialName("operating_systems") val operatingSystems: List<OperatingSystemDTO>,
-        ) {
-            @Serializable
-            data class BranchDTO(
-                val decimal: String,
-                val digital: String,
-                val hours: Int,
-                val minutes: Int,
-                val name: String,
-                val percent: Double,
-                val seconds: Int,
-                val text: String,
-                @SerialName("total_seconds") val totalSeconds: Double,
-            )
-        }
+        )
     }
 
     @Serializable
