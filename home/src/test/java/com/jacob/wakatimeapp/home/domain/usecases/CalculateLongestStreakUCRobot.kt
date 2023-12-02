@@ -3,6 +3,9 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either
 import arrow.core.right
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
+import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
@@ -10,8 +13,10 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
+import com.jacob.wakatimeapp.core.models.secondarystats.Editors
+import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
-import com.jacob.wakatimeapp.home.data.network.HomePageNetworkData
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
@@ -21,8 +26,6 @@ import io.mockk.coVerify
 import io.mockk.mockk
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
-import kotlinx.coroutines.test.TestDispatcher
-import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
@@ -31,22 +34,20 @@ internal class CalculateLongestStreakUCRobot {
     private lateinit var calculateLongestStreakUC: CalculateLongestStreakUC
     private var result: Either<Error, Streak>? = null
 
-    private val mockHomePageNetworkData: HomePageNetworkData = mockk()
     private val mockHomePageCache: HomePageCache = mockk(relaxUnitFun = true)
     private val mockAuthDataStore: AuthDataStore = mockk(relaxUnitFun = true)
+    private val mockWakaTimeAppDB: WakaTimeAppDB = mockk(relaxUnitFun = true)
 
     fun buildUseCase(
         currentInstant: Instant = defaultCurrentInstant,
-        dispatcher: TestDispatcher,
     ) = apply {
-        clearMocks(mockHomePageCache, mockHomePageNetworkData, mockAuthDataStore)
+        clearMocks(mockHomePageCache, mockAuthDataStore)
         result = null
 
         calculateLongestStreakUC = CalculateLongestStreakUC(
-            homePageNetworkData = mockHomePageNetworkData,
             homePageCache = mockHomePageCache,
             authDataStore = mockAuthDataStore,
-            dispatcher = dispatcher,
+            wakaTimeAppDB = mockWakaTimeAppDB,
             instantProvider = object : InstantProvider {
                 override val timeZone: TimeZone
                     get() = TimeZone.UTC
@@ -56,8 +57,8 @@ internal class CalculateLongestStreakUCRobot {
         )
     }
 
-    suspend fun callUseCase(batchSize: DatePeriod) = apply {
-        result = calculateLongestStreakUC(batchSize)
+    suspend fun callUseCase() = apply {
+        result = calculateLongestStreakUC()
     }
 
     fun resultShouldBe(expected: Either<Error, Streak>) = apply {
@@ -90,10 +91,10 @@ internal class CalculateLongestStreakUCRobot {
     fun mockGetStatsForRange(
         start: LocalDate? = null,
         end: LocalDate? = null,
-        data: Either<Error, DailyStatsAggregate>,
+        data: Either<Error, List<DayWithProjects>>,
     ) = apply {
         coEvery {
-            mockHomePageNetworkData.getStatsForRange(
+            mockWakaTimeAppDB.getStatsForRange(
                 start ?: any(),
                 end ?: any(),
             )
@@ -103,7 +104,7 @@ internal class CalculateLongestStreakUCRobot {
     fun verifyGetStatsForRangeCalled(count: Int, start: LocalDate? = null, end: LocalDate? = null) =
         apply {
             coVerify(exactly = count) {
-                mockHomePageNetworkData.getStatsForRange(
+                mockWakaTimeAppDB.getStatsForRange(
                     start ?: any(),
                     end ?: any(),
                 )
@@ -129,7 +130,7 @@ internal class CalculateLongestStreakUCRobot {
 
         val defaultCurrentInstant = Instant.parse("2022-10-01T00:00:00Z")
 
-        val dailyStats = DailyStats(
+        val dailyStats1 = DailyStats(
             timeSpent = Time.fromDecimal(1f),
             projectsWorkedOn = listOf<Project>().toImmutableList(),
             mostUsedLanguage = "",
@@ -138,9 +139,26 @@ internal class CalculateLongestStreakUCRobot {
             date = LocalDate(2022, 1, 1),
         )
 
-        val stats = DailyStatsAggregate(
+        val dailyStats = DayEntity(
+            dayId = 0,
+            date = LocalDate(2022, 1, 1),
+            grandTotal = Time.fromDecimal(1f),
+            editors = Editors(listOf()),
+            languages = Languages(listOf()),
+            operatingSystems = OperatingSystems(listOf()),
+            machines = listOf()
+        )
+        val stats = listOf(
+            DayWithProjects(
+                day = dailyStats,
+                projectsForDay = listOf()
+
+            ),
+        )
+
+        val stats1 = DailyStatsAggregate(
             values = List(30) {
-                dailyStats.copy(
+                dailyStats1.copy(
                     date = LocalDate(2022, 1, it + 1),
                 )
             },

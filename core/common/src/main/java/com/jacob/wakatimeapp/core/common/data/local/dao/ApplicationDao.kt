@@ -21,6 +21,15 @@ interface ApplicationDao {
     @Query("SELECT min(date) as startDate, max(date) as endDate FROM DayEntity")
     suspend fun getDateRangeInDb(): Range
 
+    @Query(
+        """
+            SELECT * FROM DayEntity
+            JOIN ProjectPerDay ON DayEntity.dayId = ProjectPerDay.dayIdFk
+            WHERE date BETWEEN :startDate AND :endDate
+        """
+    )
+    suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): Map<DayEntity, List<ProjectPerDay>>
+
     @Query("SELECT * FROM ProjectPerDay WHERE name = :name")
     suspend fun getStatsForProject(name: String): List<ProjectPerDay>
 

@@ -8,6 +8,7 @@ import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
+import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -23,9 +24,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
     private val recalculateLatestStreakUC: RecalculateLatestStreakUC,
 ) {
 
-    suspend operator fun invoke(): Either<Error, Streak> = either {
-        val last7DaysStats =
-            homePageCache.getLast7DaysStats().first().bind() ?: return@either Streak.ZERO
+    suspend operator fun invoke(last7DaysStats: Last7DaysStats): Either<Error, Streak> = either {
         val currentStreak = homePageCache.getCurrentStreak().first().bind()
 
         val today = instantProvider.date()

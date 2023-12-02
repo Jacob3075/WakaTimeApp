@@ -48,8 +48,8 @@ internal class CalculateCurrentStreakUCRobot {
         )
     }
 
-    suspend fun callUseCase() = apply {
-        result = useCase()
+    suspend fun callUseCase(last7DaysStats: Last7DaysStats) = apply {
+        result = useCase(last7DaysStats)
     }
 
     fun resultsShouldBe(expected: Either<Error, Streak>) = apply {
@@ -60,10 +60,6 @@ internal class CalculateCurrentStreakUCRobot {
 
     fun mockGetCurrentStreak(data: Either<Error, Streak>) = apply {
         coEvery { mockCache.getCurrentStreak() } returns flowOf(data)
-    }
-
-    fun mockGetLast7DaysStats(data: Either<Error, Last7DaysStats?>) = apply {
-        coEvery { mockCache.getLast7DaysStats() } returns flowOf(data)
     }
 
     fun mockRecalculateStreak(start: LocalDate, result: Either<Error, Streak>) = apply {

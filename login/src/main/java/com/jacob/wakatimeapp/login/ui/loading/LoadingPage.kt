@@ -19,6 +19,7 @@ import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.coroutines.CoroutineScope
 import kotlinx.coroutines.launch
+import timber.log.Timber
 
 @Composable
 @Destination(start = true)
@@ -43,6 +44,7 @@ private fun LoadingPageContent(
     val snackBarCoroutineScope = rememberCoroutineScope()
 
     LaunchedEffect(viewState) {
+        Timber.d("viewState: $viewState")
         when (val viewStateInstance = viewState) {
             is LoadingPageViewState.LoggedOut -> loginPageNavigator.toLoginPage()
             is LoadingPageViewState.LocalDbNotPopulated -> loginPageNavigator.toExtractUserDataPage()

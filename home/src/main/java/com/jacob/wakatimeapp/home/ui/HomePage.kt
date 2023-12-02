@@ -42,6 +42,7 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import timber.log.Timber
 
 @Composable
 @Destination
@@ -62,6 +63,7 @@ private fun HomePageScreen(
     val viewState by viewModel.homePageState.collectAsState()
 
     LaunchedEffect(viewState) {
+        Timber.d("viewState: $viewState")
         if (viewState !is HomePageViewState.Error) return@LaunchedEffect
         val viewStateError = viewState as HomePageViewState.Error
 

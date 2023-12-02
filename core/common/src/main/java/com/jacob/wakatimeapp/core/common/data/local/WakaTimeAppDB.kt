@@ -4,6 +4,7 @@ import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.dao.ApplicationDao
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
 import com.jacob.wakatimeapp.core.models.Error
@@ -35,4 +36,15 @@ class WakaTimeAppDB @Inject constructor(
     suspend fun insertExtractedData(detailedDailyStats: List<DetailedDailyStats>): Either<Error, Unit> = Either.catch {
         applicationDao.insertStatesForDay(detailedDailyStats)
     }.mapLeft { Error.DatabaseError.UnknownError("could not insert aggregate stats data into db", it) }
+
+    suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): Either<Error, List<DayWithProjects>> = Either.catch {
+        applicationDao.getStatsForRange(startDate, endDate).toDayWithProjects()
+    }.mapLeft { Error.DatabaseError.UnknownError("could not get stats for range ($startDate - $endDate)", it) }
+}
+
+private fun Map<DayEntity, List<ProjectPerDay>>.toDayWithProjects() = map { (dayEntity, projectsPerDay) ->
+    DayWithProjects(
+        day = dayEntity,
+        projectsForDay = projectsPerDay,
+    )
 }

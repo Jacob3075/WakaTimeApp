@@ -1,9 +1,7 @@
 package com.jacob.wakatimeapp.core.common.data.local.entities
 
-import androidx.room.Embedded
 import androidx.room.Entity
 import androidx.room.PrimaryKey
-import androidx.room.Relation
 import com.jacob.wakatimeapp.core.models.Branch
 import com.jacob.wakatimeapp.core.models.Machine
 import com.jacob.wakatimeapp.core.models.Time
@@ -38,11 +36,7 @@ data class ProjectPerDay(
     val machines: List<Machine>,
 )
 
-data class DayWithStats(
-    @Embedded val day: DayEntity,
-    @Relation(
-        parentColumn = "dayId",
-        entityColumn = "dayIdFk",
-    )
-    val projectPerDay: ProjectPerDay,
+data class DayWithProjects(
+    val day: DayEntity,
+    val projectsForDay: List<ProjectPerDay>,
 )

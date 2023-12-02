@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.login.ui.extract
 
 import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState as ViewState
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.contract.ActivityResultContracts
+import androidx.activity.result.contract.ActivityResultContracts.GetContent
 import androidx.annotation.RawRes
 import androidx.compose.animation.AnimatedContent
 import androidx.compose.animation.AnimatedContentTransitionScope
@@ -23,6 +23,7 @@ import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.ui.Alignment
@@ -32,9 +33,16 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets.Animations
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.CreatingExtract
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.DownloadingExtract
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.Error
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.ExtractCreated
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.ExtractLoaded
+import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.Idle
 import com.jacob.wakatimeapp.login.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
 import com.jacob.wakatimeapp.login.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
+import timber.log.Timber
 
 @Composable
 @Destination
@@ -54,7 +62,11 @@ private fun ExtractUserDataScreen(
     val viewState by viewModel.extractPageState.collectAsState()
     val context = LocalContext.current
 
-    val launcher = rememberLauncherForActivityResult(ActivityResultContracts.GetContent()) {
+    LaunchedEffect(viewState) {
+        Timber.d("viewState: $viewState")
+    }
+
+    val launcher = rememberLauncherForActivityResult(GetContent()) {
         val item = context.contentResolver.openInputStream(it!!)
         val bytes = item?.readBytes()
         item?.close()
@@ -75,10 +87,10 @@ private fun ExtractUserDataScreen(
             label = "",
             transitionSpec = { createContentTransform() },
             modifier = Modifier,
-            contentKey = { it is ViewState.Error },
+            contentKey = { it is Error },
         ) {
             when (it) {
-                is ViewState.Error -> ExtractStateAnimation(
+                is Error -> ExtractStateAnimation(
                     Animations.randomErrorAnimation,
                     it.error.errorDisplayMessage(),
                 )
@@ -95,22 +107,22 @@ private fun ExtractUserDataScreen(
             contentKey = { it.javaClass },
         ) {
             when (it) {
-                is ViewState.Idle, is ViewState.Error -> IdleContent(
+                is Idle, is Error -> IdleContent(
                     createExtract = viewModel::createExtract,
                     downloadExistingExtract = viewModel::downloadExistingExtract,
                     filePicker = { launcher.launch("application/json") },
                 )
 
-                is ViewState.CreatingExtract -> AnimatedProgressBar(it.progress)
-                is ViewState.ExtractCreated -> Button(
+                is CreatingExtract -> AnimatedProgressBar(it.progress)
+                is ExtractCreated -> Button(
                     onClick = { viewModel.downloadExtract(it.createdExtract) },
                     modifier = Modifier.fillMaxWidth(),
                 ) {
                     Text(text = "Download Extract")
                 }
 
-                is ViewState.DownloadingExtract -> Text(text = "Downloading Extract...")
-                is ViewState.ExtractLoaded -> navigator.toHomePageFromExtractUserData()
+                is DownloadingExtract -> Text(text = "Downloading Extract...")
+                is ExtractLoaded -> navigator.toHomePageFromExtractUserData()
             }
         }
     }

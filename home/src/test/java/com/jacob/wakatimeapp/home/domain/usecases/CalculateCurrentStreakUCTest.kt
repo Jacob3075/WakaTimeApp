@@ -8,13 +8,11 @@ import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.last7DaysStats
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUCRobot.Companion.noWeeklyStats
 import kotlinx.collections.immutable.toImmutableMap
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.minus
 import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class CalculateCurrentStreakUCTest {
     private val robot = CalculateCurrentStreakUCRobot()
 
@@ -23,8 +21,7 @@ internal class CalculateCurrentStreakUCTest {
         runTest {
             robot.buildUseCase()
                 .mockGetCurrentStreak(Streak.ZERO.right())
-                .mockGetLast7DaysStats(last7DaysStats.right())
-                .callUseCase()
+                .callUseCase(last7DaysStats)
                 .resultsShouldBe(Streak.ZERO.right())
         }
 
@@ -37,8 +34,7 @@ internal class CalculateCurrentStreakUCTest {
             )
             robot.buildUseCase()
                 .mockGetCurrentStreak(streak.right())
-                .mockGetLast7DaysStats(last7DaysStats.copy(weeklyTimeSpent = noWeeklyStats).right())
-                .callUseCase()
+                .callUseCase(last7DaysStats.copy(weeklyTimeSpent = noWeeklyStats))
                 .resultsShouldBe(streak.right())
         }
 
@@ -51,10 +47,7 @@ internal class CalculateCurrentStreakUCTest {
             )
             robot.buildUseCase()
                 .mockGetCurrentStreak(streak.right())
-                .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right(),
-                )
-                .callUseCase()
+                .callUseCase(last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats))
                 .resultsShouldBe(streak.copy(end = currentDay).right())
         }
 
@@ -67,10 +60,7 @@ internal class CalculateCurrentStreakUCTest {
             )
             robot.buildUseCase()
                 .mockGetCurrentStreak(streak.right())
-                .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = noWeeklyStats).right(),
-                )
-                .callUseCase()
+                .callUseCase(last7DaysStats.copy(weeklyTimeSpent = noWeeklyStats))
                 .resultsShouldBe(Streak.ZERO.right())
         }
 
@@ -94,10 +84,7 @@ internal class CalculateCurrentStreakUCTest {
 
             robot.buildUseCase()
                 .mockGetCurrentStreak(initialStreak.right())
-                .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = updatedWeeklyStats).right(),
-                )
-                .callUseCase()
+                .callUseCase(last7DaysStats.copy(weeklyTimeSpent = updatedWeeklyStats))
                 .resultsShouldBe(result.right())
         }
 
@@ -116,10 +103,7 @@ internal class CalculateCurrentStreakUCTest {
 
             robot.buildUseCase()
                 .mockGetCurrentStreak(initialStreak.right())
-                .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right(),
-                )
-                .callUseCase()
+                .callUseCase(last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats))
                 .resultsShouldBe(result.right())
         }
 
@@ -138,20 +122,8 @@ internal class CalculateCurrentStreakUCTest {
 
             robot.buildUseCase()
                 .mockGetCurrentStreak(initialStreak.right())
-                .mockGetLast7DaysStats(
-                    last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats).right(),
-                )
                 .mockRecalculateStreak(currentDay.minus(8, DateTimeUnit.DAY), result.right())
-                .callUseCase()
+                .callUseCase(last7DaysStats.copy(weeklyTimeSpent = continuousWeeklyStats))
                 .resultsShouldBe(result.right())
         }
-
-    @Test
-    internal fun `when last 7 days stats is null, then return zero`() = runTest {
-        robot.buildUseCase()
-            .mockGetLast7DaysStats(null.right())
-            .mockGetCurrentStreak(Streak.ZERO.right())
-            .callUseCase()
-            .resultsShouldBe(Streak.ZERO.right())
-    }
 }
