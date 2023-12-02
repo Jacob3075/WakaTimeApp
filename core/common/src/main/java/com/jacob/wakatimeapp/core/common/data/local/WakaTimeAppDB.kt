@@ -17,9 +17,14 @@ import kotlinx.datetime.LocalDate
 class WakaTimeAppDB @Inject constructor(
     private val applicationDao: ApplicationDao,
 ) {
-    suspend fun getStatsForDay(date: LocalDate): Either<Error, List<DayEntity>> = Either.catch {
-        applicationDao.getStatsForDay(date)
-    }.mapLeft { Error.DatabaseError.UnknownError("could not get stats for day ($date)", it) }
+    suspend fun getStatsForDay(date: LocalDate): Either<Error, DayEntity> = Either.catch {
+        applicationDao.getStatsForDay(date)!!
+    }.mapLeft {
+        when (it) {
+            is NullPointerException -> Error.DatabaseError.NotFound("could not find stats for day ($date)")
+            else -> Error.DatabaseError.UnknownError("could not get stats for day ($date)", it)
+        }
+    }
 
     suspend fun getStatsForProject(name: String): Either<Error, List<ProjectPerDay>> = Either.catch {
         applicationDao.getStatsForProject(name)
@@ -29,12 +34,12 @@ class WakaTimeAppDB @Inject constructor(
         applicationDao.getDateRangeInDb()
     }.mapLeft { Error.DatabaseError.UnknownError("could not get range from db", it) }
 
-    suspend fun insertExtractedData(extractedDataDTO: ExtractedDataDTO): Either<Error, Unit> = Either.catch {
+    suspend fun updateDbWithNewData(extractedDataDTO: ExtractedDataDTO): Either<Error, Unit> = Either.catch {
         applicationDao.insertStatesForDay(extractedDataDTO)
     }.mapLeft { Error.DatabaseError.UnknownError("could not insert extracted data into db", it) }
 
-    suspend fun insertExtractedData(detailedDailyStats: List<DetailedDailyStats>): Either<Error, Unit> = Either.catch {
-        applicationDao.insertStatesForDay(detailedDailyStats)
+    suspend fun updateDbWithNewData(detailedDailyStats: List<DetailedDailyStats>): Either<Error, Unit> = Either.catch {
+        applicationDao.updateDbWithNewData(detailedDailyStats)
     }.mapLeft { Error.DatabaseError.UnknownError("could not insert aggregate stats data into db", it) }
 
     suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): Either<Error, List<DayWithProjects>> = Either.catch {

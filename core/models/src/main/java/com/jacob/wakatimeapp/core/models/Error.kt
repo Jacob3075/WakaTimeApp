@@ -53,6 +53,7 @@ sealed class Error {
 
     sealed class DatabaseError : Error() {
         data class EmptyCache(override val message: String) : DatabaseError()
+        data class NotFound(override val message: String) : DatabaseError()
         data class UnknownError(override val message: String, override val exception: Throwable) :
             DatabaseError()
     }

@@ -52,6 +52,6 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
 
         val detailedDailyStatsModel = statsForRangeDto.toDetailedDailyStatsModel(projectStats)
 
-        wakaTimeAppDB.insertExtractedData(detailedDailyStatsModel)
+        wakaTimeAppDB.updateDbWithNewData(detailedDailyStatsModel)
     }
 }

@@ -21,6 +21,6 @@ internal class LoadExtractedDataIntoDbUC @Inject constructor(
 
         val extractedDataDTO = json.decodeFromString<ExtractedDataDTO>(String(bytes))
 
-        return wakaTimeAppDB.insertExtractedData(extractedDataDTO)
+        return wakaTimeAppDB.updateDbWithNewData(extractedDataDTO)
     }
 }

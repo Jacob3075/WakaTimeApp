@@ -7,7 +7,6 @@ import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
-import com.jacob.wakatimeapp.core.models.Error.NetworkErrors.Timeout
 import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
@@ -49,11 +48,6 @@ internal class CalculateLongestStreakUC @Inject constructor(
             .toStreaks()
             .maxByOrNull(Streak::days)
             ?: Streak.ZERO
-    }.mapLeft {
-        when (it) {
-            is Timeout -> Timeout("Network timed out, try again later")
-            else -> it
-        }
     }
 }
 

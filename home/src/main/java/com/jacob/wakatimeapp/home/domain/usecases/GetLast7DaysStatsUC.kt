@@ -18,7 +18,7 @@ internal class GetLast7DaysStatsUC @Inject constructor(
     suspend operator fun invoke() = either {
         val today = instantProvider.date()
         val lastWeek7Days = today.minus(DAYS_IN_WEEK, DateTimeUnit.DAY)
-        wakaTimeAppDB.getStatsForRange(today, lastWeek7Days).bind().toLast7RangeDaysStats()
+        wakaTimeAppDB.getStatsForRange(lastWeek7Days, today).bind().toLast7RangeDaysStats()
     }
 
     companion object {
