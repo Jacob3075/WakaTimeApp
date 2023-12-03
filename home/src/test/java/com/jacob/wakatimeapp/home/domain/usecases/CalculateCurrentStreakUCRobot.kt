@@ -63,7 +63,7 @@ internal class CalculateCurrentStreakUCRobot {
     }
 
     fun mockRecalculateStreak(start: LocalDate, result: Either<Error, Streak>) = apply {
-        coEvery { mockRecalculateStreak.calculate(start, any()) } returns result
+        coEvery { mockRecalculateStreak.invoke(start, any()) } returns result
     }
 
     internal companion object {

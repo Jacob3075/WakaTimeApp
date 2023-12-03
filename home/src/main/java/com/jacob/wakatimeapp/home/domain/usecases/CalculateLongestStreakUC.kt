@@ -4,17 +4,15 @@ import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
+import com.jacob.wakatimeapp.core.common.data.mappers.toDailyStateAggregate
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
-import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
-import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlin.collections.Map.Entry
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.first
 import kotlinx.datetime.LocalDate
 
@@ -50,25 +48,6 @@ internal class CalculateLongestStreakUC @Inject constructor(
             ?: Streak.ZERO
     }
 }
-
-fun List<DayWithProjects>.toDailyStateAggregate() = DailyStatsAggregate(
-    values = map {
-        DailyStats(
-            timeSpent = it.day.grandTotal,
-            projectsWorkedOn = it.projectsForDay.map { projectPerDay ->
-                Project(
-                    time = projectPerDay.grandTotal,
-                    name = projectPerDay.name,
-                    percent = projectPerDay.grandTotal.totalSeconds / it.day.grandTotal.totalSeconds,
-                )
-            }.toImmutableList(),
-            mostUsedLanguage = "",
-            mostUsedEditor = "",
-            mostUsedOs = "",
-            date = it.day.date,
-        )
-    },
-)
 
 private fun DailyStatsAggregate.groupConsecutiveDaysWithStats() = values
     .associate { it.date to it.timeSpent }

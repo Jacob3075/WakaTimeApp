@@ -61,7 +61,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
     private suspend fun whenFailedToCombine(
         recalculatedStreakForLast7Days: Streak,
     ) = when (recalculatedStreakForLast7Days.days) {
-        7 -> recalculateLatestStreakUC.calculate(
+        7 -> recalculateLatestStreakUC(
             start = instantProvider.date().minus(8, DateTimeUnit.DAY),
             batchSize = DatePeriod(months = 1),
         )

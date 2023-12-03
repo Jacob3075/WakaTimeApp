@@ -1,9 +1,8 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.right
-import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.home.domain.models.Streak
-import com.jacob.wakatimeapp.home.domain.usecases.RecalculateLatestStreakUCRobot.Companion.createDailyStats
+import com.jacob.wakatimeapp.home.domain.usecases.RecalculateLatestStreakUCRobot.Companion.createDayWithProjects
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.DateTimeUnit
@@ -25,9 +24,7 @@ internal class RecalculateLatestStreakUCTest {
             robot.buildService().mockGetDataForRange(
                 start,
                 end,
-                DailyStatsAggregate(
-                    values = createDailyStats(30, emptyList(), end),
-                ).right(),
+                createDayWithProjects(30, emptyList(), end).right(),
             ).calculate(
                 start = start,
                 DatePeriod(months = 1),
@@ -44,7 +41,7 @@ internal class RecalculateLatestStreakUCTest {
             robot.buildService().mockGetDataForRange(
                 start,
                 end,
-                DailyStatsAggregate(values = createDailyStats(size = 15, days, end)).right(),
+                createDayWithProjects(size = 15, days, end).right(),
             ).calculate(
                 start = start,
                 DatePeriod(days = 14),
@@ -66,7 +63,7 @@ internal class RecalculateLatestStreakUCTest {
             robot.buildService().mockGetDataForRange(
                 start,
                 end,
-                DailyStatsAggregate(values = createDailyStats(14, days, end)).right(),
+                createDayWithProjects(14, days, end).right(),
             ).calculate(
                 start = start,
                 DatePeriod(days = 14),
@@ -86,15 +83,11 @@ internal class RecalculateLatestStreakUCTest {
             robot.buildService().mockGetDataForRange(
                 start,
                 end,
-                DailyStatsAggregate(
-                    values = createDailyStats(count, days, end),
-                ).right(),
+                createDayWithProjects(count, days, end).right(),
             ).mockGetDataForRange(
                 secondStart,
                 secondEnd,
-                DailyStatsAggregate(
-                    values = createDailyStats(count, emptyList(), end),
-                ).right(),
+                createDayWithProjects(count, emptyList(), end).right(),
             ).calculate(
                 start = start,
                 DatePeriod(months = 1),
@@ -118,11 +111,11 @@ internal class RecalculateLatestStreakUCTest {
             robot.buildService().mockGetDataForRange(
                 start,
                 end,
-                DailyStatsAggregate(values = createDailyStats(count, days, end)).right(),
+                createDayWithProjects(count, days, end).right(),
             ).mockGetDataForRange(
                 secondStart,
                 secondEnd,
-                DailyStatsAggregate(values = createDailyStats(count, days2, secondEnd)).right(),
+                createDayWithProjects(count, days2, secondEnd).right(),
             ).calculate(
                 start = start,
                 DatePeriod(days = 14),
@@ -148,11 +141,11 @@ internal class RecalculateLatestStreakUCTest {
             robot.buildService().mockGetDataForRange(
                 start,
                 end,
-                DailyStatsAggregate(values = createDailyStats(count, days, end)).right(),
+                createDayWithProjects(count, days, end).right(),
             ).mockGetDataForRange(
                 secondStart,
                 secondEnd,
-                DailyStatsAggregate(values = createDailyStats(count, days2, secondEnd)).right(),
+                createDayWithProjects(count, days2, secondEnd).right(),
             ).calculate(
                 start = start,
                 DatePeriod(days = 14),
@@ -205,31 +198,31 @@ internal class RecalculateLatestStreakUCTest {
             robot.buildService().mockGetDataForRange(
                 start1,
                 end1,
-                DailyStatsAggregate(values = createDailyStats(count1, days1, end1)).right(),
+                createDayWithProjects(count1, days1, end1).right(),
             ).mockGetDataForRange(
                 start2,
                 end2,
-                DailyStatsAggregate(values = createDailyStats(count2, days2, end2)).right(),
+                createDayWithProjects(count2, days2, end2).right(),
             ).mockGetDataForRange(
                 start3,
                 end3,
-                DailyStatsAggregate(values = createDailyStats(count3, days3, end3)).right(),
+                createDayWithProjects(count3, days3, end3).right(),
             ).mockGetDataForRange(
                 start4,
                 end4,
-                DailyStatsAggregate(values = createDailyStats(count4, days4, end4)).right(),
+                createDayWithProjects(count4, days4, end4).right(),
             ).mockGetDataForRange(
                 start5,
                 end5,
-                DailyStatsAggregate(values = createDailyStats(count5, days5, end5)).right(),
+                createDayWithProjects(count5, days5, end5).right(),
             ).mockGetDataForRange(
                 start6,
                 end6,
-                DailyStatsAggregate(values = createDailyStats(count6, days6, end6)).right(),
+                createDayWithProjects(count6, days6, end6).right(),
             ).mockGetDataForRange(
                 start7,
                 end7,
-                DailyStatsAggregate(values = createDailyStats(count7, days7, end7)).right(),
+                createDayWithProjects(count7, days7, end7).right(),
             ).calculate(
                 start = start1,
                 DatePeriod(months = 1),

@@ -55,9 +55,11 @@ fun List<DayWithProjects>.toLast7RangeDaysStats(): Last7DaysStats {
             .flatMap { projectPerDay -> projectPerDay.operatingSystems.values }
     }.maxByOrNull { it.time.totalSeconds }
 
+    val todaysStats = maxByOrNull { it.day.date }
+    val projectWorkedOnToday = (todaysStats?.projectsForDay ?: emptyList()).toModel()
     return Last7DaysStats(
-        timeSpentToday = sumOf { it.day.grandTotal.totalSeconds }.let(Time::fromTotalSeconds),
-        projectsWorkedOn = flatMap(DayWithProjects::projectsForDay).toModel(),
+        timeSpentToday = todaysStats?.day?.grandTotal ?: Time.ZERO,
+        projectsWorkedOn = projectWorkedOnToday,
         weeklyTimeSpent = map(DayWithProjects::day).associate { it.date to it.grandTotal }.toImmutableMap(),
         mostUsedLanguage = mostUsedLanguage?.name ?: "NA",
         mostUsedEditor = mostUsedEditor?.name ?: "NA",

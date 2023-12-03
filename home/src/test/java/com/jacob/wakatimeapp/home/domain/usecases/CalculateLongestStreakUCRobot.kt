@@ -146,12 +146,12 @@ internal class CalculateLongestStreakUCRobot {
             editors = Editors(listOf()),
             languages = Languages(listOf()),
             operatingSystems = OperatingSystems(listOf()),
-            machines = listOf()
+            machines = listOf(),
         )
         val stats = listOf(
             DayWithProjects(
                 day = dailyStats,
-                projectsForDay = listOf()
+                projectsForDay = listOf(),
 
             ),
         )
