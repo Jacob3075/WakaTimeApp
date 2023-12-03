@@ -20,7 +20,6 @@ import androidx.compose.foundation.layout.statusBarsPadding
 import androidx.compose.material3.Button
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.OutlinedButton
-import androidx.compose.material3.SnackbarHostState
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
@@ -48,14 +47,12 @@ import timber.log.Timber
 @Destination
 fun ExtractUserDataPage(
     navigator: ExtractUserDataNavigator,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
-) = ExtractUserDataScreen(navigator, snackbarHostState, modifier, hiltViewModel())
+) = ExtractUserDataScreen(navigator, modifier, hiltViewModel())
 
 @Composable
 private fun ExtractUserDataScreen(
     navigator: ExtractUserDataNavigator,
-    snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
     viewModel: ExtractUseDataViewModel = hiltViewModel(),
 ) {
@@ -82,22 +79,7 @@ private fun ExtractUserDataScreen(
         verticalArrangement = Arrangement.Center,
         horizontalAlignment = Alignment.CenterHorizontally,
     ) {
-        AnimatedContent(
-            targetState = viewState,
-            label = "",
-            transitionSpec = { createContentTransform() },
-            modifier = Modifier,
-            contentKey = { it is Error },
-        ) {
-            when (it) {
-                is Error -> ExtractStateAnimation(
-                    Animations.randomErrorAnimation,
-                    it.error.errorDisplayMessage(),
-                )
-
-                else -> ExtractStateAnimation(Animations.randomDataTransferAnimations, "")
-            }
-        }
+        ExtractCreationAnimation(viewState)
 
         AnimatedContent(
             targetState = viewState,
@@ -124,6 +106,26 @@ private fun ExtractUserDataScreen(
                 is DownloadingExtract -> Text(text = "Downloading Extract...")
                 is ExtractLoaded -> navigator.toHomePageFromExtractUserData()
             }
+        }
+    }
+}
+
+@Composable
+private fun ExtractCreationAnimation(viewState: ViewState) {
+    AnimatedContent(
+        targetState = viewState,
+        label = "",
+        transitionSpec = { createContentTransform() },
+        modifier = Modifier,
+        contentKey = { it is Error },
+    ) {
+        when (it) {
+            is Error -> ExtractStateAnimation(
+                Animations.randomErrorAnimation,
+                it.error.errorDisplayMessage(),
+            )
+
+            else -> ExtractStateAnimation(Animations.randomDataTransferAnimations, "")
         }
     }
 }

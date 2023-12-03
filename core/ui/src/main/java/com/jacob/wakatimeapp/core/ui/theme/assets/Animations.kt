@@ -1,3 +1,5 @@
+@file:Suppress("unused")
+
 package com.jacob.wakatimeapp.core.ui.theme.assets
 
 import androidx.annotation.RawRes
@@ -180,10 +182,10 @@ object Animations {
     )
 
     private val dataAnimations = listOf(
-//        cloudFileAccess,
-//        cloudReporting,
-//        dataCenter,
-//        networkFolder,
+        //        cloudFileAccess,
+        //        cloudReporting,
+        //        dataCenter,
+        //        networkFolder,
         transferFiles,
     )
 

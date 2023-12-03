@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.login.data.dtos
 
-
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

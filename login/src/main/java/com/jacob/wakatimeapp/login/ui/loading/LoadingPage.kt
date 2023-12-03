@@ -71,7 +71,7 @@ private fun LoadingPageContent(
             is LoadingPageViewState.Error -> viewStateInstance.error.errorDisplayMessage()
             else -> "Loading..."
         }
-        WtaAnimation(animation = Animations.randomLoadingAnimation, text = text, modifier = modifier)
+        WtaAnimation(animation = Animations.randomLoadingAnimation, text = text)
     }
 }
 
