@@ -8,8 +8,8 @@ data class ProjectDetailsDTO(
     val data: List<DataDTO>,
     val page: Int,
     val total: Int,
-    @SerialName("next_page") val nextPage: Int,
-    @SerialName("prev_page") val prevPage: Int,
+    @SerialName("next_page") val nextPage: Int?,
+    @SerialName("prev_page") val prevPage: Int?,
     @SerialName("total_pages") val totalPages: Int,
 ) {
     @Serializable

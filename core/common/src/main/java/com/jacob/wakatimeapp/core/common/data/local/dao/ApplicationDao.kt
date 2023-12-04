@@ -1,8 +1,10 @@
 package com.jacob.wakatimeapp.core.common.data.local.dao
 
 import androidx.room.Dao
+import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
+import androidx.room.Update
 import androidx.room.Upsert
 import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
@@ -35,8 +37,11 @@ interface ApplicationDao {
     @Query("SELECT * FROM ProjectPerDay WHERE dayIdFk = :dayIdFk")
     suspend fun getProjectForDay(dayIdFk: Long): List<ProjectPerDay>
 
-    @Upsert
+    @Insert
     suspend fun insertStatesForDay(dayEntity: DayEntity): Long
+
+    @Update
+    suspend fun updateStatesForDay(dayEntity: DayEntity)
 
     @Upsert
     suspend fun upsertProjectStatsForDay(projectsPerDay: List<ProjectPerDay>): List<Long>
@@ -56,18 +61,23 @@ interface ApplicationDao {
         detailedDailyStats
             .forEach {
                 val statsForDayToInsert = combineStatsForDay(it, getStatsForDay(it.date))
-                val dayId = insertStatesForDay(statsForDayToInsert)
+                val dayId = if (statsForDayToInsert.id == null) {
+                    insertStatesForDay(statsForDayToInsert.data)
+                } else {
+                    updateStatesForDay(statsForDayToInsert.data)
+                    statsForDayToInsert.id
+                }
                 val projectStats = combineProjectStats(it, dayId, getProjectForDay(dayId))
                 upsertProjectStatsForDay(projectStats)
             }
     }
 }
 
-private fun combineStatsForDay(detailedDailyStats: DetailedDailyStats, oldStatsForDay: DayEntity?): DayEntity {
+private fun combineStatsForDay(detailedDailyStats: DetailedDailyStats, oldStatsForDay: DayEntity?): Something<DayEntity> {
     val newStatsForDay = detailedDailyStats.toEntity()
 
     return if (oldStatsForDay == null) {
-        newStatsForDay
+        Something(newStatsForDay, null)
     } else {
         val combinedStatsForDay = DayEntity(
             dayId = oldStatsForDay.dayId,
@@ -78,7 +88,7 @@ private fun combineStatsForDay(detailedDailyStats: DetailedDailyStats, oldStatsF
             operatingSystems = newStatsForDay.operatingSystems,
             machines = newStatsForDay.machines,
         )
-        combinedStatsForDay
+        Something(combinedStatsForDay, oldStatsForDay.dayId)
     }
 }
 
@@ -90,29 +100,15 @@ private fun combineProjectStats(
     it.projects
         .map { project -> project.toEntity(dayId) }
         .let { newProjectsPerDays ->
-            if (projectPerDays.isEmpty()) {
-                return newProjectsPerDays
+            val projectsByName = projectPerDays.associateBy(ProjectPerDay::name)
+
+            return newProjectsPerDays.map { newProjectPerDay ->
+                val oldProjectPerDay = projectsByName[newProjectPerDay.name]
+                newProjectPerDay.copy(
+                    projectPerDayId = oldProjectPerDay?.projectPerDayId ?: 0,
+                )
             }
-
-            val combinedProjectsPerDay = (projectPerDays + newProjectsPerDays)
-                .groupBy(ProjectPerDay::name)
-                .values
-                .map { projectsPerDay ->
-                    projectsPerDay.reduce { acc, projectPerDay ->
-                        ProjectPerDay(
-                            projectPerDayId = acc.projectPerDayId,
-                            dayIdFk = acc.dayIdFk,
-                            name = acc.name,
-                            grandTotal = acc.grandTotal + projectPerDay.grandTotal,
-                            editors = acc.editors + projectPerDay.editors,
-                            languages = acc.languages + projectPerDay.languages,
-                            operatingSystems = acc.operatingSystems + projectPerDay.operatingSystems,
-                            branches = acc.branches + projectPerDay.branches,
-                            machines = acc.machines + projectPerDay.machines,
-                        )
-                    }
-                }
-
-            return combinedProjectsPerDay
         }
 }
+
+private data class Something<T>(val data: T, val id: Long?)

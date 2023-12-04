@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.details.domain.usecases
 
+import arrow.core.left
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
@@ -20,7 +21,7 @@ internal class GetProjectStatsUC @Inject constructor(
     private val ioScope = CoroutineScope(dispatcher)
 
     suspend operator fun invoke(projectName: String) = either<Error, DetailedProjectStatsUiData> {
-        TODO()
+        Error.UnknownError("TODO").left().bind()
         //        val totalProjectTime = projectStatsNetworkData.getTotalTimeForProject(projectName).bind()
         //
         //        val batchSize = DatePeriod(months = 6)

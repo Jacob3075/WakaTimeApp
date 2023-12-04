@@ -3,8 +3,6 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
-import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
-import com.jacob.wakatimeapp.core.common.data.mappers.toDailyStateAggregate
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Time
@@ -35,12 +33,11 @@ internal class CalculateLongestStreakUC @Inject constructor(
         val currentDay = instantProvider.date()
         val userJoinedData = userDetails.createdAt
 
-        wakaTimeAppDB.getStatsForRange(
+        wakaTimeAppDB.getAggregateStatsForRange(
             startDate = userJoinedData,
             endDate = currentDay,
         )
             .bind()
-            .let(List<DayWithProjects>::toDailyStateAggregate)
             .groupConsecutiveDaysWithStats()
             .filter(List<Entry<LocalDate, Time>>::isNotEmpty)
             .toStreaks()
