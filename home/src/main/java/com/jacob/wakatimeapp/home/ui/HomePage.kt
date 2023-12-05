@@ -21,8 +21,8 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.Project
 import com.jacob.wakatimeapp.core.ui.WtaDevicePreviews
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard

@@ -1,9 +1,9 @@
 package com.jacob.wakatimeapp.core.common.data.local
 
 import androidx.room.TypeConverter
-import com.jacob.wakatimeapp.core.models.Branch
-import com.jacob.wakatimeapp.core.models.Machine
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.Branch
+import com.jacob.wakatimeapp.core.models.project.Machine
 import com.jacob.wakatimeapp.core.models.secondarystats.Editor
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Language
@@ -17,10 +17,10 @@ import kotlinx.serialization.json.Json
 @Suppress("TooManyFunctions")
 class WtaTypeConverters {
     @TypeConverter
-    fun toLocalDate(date: String) = LocalDate.parse(date)
+    fun toLocalDate(date: Int) = LocalDate.fromEpochDays(date)
 
     @TypeConverter
-    fun fromLocalDate(date: LocalDate) = date.toString()
+    fun fromLocalDate(date: LocalDate) = date.toEpochDays()
 
     @TypeConverter
     fun toTime(time: String) = Json.decodeFromString<Time>(time)

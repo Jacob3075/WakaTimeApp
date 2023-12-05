@@ -1,5 +1,7 @@
-package com.jacob.wakatimeapp.core.models
+package com.jacob.wakatimeapp.core.models.project
 
+import com.jacob.wakatimeapp.core.models.Range
+import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems

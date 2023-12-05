@@ -5,9 +5,9 @@ import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
-import com.jacob.wakatimeapp.core.models.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Range
+import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.login.data.LoginPageNetworkData
 import com.jacob.wakatimeapp.login.data.mappers.toDetailedDailyStatsModel
 import javax.inject.Inject

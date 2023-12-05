@@ -2,8 +2,8 @@ package com.jacob.wakatimeapp.login.data.mappers
 
 import com.jacob.wakatimeapp.core.common.data.mappers.toModel
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
-import com.jacob.wakatimeapp.core.models.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.login.data.dtos.GetStatsForRangeResDTO
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate

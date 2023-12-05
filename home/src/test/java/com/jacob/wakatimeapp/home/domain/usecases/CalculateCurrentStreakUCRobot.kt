@@ -3,8 +3,8 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.Project
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak

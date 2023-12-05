@@ -5,9 +5,9 @@ import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.core.common.data.BaseNetworkData
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.project.ProjectDetails
 import com.jacob.wakatimeapp.details.data.dtos.TotalTimeForProjectDTO
 import com.jacob.wakatimeapp.details.data.mappers.toModel
-import com.jacob.wakatimeapp.details.domain.models.ProjectDetails
 import com.jacob.wakatimeapp.details.domain.models.TotalProjectTime
 import javax.inject.Inject
 import javax.inject.Singleton

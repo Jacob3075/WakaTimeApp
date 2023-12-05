@@ -1,9 +1,9 @@
 package com.jacob.wakatimeapp.home.domain.models
 
-import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
 import com.jacob.wakatimeapp.core.models.WeeklyStats
+import com.jacob.wakatimeapp.core.models.project.Project
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableMap

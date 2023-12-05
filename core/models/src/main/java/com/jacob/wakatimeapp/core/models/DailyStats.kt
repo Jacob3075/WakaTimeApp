@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.core.models
 
+import com.jacob.wakatimeapp.core.models.project.Project
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.datetime.LocalDate
 

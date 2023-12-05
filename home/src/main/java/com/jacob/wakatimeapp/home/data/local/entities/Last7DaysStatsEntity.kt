@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.data.local.entities
 
-import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.Project
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
 

@@ -2,8 +2,8 @@ package com.jacob.wakatimeapp.home.data.local.mappers
 
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
-import com.jacob.wakatimeapp.core.models.Project
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.Project
 import com.jacob.wakatimeapp.home.data.local.entities.Last7DaysStatsEntity
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import kotlinx.collections.immutable.ImmutableList
@@ -34,7 +34,7 @@ fun List<ProjectPerDay>.toModel(): ImmutableList<Project> {
         Project(
             time = it.grandTotal,
             name = it.name,
-            percent = it.grandTotal.totalSeconds / totalSeconds,
+            percent = if (totalSeconds == 0.0) 0.0 else it.grandTotal.totalSeconds / totalSeconds,
         )
     }.toImmutableList()
 }

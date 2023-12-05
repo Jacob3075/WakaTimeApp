@@ -8,9 +8,9 @@ import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.MachineDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
-import com.jacob.wakatimeapp.core.models.Branch
-import com.jacob.wakatimeapp.core.models.Machine
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.Branch
+import com.jacob.wakatimeapp.core.models.project.Machine
 import com.jacob.wakatimeapp.core.models.secondarystats.Editor
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Language

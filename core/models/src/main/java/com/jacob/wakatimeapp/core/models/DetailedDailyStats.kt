@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.core.models
 
+import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems

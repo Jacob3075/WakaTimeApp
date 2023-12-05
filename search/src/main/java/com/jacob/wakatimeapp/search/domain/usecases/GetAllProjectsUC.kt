@@ -1,30 +1,16 @@
 package com.jacob.wakatimeapp.search.domain.usecases
 
 import arrow.core.raise.either
-import com.jacob.wakatimeapp.search.data.network.SearchProjectNetworkData
-import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
+import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.collections.immutable.toImmutableList
 
 @Singleton
 internal class GetAllProjectsUC @Inject constructor(
-    private val searchProjectNetworkData: SearchProjectNetworkData,
+    private val wakaTimeAppDB: WakaTimeAppDB,
 ) {
     suspend operator fun invoke() = either {
-        var page = 1
-        val projects = mutableListOf<ProjectDetails>()
-
-        do {
-            val projectListWithPageNumber = searchProjectNetworkData.getProjects(page).bind()
-
-            projects.addAll(projectListWithPageNumber.projectList)
-
-            if (projectListWithPageNumber.pageNumber == projectListWithPageNumber.totalPageCount) break
-
-            ++page
-        } while (true)
-
-        projects.toImmutableList()
+        wakaTimeAppDB.getAllProjects().bind().sortedBy { it.range.endDate }.asReversed().toImmutableList()
     }
 }

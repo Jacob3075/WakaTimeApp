@@ -6,10 +6,14 @@ import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
-import com.jacob.wakatimeapp.core.models.DetailedProjectStatsForDay
-import com.jacob.wakatimeapp.core.models.Project
+import com.jacob.wakatimeapp.core.models.Range
+import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
+import com.jacob.wakatimeapp.core.models.project.Project
+import com.jacob.wakatimeapp.core.models.project.ProjectDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
+import kotlinx.datetime.LocalDate
 
 fun List<DayWithProjects>.toDailyStateAggregate() = DailyStatsAggregate(
     values = map {
@@ -36,14 +40,14 @@ fun List<ProjectPerDay>.toModel(): ImmutableList<Project> {
         Project(
             time = it.grandTotal,
             name = it.name,
-            percent = it.grandTotal.totalSeconds / totalSeconds,
+            percent = if (totalSeconds == 0.0) 0.0 else it.grandTotal.totalSeconds / totalSeconds,
         )
     }.toImmutableList()
 }
-fun DetailedProjectStatsForDay.toEntity(dayId: Long): ProjectPerDay {
+fun DetailedProjectStatsForDay.toEntity(dayId: LocalDate): ProjectPerDay {
     return ProjectPerDay(
         projectPerDayId = 0,
-        dayIdFk = dayId,
+        day = dayId,
         name = name,
         grandTotal = totalTime,
         editors = editors,
@@ -55,7 +59,6 @@ fun DetailedProjectStatsForDay.toEntity(dayId: Long): ProjectPerDay {
 }
 
 fun DetailedDailyStats.toEntity() = DayEntity(
-    dayId = 0,
     date = date,
     grandTotal = timeSpent,
     editors = editors,
@@ -63,3 +66,27 @@ fun DetailedDailyStats.toEntity() = DayEntity(
     operatingSystems = operatingSystems,
     machines = emptyList(),
 )
+
+fun List<ProjectPerDay>.toProjectDetails() = groupBy(ProjectPerDay::name)
+    .map {
+        it.value
+            .fold(
+                ProjectDetails(
+                    name = it.key,
+                    time = Time.ZERO,
+                    range = Range(
+                        startDate = it.value.minOf(ProjectPerDay::day),
+                        endDate = it.value.maxOf(ProjectPerDay::day),
+                    ),
+                ),
+            ) { acc, projectPerDay ->
+                acc.copy(time = acc.time + projectPerDay.grandTotal)
+            }
+    }
+
+fun Map<DayEntity, List<ProjectPerDay>>.toDayWithProjects() = map { (dayEntity, projectsPerDay) ->
+    DayWithProjects(
+        day = dayEntity,
+        projectsForDay = projectsPerDay,
+    )
+}

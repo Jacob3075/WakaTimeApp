@@ -1,12 +1,13 @@
 package com.jacob.wakatimeapp.search.ui
 
+import com.jacob.wakatimeapp.core.models.Error as CoreError
 import androidx.compose.ui.text.input.TextFieldValue
-import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
+import com.jacob.wakatimeapp.core.models.project.ProjectDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 
 sealed class SearchProjectsViewState {
-    object Loading : SearchProjectsViewState()
+    data object Loading : SearchProjectsViewState()
     data class Loaded(
         val projects: ImmutableList<ProjectDetails>,
         val searchQuery: TextFieldValue = TextFieldValue(""),
@@ -19,5 +20,5 @@ sealed class SearchProjectsViewState {
         }.toImmutableList()
     }
 
-    data class Error(val error: com.jacob.wakatimeapp.core.models.Error) : SearchProjectsViewState()
+    data class Error(val error: CoreError) : SearchProjectsViewState()
 }

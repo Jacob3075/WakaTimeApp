@@ -7,10 +7,10 @@ import com.jacob.wakatimeapp.core.common.data.mappers.fromDto
 import com.jacob.wakatimeapp.core.common.data.mappers.toBranch
 import com.jacob.wakatimeapp.core.common.data.mappers.toMachine
 import com.jacob.wakatimeapp.core.common.data.mappers.toModel
-import com.jacob.wakatimeapp.core.models.AggregateProjectStatsForRange
-import com.jacob.wakatimeapp.core.models.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.AggregateProjectStatsForRange
+import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.login.data.dtos.DetailedProjectStatsDTO
 import com.jacob.wakatimeapp.login.data.dtos.DetailedProjectStatsDTO.Data
 import kotlinx.datetime.toLocalDate

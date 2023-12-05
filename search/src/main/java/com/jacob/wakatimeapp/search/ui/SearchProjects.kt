@@ -13,10 +13,10 @@ import androidx.compose.runtime.getValue
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.input.TextFieldValue
 import androidx.hilt.navigation.compose.hiltViewModel
+import com.jacob.wakatimeapp.core.models.project.ProjectDetails
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Error
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loaded
 import com.jacob.wakatimeapp.search.ui.SearchProjectsViewState.Loading

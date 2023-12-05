@@ -1,10 +1,8 @@
 package com.jacob.wakatimeapp.core.common.data.local.dao
 
 import androidx.room.Dao
-import androidx.room.Insert
 import androidx.room.Query
 import androidx.room.Transaction
-import androidx.room.Update
 import androidx.room.Upsert
 import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
@@ -25,7 +23,7 @@ interface ApplicationDao {
     @Query(
         """
             SELECT * FROM DayEntity
-            LEFT JOIN ProjectPerDay ON DayEntity.dayId = ProjectPerDay.dayIdFk
+            LEFT JOIN ProjectPerDay ON DayEntity.date = ProjectPerDay.day
             WHERE date BETWEEN :startDate AND :endDate
         """,
     )
@@ -34,14 +32,11 @@ interface ApplicationDao {
     @Query("SELECT * FROM ProjectPerDay WHERE name = :name")
     suspend fun getStatsForProject(name: String): List<ProjectPerDay>
 
-    @Query("SELECT * FROM ProjectPerDay WHERE dayIdFk = :dayIdFk")
-    suspend fun getProjectForDay(dayIdFk: Long): List<ProjectPerDay>
+    @Query("SELECT * FROM ProjectPerDay WHERE day = :date")
+    suspend fun getProjectForDay(date: LocalDate): List<ProjectPerDay>
 
-    @Insert
-    suspend fun insertStatesForDay(dayEntity: DayEntity): Long
-
-    @Update
-    suspend fun updateStatesForDay(dayEntity: DayEntity)
+    @Upsert
+    suspend fun insertStatesForDay(dayEntity: DayEntity)
 
     @Upsert
     suspend fun upsertProjectStatsForDay(projectsPerDay: List<ProjectPerDay>): List<Long>
@@ -49,9 +44,10 @@ interface ApplicationDao {
     @Transaction
     suspend fun insertStatesForDay(extractedDataDTO: ExtractedDataDTO) {
         extractedDataDTO.days.forEach {
-            val dayId = insertStatesForDay(it.toEntity())
+            val dayEntity = it.toEntity()
+            insertStatesForDay(dayEntity)
             it.projects
-                .map { project -> project.toEntity(dayId) }
+                .map { project -> project.toEntity(dayEntity.date) }
                 .let { projectsPerDays -> upsertProjectStatsForDay(projectsPerDays) }
         }
     }
@@ -61,26 +57,26 @@ interface ApplicationDao {
         detailedDailyStats
             .forEach {
                 val statsForDayToInsert = combineStatsForDay(it, getStatsForDay(it.date))
-                val dayId = if (statsForDayToInsert.id == null) {
-                    insertStatesForDay(statsForDayToInsert.data)
-                } else {
-                    updateStatesForDay(statsForDayToInsert.data)
-                    statsForDayToInsert.id
-                }
-                val projectStats = combineProjectStats(it, dayId, getProjectForDay(dayId))
+                insertStatesForDay(statsForDayToInsert)
+                val projectStats = combineProjectStats(it, it.date, getProjectForDay(it.date))
                 upsertProjectStatsForDay(projectStats)
             }
     }
+
+    @Query("SELECT * FROM ProjectPerDay")
+    suspend fun getAllProjects(): List<ProjectPerDay>
+
+    @Query("SELECT * FROM ProjectPerDay WHERE name LIKE :projectName")
+    suspend fun getDetailsForProject(projectName: String): List<ProjectPerDay>
 }
 
-private fun combineStatsForDay(detailedDailyStats: DetailedDailyStats, oldStatsForDay: DayEntity?): Something<DayEntity> {
+private fun combineStatsForDay(detailedDailyStats: DetailedDailyStats, oldStatsForDay: DayEntity?): DayEntity {
     val newStatsForDay = detailedDailyStats.toEntity()
 
     return if (oldStatsForDay == null) {
-        Something(newStatsForDay, null)
+        newStatsForDay
     } else {
         val combinedStatsForDay = DayEntity(
-            dayId = oldStatsForDay.dayId,
             date = newStatsForDay.date,
             grandTotal = newStatsForDay.grandTotal,
             editors = newStatsForDay.editors,
@@ -88,13 +84,13 @@ private fun combineStatsForDay(detailedDailyStats: DetailedDailyStats, oldStatsF
             operatingSystems = newStatsForDay.operatingSystems,
             machines = newStatsForDay.machines,
         )
-        Something(combinedStatsForDay, oldStatsForDay.dayId)
+        combinedStatsForDay
     }
 }
 
 private fun combineProjectStats(
     it: DetailedDailyStats,
-    dayId: Long,
+    dayId: LocalDate,
     projectPerDays: List<ProjectPerDay>,
 ): List<ProjectPerDay> {
     it.projects
@@ -110,5 +106,3 @@ private fun combineProjectStats(
             }
         }
 }
-
-private data class Something<T>(val data: T, val id: Long?)

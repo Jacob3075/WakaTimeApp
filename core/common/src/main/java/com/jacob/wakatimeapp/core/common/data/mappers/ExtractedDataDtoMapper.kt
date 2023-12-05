@@ -4,12 +4,13 @@ import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO.DayDTO
 import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO.DayDTO.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
-import com.jacob.wakatimeapp.core.models.Machine
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.project.Branch
+import com.jacob.wakatimeapp.core.models.project.Machine
+import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
 
 fun DayDTO.toEntity() = DayEntity(
-    dayId = 0,
     date = date.toLocalDate(),
     grandTotal = Time(grandTotal.hours, grandTotal.minutes, grandTotal.decimal.toFloat()),
     editors = editors.fromDto(),
@@ -23,9 +24,9 @@ fun DayDTO.toEntity() = DayEntity(
     },
 )
 
-fun ProjectDTO.toEntity(dayId: Long): ProjectPerDay {
+fun ProjectDTO.toEntity(day: LocalDate): ProjectPerDay {
     val branches = branches.map { branch ->
-        com.jacob.wakatimeapp.core.models.Branch(
+        Branch(
             name = branch.name,
             time = Time.fromTotalSeconds(branch.totalSeconds),
         )
@@ -39,7 +40,7 @@ fun ProjectDTO.toEntity(dayId: Long): ProjectPerDay {
 
     return ProjectPerDay(
         projectPerDayId = 0,
-        dayIdFk = dayId,
+        day = day,
         name = name,
         grandTotal = Time(grandTotal.hours, grandTotal.minutes, grandTotal.decimal.toFloat()),
         editors = editors.fromDto(),
