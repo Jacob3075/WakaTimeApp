@@ -4,7 +4,6 @@ import arrow.core.left
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
-import com.jacob.wakatimeapp.details.data.ProjectDetailsNetworkData
 import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
 import javax.inject.Inject
 import javax.inject.Singleton
@@ -15,7 +14,6 @@ import kotlinx.coroutines.Dispatchers
 @Singleton
 internal class GetProjectStatsUC @Inject constructor(
     dispatcher: CoroutineContext = Dispatchers.IO,
-    private val projectStatsNetworkData: ProjectDetailsNetworkData,
     private val instantProvider: InstantProvider,
 ) {
     private val ioScope = CoroutineScope(dispatcher)

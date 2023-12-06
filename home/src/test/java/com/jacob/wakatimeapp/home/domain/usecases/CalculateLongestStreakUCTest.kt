@@ -1,8 +1,8 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import arrow.core.right
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.utils.toDate
-import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats
@@ -93,14 +93,16 @@ internal class CalculateLongestStreakUCTest {
                 .mockGetStatsForRange(
                     start = userCreatedAt,
                     end = currentInstant.toDate(),
-                    data = stats.copy(
-                        values = List(30) {
-                            dailyStats.copy(
-                                date = userCreatedAt + 0.days,
-                                timeSpent = Time.ZERO,
-                            )
-                        },
-                    ).right(),
+                    data = List(30) {
+                        DayWithProjects(
+                            day = dailyStats.copy(
+                                grandTotal = Time.ZERO,
+                                date = userCreatedAt + it.days,
+                            ),
+                            projectsForDay = emptyList(),
+                        )
+                    }
+                        .right(),
                 )
                 .callUseCase()
                 .resultShouldBe(Streak.ZERO.right())
@@ -118,14 +120,13 @@ internal class CalculateLongestStreakUCTest {
                 .mockGetStatsForRange(
                     start = userCreatedAt,
                     end = currentInstant.toDate(),
-                    data =
-                    stats.copy(
-                        List(10) {
-                            dailyStats.copy(
-                                date = userCreatedAt + it.days,
-                            )
-                        },
-                    ).right(),
+                    data = List(10) {
+                        DayWithProjects(
+                            day = dailyStats.copy(date = userCreatedAt + it.days),
+                            projectsForDay = emptyList(),
+                        )
+                    }
+                        .right(),
                 )
                 .callUseCase()
                 .resultShouldBe(
@@ -141,7 +142,7 @@ internal class CalculateLongestStreakUCTest {
         runTest {
             val userCreatedAt = LocalDate(2022, 1, 1)
             val currentInstant = Instant.parse("2022-01-12T00:00:00Z")
-            val zeroDailyStats = dailyStats.copy(timeSpent = Time.ZERO)
+            val zeroDailyStats = dailyStats.copy(grandTotal = Time.ZERO)
 
             val testDailyStats = listOf(
                 dailyStats.copy(date = userCreatedAt + 0.days),
@@ -157,7 +158,7 @@ internal class CalculateLongestStreakUCTest {
                 dailyStats.copy(date = userCreatedAt + 10.days),
                 zeroDailyStats.copy(date = userCreatedAt + 11.days),
             )
-                .let(::DailyStatsAggregate)
+                .map { DayWithProjects(it, emptyList()) }
                 .right()
 
             robot.buildUseCase(currentInstant)

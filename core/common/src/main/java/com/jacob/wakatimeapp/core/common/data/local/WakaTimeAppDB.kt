@@ -4,14 +4,11 @@ import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.dao.ApplicationDao
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
-import com.jacob.wakatimeapp.core.common.data.mappers.toDailyStateAggregate
+import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.common.data.mappers.toDayWithProjects
-import com.jacob.wakatimeapp.core.common.data.mappers.toProjectDetails
-import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Range
-import com.jacob.wakatimeapp.core.models.project.ProjectDetails
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.datetime.LocalDate
@@ -32,19 +29,15 @@ class WakaTimeAppDB @Inject constructor(
         applicationDao.updateDbWithNewData(detailedDailyStats)
     }.mapLeft { Error.DatabaseError.UnknownError("could not insert aggregate stats data into db", it) }
 
-    suspend fun getAggregateStatsForRange(startDate: LocalDate, endDate: LocalDate): Either<Error, DailyStatsAggregate> = Either.catch {
-        applicationDao.getStatsForRange(startDate, endDate).toDayWithProjects().toDailyStateAggregate()
-    }.mapLeft { Error.DatabaseError.UnknownError("could not get stats for range ($startDate - $endDate)", it) }
-
     suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): Either<Error, List<DayWithProjects>> = Either.catch {
         applicationDao.getStatsForRange(startDate, endDate).toDayWithProjects()
     }.mapLeft { Error.DatabaseError.UnknownError("could not get stats for range ($startDate - $endDate)", it) }
 
-    suspend fun getAllProjects(): Either<Error, List<ProjectDetails>> = Either.catch {
-        applicationDao.getAllProjects().toProjectDetails()
+    suspend fun getAllProjects(): Either<Error, List<ProjectPerDay>> = Either.catch {
+        applicationDao.getAllProjects()
     }.mapLeft { Error.DatabaseError.UnknownError("could not get all projects", it) }
 
-    suspend fun getDetailsForProject(projectName: String): Either<Error, List<ProjectDetails>> = Either.catch {
-        applicationDao.getDetailsForProject(projectName).toProjectDetails()
+    suspend fun getDetailsForProject(projectName: String): Either<Error, List<ProjectPerDay>> = Either.catch {
+        applicationDao.getDetailsForProject(projectName)
     }.mapLeft { Error.DatabaseError.UnknownError("could not get details for project: $projectName", it) }
 }

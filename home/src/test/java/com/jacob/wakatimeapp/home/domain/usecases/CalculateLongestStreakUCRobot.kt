@@ -4,13 +4,15 @@ import arrow.core.Either
 import arrow.core.right
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
-import com.jacob.wakatimeapp.core.models.DailyStats
-import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.UserDetails
-import com.jacob.wakatimeapp.core.models.project.Project
+import com.jacob.wakatimeapp.core.models.secondarystats.Editors
+import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import io.kotest.assertions.asClue
@@ -19,7 +21,6 @@ import io.mockk.clearMocks
 import io.mockk.coEvery
 import io.mockk.coVerify
 import io.mockk.mockk
-import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.flow.flowOf
 import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
@@ -86,10 +87,10 @@ internal class CalculateLongestStreakUCRobot {
     fun mockGetStatsForRange(
         start: LocalDate? = null,
         end: LocalDate? = null,
-        data: Either<Error, DailyStatsAggregate>,
+        data: Either<Error, List<DayWithProjects>>,
     ) = apply {
         coEvery {
-            mockWakaTimeAppDB.getAggregateStatsForRange(
+            mockWakaTimeAppDB.getStatsForRange(
                 start ?: any(),
                 end ?: any(),
             )
@@ -99,7 +100,7 @@ internal class CalculateLongestStreakUCRobot {
     fun verifyGetStatsForRangeCalled(count: Int, start: LocalDate? = null, end: LocalDate? = null) =
         apply {
             coVerify(exactly = count) {
-                mockWakaTimeAppDB.getAggregateStatsForRange(
+                mockWakaTimeAppDB.getStatsForRange(
                     start ?: any(),
                     end ?: any(),
                 )
@@ -125,19 +126,20 @@ internal class CalculateLongestStreakUCRobot {
 
         val defaultCurrentInstant = Instant.parse("2022-10-01T00:00:00Z")
 
-        val dailyStats = DailyStats(
-            timeSpent = Time.fromDecimal(1f),
-            projectsWorkedOn = emptyList<Project>().toImmutableList(),
-            mostUsedLanguage = "",
-            mostUsedEditor = "",
-            mostUsedOs = "",
+        val dailyStats = DayEntity(
             date = LocalDate(2022, 1, 1),
+            grandTotal = Time.fromDecimal(1f),
+            editors = Editors(listOf()),
+            languages = Languages(listOf()),
+            operatingSystems = OperatingSystems(listOf()),
+            machines = listOf(),
         )
-        val stats = DailyStatsAggregate(
-            values = listOf(
-                dailyStats
-            )
+        val stats = listOf(
+            DayWithProjects(
+                day = dailyStats,
+                projectsForDay = listOf(),
 
+            ),
         )
     }
 }

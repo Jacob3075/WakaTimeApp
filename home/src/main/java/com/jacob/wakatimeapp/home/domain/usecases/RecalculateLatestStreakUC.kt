@@ -3,7 +3,9 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.Either
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.home.data.mappers.toDailyStateAggregate
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
@@ -39,7 +41,8 @@ internal class RecalculateLatestStreakUC @Inject constructor(
     }
 
     private suspend fun getStatsInRange(start: LocalDate, end: LocalDate) =
-        homePageNetworkData.getAggregateStatsForRange(start, end)
+        homePageNetworkData.getStatsForRange(start, end)
+            .map(List<DayWithProjects>::toDailyStateAggregate)
             .map { stats ->
                 stats.values
                     .associate { it.date to it.timeSpent }

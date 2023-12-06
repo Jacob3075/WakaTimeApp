@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.search.ui
 
 import com.jacob.wakatimeapp.core.models.Error as CoreError
 import androidx.compose.ui.text.input.TextFieldValue
-import com.jacob.wakatimeapp.core.models.project.ProjectDetails
+import com.jacob.wakatimeapp.search.domain.models.ProjectDetails
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 

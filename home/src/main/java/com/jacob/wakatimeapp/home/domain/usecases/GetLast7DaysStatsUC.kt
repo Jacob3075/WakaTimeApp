@@ -3,7 +3,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
-import com.jacob.wakatimeapp.home.data.local.mappers.toLast7RangeDaysStats
+import com.jacob.wakatimeapp.home.data.mappers.toLast7RangeDaysStats
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.datetime.DateTimeUnit
