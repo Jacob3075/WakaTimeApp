@@ -10,8 +10,6 @@ android {
 dependencies {
     implementation(project(":core:models"))
 
-    implementation(libs.androidx.lifecycle.runtimeKtx)
-
     // OAuth
     implementation(libs.appAuth)
 

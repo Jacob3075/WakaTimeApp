@@ -1,13 +1,13 @@
 [versions]
-androidGradlePlugin = "8.1.1"
-androidxCore = "1.10.1" # https://developer.android.com/jetpack/androidx/releases/core
-androidxActivity = "1.7.2"
+androidGradlePlugin = "8.2.0"
+androidxCore = "1.12.0" # https://developer.android.com/jetpack/androidx/releases/core
+androidxActivity = "1.8.1"
 androidxAppCompat = "1.6.1" # https://developer.android.com/jetpack/androidx/releases/appcompat
-androidMaterial = "1.9.0" # https://github.com/material-components/material-components-android
+androidMaterial = "1.10.0" # https://github.com/material-components/material-components-android
 androidxCoreSplashscreen = "1.0.1" # https://developer.android.com/jetpack/androidx/releases/core
-androidxLifecycle = "2.6.1"
+androidxLifecycle = "2.6.2"
 dataStore = "1.0.0"
-workRuntimeKtx = "2.8.1"
+workRuntimeKtx = "2.9.0"
 
 kotlin = "1.9.10" # https://kotlinlang.org/
 kotlinxCoroutines = "1.7.3" # https://github.com/Kotlin/kotlinx.coroutines
@@ -16,17 +16,17 @@ kotlinxDatetime = "0.4.1" # https://github.com/Kotlin/kotlinx-datetime
 kotlinxCollectionsImmutable = "0.3.5" # https://github.com/Kotlin/kotlinx.collections.immutable
 ksp = "1.9.10-1.0.13" # https://goo.gle/ksp
 
-composeBom = "2023.08.00" # https://developer.android.com/jetpack/androidx/releases/compose
+composeBom = "2023.10.01" # https://developer.android.com/jetpack/androidx/releases/compose
 composeCompiler = "1.5.3" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 
 accompanistPager = "0.32.0"
 
 hilt = "2.48" # https://github.com/google/dagger
-hiltNavigationCompose = "1.0.0"
-hiltWork = "1.0.0"
+hiltNavigationCompose = "1.1.0"
+hiltWork = "1.1.0"
 
-roomCompiler = "2.5.2"
-roomKtx = "2.5.2"
+roomCompiler = "2.6.1"
+roomKtx = "2.6.1"
 
 okhttp = "4.11.0" # https://square.github.io/okhttp/
 retrofit = "2.9.0"
@@ -34,7 +34,6 @@ retrofitKotlinxSerializationJson = "1.0.0" # https://github.com/JakeWharton/retr
 
 junit4 = "4.13.2" # https://junit.org/junit4/
 junit5 = "5.10.0" # https://junit.org/junit5/
-androidxEspresso = "3.5.0"
 androidxTestCore = "1.5.0"
 androidxTestExt = "1.1.5" # https://developer.android.com/testing
 androidxTestRunner = "1.5.2"
@@ -71,10 +70,6 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 androidx-dataStore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
-
-androidx-lifecycle-runtimeKtx = { module = "androidx.lifecycle:lifecycle-runtime-ktx", version.ref = "androidxLifecycle" }
-androidx-lifecycle-runtimeCompose = { module = "androidx.lifecycle:lifecycle-runtime-compose", version.ref = "androidxLifecycle" }
-androidx-lifecycle-viewModelCompose = { module = "androidx.lifecycle:lifecycle-viewmodel-compose", version.ref = "androidxLifecycle" }
 
 kotlin-plugin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-plugin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
