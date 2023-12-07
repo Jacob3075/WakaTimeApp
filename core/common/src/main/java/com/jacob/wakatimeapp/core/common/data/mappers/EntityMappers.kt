@@ -6,6 +6,7 @@ import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
 import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.core.models.project.Project
+import kotlin.collections.Map.Entry
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
@@ -20,6 +21,7 @@ fun List<ProjectPerDay>.toModel(): ImmutableList<Project> {
         )
     }.toImmutableList()
 }
+
 fun DetailedProjectStatsForDay.toEntity(dayId: LocalDate) = ProjectPerDay(
     projectPerDayId = 0,
     day = dayId,
@@ -41,9 +43,13 @@ fun DetailedDailyStats.toEntity() = DayEntity(
     machines = emptyList(),
 )
 
-fun Map<DayEntity, List<ProjectPerDay>>.toDayWithProjects() = map { (dayEntity, projectsPerDay) ->
+fun Map<DayEntity, ProjectPerDay>.toDayWithProjects() = entries.groupBy {
+    it.key.date
+}.values.map {
+    val dayEntity = (it.firstOrNull() ?: return@map null).key
+    val projects = it.map(Entry<DayEntity, ProjectPerDay>::value)
     DayWithProjects(
-        day = dayEntity,
-        projectsForDay = projectsPerDay,
+        dayEntity,
+        projects,
     )
-}
+}.filterNotNull()
