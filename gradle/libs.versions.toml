@@ -44,12 +44,12 @@ timber = "5.0.1" # https://github.com/JakeWharton/timber
 coil = "2.4.0" # https://github.com/coil-kt/coil
 appAuth = "0.11.1" # https://github.com/openid/AppAuth-Android
 lottieCompose = "6.1.0" # https://github.com/airbnb/lottie-android
-detekt = "1.23.1" # https://detekt.dev
+detekt = "1.23.3" # https://detekt.dev
 gradleVersionsPlugin = "0.48.0" # https://github.com/ben-manes/gradle-versions-plugin
 turbine = "0.13.0" # https://github.com/cashapp/turbine/
 mockk = "1.13.7" # https://mockk.io
 mannodermausAndroidJunit5 = "1.9.3.0" # https://github.com/mannodermaus/android-junit5
-mpAndroidChart = "v3.1.0"
+vico = "1.13.1"
 
 detektVersion = "0.0.26"
 detektFormatting = "1.22.0"
@@ -121,7 +121,7 @@ arrow-kt-core = { module = "io.arrow-kt:arrow-core", version.ref = "arrow" }
 lottie-compose = { module = "com.airbnb.android:lottie-compose", version.ref = "lottieCompose" }
 timber = { module = "com.jakewharton.timber:timber", version.ref = "timber" }
 appAuth = { module = "net.openid:appauth", version.ref = "appAuth" }
-philJay-mpAndroidChart = { module = "com.github.PhilJay:MPAndroidChart", version.ref = "mpAndroidChart" }
+vico-compose-m3 = { group = "com.patrykandpatrick.vico", name = "compose-m3", version.ref = "vico" }
 
 detekt-gradle-plugin = { module = "io.gitlab.arturbosch.detekt:detekt-gradle-plugin", version.ref = "detekt" }
 gradle-version-plugin = { module = "com.github.ben-manes:gradle-versions-plugin", version.ref = "gradleVersionsPlugin" }

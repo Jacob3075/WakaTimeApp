@@ -15,6 +15,7 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
+import androidx.compose.runtime.remember
 import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.tooling.preview.PreviewParameter
@@ -33,6 +34,7 @@ import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.home.ui.HomePageViewState.Loaded
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
@@ -61,6 +63,7 @@ private fun HomePageScreen(
 ) {
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.homePageState.collectAsState()
+    val todaysDate = remember { viewModel.getTodaysDate() }
 
     LaunchedEffect(viewState) {
         Timber.d("viewState: $viewState")
@@ -79,6 +82,7 @@ private fun HomePageScreen(
         viewState = viewState,
         toDetailsPage = navigator::toProjectDetailsPage,
         toSearchPage = navigator::toSearchPage,
+        todaysDate = todaysDate,
         modifier = modifier,
     )
 }
@@ -89,6 +93,7 @@ private fun HomePageContent(
     toDetailsPage: (String) -> Unit,
     toSearchPage: () -> Unit,
     modifier: Modifier = Modifier,
+    todaysDate: LocalDate,
 ) {
     Column(modifier = modifier.statusBarsPadding()) {
         when (viewState) {
@@ -97,6 +102,7 @@ private fun HomePageContent(
                 homePageViewState = viewState,
                 toDetailsPage = toDetailsPage,
                 toSearchPage = toSearchPage,
+                todaysDate = todaysDate,
             )
 
             is HomePageViewState.Error -> HomePageError(viewState)
@@ -106,9 +112,10 @@ private fun HomePageContent(
 
 @Composable
 private fun HomePageLoaded(
-    homePageViewState: HomePageViewState.Loaded,
+    homePageViewState: Loaded,
     toDetailsPage: (String) -> Unit,
     toSearchPage: () -> Unit = {},
+    todaysDate: LocalDate,
 ) {
     val scrollState = rememberScrollState()
     val spacing = MaterialTheme.spacing
@@ -140,7 +147,7 @@ private fun HomePageLoaded(
         )
         Spacer(modifier = Modifier.height(spacing.extraSmall))
 
-        WeeklyReport(homePageViewState.last7DaysStats.weeklyTimeSpent)
+        WeeklyReport(homePageViewState.last7DaysStats.weeklyTimeSpent, today = todaysDate)
         Spacer(modifier = Modifier.height(spacing.small))
 
         OtherDailyStatsSection(
@@ -175,7 +182,7 @@ private fun HomePageLoading() = WtaAnimation(
 private fun HomePagePreview(
     @PreviewParameter(HomePagePreviewProvider::class) viewState: HomePageViewState,
 ) = WakaTimeAppTheme {
-    HomePageContent(viewState = viewState, toDetailsPage = { }, toSearchPage = { })
+    HomePageContent(viewState = viewState, toDetailsPage = { }, toSearchPage = { }, todaysDate = LocalDate(2023, 1, 1))
 }
 
 private class HomePagePreviewProvider : CollectionPreviewParameterProvider<HomePageViewState>(

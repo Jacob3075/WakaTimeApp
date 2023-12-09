@@ -28,8 +28,6 @@ dependencies {
 
     implementation(libs.lottie.compose)
 
-    implementation(libs.philJay.mpAndroidChart)
-
     testImplementation(libs.test.junit4)
     androidTestImplementation(libs.androidx.test.ext)
 }

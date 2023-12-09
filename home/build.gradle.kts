@@ -9,7 +9,7 @@ android {
 dependencies {
     // Image Loading, Charts, Lottie Animations
     implementation(libs.coil.kt.compose)
-    implementation(libs.philJay.mpAndroidChart)
+    implementation(libs.vico.compose.m3)
 
     implementation(libs.androidx.dataStore.preferences)
 }

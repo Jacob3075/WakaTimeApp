@@ -43,8 +43,8 @@ val Typography = defaultTypography.let {
         bodyMedium = it.bodyMedium.setDefaultFontFamily(),
         bodySmall = it.bodySmall.setDefaultFontFamily(),
         labelLarge = it.labelLarge.setDefaultFontFamily(),
-        labelMedium = it.labelMedium.setDefaultFontFamily(),
-        labelSmall = it.labelSmall.setDefaultFontFamily(),
+        labelMedium = it.labelMedium.setDefaultFontFamily().copy(fontSize = 10.sp),
+        labelSmall = it.labelSmall.setDefaultFontFamily().copy(fontSize = 8.sp),
     )
 }
 

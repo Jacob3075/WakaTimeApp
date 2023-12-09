@@ -1,10 +1,6 @@
-@file: Suppress("MagicNumber")
-
 package com.jacob.wakatimeapp.home.ui.components
 
 import android.content.res.Configuration
-import android.view.ViewGroup.LayoutParams.MATCH_PARENT
-import android.widget.LinearLayout.LayoutParams
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -12,7 +8,6 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.shape.RoundedCornerShape
-import androidx.compose.material3.ColorScheme
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,30 +18,38 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.toArgb
 import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
-import androidx.compose.ui.viewinterop.AndroidView
-import com.github.mikephil.charting.animation.Easing
-import com.github.mikephil.charting.components.AxisBase
-import com.github.mikephil.charting.components.XAxis.XAxisPosition.BOTTOM
-import com.github.mikephil.charting.data.BarData
-import com.github.mikephil.charting.data.BarDataSet
-import com.github.mikephil.charting.data.BarEntry
-import com.github.mikephil.charting.formatter.ValueFormatter
 import com.jacob.wakatimeapp.core.common.utils.getDisplayNameForDay
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.core.ui.components.RoundedBarChart
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import com.patrykandpatrick.vico.compose.axis.horizontal.rememberBottomAxis
+import com.patrykandpatrick.vico.compose.axis.vertical.rememberStartAxis
+import com.patrykandpatrick.vico.compose.chart.Chart
+import com.patrykandpatrick.vico.compose.chart.column.columnChart
+import com.patrykandpatrick.vico.core.DEF_LABEL_COUNT
+import com.patrykandpatrick.vico.core.axis.AxisItemPlacer
+import com.patrykandpatrick.vico.core.chart.values.AxisValuesOverrider
+import com.patrykandpatrick.vico.core.chart.values.ChartValues
+import com.patrykandpatrick.vico.core.component.shape.LineComponent
+import com.patrykandpatrick.vico.core.component.shape.Shapes
+import com.patrykandpatrick.vico.core.component.text.textComponent
+import com.patrykandpatrick.vico.core.entry.ChartEntryModelProducer
+import com.patrykandpatrick.vico.core.entry.entryOf
+import com.patrykandpatrick.vico.core.extension.ceil
+import com.patrykandpatrick.vico.core.formatter.ValueFormatter
 import kotlinx.collections.immutable.ImmutableCollection
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.ImmutableSet
 import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.datetime.DateTimeUnit
 import kotlinx.datetime.LocalDate
+import kotlinx.datetime.minus
 
 @Composable
-fun WeeklyReport(
+internal fun WeeklyReport(
     weeklyTimeSpent: ImmutableMap<LocalDate, Time>,
+    today: LocalDate,
     modifier: Modifier = Modifier,
 ) = Column(
     modifier = modifier.fillMaxWidth(),
@@ -65,152 +68,93 @@ fun WeeklyReport(
             style = typography.sectionSubtitle,
         )
     }
-    WeeklyReportChart(weeklyTimeSpent)
+    WeeklyReportChart(weeklyTimeSpent, today)
 }
 
 @Composable
-private fun WeeklyReportChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>) {
-    val cardShape = RoundedCornerShape(percent = 10)
-    val colorScheme = MaterialTheme.colorScheme
+private fun WeeklyReportChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>, today: LocalDate) = Surface(
+    modifier = Modifier
+        .padding(horizontal = MaterialTheme.spacing.small)
+        .aspectRatio(ratio = 1.4f),
+    shape = RoundedCornerShape(percent = 10),
+    shadowElevation = 10.dp,
+    tonalElevation = 2.dp,
+) {
+    VicoBarChart(
+        modifier = Modifier.padding(MaterialTheme.spacing.small),
+        entries = rememberChartEntries(weeklyStats = weeklyTimeSpent.values),
+        labelFormatter = object : ValueFormatter {
+            override fun formatValue(
+                value: Float,
+                chartValues: ChartValues,
+            ) = Time.fromDecimal(value).formattedPrint()
+        },
+        yAxisFormatter = { value, _ -> "${value.toInt()}H" },
+        xAxisFormatter = { value, chartValues ->
+            today.minus(
+                chartValues.chartEntryModel.entries.size - value.toLong(),
+                DateTimeUnit.DAY,
+            ).getDisplayNameForDay()
+        },
+    )
+}
 
-    val labels = rememberLabels(weeklyTimeSpent.keys)
-    val barData = rememberBarData(weeklyTimeSpent.values, colorScheme)
+@Composable
+fun VicoBarChart(
+    entries: ChartEntryModelProducer,
+    labelFormatter: ValueFormatter,
+    yAxisFormatter: (value: Float, chartValues: ChartValues) -> CharSequence,
+    xAxisFormatter: (value: Float, chartValues: ChartValues) -> CharSequence,
+    modifier: Modifier = Modifier,
+) {
+    val maxY = remember(entries) { entries.getModel()?.maxY?.ceil }
 
-    val spacing = MaterialTheme.spacing
+    Chart(
+        modifier = modifier,
+        chartModelProducer = entries,
+        chart = columnChart(
+            columns = listOf(
+                LineComponent(
+                    color = MaterialTheme.colorScheme.primary.toArgb(),
+                    thicknessDp = MaterialTheme.spacing.small.value,
+                    shape = Shapes.roundedCornerShape(topLeftPercent = 50, topRightPercent = 50),
+                ),
+            ),
+            axisValuesOverrider = AxisValuesOverrider.fixed(minY = 0f, maxY = maxY),
+            dataLabel = textComponent {
+                color = MaterialTheme.colorScheme.onSurface.toArgb()
+                textSizeSp = MaterialTheme.typography.labelSmall.fontSize.value
 
-    Surface(
-        modifier = Modifier
-            .padding(horizontal = spacing.small)
-            .aspectRatio(1.4f),
-        shape = cardShape,
-        shadowElevation = 10.dp,
-        tonalElevation = 2.dp,
-    ) {
-        val onSurface = MaterialTheme.colorScheme.onSurface.toArgb()
-        AndroidView(
-            modifier = Modifier.padding(spacing.small),
-            factory = {
-                RoundedBarChart(it).apply {
-                    layoutParams = LayoutParams(MATCH_PARENT, MATCH_PARENT)
-                    data = barData
-
-                    configureChartProperties()
-                    configureAxis(labels, onSurface)
-
-                    invalidate()
-                }
             },
-            update = {
-                it.data = barData
-                it.xAxis.valueFormatter = XAxisDayFormatter(labels)
-                it.invalidate()
-            },
+            dataLabelValueFormatter = labelFormatter,
+        ),
+        startAxis = rememberStartAxis(
+            valueFormatter = yAxisFormatter,
+            itemPlacer = remember { AxisItemPlacer.Vertical.default(maxY?.toInt()?.inc() ?: DEF_LABEL_COUNT) },
+        ),
+        bottomAxis = rememberBottomAxis(
+            valueFormatter = xAxisFormatter,
+            guideline = null,
+        ),
+        isZoomEnabled = false,
+        runInitialAnimation = true,
+    )
+}
+
+@Composable
+private fun rememberChartEntries(weeklyStats: ImmutableCollection<Time>) = remember(weeklyStats) {
+    weeklyStats.mapIndexed { index, value ->
+        entryOf(
+            index.toFloat(),
+            value.decimal,
         )
-    }
-}
-
-@Composable
-private fun rememberLabels(days: ImmutableSet<LocalDate>): ImmutableMap<Int, String> = remember {
-    days.mapIndexed { index, value ->
-        index to value.getDisplayNameForDay()
-    }.toMap()
-        .toImmutableMap()
-}
-
-@Composable
-private fun rememberBarData(weeklyStats: ImmutableCollection<Time>, colorScheme: ColorScheme) =
-    remember(key1 = weeklyStats) {
-        val onSurface = colorScheme.onSurface.toArgb()
-        val barColor = colorScheme.primary.toArgb()
-
-        val entries = weeklyStats.mapIndexed { index, value ->
-            BarEntry(
-                index.toFloat(),
-                value.decimal,
-                value,
-            )
-        }
-        val barDataSet = BarDataSet(entries, "Label").apply {
-            setDrawValues(true)
-            isHighlightEnabled = false
-            valueTextColor = onSurface
-            valueFormatter = BarValueFormatter()
-            color = barColor
-        }
-        BarData(barDataSet).apply { barWidth = 0.3f }
-    }
-
-private fun RoundedBarChart.configureAxis(labels: ImmutableMap<Int, String>, onSurface: Int) {
-    xAxis.apply {
-        setDrawGridLines(false)
-        textColor = onSurface
-        position = BOTTOM
-        valueFormatter = XAxisDayFormatter(labels)
-    }
-    axisLeft.apply {
-        setDrawGridLines(true)
-        isEnabled = true
-        spaceBottom = 0f
-        labelCount = 3
-        textColor = onSurface
-        textSize = 8f
-        valueFormatter = YAxisHourFormatter()
-        axisMinimum = 0.1f // Can't be zero because of RoundedBarChart
-    }
-    axisRight.setDrawGridLines(false)
-    axisRight.isEnabled = false
-}
-
-private fun RoundedBarChart.configureChartProperties() {
-    setRadius(10)
-    setScaleEnabled(false)
-    setPinchZoom(false)
-    isDoubleTapToZoomEnabled = false
-    description.isEnabled = false
-    legend.isEnabled = false
-    animateY(3000, Easing.EaseInOutBack)
+    }.let { ChartEntryModelProducer(it) }
 }
 
 @Preview(showBackground = true, showSystemUi = true, uiMode = Configuration.UI_MODE_NIGHT_YES)
 @Composable
 private fun WeeklyReportPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
-        WeeklyReport(emptyMap<LocalDate, Time>().toImmutableMap())
+        WeeklyReport(emptyMap<LocalDate, Time>().toImmutableMap(), LocalDate(2023, 1, 1))
     }
-}
-
-private class XAxisDayFormatter(private val labels: ImmutableMap<Int, String>) : ValueFormatter() {
-    /**
-     * Used to draw axis labels, calls [.getFormattedValue] by default.
-     *
-     * @param value float to be formatted
-     * @param axis  axis being labeled
-     * @return formatted string label
-     */
-    override fun getAxisLabel(value: Float, axis: AxisBase) = labels[value.toInt()] ?: "Nan"
-
-    /**
-     * Called when drawing any label, used to change numbers into formatted strings.
-     *
-     * @param value float to be formatted
-     * @return formatted string label
-     */
-    override fun getFormattedValue(value: Float) = "%.1f".format(value)
-}
-
-private class YAxisHourFormatter : ValueFormatter() {
-    /**
-     * Used to draw axis labels, calls [.getFormattedValue] by default.
-     *
-     * @param value float to be formatted
-     * @param axis  axis being labeled
-     * @return formatted string label
-     */
-    override fun getAxisLabel(value: Float, axis: AxisBase) = "${value.toInt()}H"
-}
-
-private class BarValueFormatter : ValueFormatter() {
-    override fun getBarLabel(barEntry: BarEntry?): String =
-        Time.fromDecimal(barEntry?.y ?: 0f)
-            .formattedPrint()
 }

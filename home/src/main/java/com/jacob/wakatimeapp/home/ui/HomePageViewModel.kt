@@ -4,6 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import arrow.core.raise.either
+import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.common.utils.log
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateCurrentStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUC
@@ -17,6 +18,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 @HiltViewModel
 internal class HomePageViewModel @Inject constructor(
@@ -25,6 +27,7 @@ internal class HomePageViewModel @Inject constructor(
     private val calculateCurrentStreakUC: CalculateCurrentStreakUC,
     private val calculateLongestStreakUC: CalculateLongestStreakUC,
     private val updateCachedHomePageUiData: UpdateCachedHomePageUiData,
+    private val instantProvider: InstantProvider,
     ioDispatcher: CoroutineContext = Dispatchers.IO,
 ) : ViewModel() {
 
@@ -84,4 +87,6 @@ internal class HomePageViewModel @Inject constructor(
             longestStreak = longestStreak,
         )
     }
+
+    fun getTodaysDate(): LocalDate = instantProvider.date()
 }
