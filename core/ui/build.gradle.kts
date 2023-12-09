@@ -27,6 +27,7 @@ dependencies {
     debugImplementation(libs.bundles.compose.debug)
 
     implementation(libs.lottie.compose)
+    implementation(libs.vico.compose.m3)
 
     testImplementation(libs.test.junit4)
     androidTestImplementation(libs.androidx.test.ext)

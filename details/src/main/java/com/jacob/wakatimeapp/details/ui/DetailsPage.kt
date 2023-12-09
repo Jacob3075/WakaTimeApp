@@ -17,7 +17,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.ExperimentalPagerApi
 import com.google.accompanist.pager.HorizontalPager
 import com.google.accompanist.pager.rememberPagerState
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
@@ -33,6 +32,7 @@ import com.jacob.wakatimeapp.details.ui.components.TimeTab
 import com.ramcosta.composedestinations.annotation.Destination
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.coroutines.launch
+import kotlinx.datetime.LocalDate
 
 @Composable
 @Destination(navArgsDelegate = DetailsPageNavArgs::class)
@@ -57,6 +57,7 @@ private fun DetailsPageScreen(
 ) {
     val snackBarCoroutineScope = rememberCoroutineScope()
     val viewState by viewModel.viewState.collectAsState()
+    val today = viewModel.getTodaysDate()
 
     LaunchedEffect(viewState) {
         if (viewState !is DetailsPageViewState.Error) return@LaunchedEffect
@@ -77,15 +78,14 @@ private fun DetailsPageScreen(
     ) {
         when (val state = viewState) {
             is DetailsPageViewState.Loading -> DetailsPageLoading()
-            is DetailsPageViewState.Loaded -> DetailsPageLoaded(state)
+            is DetailsPageViewState.Loaded -> DetailsPageLoaded(state, today)
             is DetailsPageViewState.Error -> DetailsPageError(state)
         }
     }
 }
 
-@OptIn(ExperimentalPagerApi::class)
 @Composable
-private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded) {
+private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded, today: LocalDate) {
     val pagerState = rememberPagerState()
     val pages = listOf(
         Tabs.Time,
@@ -109,7 +109,7 @@ private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded) {
             state = pagerState,
         ) { page ->
             when (pages[page]) {
-                Tabs.Time -> TimeTab()
+                Tabs.Time -> TimeTab(today)
                 Tabs.Languages -> LanguagesTab()
                 Tabs.Editors -> EditorsTab()
                 Tabs.OperatingSystems -> OperatingSystemsTab()
