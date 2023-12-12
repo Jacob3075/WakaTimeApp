@@ -7,7 +7,7 @@
           <value>
             <SchemaInfo>
               <option name="name" value="detekt.yml" />
-              <option name="relativePathToSchema" value="https://json.schemastore.org/detekt.json" />
+              <option name="relativePathToSchema" value="https://json.schemastore.org/detekt-1.22.0.json" />
               <option name="applicationDefined" value="true" />
               <option name="patterns">
                 <list>

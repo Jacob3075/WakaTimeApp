@@ -75,7 +75,7 @@ private fun StreakStats(
         horizontalArrangement = Arrangement.spacedBy(spacing.small),
     ) {
         StreakCard(
-            text = "TO BE DECIDED LATER...",
+            text = "Longest Streak",
             streak = longestStreak,
             gradient = gradients.flare,
             roundedCornerPercent = 10,
@@ -145,7 +145,7 @@ private fun SectionHeader() = Row(
     modifier = Modifier.fillMaxWidth(),
 ) {
     val typography = MaterialTheme.typography
-    Text(text = "Other Daily Stats", style = typography.sectionTitle)
+    Text(text = "Other Stats", style = typography.sectionTitle)
     Text(text = "Details", color = colorScheme.primary, style = typography.sectionSubtitle)
 }
 

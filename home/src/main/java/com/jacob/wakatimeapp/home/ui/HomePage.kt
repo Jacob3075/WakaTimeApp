@@ -34,7 +34,6 @@ import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
 import com.jacob.wakatimeapp.home.domain.models.Streak
-import com.jacob.wakatimeapp.home.ui.HomePageViewState.Loaded
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
@@ -112,7 +111,7 @@ private fun HomePageContent(
 
 @Composable
 private fun HomePageLoaded(
-    homePageViewState: Loaded,
+    homePageViewState: HomePageViewState.Loaded,
     toDetailsPage: (String) -> Unit,
     toSearchPage: () -> Unit = {},
     todaysDate: LocalDate,
