@@ -44,11 +44,20 @@ fun OperatingSystemDTO.toModel() = OperatingSystem(
     time = Time.fromTotalSeconds(totalSeconds),
 )
 
-fun List<EditorDTO>.fromDto() = map(EditorDTO::toModel).let(::Editors)
+fun List<EditorDTO>.fromDto(): Editors {
+    if (isEmpty()) return Editors(emptyList())
+    return map(EditorDTO::toModel).let(::Editors)
+}
 
-fun List<LanguageDTO>.fromDto() = map(LanguageDTO::toModel).let(::Languages)
+fun List<LanguageDTO>.fromDto(): Languages {
+    if (isEmpty()) return Languages(emptyList())
+    return map(LanguageDTO::toModel).let(::Languages)
+}
 
-fun List<OperatingSystemDTO>.fromDto() = map(OperatingSystemDTO::toModel).let(::OperatingSystems)
+fun List<OperatingSystemDTO>.fromDto(): OperatingSystems {
+    if (isEmpty()) return OperatingSystems(emptyList())
+    return map(OperatingSystemDTO::toModel).let(::OperatingSystems)
+}
 
 fun List<BranchDTO>.toBranch() = map { branch ->
     Branch(

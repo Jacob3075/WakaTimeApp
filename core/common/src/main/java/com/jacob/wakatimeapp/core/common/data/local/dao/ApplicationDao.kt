@@ -27,7 +27,7 @@ interface ApplicationDao {
             WHERE date BETWEEN :startDate AND :endDate
         """,
     )
-    suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): Map<DayEntity, ProjectPerDay>
+    suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): Map<DayEntity, ProjectPerDay?>
 
     @Query("SELECT * FROM ProjectPerDay WHERE name = :name")
     suspend fun getStatsForProject(name: String): List<ProjectPerDay>

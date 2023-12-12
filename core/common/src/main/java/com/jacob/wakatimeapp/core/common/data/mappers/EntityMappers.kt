@@ -43,11 +43,11 @@ fun DetailedDailyStats.toEntity() = DayEntity(
     machines = emptyList(),
 )
 
-fun Map<DayEntity, ProjectPerDay>.toDayWithProjects() = entries.groupBy {
+fun Map<DayEntity, ProjectPerDay?>.toDayWithProjects() = entries.groupBy {
     it.key.date
 }.values.map {
     val dayEntity = (it.firstOrNull() ?: return@map null).key
-    val projects = it.map(Entry<DayEntity, ProjectPerDay>::value)
+    val projects = it.mapNotNull(Entry<DayEntity, ProjectPerDay?>::value)
     DayWithProjects(
         dayEntity,
         projects,
