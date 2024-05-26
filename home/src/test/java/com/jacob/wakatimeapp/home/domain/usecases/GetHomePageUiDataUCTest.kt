@@ -17,12 +17,10 @@ import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.startOfDay
 import com.jacob.wakatimeapp.home.domain.usecases.GetCachedHomePageUiDataUCRobot.Companion.userDetails
 import kotlin.time.Duration.Companion.minutes
-import kotlinx.coroutines.ExperimentalCoroutinesApi
 import kotlinx.coroutines.test.runTest
 import kotlinx.datetime.Instant
 import org.junit.jupiter.api.Test
 
-@OptIn(ExperimentalCoroutinesApi::class)
 internal class GetHomePageUiDataUCTest {
     private val robot = GetCachedHomePageUiDataUCRobot()
 

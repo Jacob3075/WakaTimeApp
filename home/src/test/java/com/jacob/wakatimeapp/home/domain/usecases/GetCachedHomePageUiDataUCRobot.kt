@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.domain.usecases
 
 import app.cash.turbine.ReceiveTurbine
-import app.cash.turbine.testIn
+import app.cash.turbine.turbineScope
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.auth.AuthDataStore
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
@@ -70,8 +70,10 @@ internal class GetCachedHomePageUiDataUCRobot {
         )
     }
 
-    fun callUseCase(testScope: TestScope) = apply {
-        receiveTurbine = useCase().testIn(testScope, timeout = 5.seconds)
+    suspend fun callUseCase(testScope: TestScope) = apply {
+        turbineScope {
+            receiveTurbine = useCase().testIn(testScope, timeout = 5.seconds)
+        }
     }
 
     suspend fun withNextItem(
@@ -190,7 +192,7 @@ internal class GetCachedHomePageUiDataUCRobot {
             mostUsedEditor = "",
             mostUsedOs = "",
 
-        )
+            )
 
         val userDetails = UserDetails(
             fullName = "John Doe",
