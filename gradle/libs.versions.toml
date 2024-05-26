@@ -1,61 +1,61 @@
 [versions]
-androidGradlePlugin = "8.2.0"
-androidxCore = "1.12.0" # https://developer.android.com/jetpack/androidx/releases/core
-androidxActivity = "1.8.1"
+androidGradlePlugin = "8.4.1"
+androidxCore = "1.13.1" # https://developer.android.com/jetpack/androidx/releases/core
+androidxActivity = "1.9.0"
 androidxAppCompat = "1.6.1" # https://developer.android.com/jetpack/androidx/releases/appcompat
-androidMaterial = "1.10.0" # https://github.com/material-components/material-components-android
+androidMaterial = "1.12.0" # https://github.com/material-components/material-components-android
 androidxCoreSplashscreen = "1.0.1" # https://developer.android.com/jetpack/androidx/releases/core
 androidxLifecycle = "2.6.2"
-dataStore = "1.0.0"
+dataStore = "1.1.1"
 workRuntimeKtx = "2.9.0"
 
-kotlin = "1.9.10" # https://kotlinlang.org/
-kotlinxCoroutines = "1.7.3" # https://github.com/Kotlin/kotlinx.coroutines
-kotlinxSerializationJson = "1.6.0"
-kotlinxDatetime = "0.4.1" # https://github.com/Kotlin/kotlinx-datetime
-kotlinxCollectionsImmutable = "0.3.5" # https://github.com/Kotlin/kotlinx.collections.immutable
-ksp = "1.9.10-1.0.13" # https://goo.gle/ksp
+kotlin = "2.0.0" # https://kotlinlang.org/
+kotlinxCoroutines = "1.8.1" # https://github.com/Kotlin/kotlinx.coroutines
+kotlinxSerializationJson = "1.6.3"
+kotlinxDatetime = "0.6.0" # https://github.com/Kotlin/kotlinx-datetime
+kotlinxCollectionsImmutable = "0.3.7" # https://github.com/Kotlin/kotlinx.collections.immutable
+ksp = "2.0.0-1.0.21" # https://goo.gle/ksp
 
-composeBom = "2023.10.01" # https://developer.android.com/jetpack/androidx/releases/compose
-composeCompiler = "1.5.3" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
+composeBom = "2024.05.00" # https://developer.android.com/jetpack/androidx/releases/compose
+composeCompiler = "1.5.14" # https://developer.android.com/jetpack/androidx/releases/compose-compiler
 
-accompanistPager = "0.32.0"
+accompanistPager = "0.34.0"
 
-hilt = "2.48" # https://github.com/google/dagger
-hiltNavigationCompose = "1.1.0"
-hiltWork = "1.1.0"
+hilt = "2.51.1" # https://github.com/google/dagger
+hiltNavigationCompose = "1.2.0"
+hiltWork = "1.2.0"
 
 roomCompiler = "2.6.1"
 roomKtx = "2.6.1"
 
-okhttp = "4.11.0" # https://square.github.io/okhttp/
-retrofit = "2.9.0"
+okhttp = "4.12.0" # https://square.github.io/okhttp/
+retrofit = "2.11.0"
 retrofitKotlinxSerializationJson = "1.0.0" # https://github.com/JakeWharton/retrofit2-kotlinx-serialization-converter/
 
 junit4 = "4.13.2" # https://junit.org/junit4/
-junit5 = "5.10.0" # https://junit.org/junit5/
+junit5 = "5.10.2" # https://junit.org/junit5/
 androidxTestCore = "1.5.0"
 androidxTestExt = "1.1.5" # https://developer.android.com/testing
 androidxTestRunner = "1.5.2"
 
-composeDestinations = "1.9.51" # https://github.com/raamcosta/compose-destinations
-arrow = "1.2.1" # https://github.com/arrow-kt/arrow/
+composeDestinations = "1.10.2" # https://github.com/raamcosta/compose-destinations
+arrow = "1.2.4" # https://github.com/arrow-kt/arrow/
 timber = "5.0.1" # https://github.com/JakeWharton/timber
-coil = "2.4.0" # https://github.com/coil-kt/coil
+coil = "2.6.0" # https://github.com/coil-kt/coil
 appAuth = "0.11.1" # https://github.com/openid/AppAuth-Android
-lottieCompose = "6.1.0" # https://github.com/airbnb/lottie-android
+lottieCompose = "6.4.0" # https://github.com/airbnb/lottie-android
 detekt = "1.23.4" # https://detekt.dev
 gradleVersionsPlugin = "0.48.0" # https://github.com/ben-manes/gradle-versions-plugin
-turbine = "0.13.0" # https://github.com/cashapp/turbine/
-mockk = "1.13.7" # https://mockk.io
+turbine = "1.1.0" # https://github.com/cashapp/turbine/
+mockk = "1.13.11" # https://mockk.io
 mannodermausAndroidJunit5 = "1.9.3.0" # https://github.com/mannodermaus/android-junit5
-vico = "1.13.1"
+vico = "1.14.0"
 
 detektVersion = "0.0.26"
 detektFormatting = "1.22.0"
 
-kotestAssertionsCore = "5.7.1" # https://kotest.io/docs/
-kotestAssertionsArrow = "1.3.3" # https://github.com/kotest/kotest-extensions-arrow
+kotestAssertionsCore = "5.9.0" # https://kotest.io/docs/
+kotestAssertionsArrow = "1.4.0" # https://github.com/kotest/kotest-extensions-arrow
 
 [libraries]
 google-material = { module = "com.google.android.material:material", version.ref = "androidMaterial" }
@@ -146,6 +146,7 @@ detekt-formatting = { module = "io.gitlab.arturbosch.detekt:detekt-formatting", 
 
 [plugins]
 ksp = { id = "com.google.devtools.ksp", version.ref = "ksp" }
+compose-compiler = { id = "org.jetbrains.kotlin.plugin.compose", version.ref = "kotlin" }
 
 
 [bundles]

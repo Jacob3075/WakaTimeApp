@@ -2,11 +2,11 @@
 
 plugins {
     id("wakatimeapp.android.library")
+    id("org.jetbrains.kotlin.plugin.compose")
 }
 
 android {
     buildFeatures { compose = true }
-    composeOptions { kotlinCompilerExtensionVersion = libs.versions.composeCompiler.get() }
 
     namespace = "com.jacob.wakatimeapp.core.ui"
 }
