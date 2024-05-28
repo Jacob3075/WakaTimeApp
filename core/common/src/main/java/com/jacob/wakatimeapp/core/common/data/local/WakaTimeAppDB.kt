@@ -38,6 +38,6 @@ class WakaTimeAppDB @Inject constructor(
     }.mapLeft { Error.DatabaseError.UnknownError("could not get all projects", it) }
 
     suspend fun getDetailsForProject(projectName: String): Either<Error, List<ProjectPerDay>> = Either.catch {
-        applicationDao.getDetailsForProject(projectName)
+        applicationDao.getDetailsForProject(projectName).fillMissingDaysWithZeroValues()
     }.mapLeft { Error.DatabaseError.UnknownError("could not get details for project: $projectName", it) }
 }
