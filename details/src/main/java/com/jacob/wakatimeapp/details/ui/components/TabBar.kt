@@ -1,7 +1,9 @@
 package com.jacob.wakatimeapp.details.ui.components
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.pager.PagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.ScrollableTabRow
 import androidx.compose.material3.Tab
@@ -12,13 +14,11 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
-import com.google.accompanist.pager.ExperimentalPagerApi
-import com.google.accompanist.pager.PagerState
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.coroutines.launch
 
-@OptIn(ExperimentalPagerApi::class)
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 internal fun TabBar(
     pagerState: PagerState,
@@ -52,8 +52,8 @@ internal fun TabBar(
 }
 
 sealed class Tabs(val title: String) {
-    object Time : Tabs("Time")
-    object Languages : Tabs("Languages")
-    object Editors : Tabs("Editors")
-    object OperatingSystems : Tabs("Operating Systems")
+    data object Time : Tabs("Time")
+    data object Languages : Tabs("Languages")
+    data object Editors : Tabs("Editors")
+    data object OperatingSystems : Tabs("Operating Systems")
 }

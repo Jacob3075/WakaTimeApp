@@ -1,11 +1,14 @@
 package com.jacob.wakatimeapp.details.ui
 
+import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
+import androidx.compose.foundation.pager.HorizontalPager
+import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration.Long
 import androidx.compose.material3.SnackbarHostState
@@ -17,8 +20,6 @@ import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.hilt.navigation.compose.hiltViewModel
-import com.google.accompanist.pager.HorizontalPager
-import com.google.accompanist.pager.rememberPagerState
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.spacing
@@ -84,15 +85,21 @@ private fun DetailsPageScreen(
     }
 }
 
+@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded, today: LocalDate) {
-    val pagerState = rememberPagerState()
     val pages = listOf(
         Tabs.Time,
         Tabs.Languages,
         Tabs.Editors,
         Tabs.OperatingSystems,
     ).toImmutableList()
+
+    val pagerState = rememberPagerState(
+        initialPage = 0,
+        initialPageOffsetFraction = 0.0f,
+        pageCount = { pages.size },
+    )
 
     Column {
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -105,11 +112,12 @@ private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded, today: Loc
         TabBar(pagerState, pages)
 
         HorizontalPager(
-            count = pages.size,
             state = pagerState,
+            beyondBoundsPageCount = 1,
         ) { page ->
+            viewState.statsForProject
             when (pages[page]) {
-                Tabs.Time -> TimeTab(today)
+                Tabs.Time -> TimeTab(statsForProject = viewState.statsForProject, today)
                 Tabs.Languages -> LanguagesTab()
                 Tabs.Editors -> EditorsTab()
                 Tabs.OperatingSystems -> OperatingSystemsTab()

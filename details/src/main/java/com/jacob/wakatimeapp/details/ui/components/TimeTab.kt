@@ -1,12 +1,13 @@
-@file: Suppress("MagicNumber")
-
 package com.jacob.wakatimeapp.details.ui.components
 
+import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyColumn
+import androidx.compose.foundation.lazy.items
 import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
@@ -23,14 +24,14 @@ import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
 
 @Composable
-internal fun TimeTab(today: LocalDate, modifier: Modifier = Modifier) {
+internal fun TimeTab(statsForProject: ImmutableMap<LocalDate, Time>, today: LocalDate, modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         modifier = modifier.fillMaxSize(),
     ) {
-        RecentTimeSpentChart(emptyMap<LocalDate, Time>().toImmutableMap(), today)
+        RecentTimeSpentChart(statsForProject, today)
         QuickStatsCards()
-        ProjectHistory()
+        ProjectHistory(statsForProject)
     }
 }
 
@@ -40,8 +41,21 @@ private fun QuickStatsCards() {
 }
 
 @Composable
-private fun ProjectHistory() {
-    Text(text = "Project History")
+private fun ProjectHistory(statsForProject: ImmutableMap<LocalDate, Time>) {
+    LazyColumn {
+        item {
+            Text(text = "Project History", modifier = Modifier.padding(vertical = MaterialTheme.spacing.small))
+        }
+        items(statsForProject.toList()) { localDateTimePair ->
+            Text(
+                text = "Date: ${localDateTimePair.first}, Time: ${localDateTimePair.second}",
+                modifier = Modifier.border(
+                    width = 1.dp,
+                    color = MaterialTheme.colorScheme.primary,
+                ),
+            )
+        }
+    }
 }
 
 @Composable
