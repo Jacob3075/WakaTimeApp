@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.details.ui
 import androidx.lifecycle.SavedStateHandle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
+import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.details.domain.usecases.GetProjectStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
@@ -26,9 +27,17 @@ internal class DetailsPageViewModel @Inject constructor(
 
     init {
         viewModelScope.launch {
-            val data = getProjectStatsUC(args.projectName)
-            Timber.w(data.toString())
-            _viewState.value = DetailsPageViewState.Loaded(args.projectName)
+            either {
+                val data = getProjectStatsUC(args.projectName).bind()
+                Timber.w(data.toString())
+                _viewState.value = DetailsPageViewState.Loaded(
+                    projectName = args.projectName,
+                    statsForProject = data.dailyProjectStats,
+                )
+            }.mapLeft {
+                Timber.e("Error while getting stats for project ${args.projectName}: $it")
+                _viewState.value = DetailsPageViewState.Error(it)
+            }
         }
     }
 
