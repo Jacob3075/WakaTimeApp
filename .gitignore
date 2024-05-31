@@ -91,3 +91,5 @@ lint/tmp/
 *.hprof
 
 **/tools/reports
+/.idea/deviceManager.xml
+/.kotlin/sessions/

@@ -38,7 +38,7 @@ import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.Error
 import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.ExtractCreated
 import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.ExtractLoaded
 import com.jacob.wakatimeapp.login.ui.extract.ExtractPageViewState.Idle
-import com.jacob.wakatimeapp.login.ui.extract.ExtractUseDataViewModel.Constants.AnimationDuration
+import com.jacob.wakatimeapp.login.ui.extract.ExtractUseDataViewModel.Constants.ANIMATION_DURATION
 import com.jacob.wakatimeapp.login.ui.extract.components.AnimatedProgressBar
 import com.ramcosta.composedestinations.annotation.Destination
 import timber.log.Timber
@@ -169,13 +169,13 @@ private fun ExtractStateAnimation(@RawRes animationResourceId: Int, text: String
 private fun AnimatedContentTransitionScope<ViewState>.createContentTransform() = slideIntoContainer(
     towards = SlideDirection.Up,
     animationSpec = tween(
-        durationMillis = AnimationDuration,
+        durationMillis = ANIMATION_DURATION,
         easing = LinearEasing,
     ),
 ) togetherWith slideOutOfContainer(
     towards = SlideDirection.Up,
     animationSpec = tween(
-        durationMillis = AnimationDuration,
+        durationMillis = ANIMATION_DURATION,
         easing = LinearEasing,
     ),
 )

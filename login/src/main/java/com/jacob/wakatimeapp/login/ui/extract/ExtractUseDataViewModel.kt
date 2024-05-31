@@ -52,7 +52,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
                     extractCreationProgress.isProcessing ->
                         _extractPageState.value = ViewState.CreatingExtract(extractCreationProgress.percentComplete)
 
-                    extractCreationProgress.status == CompletedStatusString -> {
+                    extractCreationProgress.status == COMPLETED_STATUS_STRING -> {
                         _extractPageState.value = ViewState.ExtractCreated(extractCreationProgress)
                         break
                     }
@@ -72,7 +72,7 @@ internal class ExtractUseDataViewModel @Inject constructor(
                     }
                 }
 
-                delay(ProgressPollingDelay)
+                delay(PROGRESS_POLLING_DELAY)
             }
         }.mapLeft { error -> _extractPageState.value = ViewState.Error(error) }
     }
@@ -123,8 +123,8 @@ internal class ExtractUseDataViewModel @Inject constructor(
     }
 
     companion object Constants {
-        const val AnimationDuration = 250
-        const val ProgressPollingDelay = 1500L
-        const val CompletedStatusString = "Completed"
+        const val ANIMATION_DURATION = 250
+        const val PROGRESS_POLLING_DELAY = 1500L
+        const val COMPLETED_STATUS_STRING = "Completed"
     }
 }
