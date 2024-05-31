@@ -18,6 +18,7 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.components.VicoBarChart
+import com.jacob.wakatimeapp.core.ui.components.VicoBarChartData
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.sectionSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.sectionTitle
@@ -61,9 +62,10 @@ private fun WeeklyReportChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>, to
     tonalElevation = 2.dp,
 ) {
     VicoBarChart(
-        modifier = Modifier.padding(MaterialTheme.spacing.small),
         timeData = weeklyTimeSpent.values,
-        xAxisFormatter = VicoBarChart.getDefaultXAxisFormatter(today),
+        xAxisFormatter = VicoBarChartData.getDefaultXAxisFormatter(today),
+        modifier = Modifier.padding(MaterialTheme.spacing.small),
+        columnWidth = 10f,
     )
 }
 

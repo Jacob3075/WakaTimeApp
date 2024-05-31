@@ -16,9 +16,10 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.components.VicoBarChart
+import com.jacob.wakatimeapp.core.ui.components.VicoBarChartData
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.toImmutableMap
+import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
 
 @Composable
@@ -47,10 +48,17 @@ private fun ProjectHistory() {
 private fun RecentTimeSpentChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>, today: LocalDate) = Surface(
     modifier = Modifier
         .padding(horizontal = MaterialTheme.spacing.small)
-        .aspectRatio(1.4f),
+        .padding(top = MaterialTheme.spacing.sMedium)
+        .aspectRatio(ratio = 1.4f),
     shape = RoundedCornerShape(percent = 10),
     shadowElevation = 10.dp,
     tonalElevation = 2.dp,
 ) {
-    VicoBarChart(timeData = weeklyTimeSpent.values, xAxisFormatter = VicoBarChart.getDefaultXAxisFormatter(today))
+    VicoBarChart(
+        timeData = weeklyTimeSpent.values.toMutableList().takeLast(30).toImmutableList(),
+        xAxisFormatter = VicoBarChartData.getDefaultXAxisFormatter(today, skipCount = 5),
+        modifier = Modifier.padding(MaterialTheme.spacing.small),
+        columnWidth = 30f,
+        showLabel = false
+    )
 }
