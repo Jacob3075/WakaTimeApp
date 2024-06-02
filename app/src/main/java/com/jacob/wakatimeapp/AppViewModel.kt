@@ -26,7 +26,6 @@ class AppViewModel @Inject constructor(
     }
 
     fun isStillLoading(): Boolean {
-//        Timber.d("viewstate: ${viewState.value}")
         return viewState.value == LoadingState.Loading
     }
 
