@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.common.data.dtos
+package com.jacob.wakatimeapp.core.common.data.remote.dtos
 
 import kotlinx.serialization.Serializable
 

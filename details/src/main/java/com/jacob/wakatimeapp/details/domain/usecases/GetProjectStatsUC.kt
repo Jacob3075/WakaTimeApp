@@ -3,7 +3,7 @@ package com.jacob.wakatimeapp.details.domain.usecases
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
-import com.jacob.wakatimeapp.core.common.data.mappers.toAggregateProjectStatsForRange
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toAggregateProjectStatsForRange
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
 import javax.inject.Inject

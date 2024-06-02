@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.common.data.local
+package com.jacob.wakatimeapp.core.common.data.local.utils
 
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.models.Time

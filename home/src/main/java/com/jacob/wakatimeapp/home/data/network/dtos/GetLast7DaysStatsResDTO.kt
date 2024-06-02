@@ -1,15 +1,15 @@
 package com.jacob.wakatimeapp.home.data.network.dtos
 
-import com.jacob.wakatimeapp.core.common.data.dtos.CategoryDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.CumulativeTotalDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.DependencyDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.GrandTotalDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.MachineDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.RangeDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.CategoryDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.CumulativeTotalDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.DependencyDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.EditorDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.GrandTotalDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.LanguageDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.MachineDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.OperatingSystemDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ProjectDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.RangeDTO
 import kotlinx.serialization.SerialName
 import kotlinx.serialization.Serializable
 

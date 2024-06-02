@@ -4,7 +4,7 @@ import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.jacob.wakatimeapp.home.ui.destinations.HomePageDestination
 import com.jacob.wakatimeapp.login.ui.destinations.LoginPageDestination
-import com.jacob.wakatimeapp.login.ui.loading.LoadingPageLoader
+import com.jacob.wakatimeapp.login.ui.loading.SplashScreenLoader
 import com.ramcosta.composedestinations.spec.Route
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -13,7 +13,7 @@ import kotlinx.coroutines.launch
 
 @HiltViewModel
 class AppViewModel @Inject constructor(
-    private val loadingPageLoader: LoadingPageLoader,
+    private val splashScreenLoader: SplashScreenLoader,
 ) : ViewModel() {
     private var _startRoute: Route = HomePageDestination
     val startRoute: Route
@@ -26,12 +26,13 @@ class AppViewModel @Inject constructor(
     }
 
     fun isStillLoading(): Boolean {
+//        Timber.d("viewstate: ${viewState.value}")
         return viewState.value == LoadingState.Loading
     }
 
     private fun startLoading() {
         viewModelScope.launch {
-            val doneLoading = loadingPageLoader.loadData()
+            val doneLoading = splashScreenLoader.loadData()
             if (!doneLoading) {
                 viewState.value = LoadingState.Loaded
                 _startRoute = LoginPageDestination

@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.common.data.mappers
+package com.jacob.wakatimeapp.core.common.data.remote.mappers
 
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects

@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.login.data
 
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
-import com.jacob.wakatimeapp.core.common.data.BaseNetworkData
+import com.jacob.wakatimeapp.core.common.data.remote.BaseNetworkData
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
 import com.jacob.wakatimeapp.login.data.dtos.CreateExtractReqDTO

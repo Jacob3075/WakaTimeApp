@@ -1,6 +1,6 @@
-package com.jacob.wakatimeapp.core.common.data.mappers // ktlint-disable filename
+package com.jacob.wakatimeapp.core.common.data.remote.mappers // ktlint-disable filename
 
-import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Project
 

@@ -8,6 +8,7 @@ import androidx.datastore.preferences.core.stringPreferencesKey
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.right
+import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppCache
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.common.utils.log
 import com.jacob.wakatimeapp.core.models.Error
@@ -29,24 +30,16 @@ import timber.log.Timber
 
 @Singleton
 class HomePageCache @Inject constructor(
+    private val wakaTimeAppCache: WakaTimeAppCache,
     private val dataStore: DataStore<Preferences>,
     private val json: Json,
     private val instantProvider: InstantProvider,
 ) {
 
-    fun getLastRequestTime() = dataStore.data.map {
-        val value = it[KEY_LAST_REQUEST_TIME]
-        value?.let(Instant::fromEpochMilliseconds) ?: Instant.DISTANT_PAST
-    }
-        .catch { Instant.DISTANT_PAST }
-        .distinctUntilChanged()
-        .log("getLastRequestTime")
+    fun getLastRequestTime() = wakaTimeAppCache.getLastRequestTime(KEY_LAST_REQUEST_TIME)
 
-    suspend fun updateLastRequestTime(time: Instant = instantProvider.now()) {
-        dataStore.edit {
-            it[KEY_LAST_REQUEST_TIME] = time.toEpochMilliseconds()
-        }
-    }
+    suspend fun updateLastRequestTime(time: Instant = instantProvider.now()) =
+        wakaTimeAppCache.updateLastRequestTime(time, KEY_LAST_REQUEST_TIME)
 
     fun getLast7DaysStats() = dataStore.data.map {
         it[KEY_LAST_7_DAYS_STATS]?.let<String, Last7DaysStatsEntity>(json::decodeFromString)

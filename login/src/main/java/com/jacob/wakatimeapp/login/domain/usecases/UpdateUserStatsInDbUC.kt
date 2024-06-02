@@ -3,8 +3,8 @@ package com.jacob.wakatimeapp.login.domain.usecases
 import arrow.core.Either
 import arrow.core.left
 import arrow.core.raise.either
-import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Range
@@ -22,7 +22,6 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
     private val loginPaeNetworkData: LoginPageNetworkData,
     private val instantProvider: InstantProvider,
 ) {
-    // TODO: SET AND CHECK LAST UPDATE TIME SIMILAR TO HOW HOME PAGE CACHE WORKS
     suspend operator fun invoke(): Either<Error, Unit> = either {
         val rangeInDb = wakaTimeAppDB.getDateRangeInDb().bind()
         val newRange = Range(rangeInDb.endDate, instantProvider.date())

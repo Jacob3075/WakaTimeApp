@@ -1,4 +1,4 @@
-package com.jacob.wakatimeapp.core.common.data.local
+package com.jacob.wakatimeapp.core.common.data.local.utils
 
 import androidx.room.TypeConverter
 import com.jacob.wakatimeapp.core.models.Time

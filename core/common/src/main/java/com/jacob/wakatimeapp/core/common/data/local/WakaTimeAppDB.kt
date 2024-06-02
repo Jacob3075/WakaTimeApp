@@ -1,11 +1,12 @@
 package com.jacob.wakatimeapp.core.common.data.local
 
 import arrow.core.Either
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.dao.ApplicationDao
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
-import com.jacob.wakatimeapp.core.common.data.mappers.toDayWithProjects
+import com.jacob.wakatimeapp.core.common.data.local.utils.fillMissingDaysWithZeroValues
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ExtractedDataDTO
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toDayWithProjects
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
 import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.core.models.Range

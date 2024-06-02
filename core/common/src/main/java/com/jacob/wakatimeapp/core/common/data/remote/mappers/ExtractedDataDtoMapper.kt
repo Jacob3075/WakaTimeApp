@@ -1,9 +1,9 @@
-package com.jacob.wakatimeapp.core.common.data.mappers
+package com.jacob.wakatimeapp.core.common.data.remote.mappers
 
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO.DayDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO.DayDTO.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ExtractedDataDTO.DayDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ExtractedDataDTO.DayDTO.ProjectDTO
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Branch
 import com.jacob.wakatimeapp.core.models.project.Machine

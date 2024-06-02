@@ -1,11 +1,11 @@
 package com.jacob.wakatimeapp.home.data.mappers
 
-import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
-import com.jacob.wakatimeapp.core.common.data.mappers.toModel
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.EditorDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.LanguageDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.OperatingSystemDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ProjectDTO
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toModel
 import com.jacob.wakatimeapp.core.models.DailyStats
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Range

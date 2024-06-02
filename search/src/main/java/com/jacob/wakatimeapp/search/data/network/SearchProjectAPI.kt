@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.search.data.network
 
-import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ProjectDetailsDTO
 import retrofit2.Response
 import retrofit2.http.GET
 import retrofit2.http.Header

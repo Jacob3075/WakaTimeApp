@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.details.data
 
-import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDetailsDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ProjectDetailsDTO
 import com.jacob.wakatimeapp.details.data.dtos.TotalTimeForProjectDTO
 import retrofit2.Response
 import retrofit2.http.GET

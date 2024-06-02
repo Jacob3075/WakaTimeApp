@@ -1,12 +1,12 @@
 package com.jacob.wakatimeapp.login.data.mappers
 
-import com.jacob.wakatimeapp.core.common.data.dtos.EditorDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.LanguageDTO
-import com.jacob.wakatimeapp.core.common.data.dtos.OperatingSystemDTO
-import com.jacob.wakatimeapp.core.common.data.mappers.fromDto
-import com.jacob.wakatimeapp.core.common.data.mappers.toBranch
-import com.jacob.wakatimeapp.core.common.data.mappers.toMachine
-import com.jacob.wakatimeapp.core.common.data.mappers.toModel
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.EditorDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.LanguageDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.OperatingSystemDTO
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.fromDto
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toBranch
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toMachine
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toModel
 import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.AggregateProjectStatsForRange

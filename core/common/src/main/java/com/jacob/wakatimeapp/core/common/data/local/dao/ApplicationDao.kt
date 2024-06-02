@@ -4,10 +4,10 @@ import androidx.room.Dao
 import androidx.room.Query
 import androidx.room.Transaction
 import androidx.room.Upsert
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
-import com.jacob.wakatimeapp.core.common.data.mappers.toEntity
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ExtractedDataDTO
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toEntity
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
 import com.jacob.wakatimeapp.core.models.Range
 import kotlinx.datetime.LocalDate

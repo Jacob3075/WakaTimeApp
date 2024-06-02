@@ -1,6 +1,6 @@
 package com.jacob.wakatimeapp.login.data.mappers
 
-import com.jacob.wakatimeapp.core.common.data.mappers.toModel
+import com.jacob.wakatimeapp.core.common.data.remote.mappers.toModel
 import com.jacob.wakatimeapp.core.models.DetailedDailyStats
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay

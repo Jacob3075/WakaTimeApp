@@ -2,8 +2,8 @@ package com.jacob.wakatimeapp.login.domain.usecases
 
 import arrow.core.Either
 import arrow.core.left
-import com.jacob.wakatimeapp.core.common.data.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.ExtractedDataDTO
 import com.jacob.wakatimeapp.core.models.Error
 import javax.inject.Inject
 import javax.inject.Singleton
