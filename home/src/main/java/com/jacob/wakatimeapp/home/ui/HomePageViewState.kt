@@ -15,5 +15,5 @@ internal sealed class HomePageViewState {
 
     data class Error(val error: CoreModelsError) : HomePageViewState()
 
-    object Loading : HomePageViewState()
+    data object Loading : HomePageViewState()
 }

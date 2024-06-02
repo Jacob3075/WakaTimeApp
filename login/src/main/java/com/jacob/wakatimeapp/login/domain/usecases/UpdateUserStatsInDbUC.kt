@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.login.domain.usecases
 
+import arrow.core.Either
 import arrow.core.left
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.data.dtos.ProjectDTO
@@ -22,7 +23,7 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
     private val instantProvider: InstantProvider,
 ) {
     // TODO: SET AND CHECK LAST UPDATE TIME SIMILAR TO HOW HOME PAGE CACHE WORKS
-    suspend operator fun invoke() = either {
+    suspend operator fun invoke(): Either<Error, Unit> = either {
         val rangeInDb = wakaTimeAppDB.getDateRangeInDb().bind()
         val newRange = Range(rangeInDb.endDate, instantProvider.date())
 
@@ -52,6 +53,6 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
 
         val detailedDailyStatsModel = statsForRangeDto.toDetailedDailyStatsModel(projectStats)
 
-        wakaTimeAppDB.updateDbWithNewData(detailedDailyStatsModel)
+        wakaTimeAppDB.updateDbWithNewData(detailedDailyStatsModel).bind()
     }
 }

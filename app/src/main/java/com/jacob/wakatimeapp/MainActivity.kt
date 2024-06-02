@@ -7,6 +7,7 @@ import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.compose.setContent
+import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
@@ -26,12 +27,15 @@ import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
 
 @AndroidEntryPoint
+@SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : AppCompatActivity() {
-    @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
+    private val appViewModel: AppViewModel by viewModels<AppViewModel>()
+
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        installSplashScreen()
+        installSplashScreen().setKeepOnScreenCondition(appViewModel::isStillLoading)
+
         setContent {
             WakaTimeAppTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
@@ -41,6 +45,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     LockScreenOrientation()
                     DestinationsNavHost(
+                        startRoute = appViewModel.startRoute,
                         navGraph = NavGraphs.root,
                         dependenciesContainerBuilder = {
                             dependency(ApplicationNavigator(destinationsNavigator))
@@ -53,6 +58,7 @@ class MainActivity : AppCompatActivity() {
     }
 }
 
+@SuppressLint("SourceLockedOrientationActivity")
 @Composable
 private fun LockScreenOrientation() {
     val context = LocalContext.current

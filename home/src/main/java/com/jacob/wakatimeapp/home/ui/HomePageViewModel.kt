@@ -2,7 +2,6 @@ package com.jacob.wakatimeapp.home.ui
 
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
-import arrow.core.Either
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.common.utils.log
@@ -31,21 +30,16 @@ internal class HomePageViewModel @Inject constructor(
     ioDispatcher: CoroutineContext = Dispatchers.IO,
 ) : ViewModel() {
 
-    private val _homePageState =
-        MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
+    private val _homePageState = MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
     val homePageState = _homePageState.asStateFlow()
 
     init {
         viewModelScope.launch(ioDispatcher) {
             getCachedHomePageUiDataUC().log("cachedData")
                 .collect { eitherCachedData ->
-                    when (eitherCachedData) {
-                        is Either.Left ->
-                            _homePageState.value = HomePageViewState.Error(eitherCachedData.value)
-
-                        is Either.Right -> {
-                            val cachedData = eitherCachedData.value
-
+                    eitherCachedData
+                        .onLeft { _homePageState.value = HomePageViewState.Error(it) }
+                        .onRight { cachedData ->
                             when {
                                 cachedData == null -> updateCacheWithNewData().onLeft {
                                     _homePageState.value = HomePageViewState.Error(it)
@@ -71,7 +65,6 @@ internal class HomePageViewModel @Inject constructor(
                                 )
                             }
                         }
-                    }
                 }
         }
     }

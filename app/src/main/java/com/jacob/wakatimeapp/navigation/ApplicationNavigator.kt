@@ -7,7 +7,6 @@ import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.home.ui.destinations.HomePageDestination
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
 import com.jacob.wakatimeapp.login.ui.destinations.ExtractUserDataPageDestination
-import com.jacob.wakatimeapp.login.ui.destinations.LoadingPageDestination
 import com.jacob.wakatimeapp.login.ui.destinations.LoginPageDestination
 import com.jacob.wakatimeapp.login.ui.extract.ExtractUserDataNavigator
 import com.jacob.wakatimeapp.search.ui.SearchProjectsNavigator
@@ -37,16 +36,6 @@ class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : Log
     override fun toExtractUserDataPage() = navigator.navigate(
         ExtractUserDataPageDestination,
         navOptions = navOptions { popUpTo(LoginPageDestination.route) { inclusive = true } },
-    )
-
-    override fun toLoginPage() = navigator.navigate(
-        LoginPageDestination,
-        navOptions = navOptions { popUpTo(LoadingPageDestination.route) { inclusive = true } },
-    )
-
-    override fun toHomePageFromLoading() = navigator.navigate(
-        HomePageDestination,
-        navOptions = navOptions { popUpTo(LoadingPageDestination.route) { inclusive = true } },
     )
 }
 

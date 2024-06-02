@@ -21,8 +21,6 @@ import kotlinx.serialization.ExperimentalSerializationApi
 import kotlinx.serialization.json.Json
 import okhttp3.MediaType.Companion.toMediaType
 import okhttp3.OkHttpClient
-import okhttp3.logging.HttpLoggingInterceptor
-import okhttp3.logging.HttpLoggingInterceptor.Level.BODY
 import retrofit2.Retrofit
 
 @Module
@@ -45,7 +43,7 @@ object DataModule {
             .readTimeout(Duration.ofMinutes(1))
             .connectTimeout(Duration.ofMinutes(1))
 
-        builder.networkInterceptors().add(HttpLoggingInterceptor().setLevel(BODY))
+//        builder.networkInterceptors().add(HttpLoggingInterceptor().setLevel(BODY))
 
         return builder.build()
     }
