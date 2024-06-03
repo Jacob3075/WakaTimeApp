@@ -2,11 +2,18 @@ package com.jacob.wakatimeapp
 
 import android.app.Application
 import android.util.Log
+import androidx.hilt.work.HiltWorkerFactory
+import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
+import javax.inject.Inject
 import timber.log.Timber
 
 @HiltAndroidApp
-class WakaTimeApp : Application() {
+class WakaTimeApp : Application(), Configuration.Provider {
+
+    @Inject
+    lateinit var workerFactory: HiltWorkerFactory
+
     override fun onCreate() {
         super.onCreate()
 
@@ -14,6 +21,11 @@ class WakaTimeApp : Application() {
             Timber.plant(WtaLogger())
         }
     }
+
+    override val workManagerConfiguration: Configuration
+        get() = Configuration.Builder()
+            .setWorkerFactory(workerFactory)
+            .build()
 }
 
 class WtaLogger : Timber.DebugTree() {

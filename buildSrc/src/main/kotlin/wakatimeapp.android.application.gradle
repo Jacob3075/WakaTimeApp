@@ -4,6 +4,8 @@ plugins {
     id "org.jetbrains.kotlin.kapt"
     id "dagger.hilt.android.plugin"
 
+    id("com.google.devtools.ksp")
+
     id "wakatimeapp.tooling"
 
     id("org.jetbrains.kotlin.plugin.compose")
@@ -66,7 +68,9 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
+    ksp(libs.androidx.hilt.work)
 
     // Logging
     implementation(libs.timber)

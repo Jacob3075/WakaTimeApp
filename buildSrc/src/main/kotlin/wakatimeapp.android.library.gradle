@@ -2,8 +2,8 @@ plugins {
     id "com.android.library"
     id "org.jetbrains.kotlin.android"
     id "dagger.hilt.android.plugin"
-    id "org.jetbrains.kotlin.kapt"
     id "org.jetbrains.kotlin.plugin.serialization"
+    id "com.google.devtools.ksp"
 
     id "wakatimeapp.tooling"
 }
@@ -37,7 +37,8 @@ dependencies {
 
     // Hilt
     implementation(libs.hilt.android)
-    kapt(libs.hilt.compiler)
+    ksp(libs.hilt.compiler)
+    ksp(libs.androidx.hilt.compiler)
 
     // Logging
     implementation(libs.timber)
@@ -47,8 +48,4 @@ dependencies {
     // Testing
     testImplementation(libs.androidx.test.core)
     testImplementation(libs.androidx.test.ext)
-}
-
-kapt {
-    correctErrorTypes = true
 }

@@ -7,6 +7,7 @@ androidMaterial = "1.12.0" # https://github.com/material-components/material-com
 androidxCoreSplashscreen = "1.0.1" # https://developer.android.com/jetpack/androidx/releases/core
 androidxLifecycle = "2.6.2"
 dataStore = "1.1.1"
+hiltCompiler = "1.2.0"
 workRuntimeKtx = "2.9.0"
 
 kotlin = "2.0.0" # https://kotlinlang.org/
@@ -70,6 +71,7 @@ androidx-core-splashscreen = { module = "androidx.core:core-splashscreen", versi
 androidx-dataStore-preferences = { module = "androidx.datastore:datastore-preferences", version.ref = "dataStore" }
 
 androidx-work-runtime-ktx = { module = "androidx.work:work-runtime-ktx", version.ref = "workRuntimeKtx" }
+androidx-hilt-compiler = { module = "androidx.hilt:hilt-compiler", version.ref = "hiltCompiler" }
 
 kotlin-plugin-gradle = { module = "org.jetbrains.kotlin:kotlin-gradle-plugin", version.ref = "kotlin" }
 kotlin-plugin-serialization = { module = "org.jetbrains.kotlin:kotlin-serialization", version.ref = "kotlin" }
