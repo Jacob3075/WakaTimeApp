@@ -1,5 +1,7 @@
 package com.jacob.wakatimeapp.core.common.data.local.utils
 
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayEntity
+import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
@@ -30,4 +32,29 @@ internal fun List<ProjectPerDay>.fillMissingDaysWithZeroValues(): List<ProjectPe
         }
 
     return dayToStats.values.toList().sortedBy(ProjectPerDay::day)
+}
+
+internal fun List<DayWithProjects>.fillMissingDaysWithZeroValues(startDate: LocalDate, endDate: LocalDate): List<DayWithProjects> {
+    val dayToStats = associateBy { it.day.date.toEpochDays() }.toMutableMap()
+    val startDateEpoch = startDate.toEpochDays()
+    val endDateEpoch = endDate.toEpochDays()
+
+    generateSequence(startDateEpoch) { it + 1 }
+        .takeWhile { it <= endDateEpoch }
+        .filter { day -> dayToStats[day] == null }
+        .forEach { day ->
+            dayToStats[day] = DayWithProjects(
+                day = DayEntity(
+                    date = startDate,
+                    grandTotal = Time.ZERO,
+                    editors = Editors.NONE,
+                    languages = Languages.NONE,
+                    operatingSystems = OperatingSystems.NONE,
+                    machines = emptyList(),
+                ),
+                projectsForDay = emptyList(),
+            )
+        }
+
+    return dayToStats.values.toList().sortedBy { it.day.date }
 }

@@ -15,7 +15,8 @@ internal class GetProjectStatsUC @Inject constructor(
     private val wakaTimeAppDB: WakaTimeAppDB,
 ) {
     suspend operator fun invoke(projectName: String) = either {
-        val aggregateProjectStatsForRange = wakaTimeAppDB.getDetailsForProject(projectName).bind()
+        val aggregateProjectStatsForRange = wakaTimeAppDB.getDetailsForProject(projectName)
+            .bind()
             .let(List<ProjectPerDay>::toAggregateProjectStatsForRange)
 
         DetailedProjectStatsUiData(
