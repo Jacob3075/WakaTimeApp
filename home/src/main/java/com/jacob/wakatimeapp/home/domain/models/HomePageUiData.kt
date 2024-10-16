@@ -48,7 +48,7 @@ data class HomePageUserDetails(
 data class Streak(
     val start: LocalDate,
     val end: LocalDate,
-) {
+) : Comparable<Streak> {
     val days: Int = if (this == ZERO) 0 else start.daysUntil(end) + 1
 
     operator fun plus(other: Streak) = when {
@@ -68,7 +68,7 @@ data class Streak(
 
     operator fun contains(other: Streak) = other.start in this && other.end in this
 
-    operator fun compareTo(streak: Streak) = days.compareTo(streak.days)
+    override operator fun compareTo(other: Streak) = days.compareTo(other.days)
 
     private fun padded() = Streak(start - oneDay, end + oneDay)
 

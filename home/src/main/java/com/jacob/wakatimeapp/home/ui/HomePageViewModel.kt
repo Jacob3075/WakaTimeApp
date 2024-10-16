@@ -11,13 +11,13 @@ import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUC
 import com.jacob.wakatimeapp.home.domain.usecases.GetLast7DaysStatsUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.asStateFlow
 import kotlinx.coroutines.flow.firstOrNull
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 internal class HomePageViewModel @Inject constructor(

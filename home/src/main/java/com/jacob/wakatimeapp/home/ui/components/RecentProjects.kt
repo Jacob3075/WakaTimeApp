@@ -1,6 +1,5 @@
 package com.jacob.wakatimeapp.home.ui.components
 
-import android.content.res.Configuration.UI_MODE_NIGHT_YES
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
@@ -10,7 +9,6 @@ import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -19,10 +17,11 @@ import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
-import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Project
+import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
+import com.jacob.wakatimeapp.core.ui.components.WtaSurface
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.cardHeader
@@ -74,16 +73,8 @@ private fun RecentProjectList(
 
 @Composable
 private fun ProjectCardItem(project: Project, onClick: (String) -> Unit) {
-    val cardShape = RoundedCornerShape(percent = 25)
     val spacing = MaterialTheme.spacing
-    Surface(
-        modifier = Modifier
-            .fillMaxWidth(),
-        shape = cardShape,
-        shadowElevation = 10.dp,
-        tonalElevation = 2.dp,
-        onClick = { onClick(project.name) },
-    ) {
+    WtaSurface(modifier = Modifier.fillMaxWidth(), onClick = { onClick(project.name) }) {
         Row(
             horizontalArrangement = Arrangement.SpaceBetween,
             verticalAlignment = Alignment.CenterVertically,
@@ -110,7 +101,7 @@ private fun ProjectCardItem(project: Project, onClick: (String) -> Unit) {
     }
 }
 
-@Preview(showBackground = true, showSystemUi = true, uiMode = UI_MODE_NIGHT_YES)
+@WtaComponentPreviews
 @Composable
 private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     Surface {
@@ -126,7 +117,7 @@ private fun RecentProjectPreview() = WakaTimeAppTheme(darkTheme = true) {
     }
 }
 
-@Preview(showBackground = true, uiMode = UI_MODE_NIGHT_YES)
+@WtaComponentPreviews
 @Composable
 private fun ProjectCardItemPreview() = WakaTimeAppTheme {
     Surface {

@@ -32,10 +32,17 @@ class WakaTimeAppDB @Inject constructor(
         applicationDao.updateDbWithNewData(detailedDailyStats)
     }.mapLeft { Error.DatabaseError.UnknownError("could not insert aggregate stats data into db", it) }
 
-    suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): EitherErrorOr<List<DayWithProjects>> = Either.catch {
-        applicationDao.getStatsForRange(startDate, endDate).toDayWithProjects()
-            .fillMissingDaysWithZeroValues(startDate, endDate)
-    }.mapLeft { Error.DatabaseError.UnknownError("could not get stats for range ($startDate - $endDate)", it) }
+    suspend fun getStatsForRange(startDate: LocalDate, endDate: LocalDate): EitherErrorOr<List<DayWithProjects>> =
+        Either.catch {
+            applicationDao.getStatsForRange(startDate, endDate)
+                .toDayWithProjects()
+                .fillMissingDaysWithZeroValues(startDate, endDate)
+        }.mapLeft {
+            Error.DatabaseError.UnknownError(
+                "could not get stats for range ($startDate - $endDate)",
+                it,
+            )
+        }
 
     suspend fun getAllProjects(): EitherErrorOr<List<ProjectPerDay>> = Either.catch {
         applicationDao.getAllProjects()
