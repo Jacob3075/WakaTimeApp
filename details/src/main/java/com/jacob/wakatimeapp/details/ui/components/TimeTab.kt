@@ -1,14 +1,13 @@
 package com.jacob.wakatimeapp.details.ui.components
 
-import androidx.compose.foundation.border
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.lazy.LazyColumn
-import androidx.compose.foundation.lazy.items
+import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.shape.RoundedCornerShape
+import androidx.compose.foundation.verticalScroll
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -23,39 +22,25 @@ import kotlinx.collections.immutable.ImmutableMap
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
 
+private const val DaysInChart = 30
+
 @Composable
 internal fun TimeTab(statsForProject: ImmutableMap<LocalDate, Time>, today: LocalDate, modifier: Modifier = Modifier) {
     Column(
         verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
-        modifier = modifier.fillMaxSize(),
+        modifier = modifier
+            .fillMaxSize()
+            .verticalScroll(rememberScrollState()),
     ) {
         RecentTimeSpentChart(statsForProject, today)
         QuickStatsCards()
-        ProjectHistory(statsForProject)
+        ProjectHistory(statsForProject, modifier = Modifier.padding(horizontal = MaterialTheme.spacing.small))
     }
 }
 
 @Composable
 private fun QuickStatsCards() {
     Text(text = "Quick Stats Cards")
-}
-
-@Composable
-private fun ProjectHistory(statsForProject: ImmutableMap<LocalDate, Time>) {
-    LazyColumn {
-        item {
-            Text(text = "Project History", modifier = Modifier.padding(vertical = MaterialTheme.spacing.small))
-        }
-        items(statsForProject.toList()) { localDateTimePair ->
-            Text(
-                text = "Date: ${localDateTimePair.first}, Time: ${localDateTimePair.second}",
-                modifier = Modifier.border(
-                    width = 1.dp,
-                    color = MaterialTheme.colorScheme.primary,
-                ),
-            )
-        }
-    }
 }
 
 @Composable
@@ -69,10 +54,10 @@ private fun RecentTimeSpentChart(weeklyTimeSpent: ImmutableMap<LocalDate, Time>,
     tonalElevation = 2.dp,
 ) {
     VicoBarChart(
-        timeData = weeklyTimeSpent.values.toMutableList().takeLast(30).toImmutableList(),
+        timeData = weeklyTimeSpent.values.toMutableList().takeLast(DaysInChart).toImmutableList(),
         xAxisFormatter = VicoBarChartData.getDefaultXAxisFormatter(today, skipCount = 5),
         modifier = Modifier.padding(MaterialTheme.spacing.small),
         columnWidth = 30f,
-        showLabel = false
+        showLabel = false,
     )
 }
