@@ -13,7 +13,6 @@ import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserStatsInDbUC
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlin.coroutines.CoroutineContext
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
@@ -29,6 +28,7 @@ import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.ClientSecretPost
 import net.openid.appauth.ResponseTypeValues
 import timber.log.Timber
+import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 internal class LoginPageViewModel @Inject constructor(
@@ -43,16 +43,16 @@ internal class LoginPageViewModel @Inject constructor(
     val viewState: StateFlow<LoginPageState> = _viewState.asStateFlow()
 
     private val serviceConfig = AuthorizationServiceConfiguration(
-        Uri.parse(Constants.authorizationUrl),
-        Uri.parse(Constants.tokenUrl),
+        Uri.parse(Constants.AUTHORIZATION_URL),
+        Uri.parse(Constants.TOKEN_URL),
     )
 
     private val authRequest = Builder(
         serviceConfig,
         BuildConfig.CLIENT_ID,
         ResponseTypeValues.CODE,
-        Uri.parse(Constants.redirectUrl),
-    ).setScopes(Constants.scope)
+        Uri.parse(Constants.REDIRECT_URL),
+    ).setScopes(Constants.SCOPE)
         .build()
 
     init {
