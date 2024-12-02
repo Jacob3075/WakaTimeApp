@@ -145,7 +145,7 @@ private fun SectionHeader() = Row(
     modifier = Modifier.fillMaxWidth(),
 ) {
     val typography = MaterialTheme.typography
-    Text(text = "Other Stats", style = typography.sectionTitle)
+    Text(text = "Other Daily Stats", style = typography.sectionTitle)
     Text(text = "Details", color = colorScheme.primary, style = typography.sectionSubtitle)
 }
 

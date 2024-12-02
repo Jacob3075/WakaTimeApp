@@ -2,9 +2,10 @@ package com.jacob.wakatimeapp.details.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.lazy.LazyListScope
+import androidx.compose.foundation.lazy.items
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -18,28 +19,28 @@ import com.jacob.wakatimeapp.core.ui.theme.cardHeader
 import com.jacob.wakatimeapp.core.ui.theme.cardSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import kotlinx.collections.immutable.ImmutableMap
-import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.char
+import java.util.Comparator.comparing
 
-@Composable
-internal fun ProjectHistory(
+private const val BaseYear = 2000
+
+internal fun LazyListScope.projectHistory(
     statsForProject: ImmutableMap<LocalDate, Time>,
-    modifier: Modifier = Modifier,
 ) {
-    Column(
-        modifier = modifier.fillMaxSize(),
-        verticalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+    item {
+        Text(text = "Project History", modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall))
+    }
+    items(
+        items = statsForProject.filter { it.value != Time.ZERO }
+            .toSortedMap(comparing { -it.toEpochDays() })
+            .toList(),
+        key = { it.first.toEpochDays() },
     ) {
-        Text(text = "Project History", modifier = Modifier.padding(vertical = MaterialTheme.spacing.small))
-        statsForProject
-            .filter { it.value != Time.ZERO }
-            .forEach { localDateTimePair ->
-                ProjectHistoryItem(entry = localDateTimePair.toPair())
-            }
+        ProjectHistoryItem(entry = it)
     }
 }
 
@@ -48,14 +49,15 @@ fun ProjectHistoryItem(
     entry: Pair<LocalDate, Time>,
     modifier: Modifier = Modifier,
 ) {
-    val format =
-        LocalDate.Format {
-            dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
-            chars(", ")
-            monthName(MonthNames.ENGLISH_ABBREVIATED)
-            char(' ')
-            dayOfMonth()
-        }
+    val format = LocalDate.Format {
+        dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+        chars(", ")
+        monthName(MonthNames.ENGLISH_ABBREVIATED)
+        char(' ')
+        dayOfMonth()
+        chars(", ")
+        yearTwoDigits(BaseYear)
+    }
 
     WtaSurface(modifier = modifier.fillMaxWidth()) {
         Column(
@@ -82,23 +84,6 @@ private fun ProjectHistoryItemPreview() {
     WakaTimeAppTheme {
         Surface {
             ProjectHistoryItem(LocalDate.fromEpochDays(1) to Time(1, 1, 1f))
-        }
-    }
-}
-
-@WtaComponentPreviews
-@Composable
-private fun ProjectHistoryListPreview() {
-    WakaTimeAppTheme {
-        Surface {
-            ProjectHistory(
-                statsForProject =
-                    mapOf(
-                        LocalDate.fromEpochDays(1) to Time(1, 1, 1f),
-                        LocalDate.fromEpochDays(2) to Time(1, 1, 1f),
-                        LocalDate.fromEpochDays(3) to Time(1, 1, 1f),
-                    ).toImmutableMap(),
-            )
         }
     }
 }

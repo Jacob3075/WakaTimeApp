@@ -5,4 +5,7 @@
     <ktlintRulesetVersion>V1_3_1</ktlintRulesetVersion>
     <formatOnSave>false</formatOnSave>
   </component>
+  <component name="com.nbadal.ktlint.KtlintProjectSettings">
+    <ktlintMode>DISABLED</ktlintMode>
+  </component>
 </project>
