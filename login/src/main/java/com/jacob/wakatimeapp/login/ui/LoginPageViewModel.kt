@@ -66,8 +66,14 @@ internal class LoginPageViewModel @Inject constructor(
     private fun updateStatsInDB() {
         viewModelScope.launch(ioDispatcher) {
             when (val result = updateUserStatsInDbUC()) {
-                is Either.Left -> _viewState.value = LoginPageState.Error(result.value.errorDisplayMessage())
-                is Either.Right -> _viewState.value = LoginPageState.Success
+                is Either.Left -> {
+                    _viewState.value = LoginPageState.Error(result.value.errorDisplayMessage())
+                    Timber.e("Error when updating user stats")
+                }
+                is Either.Right -> {
+                    _viewState.value = LoginPageState.Success
+                    Timber.i("Successfully updated stats")
+                }
             }
         }
     }

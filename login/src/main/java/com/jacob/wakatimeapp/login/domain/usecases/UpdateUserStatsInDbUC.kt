@@ -15,6 +15,7 @@ import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.datetime.DatePeriod
 import kotlinx.datetime.minus
+import timber.log.Timber
 
 @Singleton
 internal class UpdateUserStatsInDbUC @Inject constructor(
@@ -25,6 +26,8 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
     suspend operator fun invoke(): Either<Error, Unit> = either {
         val rangeInDb = wakaTimeAppDB.getDateRangeInDb().bind()
         val newRange = Range(rangeInDb.endDate, instantProvider.date())
+
+        Timber.i("Range of stats in db: $rangeInDb, getting stats for range: $newRange")
 
         if (newRange.startDate < newRange.endDate.minus(DatePeriod(days = 14))) {
             return Error.DomainError.DataRangeTooLarge(
@@ -51,6 +54,8 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
             .groupBy(DetailedProjectStatsForDay::date)
 
         val detailedDailyStatsModel = statsForRangeDto.toDetailedDailyStatsModel(projectStats)
+
+        Timber.i("Adding stats to db: $detailedDailyStatsModel")
 
         wakaTimeAppDB.updateDbWithNewData(detailedDailyStatsModel).bind()
     }
