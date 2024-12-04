@@ -22,6 +22,7 @@ import androidx.compose.ui.draw.clip
 import androidx.compose.ui.graphics.Brush
 import androidx.compose.ui.graphics.ColorFilter
 import androidx.compose.ui.res.painterResource
+import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
@@ -45,6 +46,7 @@ fun StatsChip(
     onClick: () -> Unit,
     roundedCornerPercent: Int,
     modifier: Modifier = Modifier,
+    statValueTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
 ) {
     val gradientBrush = Brush.horizontalGradient(gradient.colorList)
     val shape = RoundedCornerShape(roundedCornerPercent)
@@ -68,6 +70,7 @@ fun StatsChip(
                 .size(size = 50.dp)
                 .align(Alignment.BottomEnd),
         )
+        // TODO: UPDATE TO USE SLOTS API
         Column(
             modifier = Modifier
                 .padding(
@@ -75,11 +78,9 @@ fun StatsChip(
                     vertical = MaterialTheme.spacing.small,
                 ),
         ) {
-            val streakValueTextStyle = MaterialTheme.typography.displayLarge
-
             Text(
                 text = buildAnnotatedString {
-                    withStyle(style = streakValueTextStyle.toSpanStyle()) {
+                    withStyle(style = statValueTextStyle.toSpanStyle()) {
                         append(statsValue)
                     }
                     withStyle(
@@ -91,7 +92,7 @@ fun StatsChip(
                     }
                 },
                 color = gradient.onStartColor,
-                modifier = Modifier.removeFontPadding(streakValueTextStyle),
+                modifier = Modifier.removeFontPadding(statValueTextStyle),
             )
             Text(
                 text = statsType,

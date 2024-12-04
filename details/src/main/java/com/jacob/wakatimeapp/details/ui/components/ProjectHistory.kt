@@ -18,7 +18,7 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.cardHeader
 import com.jacob.wakatimeapp.core.ui.theme.cardSubtitle
 import com.jacob.wakatimeapp.core.ui.theme.spacing
-import kotlinx.collections.immutable.ImmutableMap
+import com.jacob.wakatimeapp.details.ui.DetailsPageViewState
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.format
 import kotlinx.datetime.format.DayOfWeekNames
@@ -29,13 +29,13 @@ import java.util.Comparator.comparing
 private const val BaseYear = 2000
 
 internal fun LazyListScope.projectHistory(
-    statsForProject: ImmutableMap<LocalDate, Time>,
+    detailsPageData: DetailsPageViewState.Loaded,
 ) {
     item {
         Text(text = "Project History", modifier = Modifier.padding(vertical = MaterialTheme.spacing.extraSmall))
     }
     items(
-        items = statsForProject.filter { it.value != Time.ZERO }
+        items = detailsPageData.statsForProject.filter { it.value != Time.ZERO }
             .toSortedMap(comparing { -it.toEpochDays() })
             .toList(),
         key = { it.first.toEpochDays() },

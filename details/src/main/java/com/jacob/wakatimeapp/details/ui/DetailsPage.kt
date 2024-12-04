@@ -115,9 +115,8 @@ private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded, today: Loc
             state = pagerState,
             beyondBoundsPageCount = 1,
         ) { page ->
-            viewState.statsForProject
             when (pages[page]) {
-                Tabs.Time -> TimeTab(statsForProject = viewState.statsForProject, today)
+                Tabs.Time -> TimeTab(detailsPageData = viewState, today)
                 Tabs.Languages -> LanguagesTab()
                 Tabs.Editors -> EditorsTab()
                 Tabs.OperatingSystems -> OperatingSystemsTab()
