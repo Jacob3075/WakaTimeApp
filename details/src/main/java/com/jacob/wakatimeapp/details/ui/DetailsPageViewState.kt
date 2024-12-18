@@ -10,7 +10,11 @@ sealed class DetailsPageViewState {
     data class Loaded(
         val projectName: String,
         val statsForProject: ImmutableMap<LocalDate, Time>,
-    ) : DetailsPageViewState()
+    ) : DetailsPageViewState() {
+        fun filterDayStatsToNonZeroDays(): List<Time> {
+            return statsForProject.values.filter { it != Time.ZERO }
+        }
+    }
 
     data class Error(val error: com.jacob.wakatimeapp.core.models.Error) : DetailsPageViewState()
 }

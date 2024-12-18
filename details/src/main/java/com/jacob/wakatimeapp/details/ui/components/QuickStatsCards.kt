@@ -2,6 +2,7 @@ package com.jacob.wakatimeapp.details.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,11 +14,18 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.buildAnnotatedString
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.BaselineShift
+import androidx.compose.ui.text.withStyle
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
 import com.jacob.wakatimeapp.core.ui.components.cards.StatsChip
+import com.jacob.wakatimeapp.core.ui.modifiers.removeFontPadding
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.details.ui.DetailsPageViewState
@@ -28,71 +36,90 @@ import kotlinx.datetime.format.DayOfWeekNames
 import kotlinx.datetime.format.MonthNames
 import kotlinx.datetime.format.char
 
+private const val EpochYear = 1970
+
+private val format = LocalDate.Format {
+    dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
+    chars(", ")
+    monthName(MonthNames.ENGLISH_ABBREVIATED)
+    char(' ')
+    dayOfMonth()
+    chars(", ")
+    yearTwoDigits(EpochYear)
+}
+
 @Composable
 internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
-    val totalTime = remember(detailsPageData) { detailsPageData.statsForProject.values.fold(Time.ZERO, Time::plus) }
-    val averageTime =
-        remember(detailsPageData) { Time.fromDecimal(totalTime.decimal.div(detailsPageData.statsForProject.size)) }
+    val filteredData = remember(detailsPageData) { detailsPageData.filterDayStatsToNonZeroDays() }
+    val totalTime = remember(filteredData) { filteredData.fold(Time.ZERO, Time::plus) }
+    val averageTime = remember(filteredData) { Time.fromDecimal(totalTime.decimal.div(filteredData.size)) }
     val startDate = remember(detailsPageData) { detailsPageData.statsForProject.keys.minBy(LocalDate::toEpochDays) }
-    val numberOfDaysWorked =
-        remember(detailsPageData) { detailsPageData.statsForProject.values.filter { it != Time.ZERO }.size }
+    val numberOfDaysWorked = remember(filteredData) { filteredData.filter { it != Time.ZERO }.size }
 
     Column(
         Modifier.fillMaxWidth(),
         Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
     ) {
         StatsChip(
-            statsType = "Total Time on Project",
-            statsValue = totalTime.formattedPrint(),
-            statsValueSubText = "",
             gradient = MaterialTheme.gradients.amin,
             iconId = MaterialTheme.assets.icons.time,
-            onClick = {},
             roundedCornerPercent = 15,
-        )
-        StatsChip(
-            statsType = "Average Time",
-            statsValue = averageTime.formattedPrint(),
-            statsValueSubText = "",
-            gradient = MaterialTheme.gradients.purpink,
-            iconId = MaterialTheme.assets.icons.time,
-            onClick = {},
-            roundedCornerPercent = 15,
-        )
-        Row(modifier = Modifier.fillMaxWidth()) {
-            val format = LocalDate.Format {
-                dayOfWeek(DayOfWeekNames.ENGLISH_ABBREVIATED)
-                chars(", ")
-                monthName(MonthNames.ENGLISH_ABBREVIATED)
-                char(' ')
-                dayOfMonth()
-                chars(", ")
-                yearTwoDigits(1960)
-            }
-            StatsChip(
-                statsType = "Start date",
-                statsValue = startDate.format(format),
+        ) {
+            ChipContent(
+                statsType = "Total Time on Project",
+                statsValue = totalTime.formattedPrint(),
                 statsValueSubText = "",
-                gradient = MaterialTheme.gradients.quepal,
-                iconId = MaterialTheme.assets.icons.time,
-                onClick = {},
-                roundedCornerPercent = 15,
-                statValueTextStyle = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f),
-            )
-            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-            StatsChip(
-                statsType = "No. of days worked",
-                statsValue = numberOfDaysWorked.toString(),
-                statsValueSubText = "",
-                gradient = MaterialTheme.gradients.tealLove,
-                iconId = MaterialTheme.assets.icons.time,
-                onClick = {},
-                roundedCornerPercent = 15,
-                statValueTextStyle = MaterialTheme.typography.titleMedium,
-                modifier = Modifier.weight(1f),
+                gradient = MaterialTheme.gradients.amin,
             )
         }
+
+        StatsChip(
+            gradient = MaterialTheme.gradients.purpink,
+            iconId = MaterialTheme.assets.icons.time,
+            roundedCornerPercent = 15,
+        ) {
+            ChipContent(
+                statsType = "Average Time",
+                statsValue = averageTime.formattedPrint(),
+                statsValueSubText = "",
+                gradient = MaterialTheme.gradients.purpink,
+            )
+        }
+
+        Row(modifier = Modifier.fillMaxWidth()) {
+            StatsChip(
+                gradient = MaterialTheme.gradients.quepal,
+                iconId = MaterialTheme.assets.icons.time,
+                roundedCornerPercent = 15,
+                modifier = Modifier.weight(1f),
+            ) {
+                ChipContent(
+                    statsType = "Start date",
+                    statsValue = startDate.format(format),
+                    statsValueSubText = "",
+                    gradient = MaterialTheme.gradients.quepal,
+                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                )
+            }
+
+            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
+
+            StatsChip(
+                gradient = MaterialTheme.gradients.tealLove,
+                iconId = MaterialTheme.assets.icons.time,
+                roundedCornerPercent = 15,
+                modifier = Modifier.weight(1f),
+            ) {
+                ChipContent(
+                    statsType = "No. of days worked",
+                    statsValue = numberOfDaysWorked.toString(),
+                    statsValueSubText = "",
+                    gradient = MaterialTheme.gradients.tealLove,
+                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                )
+            }
+        }
+
         Row(modifier = Modifier.fillMaxWidth()) {
             // expandable cards
             // could replace tabs?
@@ -110,6 +137,37 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             Text("Most used machine")
         }
     }
+}
+
+@Composable
+private fun ColumnScope.ChipContent(
+    statsType: String,
+    statsValue: String,
+    statsValueSubText: String,
+    gradient: Gradient,
+    statValueTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
+) {
+    Text(
+        text = buildAnnotatedString {
+            withStyle(style = statValueTextStyle.toSpanStyle()) {
+                append(statsValue)
+            }
+            withStyle(
+                style = MaterialTheme.typography.headlineSmall.copy(
+                    baselineShift = BaselineShift(multiplier = 0.5f),
+                ).toSpanStyle(),
+            ) {
+                append(" $statsValueSubText")
+            }
+        },
+        color = gradient.onStartColor,
+        modifier = Modifier.removeFontPadding(statValueTextStyle),
+    )
+    Text(
+        text = statsType,
+        color = gradient.onStartColor,
+        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
+    )
 }
 
 @WtaPreviews

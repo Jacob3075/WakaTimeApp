@@ -9,7 +9,6 @@ sealed class Error {
     sealed class DomainError : Error() {
         data class InvalidData(override val message: String) : DomainError()
         data class DataRangeTooLarge(override val message: String) : DomainError()
-        data class UnknownError(override val message: String) : DomainError()
     }
 
     sealed class NetworkErrors : Error() {

@@ -13,10 +13,13 @@ import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.flow.MutableStateFlow
-import kotlinx.coroutines.flow.asStateFlow
+import kotlinx.coroutines.flow.SharingStarted
 import kotlinx.coroutines.flow.firstOrNull
+import kotlinx.coroutines.flow.onStart
+import kotlinx.coroutines.flow.stateIn
 import kotlinx.coroutines.launch
 import kotlinx.datetime.LocalDate
+import timber.log.Timber
 import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
@@ -26,16 +29,22 @@ internal class HomePageViewModel @Inject constructor(
     private val calculateLongestStreakUC: CalculateLongestStreakUC,
     private val authDataStore: AuthDataStore,
     private val instantProvider: InstantProvider,
-    ioDispatcher: CoroutineContext = Dispatchers.IO,
+    private val ioDispatcher: CoroutineContext = Dispatchers.IO,
 ) : ViewModel() {
 
     private val _homePageState = MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
-    val homePageState = _homePageState.asStateFlow()
+    val homePageState = _homePageState
+        .onStart { loadData() }
+        .stateIn(
+            viewModelScope,
+            SharingStarted.WhileSubscribed(5000),
+            HomePageViewState.Loading
+        )
 
-    init {
-
+    private fun loadData() {
         viewModelScope.launch(ioDispatcher) {
             either {
+                Timber.i("Loading home page data")
                 val last7DaysStats = getLast7DaysStatsUC().bind()
                 val currentStreak = calculateCurrentStreakUC(last7DaysStats).bind()
                 val longestStreak = calculateLongestStreakUC().bind()
