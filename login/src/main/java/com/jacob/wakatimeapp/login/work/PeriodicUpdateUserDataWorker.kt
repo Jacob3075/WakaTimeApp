@@ -10,6 +10,7 @@ import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserStatsInDbUC
 import dagger.assisted.Assisted
 import dagger.assisted.AssistedInject
+import timber.log.Timber
 
 @HiltWorker
 internal class PeriodicUpdateUserDataWorker @AssistedInject constructor(
@@ -19,7 +20,11 @@ internal class PeriodicUpdateUserDataWorker @AssistedInject constructor(
     private val updateUserStatsInDbUC: UpdateUserStatsInDbUC,
 ) : CoroutineWorker(appContext, workerParams) {
     override suspend fun doWork(): Result {
+        Timber.i("Worker started (PeriodicUpdateUserDataWorker)")
+
         if (!authTokenProvider.current.isAuthorized) return Result.failure()
+
+        Timber.i("Updating user stats in database...")
 
         return when (updateUserStatsInDbUC()) {
             is Left -> Result.failure()

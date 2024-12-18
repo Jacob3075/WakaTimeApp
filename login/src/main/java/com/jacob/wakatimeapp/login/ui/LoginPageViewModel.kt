@@ -8,9 +8,10 @@ import androidx.lifecycle.viewModelScope
 import arrow.core.Either
 import com.jacob.wakatimeapp.core.common.Constants
 import com.jacob.wakatimeapp.core.common.auth.AuthTokenProvider
+import com.jacob.wakatimeapp.core.models.Error
 import com.jacob.wakatimeapp.login.BuildConfig
 import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
-import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserStatsInDbUC
+import com.jacob.wakatimeapp.login.ui.loading.InitialDataLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
 import kotlinx.coroutines.Dispatchers
@@ -36,7 +37,7 @@ internal class LoginPageViewModel @Inject constructor(
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val authTokenProvider: AuthTokenProvider,
     private val ioDispatcher: CoroutineContext = Dispatchers.IO,
-    private val updateUserStatsInDbUC: UpdateUserStatsInDbUC,
+    private val initialDataLoader: InitialDataLoader,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
     private val _viewState: MutableStateFlow<LoginPageState> = MutableStateFlow(LoginPageState.Idle)
@@ -58,21 +59,17 @@ internal class LoginPageViewModel @Inject constructor(
     init {
         val authToken = authTokenProvider.current
         if (authToken.isAuthorized) {
-            updateUserDetails()
-            updateStatsInDB()
-        }
-    }
-
-    private fun updateStatsInDB() {
-        viewModelScope.launch(ioDispatcher) {
-            when (val result = updateUserStatsInDbUC()) {
-                is Either.Left -> {
-                    _viewState.value = LoginPageState.Error(result.value.errorDisplayMessage())
-                    Timber.e("Error when updating user stats")
-                }
-                is Either.Right -> {
-                    _viewState.value = LoginPageState.Success
-                    Timber.i("Successfully updated stats")
+            viewModelScope.launch(ioDispatcher) {
+                updateUserDetails()
+                when (val loadDataResult = initialDataLoader.loadData()) {
+                    is Either.Left -> {
+                        when (loadDataResult.value) {
+                            is Error.DomainError.DataRangeTooLarge -> _viewState.value = LoginPageState.NewLoginSuccess
+                            else -> _viewState.value = LoginPageState.Error(loadDataResult.value.message)
+                        }
+                        _viewState.value = LoginPageState.Error(loadDataResult.value.message)
+                    }
+                    is Either.Right -> _viewState.value = LoginPageState.ExistingLoginSuccess
                 }
             }
         }
@@ -84,18 +81,19 @@ internal class LoginPageViewModel @Inject constructor(
      * Must be called from UI before navigating to the next screen so that a fresh
      * token is available
      */
-    private fun updateUserDetails() {
+    private suspend fun updateUserDetails() {
         _viewState.value = LoginPageState.Loading
-        viewModelScope.launch(ioDispatcher) {
-            try {
-                _viewState.value = authTokenProvider.getFreshToken()
-                    .filterNotNull()
-                    .first()
-                    .let { updateUserDetailsUC(it) }
-            } catch (e: Exception) {
-                Timber.e("could not re-login: $e")
-                _viewState.value = LoginPageState.Error("Could not login, try again")
-            }
+        try {
+            authTokenProvider.getFreshToken()
+                .filterNotNull()
+                .first()
+                .let { updateUserDetailsUC(it) }
+                .onLeft {
+                    _viewState.value = LoginPageState.Error(it.errorDisplayMessage())
+                }
+        } catch (e: Exception) {
+            Timber.e("could not re-login: $e")
+            _viewState.value = LoginPageState.Error("Could not login, try again")
         }
     }
 

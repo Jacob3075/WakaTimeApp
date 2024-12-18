@@ -7,7 +7,6 @@ import android.content.ContextWrapper
 import android.content.pm.ActivityInfo
 import android.os.Bundle
 import androidx.activity.compose.setContent
-import androidx.activity.viewModels
 import androidx.appcompat.app.AppCompatActivity
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.material3.Scaffold
@@ -18,8 +17,8 @@ import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
-import androidx.core.splashscreen.SplashScreen.Companion.installSplashScreen
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.login.ui.destinations.LoginPageDestination
 import com.jacob.wakatimeapp.navigation.ApplicationNavigator
 import com.jacob.wakatimeapp.navigation.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
@@ -29,12 +28,9 @@ import dagger.hilt.android.AndroidEntryPoint
 @AndroidEntryPoint
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : AppCompatActivity() {
-    private val appViewModel: AppViewModel by viewModels<AppViewModel>()
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
-
-        installSplashScreen().setKeepOnScreenCondition(appViewModel::isStillLoading)
 
         setContent {
             WakaTimeAppTheme {
@@ -45,7 +41,7 @@ class MainActivity : AppCompatActivity() {
                 ) {
                     LockScreenOrientation()
                     DestinationsNavHost(
-                        startRoute = appViewModel.startRoute,
+                        startRoute = LoginPageDestination,
                         navGraph = NavGraphs.root,
                         dependenciesContainerBuilder = {
                             dependency(ApplicationNavigator(destinationsNavigator))

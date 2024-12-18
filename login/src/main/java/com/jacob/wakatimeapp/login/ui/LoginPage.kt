@@ -1,9 +1,7 @@
 package com.jacob.wakatimeapp.login.ui
 
 import android.content.Intent
-import androidx.activity.compose.ManagedActivityResultLauncher
 import androidx.activity.compose.rememberLauncherForActivityResult
-import androidx.activity.result.ActivityResult
 import androidx.activity.result.contract.ActivityResultContracts.StartActivityForResult
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -74,7 +72,8 @@ private fun LoginPage(
     LaunchedEffect(viewState) {
         Timber.d("viewState: $viewState")
         when (val viewStateInstance = viewState) {
-            is LoginPageState.Success -> loginPageNavigator.toExtractUserDataPage()
+            is LoginPageState.NewLoginSuccess -> loginPageNavigator.toExtractUserDataPage()
+            is LoginPageState.ExistingLoginSuccess -> loginPageNavigator.toHomePage()
 
             is LoginPageState.Error -> showSnackBar(
                 viewStateInstance,
@@ -110,8 +109,7 @@ private fun LoginPageContent(
 
     when (viewState) {
         is LoginPageState.Idle, is LoginPageState.Error -> LoginPageIdleState(
-            getLoginAuthIntent = getLoginAuthIntent,
-            launcher = launcher,
+            onLoginButtonClicked = { launcher.launch(getLoginAuthIntent()) },
             modifier = modifier,
         )
 
@@ -142,8 +140,7 @@ private fun showSnackBar(
 
 @Composable
 private fun LoginPageIdleState(
-    launcher: ManagedActivityResultLauncher<Intent, ActivityResult>,
-    getLoginAuthIntent: () -> Intent?,
+    onLoginButtonClicked: () -> Unit,
     modifier: Modifier = Modifier,
 ) {
     val spacing = MaterialTheme.spacing
@@ -158,7 +155,7 @@ private fun LoginPageIdleState(
             .padding(horizontal = spacing.small),
     ) {
         AppTitle()
-        LoginButton(onClick = { launcher.launch(getLoginAuthIntent()) })
+        LoginButton(onClick = onLoginButtonClicked)
     }
 }
 

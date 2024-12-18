@@ -37,6 +37,11 @@ class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : Log
         ExtractUserDataPageDestination,
         navOptions = navOptions { popUpTo(LoginPageDestination.route) { inclusive = true } },
     )
+
+    override fun toHomePage() = navigator.navigate(
+        HomePageDestination,
+        navOptions = navOptions { popUpTo(HomePageDestination.route) { inclusive = true } },
+    )
 }
 
 class HomePageNavigatorImpl(private val navigator: DestinationsNavigator) : HomePageNavigator {
