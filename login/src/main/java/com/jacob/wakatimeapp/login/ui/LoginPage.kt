@@ -73,7 +73,10 @@ private fun LoginPage(
         Timber.d("viewState: $viewState")
         when (val viewStateInstance = viewState) {
             is LoginPageState.NewLoginSuccess -> loginPageNavigator.toExtractUserDataPage()
-            is LoginPageState.ExistingLoginSuccess -> loginPageNavigator.toHomePage()
+            is LoginPageState.ExistingLoginSuccess -> {
+                loginPageNavigator.preloadHomePageData()
+                loginPageNavigator.toHomePage()
+            }
 
             is LoginPageState.Error -> showSnackBar(
                 viewStateInstance,

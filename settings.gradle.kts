@@ -16,7 +16,7 @@ dependencyResolutionManagement {
         maven(url = "https://jitpack.io")
     }
 }
-rootProject.name = "WakatimeApp"
+rootProject.name = "WakaTimeApp.Compose"
 
 include(":app")
 include(":login")

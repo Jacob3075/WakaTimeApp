@@ -18,16 +18,21 @@ import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.home.ui.DataLoaderWrapper
 import com.jacob.wakatimeapp.login.ui.destinations.LoginPageDestination
 import com.jacob.wakatimeapp.navigation.ApplicationNavigator
 import com.jacob.wakatimeapp.navigation.NavGraphs
 import com.ramcosta.composedestinations.DestinationsNavHost
 import com.ramcosta.composedestinations.navigation.dependency
 import dagger.hilt.android.AndroidEntryPoint
+import javax.inject.Inject
 
 @AndroidEntryPoint
 @SuppressLint("UnusedMaterial3ScaffoldPaddingParameter")
 class MainActivity : AppCompatActivity() {
+
+    @Inject
+    lateinit var homePageDataLoader: DataLoaderWrapper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -44,7 +49,7 @@ class MainActivity : AppCompatActivity() {
                         startRoute = LoginPageDestination,
                         navGraph = NavGraphs.root,
                         dependenciesContainerBuilder = {
-                            dependency(ApplicationNavigator(destinationsNavigator))
+                            dependency(ApplicationNavigator(destinationsNavigator, homePageDataLoader))
                             dependency(snackbarHostState)
                         },
                     )

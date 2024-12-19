@@ -1,6 +1,16 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <project version="4">
   <component name="CompilerConfiguration">
-    <bytecodeTargetLevel target="21" />
+    <bytecodeTargetLevel target="21">
+      <module name="WakatimeApp.buildSrc" target="11" />
+      <module name="WakatimeApp.buildSrc.main" target="11" />
+      <module name="WakatimeApp.buildSrc.test" target="11" />
+      <module name="WakatimeApp.Compose.buildSrc" target="11" />
+      <module name="WakaTimeApp.Compose.buildSrc" target="11" />
+      <module name="WakaTimeApp.Compose.buildSrc.main" target="11" />
+      <module name="WakatimeApp.Compose.buildSrc.main" target="11" />
+      <module name="WakaTimeApp.Compose.buildSrc.test" target="11" />
+      <module name="WakatimeApp.Compose.buildSrc.test" target="11" />
+    </bytecodeTargetLevel>
   </component>
 </project>

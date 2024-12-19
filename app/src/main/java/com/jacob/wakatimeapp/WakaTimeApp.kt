@@ -1,7 +1,6 @@
 package com.jacob.wakatimeapp
 
 import android.app.Application
-import android.util.Log
 import androidx.hilt.work.HiltWorkerFactory
 import androidx.work.Configuration
 import dagger.hilt.android.HiltAndroidApp
@@ -30,12 +29,13 @@ class WakaTimeApp : Application(), Configuration.Provider {
 
 class WtaLogger : Timber.DebugTree() {
     override fun log(priority: Int, tag: String?, message: String, t: Throwable?) {
-        if (!message.contains("flow:")) return super.log(priority, tag, message, t)
+        if (!message.contains("flow:")) return super.log(priority, "WTA.$tag", message, t)
 
-        Log.println(
+        super.log(
             priority,
-            tag?.split("$$")?.first(),
+            "WTA.${tag?.split("$$")?.first()}",
             message.replace("flow:", ""),
+            t,
         )
     }
 }

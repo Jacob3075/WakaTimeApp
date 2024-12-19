@@ -3,6 +3,7 @@ package com.jacob.wakatimeapp.navigation
 import androidx.navigation.navOptions
 import com.jacob.wakatimeapp.details.ui.DetailsPageNavigator
 import com.jacob.wakatimeapp.details.ui.destinations.DetailsPageDestination
+import com.jacob.wakatimeapp.home.ui.DataLoaderWrapper
 import com.jacob.wakatimeapp.home.ui.HomePageNavigator
 import com.jacob.wakatimeapp.home.ui.destinations.HomePageDestination
 import com.jacob.wakatimeapp.login.ui.LoginPageNavigator
@@ -13,9 +14,9 @@ import com.jacob.wakatimeapp.search.ui.SearchProjectsNavigator
 import com.jacob.wakatimeapp.search.ui.destinations.SearchProjectsDestination
 import com.ramcosta.composedestinations.navigation.DestinationsNavigator
 
-class ApplicationNavigator(private val navigator: DestinationsNavigator) :
+class ApplicationNavigator(private val navigator: DestinationsNavigator, homePageDataLoader: DataLoaderWrapper) :
     HomePageNavigator by HomePageNavigatorImpl(navigator),
-    LoginPageNavigator by LoginPageNavigatorImpl(navigator),
+    LoginPageNavigator by LoginPageNavigatorImpl(navigator, homePageDataLoader),
     DetailsPageNavigator by DetailsPageNavigatorImpl(navigator),
     ExtractUserDataNavigator by ExtractUserDataNavigatorImpl(navigator),
     SearchProjectsNavigator {
@@ -32,7 +33,10 @@ class ExtractUserDataNavigatorImpl(private val navigator: DestinationsNavigator)
     )
 }
 
-class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : LoginPageNavigator {
+class LoginPageNavigatorImpl(
+    private val navigator: DestinationsNavigator,
+    private val homePageDataLoader: DataLoaderWrapper,
+) : LoginPageNavigator {
     override fun toExtractUserDataPage() = navigator.navigate(
         ExtractUserDataPageDestination,
         navOptions = navOptions { popUpTo(LoginPageDestination.route) { inclusive = true } },
@@ -42,6 +46,10 @@ class LoginPageNavigatorImpl(private val navigator: DestinationsNavigator) : Log
         HomePageDestination,
         navOptions = navOptions { popUpTo(HomePageDestination.route) { inclusive = true } },
     )
+
+    override suspend fun preloadHomePageData() {
+        homePageDataLoader.loadData()
+    }
 }
 
 class HomePageNavigatorImpl(private val navigator: DestinationsNavigator) : HomePageNavigator {
