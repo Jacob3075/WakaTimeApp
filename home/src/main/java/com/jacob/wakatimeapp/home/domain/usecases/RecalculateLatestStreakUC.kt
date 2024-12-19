@@ -5,9 +5,9 @@ import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Streak
 import com.jacob.wakatimeapp.home.data.mappers.toDailyStateAggregate
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
-import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.datetime.DatePeriod

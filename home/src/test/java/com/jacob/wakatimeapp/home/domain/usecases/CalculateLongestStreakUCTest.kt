@@ -4,7 +4,7 @@ import arrow.core.right
 import com.jacob.wakatimeapp.core.common.data.local.entities.DayWithProjects
 import com.jacob.wakatimeapp.core.common.utils.toDate
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.core.models.Streak
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.dailyStats
 import com.jacob.wakatimeapp.home.domain.usecases.CalculateLongestStreakUCRobot.Companion.stats
 import kotlinx.coroutines.test.runTest

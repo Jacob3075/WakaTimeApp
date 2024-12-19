@@ -6,10 +6,7 @@
       <module name="WakatimeApp.buildSrc.main" target="11" />
       <module name="WakatimeApp.buildSrc.test" target="11" />
       <module name="WakatimeApp.Compose.buildSrc" target="11" />
-      <module name="WakaTimeApp.Compose.buildSrc" target="11" />
-      <module name="WakaTimeApp.Compose.buildSrc.main" target="11" />
       <module name="WakatimeApp.Compose.buildSrc.main" target="11" />
-      <module name="WakaTimeApp.Compose.buildSrc.test" target="11" />
       <module name="WakatimeApp.Compose.buildSrc.test" target="11" />
     </bytecodeTargetLevel>
   </component>

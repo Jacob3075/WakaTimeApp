@@ -2,7 +2,7 @@ package com.jacob.wakatimeapp.home.domain.usecases
 
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.core.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 

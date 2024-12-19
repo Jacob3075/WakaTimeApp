@@ -5,11 +5,11 @@ import arrow.core.raise.either
 import arrow.core.right
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Streak
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.getLatestStreakInRange
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first
@@ -32,8 +32,7 @@ internal class CalculateCurrentStreakUC @Inject constructor(
 
         val endOfCurrentStreakIsYesterday = currentStreak.end == today.minus(1, DateTimeUnit.DAY)
 
-        val recalculatedStreakForLast7Days = last7DaysStats.weeklyTimeSpent
-            .getLatestStreakInRange()
+        val recalculatedStreakForLast7Days = last7DaysStats.weeklyTimeSpent.getLatestStreakInRange()
 
         val combinedStreak = currentStreak + recalculatedStreakForLast7Days
         val failedToCombine = !currentStreak.canBeCombinedWith(recalculatedStreakForLast7Days)

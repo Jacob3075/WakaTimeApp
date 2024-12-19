@@ -10,7 +10,7 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
-import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.core.models.Streak
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks

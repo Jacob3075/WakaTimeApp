@@ -1,5 +1,6 @@
 package com.jacob.wakatimeapp.home.domain.models
 
+import com.jacob.wakatimeapp.core.models.Streak
 import io.kotest.matchers.booleans.shouldBeFalse
 import io.kotest.matchers.booleans.shouldBeTrue
 import io.kotest.matchers.shouldBe

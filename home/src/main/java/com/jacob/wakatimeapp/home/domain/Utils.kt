@@ -1,7 +1,7 @@
 package com.jacob.wakatimeapp.home.domain // ktlint-disable filename
 
 import com.jacob.wakatimeapp.core.models.Time
-import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.core.models.Streak
 import kotlinx.datetime.LocalDate
 
 internal fun Map<LocalDate, Time>.getLatestStreakInRange() = toSortedMap()

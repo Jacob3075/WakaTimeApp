@@ -7,7 +7,7 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Project
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.core.models.Streak
 import io.kotest.assertions.asClue
 import io.kotest.matchers.shouldBe
 import io.mockk.clearMocks

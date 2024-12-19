@@ -21,7 +21,7 @@ import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
-import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.core.models.Streak
 import kotlinx.datetime.LocalDate
 
 @Composable

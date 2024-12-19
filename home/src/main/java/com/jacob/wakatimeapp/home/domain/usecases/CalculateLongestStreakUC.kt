@@ -7,10 +7,10 @@ import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import com.jacob.wakatimeapp.core.common.utils.InstantProvider
 import com.jacob.wakatimeapp.core.models.DailyStatsAggregate
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Streak
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.home.data.local.HomePageCache
 import com.jacob.wakatimeapp.home.data.mappers.toDailyStateAggregate
-import com.jacob.wakatimeapp.home.domain.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.first

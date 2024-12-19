@@ -17,7 +17,7 @@ import com.jacob.wakatimeapp.home.data.local.entities.Last7DaysStatsEntity
 import com.jacob.wakatimeapp.home.data.mappers.toEntity
 import com.jacob.wakatimeapp.home.data.mappers.toModel
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.home.domain.models.Streak
+import com.jacob.wakatimeapp.core.models.Streak
 import javax.inject.Inject
 import javax.inject.Singleton
 import kotlinx.coroutines.flow.catch
