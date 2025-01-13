@@ -14,7 +14,6 @@ import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import com.jacob.wakatimeapp.login.ui.loading.InitialDataLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -66,8 +65,6 @@ internal class LoginPageViewModel @Inject constructor(
         when (val loadDataResult = initialDataLoader.loadData()) {
             is Either.Left -> {
                 _viewState.value = LoginPageState.Error(loadDataResult.value.message)
-
-                delay(500)
 
                 if (loadDataResult.value is Error.DomainError.DataRangeTooLarge) {
                     _viewState.value = LoginPageState.NewLoginSuccess

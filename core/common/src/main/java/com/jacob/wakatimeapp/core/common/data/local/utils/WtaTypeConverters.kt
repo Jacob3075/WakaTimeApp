@@ -7,6 +7,7 @@ import com.jacob.wakatimeapp.core.models.secondarystats.Editor
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Language
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machine
 import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystem
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
@@ -48,10 +49,10 @@ class WtaTypeConverters {
     fun fromOperatingSystems(operatingSystems: OperatingSystems) = Json.encodeToString(operatingSystems.values)
 
     @TypeConverter
-    fun toMachines(machine: String) = Json.decodeFromString<Machines>(machine)
+    fun toMachines(machine: String) = Machines(Json.decodeFromString<List<Machine>>(machine))
 
     @TypeConverter
-    fun fromMachines(machine: Machines) = Json.encodeToString(machine)
+    fun fromMachines(machine: Machines) = Json.encodeToString(machine.values)
 
     @TypeConverter
     fun toBranch(branch: String) = Json.decodeFromString<List<Branch>>(branch)
