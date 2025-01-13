@@ -12,7 +12,6 @@ import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.remember
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.buildAnnotatedString
@@ -20,6 +19,10 @@ import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.BaselineShift
 import androidx.compose.ui.text.withStyle
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.secondarystats.Editors
+import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machines
+import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
 import com.jacob.wakatimeapp.core.ui.components.cards.StatsChip
 import com.jacob.wakatimeapp.core.ui.modifiers.removeFontPadding
@@ -28,6 +31,7 @@ import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
 import com.jacob.wakatimeapp.details.ui.DetailsPageViewState
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.LocalDate
@@ -50,16 +54,11 @@ private val format = LocalDate.Format {
 
 @Composable
 internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
-    val filteredData = remember(detailsPageData) { detailsPageData.filterDayStatsToNonZeroDays() }
-    val totalTime = remember(filteredData) { filteredData.fold(Time.ZERO, Time::plus) }
-    val averageTime = remember(filteredData) { Time.fromDecimal(totalTime.decimal.div(filteredData.size)) }
-    val startDate = remember(detailsPageData) { detailsPageData.statsForProject.keys.minBy(LocalDate::toEpochDays) }
-    val numberOfDaysWorked = remember(filteredData) { filteredData.filter { it != Time.ZERO }.size }
-
     Column(
         Modifier.fillMaxWidth(),
         Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
     ) {
+        // TODO: REPLACE CHIP WITH CARD
         StatsChip(
             gradient = MaterialTheme.gradients.amin,
             iconId = MaterialTheme.assets.icons.time,
@@ -67,7 +66,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
         ) {
             ChipContent(
                 statsType = "Total Time on Project",
-                statsValue = totalTime.formattedPrint(),
+                statsValue = detailsPageData.totalTime.formattedPrint(),
                 statsValueSubText = "",
                 gradient = MaterialTheme.gradients.amin,
             )
@@ -80,7 +79,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
         ) {
             ChipContent(
                 statsType = "Average Time",
-                statsValue = averageTime.formattedPrint(),
+                statsValue = detailsPageData.averageTime.formattedPrint(),
                 statsValueSubText = "",
                 gradient = MaterialTheme.gradients.purpink,
             )
@@ -95,7 +94,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             ) {
                 ChipContent(
                     statsType = "Start date",
-                    statsValue = startDate.format(format),
+                    statsValue = detailsPageData.startDate.format(format),
                     statsValueSubText = "",
                     gradient = MaterialTheme.gradients.quepal,
                     statValueTextStyle = MaterialTheme.typography.titleMedium,
@@ -112,13 +111,15 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             ) {
                 ChipContent(
                     statsType = "No. of days worked",
-                    statsValue = numberOfDaysWorked.toString(),
+                    statsValue = detailsPageData.numberOfDaysWorked.toString(),
                     statsValueSubText = "",
                     gradient = MaterialTheme.gradients.tealLove,
                     statValueTextStyle = MaterialTheme.typography.titleMedium,
                 )
             }
         }
+
+        // TODO: ADD PENDING CARDS/CHIPS TO UI
 
         Row(modifier = Modifier.fillMaxWidth()) {
             // expandable cards
@@ -178,18 +179,27 @@ private fun ProjectHistoryListPreview() {
             QuickStatsCards(
                 DetailsPageViewState.Loaded(
                     "",
-                    mapOf(
-                        LocalDate.fromEpochDays(1) to Time.fromDecimal(3f),
-                        LocalDate.fromEpochDays(2) to Time.fromDecimal(1f),
-                        LocalDate.fromEpochDays(3) to Time.fromDecimal(2f),
-                        LocalDate.fromEpochDays(4) to Time.fromDecimal(2f),
-                        LocalDate.fromEpochDays(5) to Time.fromDecimal(4f),
-                        LocalDate.fromEpochDays(6) to Time.fromDecimal(3f),
-                        LocalDate.fromEpochDays(7) to Time.fromDecimal(2f),
-                        LocalDate.fromEpochDays(8) to Time.fromDecimal(3f),
-                        LocalDate.fromEpochDays(9) to Time.fromDecimal(4f),
-                        LocalDate.fromEpochDays(10) to Time.fromDecimal(1f),
-                    ).toImmutableMap(),
+                    uiData = DetailedProjectStatsUiData(
+                        totalTime = Time.ZERO,
+                        averageTime = Time.ZERO,
+                        dailyProjectStats = mapOf(
+                            LocalDate.fromEpochDays(1) to Time.fromDecimal(3f),
+                            LocalDate.fromEpochDays(2) to Time.fromDecimal(1f),
+                            LocalDate.fromEpochDays(3) to Time.fromDecimal(2f),
+                            LocalDate.fromEpochDays(4) to Time.fromDecimal(2f),
+                            LocalDate.fromEpochDays(5) to Time.fromDecimal(4f),
+                            LocalDate.fromEpochDays(6) to Time.fromDecimal(3f),
+                            LocalDate.fromEpochDays(7) to Time.fromDecimal(2f),
+                            LocalDate.fromEpochDays(8) to Time.fromDecimal(3f),
+                            LocalDate.fromEpochDays(9) to Time.fromDecimal(4f),
+                            LocalDate.fromEpochDays(10) to Time.fromDecimal(1f),
+                        ).toImmutableMap(),
+                        languages = Languages.NONE,
+                        operatingSystems = OperatingSystems.NONE,
+                        editors = Editors.NONE,
+                        machines = Machines.NONE,
+                    ),
+                    todaysDate = LocalDate.fromEpochDays(1),
                 ),
             )
         }

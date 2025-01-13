@@ -12,11 +12,16 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.models.Time
+import com.jacob.wakatimeapp.core.models.secondarystats.Editors
+import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machines
+import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
 import com.jacob.wakatimeapp.core.ui.components.VicoBarChart
 import com.jacob.wakatimeapp.core.ui.components.VicoBarChartData
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.spacing
+import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
 import com.jacob.wakatimeapp.details.ui.DetailsPageViewState
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.collections.immutable.toImmutableMap
@@ -68,18 +73,27 @@ private fun ProjectHistoryListPreview() {
             TimeTab(
                 DetailsPageViewState.Loaded(
                     "",
-                    mapOf(
-                        LocalDate.fromEpochDays(1) to Time.fromDecimal(3f),
-                        LocalDate.fromEpochDays(2) to Time.fromDecimal(1f),
-                        LocalDate.fromEpochDays(3) to Time.fromDecimal(2f),
-                        LocalDate.fromEpochDays(4) to Time.fromDecimal(2f),
-                        LocalDate.fromEpochDays(5) to Time.fromDecimal(4f),
-                        LocalDate.fromEpochDays(6) to Time.fromDecimal(3f),
-                        LocalDate.fromEpochDays(7) to Time.fromDecimal(2f),
-                        LocalDate.fromEpochDays(8) to Time.fromDecimal(3f),
-                        LocalDate.fromEpochDays(9) to Time.fromDecimal(4f),
-                        LocalDate.fromEpochDays(10) to Time.fromDecimal(1f),
-                    ).toImmutableMap(),
+                    todaysDate = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
+                    uiData = DetailedProjectStatsUiData(
+                        totalTime = Time.ZERO,
+                        averageTime = Time(hours = 0, minutes = 0, decimal = 0.0f, totalSeconds = 0.0),
+                        dailyProjectStats = mapOf(
+                            LocalDate.fromEpochDays(1) to Time.fromDecimal(3f),
+                            LocalDate.fromEpochDays(2) to Time.fromDecimal(1f),
+                            LocalDate.fromEpochDays(3) to Time.fromDecimal(2f),
+                            LocalDate.fromEpochDays(4) to Time.fromDecimal(2f),
+                            LocalDate.fromEpochDays(5) to Time.fromDecimal(4f),
+                            LocalDate.fromEpochDays(6) to Time.fromDecimal(3f),
+                            LocalDate.fromEpochDays(7) to Time.fromDecimal(2f),
+                            LocalDate.fromEpochDays(8) to Time.fromDecimal(3f),
+                            LocalDate.fromEpochDays(9) to Time.fromDecimal(4f),
+                            LocalDate.fromEpochDays(10) to Time.fromDecimal(1f),
+                        ).toImmutableMap(),
+                        languages = Languages(values = listOf()),
+                        operatingSystems = OperatingSystems(values = listOf()),
+                        editors = Editors(values = listOf()),
+                        machines = Machines(values = listOf()),
+                    ),
                 ),
                 today = Clock.System.now().toLocalDateTime(TimeZone.currentSystemDefault()).date,
             )

@@ -31,7 +31,8 @@ internal class DetailsPageViewModel @Inject constructor(
                 val data = getProjectStatsUC(args.projectName).bind()
                 _viewState.value = DetailsPageViewState.Loaded(
                     projectName = args.projectName,
-                    statsForProject = data.dailyProjectStats,
+                    uiData = data,
+                    todaysDate = getTodaysDate(),
                 )
             }.mapLeft {
                 Timber.e("Error while getting stats for project ${args.projectName}: $it")
