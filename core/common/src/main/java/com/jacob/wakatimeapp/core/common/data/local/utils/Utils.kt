@@ -6,6 +6,7 @@ import com.jacob.wakatimeapp.core.common.data.local.entities.ProjectPerDay
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import kotlinx.datetime.LocalDate
 
@@ -27,7 +28,7 @@ internal fun List<ProjectPerDay>.fillMissingDaysWithZeroValues(): List<ProjectPe
                 languages = Languages.NONE,
                 operatingSystems = OperatingSystems.NONE,
                 branches = emptyList(),
-                machines = emptyList(),
+                machines = Machines.NONE,
             )
         }
 
@@ -50,7 +51,7 @@ internal fun List<DayWithProjects>.fillMissingDaysWithZeroValues(startDate: Loca
                     editors = Editors.NONE,
                     languages = Languages.NONE,
                     operatingSystems = OperatingSystems.NONE,
-                    machines = emptyList(),
+                    machines = Machines.NONE,
                 ),
                 projectsForDay = emptyList(),
             )

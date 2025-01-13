@@ -2,10 +2,10 @@ package com.jacob.wakatimeapp.login.data.mappers
 
 import com.jacob.wakatimeapp.core.common.data.remote.dtos.EditorDTO
 import com.jacob.wakatimeapp.core.common.data.remote.dtos.LanguageDTO
+import com.jacob.wakatimeapp.core.common.data.remote.dtos.MachineDTO
 import com.jacob.wakatimeapp.core.common.data.remote.dtos.OperatingSystemDTO
 import com.jacob.wakatimeapp.core.common.data.remote.mappers.fromDto
 import com.jacob.wakatimeapp.core.common.data.remote.mappers.toBranch
-import com.jacob.wakatimeapp.core.common.data.remote.mappers.toMachine
 import com.jacob.wakatimeapp.core.common.data.remote.mappers.toModel
 import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
@@ -30,7 +30,8 @@ fun DetailedProjectStatsDTO.toDetailedProjectStatsInRangeModel(name: String): Ag
         .let(List<OperatingSystemDTO>::fromDto)
 
     val branches = data.flatMap(Data::branches).toBranch()
-    val machines = data.flatMap(Data::machines).toMachine()
+    val machines =data.flatMap(Data::machines)
+        .let(List<MachineDTO>::fromDto)
 
     return AggregateProjectStatsForRange(
         name = name,
@@ -54,6 +55,6 @@ fun DetailedProjectStatsDTO.toDetailedProjectStatsForDayModel(name: String) = da
         editors = it.editors.toModel(),
         operatingSystems = it.operatingSystems.toModel(),
         branches = it.branches.toBranch(),
-        machines = it.machines.toMachine(),
+        machines = it.machines.toModel(),
     )
 }

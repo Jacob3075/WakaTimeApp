@@ -9,15 +9,15 @@ import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.AggregateProjectStatsForRange
 import com.jacob.wakatimeapp.core.models.project.Branch
 import com.jacob.wakatimeapp.core.models.project.DetailedProjectStatsForDay
-import com.jacob.wakatimeapp.core.models.project.Machine
 import com.jacob.wakatimeapp.core.models.project.Project
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
-import kotlin.collections.Map.Entry
 import kotlinx.collections.immutable.ImmutableList
 import kotlinx.collections.immutable.toImmutableList
 import kotlinx.datetime.LocalDate
+import kotlin.collections.Map.Entry
 
 fun List<ProjectPerDay>.toModel(): ImmutableList<Project> {
     val totalSeconds = sumOf { it.grandTotal.totalSeconds }
@@ -48,7 +48,7 @@ fun DetailedDailyStats.toEntity() = DayEntity(
     editors = editors,
     languages = languages,
     operatingSystems = operatingSystems,
-    machines = emptyList(),
+    machines = machines,
 )
 
 fun Map<DayEntity, ProjectPerDay?>.toDayWithProjects() = entries.groupBy {
@@ -72,14 +72,9 @@ fun List<ProjectPerDay>.toAggregateProjectStatsForRange(): AggregateProjectStats
     val languages = flatMap { it.languages.values }.let(::Languages)
     val editors = flatMap { it.editors.values }.let(::Editors)
     val operatingSystems = flatMap { it.operatingSystems.values }.let(::OperatingSystems)
+    val machines = flatMap { it.machines.values }.let(::Machines)
 
     val branches = flatMap(ProjectPerDay::branches).groupBy(Branch::name)
-        .values
-        .map {
-            it.reduce { acc, branch -> acc.copy(time = acc.time + branch.time) }
-        }
-
-    val machines = flatMap(ProjectPerDay::machines).groupBy(Machine::name)
         .values
         .map {
             it.reduce { acc, branch -> acc.copy(time = acc.time + branch.time) }

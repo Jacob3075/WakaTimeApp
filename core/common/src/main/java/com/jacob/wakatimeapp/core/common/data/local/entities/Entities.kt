@@ -4,9 +4,9 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Branch
-import com.jacob.wakatimeapp.core.models.project.Machine
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import kotlinx.datetime.LocalDate
 
@@ -18,7 +18,7 @@ data class DayEntity(
     val editors: Editors,
     val languages: Languages,
     val operatingSystems: OperatingSystems,
-    val machines: List<Machine>,
+    val machines: Machines,
 )
 
 @Entity(primaryKeys = ["name", "day"])
@@ -31,7 +31,7 @@ data class ProjectPerDay(
     val languages: Languages,
     val operatingSystems: OperatingSystems,
     val branches: List<Branch>,
-    val machines: List<Machine>,
+    val machines: Machines,
 )
 
 data class DayWithProjects(

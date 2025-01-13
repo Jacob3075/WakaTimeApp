@@ -6,7 +6,6 @@ import com.jacob.wakatimeapp.core.common.data.remote.dtos.ExtractedDataDTO.DayDT
 import com.jacob.wakatimeapp.core.common.data.remote.dtos.ExtractedDataDTO.DayDTO.ProjectDTO
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Branch
-import com.jacob.wakatimeapp.core.models.project.Machine
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.toLocalDate
 
@@ -16,12 +15,7 @@ fun DayDTO.toEntity() = DayEntity(
     editors = editors.fromDto(),
     languages = languages.fromDto(),
     operatingSystems = operatingSystems.fromDto(),
-    machines = this.machines.map { machine ->
-        Machine(
-            name = machine.name,
-            time = Time.fromTotalSeconds(machine.totalSeconds),
-        )
-    },
+    machines = machines.fromDto(),
 )
 
 fun ProjectDTO.toEntity(day: LocalDate): ProjectPerDay {
@@ -29,12 +23,6 @@ fun ProjectDTO.toEntity(day: LocalDate): ProjectPerDay {
         Branch(
             name = branch.name,
             time = Time.fromTotalSeconds(branch.totalSeconds),
-        )
-    }
-    val machines = machines.map { machine ->
-        Machine(
-            name = machine.name,
-            time = Time.fromTotalSeconds(machine.totalSeconds),
         )
     }
 
@@ -47,6 +35,6 @@ fun ProjectDTO.toEntity(day: LocalDate): ProjectPerDay {
         languages = languages.fromDto(),
         operatingSystems = operatingSystems.fromDto(),
         branches = branches,
-        machines = machines,
+        machines = machines.fromDto(),
     )
 }

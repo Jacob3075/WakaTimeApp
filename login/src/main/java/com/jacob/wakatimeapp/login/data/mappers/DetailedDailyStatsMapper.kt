@@ -22,6 +22,7 @@ internal fun GetStatsForRangeResDTO.toDetailedDailyStatsModel(
         languages = dailyStats.languages.toModel(),
         editors = dailyStats.editors.toModel(),
         operatingSystems = dailyStats.operatingSystems.toModel(),
+        machines = dailyStats.machines.toModel(),
         timeSpent = Time.fromTotalSeconds(dailyStats.grandTotal.totalSeconds),
     )
 }

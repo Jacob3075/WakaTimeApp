@@ -4,6 +4,7 @@ import com.jacob.wakatimeapp.core.models.Range
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import kotlinx.datetime.LocalDate
 import kotlinx.serialization.Serializable
@@ -17,7 +18,7 @@ data class AggregateProjectStatsForRange(
     val operatingSystems: OperatingSystems,
     val editors: Editors,
     val branches: List<Branch>,
-    val machines: List<Machine>,
+    val machines: Machines,
 ) {
     operator fun plus(other: AggregateProjectStatsForRange) = AggregateProjectStatsForRange(
         name = name,
@@ -41,7 +42,7 @@ data class AggregateProjectStatsForRange(
             operatingSystems = OperatingSystems.NONE,
             editors = Editors.NONE,
             branches = emptyList(),
-            machines = emptyList(),
+            machines = Machines.NONE,
         )
     }
 }

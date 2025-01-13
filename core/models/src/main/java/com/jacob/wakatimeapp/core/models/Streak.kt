@@ -10,6 +10,7 @@ import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
 import kotlinx.serialization.Serializable
 import timber.log.Timber
+import kotlin.collections.Map.Entry
 
 @Serializable
 data class Streak(
@@ -54,5 +55,28 @@ data class Streak(
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
             Instant.DISTANT_PAST.toLocalDateTime(TimeZone.currentSystemDefault()).date,
         )
+
+        fun getStreaksIn(statsForDay: Map<LocalDate, Time>): List<Streak> = statsForDay.entries
+            .groupConsecutive()
+            .filter(List<Entry<LocalDate, Time>>::isNotEmpty)
+            .toStreaks()
+
+        /**
+         * Given a list of days, groups consecutive days with non-zero stats into a list and adds that to a list
+         *
+         * [Source](https://stackoverflow.com/a/65357359/13181948)
+         */
+        private fun Iterable<Entry<LocalDate, Time>>.groupConsecutive() =
+            fold(mutableListOf(mutableListOf<Entry<LocalDate, Time>>())) { groups, dateTimeEntry ->
+                when (dateTimeEntry.value) {
+                    Time.ZERO -> groups.add(mutableListOf())
+                    else -> groups.last().add(dateTimeEntry)
+                }
+                groups
+            }
+
+        private fun List<List<Entry<LocalDate, Time>>>.toStreaks() = map {
+            Streak(it.first().key, it.last().key)
+        }
     }
 }

@@ -3,11 +3,11 @@ package com.jacob.wakatimeapp.core.common.data.local.utils
 import androidx.room.TypeConverter
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Branch
-import com.jacob.wakatimeapp.core.models.project.Machine
 import com.jacob.wakatimeapp.core.models.secondarystats.Editor
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Language
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
+import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystem
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import kotlinx.datetime.LocalDate
@@ -48,10 +48,10 @@ class WtaTypeConverters {
     fun fromOperatingSystems(operatingSystems: OperatingSystems) = Json.encodeToString(operatingSystems.values)
 
     @TypeConverter
-    fun toMachines(machine: String) = Json.decodeFromString<List<Machine>>(machine)
+    fun toMachines(machine: String) = Json.decodeFromString<Machines>(machine)
 
     @TypeConverter
-    fun fromMachines(machine: List<Machine>) = Json.encodeToString(machine)
+    fun fromMachines(machine: Machines) = Json.encodeToString(machine)
 
     @TypeConverter
     fun toBranch(branch: String) = Json.decodeFromString<List<Branch>>(branch)
