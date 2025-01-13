@@ -1,7 +1,6 @@
 package com.jacob.wakatimeapp.login.domain.usecases
 
 import arrow.core.Either
-import arrow.core.left
 import arrow.core.raise.either
 import com.jacob.wakatimeapp.core.common.data.local.WakaTimeAppDB
 import com.jacob.wakatimeapp.core.common.data.remote.dtos.ProjectDTO
@@ -30,9 +29,8 @@ internal class UpdateUserStatsInDbUC @Inject constructor(
         Timber.i("Range of stats in db: $rangeInDb, getting stats for range: $newRange")
 
         if (newRange.startDate < newRange.endDate.minus(DatePeriod(days = 14))) {
-            return Error.DomainError.DataRangeTooLarge(
-                "cannot get data for more than 14 days, create a new extract and import to get older data",
-            ).left()
+            val message = "cannot get data for more than 14 days, create a new extract and import to get older data"
+            raise(Error.DomainError.DataRangeTooLarge(message))
         }
 
         val statsForRangeDto = loginPaeNetworkData.getStatsForRange(

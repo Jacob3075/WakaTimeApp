@@ -30,7 +30,7 @@ fun DetailedProjectStatsDTO.toDetailedProjectStatsInRangeModel(name: String): Ag
         .let(List<OperatingSystemDTO>::fromDto)
 
     val branches = data.flatMap(Data::branches).toBranch()
-    val machines =data.flatMap(Data::machines)
+    val machines = data.flatMap(Data::machines)
         .let(List<MachineDTO>::fromDto)
 
     return AggregateProjectStatsForRange(

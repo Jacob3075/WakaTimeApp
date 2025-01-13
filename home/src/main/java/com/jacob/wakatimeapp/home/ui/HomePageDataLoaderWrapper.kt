@@ -14,7 +14,7 @@ import kotlinx.coroutines.flow.firstOrNull
 import timber.log.Timber
 
 @Singleton
-class DataLoaderWrapper @Inject constructor() {
+class HomePageDataLoaderWrapper @Inject constructor() {
     private lateinit var _loadedDataResult: Either<Error, HomePageViewState.Loaded>
     internal val loadedDataResult: Either<Error, HomePageViewState.Loaded>
         get() = _loadedDataResult

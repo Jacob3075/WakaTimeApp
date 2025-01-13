@@ -24,7 +24,6 @@ import androidx.compose.runtime.Composable
 import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
-import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.shadow
@@ -52,11 +51,13 @@ import timber.log.Timber
 fun LoginPage(
     loginPageNavigator: LoginPageNavigator,
     snackbarHostState: SnackbarHostState,
+    snackBarCoroutineScope: CoroutineScope,
     modifier: Modifier = Modifier,
 ) = LoginPage(
     loginPageNavigator = loginPageNavigator,
     snackbarHostState = snackbarHostState,
     modifier = modifier,
+    snackBarCoroutineScope = snackBarCoroutineScope,
     viewModel = hiltViewModel(),
 )
 
@@ -65,18 +66,15 @@ private fun LoginPage(
     loginPageNavigator: LoginPageNavigator,
     snackbarHostState: SnackbarHostState,
     modifier: Modifier = Modifier,
+    snackBarCoroutineScope: CoroutineScope,
     viewModel: LoginPageViewModel = hiltViewModel(),
 ) {
     val viewState by viewModel.viewState.collectAsState()
-    val snackBarCoroutineScope = rememberCoroutineScope()
     LaunchedEffect(viewState) {
         Timber.d("viewState: $viewState")
         when (val viewStateInstance = viewState) {
             is LoginPageState.NewLoginSuccess -> loginPageNavigator.toExtractUserDataPage()
-            is LoginPageState.ExistingLoginSuccess -> {
-                loginPageNavigator.preloadHomePageData()
-                loginPageNavigator.toHomePage()
-            }
+            is LoginPageState.ExistingLoginSuccess -> loginPageNavigator.toHomePage()
 
             is LoginPageState.Error -> showSnackBar(
                 viewStateInstance,

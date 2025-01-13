@@ -26,7 +26,7 @@ internal class GetProjectStatsUC @Inject constructor(
             languages = aggregateProjectStatsForRange.languages,
             operatingSystems = aggregateProjectStatsForRange.operatingSystems,
             editors = aggregateProjectStatsForRange.editors,
-            machines = aggregateProjectStatsForRange.machines
+            machines = aggregateProjectStatsForRange.machines,
         )
     }
 }

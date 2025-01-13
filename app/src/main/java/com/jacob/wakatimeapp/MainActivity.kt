@@ -15,10 +15,11 @@ import androidx.compose.material3.SnackbarHostState
 import androidx.compose.runtime.Composable
 import androidx.compose.runtime.DisposableEffect
 import androidx.compose.runtime.remember
+import androidx.compose.runtime.rememberCoroutineScope
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.platform.LocalContext
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
-import com.jacob.wakatimeapp.home.ui.DataLoaderWrapper
+import com.jacob.wakatimeapp.home.ui.HomePageDataLoaderWrapper
 import com.jacob.wakatimeapp.login.ui.destinations.LoginPageDestination
 import com.jacob.wakatimeapp.navigation.ApplicationNavigator
 import com.jacob.wakatimeapp.navigation.NavGraphs
@@ -32,7 +33,7 @@ import javax.inject.Inject
 class MainActivity : AppCompatActivity() {
 
     @Inject
-    lateinit var homePageDataLoader: DataLoaderWrapper
+    lateinit var homePageDataLoader: HomePageDataLoaderWrapper
 
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -40,6 +41,7 @@ class MainActivity : AppCompatActivity() {
         setContent {
             WakaTimeAppTheme {
                 val snackbarHostState = remember { SnackbarHostState() }
+                val coroutineScope = rememberCoroutineScope()
                 Scaffold(
                     snackbarHost = { SnackbarHost(snackbarHostState) },
                     modifier = Modifier.fillMaxSize(),
@@ -51,6 +53,7 @@ class MainActivity : AppCompatActivity() {
                         dependenciesContainerBuilder = {
                             dependency(ApplicationNavigator(destinationsNavigator, homePageDataLoader))
                             dependency(snackbarHostState)
+                            dependency(coroutineScope)
                         },
                     )
                 }

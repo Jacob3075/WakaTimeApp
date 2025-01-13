@@ -14,7 +14,7 @@ import com.jacob.wakatimeapp.login.domain.usecases.UpdateUserDetailsUC
 import com.jacob.wakatimeapp.login.ui.loading.InitialDataLoader
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
-import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.delay
 import kotlinx.coroutines.flow.MutableStateFlow
 import kotlinx.coroutines.flow.StateFlow
 import kotlinx.coroutines.flow.asStateFlow
@@ -29,14 +29,12 @@ import net.openid.appauth.AuthorizationServiceConfiguration
 import net.openid.appauth.ClientSecretPost
 import net.openid.appauth.ResponseTypeValues
 import timber.log.Timber
-import kotlin.coroutines.CoroutineContext
 
 @HiltViewModel
 internal class LoginPageViewModel @Inject constructor(
     application: Application,
     private val updateUserDetailsUC: UpdateUserDetailsUC,
     private val authTokenProvider: AuthTokenProvider,
-    private val ioDispatcher: CoroutineContext = Dispatchers.IO,
     private val initialDataLoader: InitialDataLoader,
 ) : AndroidViewModel(application) {
     private val authService = AuthorizationService(getApplication())
@@ -59,19 +57,24 @@ internal class LoginPageViewModel @Inject constructor(
     init {
         val authToken = authTokenProvider.current
         if (authToken.isAuthorized) {
-            viewModelScope.launch(ioDispatcher) {
-                updateUserDetails()
-                when (val loadDataResult = initialDataLoader.loadData()) {
-                    is Either.Left -> {
-                        when (loadDataResult.value) {
-                            is Error.DomainError.DataRangeTooLarge -> _viewState.value = LoginPageState.NewLoginSuccess
-                            else -> _viewState.value = LoginPageState.Error(loadDataResult.value.message)
-                        }
-                        _viewState.value = LoginPageState.Error(loadDataResult.value.message)
-                    }
-                    is Either.Right -> _viewState.value = LoginPageState.ExistingLoginSuccess
+            viewModelScope.launch { loadDataOnLogin() }
+        }
+    }
+
+    private suspend fun loadDataOnLogin() {
+        updateUserDetails()
+        when (val loadDataResult = initialDataLoader.loadData()) {
+            is Either.Left -> {
+                _viewState.value = LoginPageState.Error(loadDataResult.value.message)
+
+                delay(500)
+
+                if (loadDataResult.value is Error.DomainError.DataRangeTooLarge) {
+                    _viewState.value = LoginPageState.NewLoginSuccess
                 }
             }
+
+            is Either.Right -> _viewState.value = LoginPageState.ExistingLoginSuccess
         }
     }
 
@@ -121,7 +124,7 @@ internal class LoginPageViewModel @Inject constructor(
                     authorizationException,
                 )
                 if (authState.isAuthorized) {
-                    updateUserDetails()
+                    loadDataOnLogin()
                 } else {
                     _viewState.value = LoginPageState.Error("Failed to login")
                 }

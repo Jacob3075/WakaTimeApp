@@ -15,7 +15,7 @@ import kotlinx.datetime.LocalDate
 @HiltViewModel
 internal class HomePageViewModel @Inject constructor(
     private val instantProvider: InstantProvider,
-    private val dataLoaderWrapper: DataLoaderWrapper,
+    private val dataLoaderWrapper: HomePageDataLoaderWrapper,
 ) : ViewModel() {
 
     private val _homePageState = MutableStateFlow<HomePageViewState>(HomePageViewState.Loading)
