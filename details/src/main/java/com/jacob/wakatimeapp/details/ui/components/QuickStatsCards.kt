@@ -2,7 +2,6 @@ package com.jacob.wakatimeapp.details.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.ColumnScope
 import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
@@ -13,22 +12,16 @@ import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
-import androidx.compose.ui.text.TextStyle
-import androidx.compose.ui.text.buildAnnotatedString
-import androidx.compose.ui.text.font.FontWeight
-import androidx.compose.ui.text.style.BaselineShift
-import androidx.compose.ui.text.withStyle
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.secondarystats.Editors
 import com.jacob.wakatimeapp.core.models.secondarystats.Languages
 import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
+import com.jacob.wakatimeapp.core.ui.components.cards.StatsCard
 import com.jacob.wakatimeapp.core.ui.components.cards.StatsChip
-import com.jacob.wakatimeapp.core.ui.modifiers.removeFontPadding
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
-import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
@@ -58,29 +51,28 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
         Modifier.fillMaxWidth(),
         Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
     ) {
-        // TODO: REPLACE CHIP WITH CARD
-        StatsChip(
+        StatsCard(
             gradient = MaterialTheme.gradients.amin,
-            iconId = MaterialTheme.assets.icons.time,
             roundedCornerPercent = 15,
+            iconId = MaterialTheme.assets.icons.time,
+            onClick = {},
         ) {
-            ChipContent(
-                statsType = "Total Time on Project",
-                statsValue = detailsPageData.totalTime.formattedPrint(),
-                statsValueSubText = "",
+            CardContent(
+                cardSubHeading = "Total Time on Project",
+                cardHeading = detailsPageData.totalTime.formattedPrint(),
                 gradient = MaterialTheme.gradients.amin,
             )
         }
 
-        StatsChip(
-            gradient = MaterialTheme.gradients.purpink,
-            iconId = MaterialTheme.assets.icons.time,
+        StatsCard(
+            gradient = MaterialTheme.gradients.amin,
             roundedCornerPercent = 15,
+            iconId = MaterialTheme.assets.icons.time,
+            onClick = {},
         ) {
-            ChipContent(
-                statsType = "Average Time",
-                statsValue = detailsPageData.averageTime.formattedPrint(),
-                statsValueSubText = "",
+            CardContent(
+                cardSubHeading = "Average Time",
+                cardHeading = detailsPageData.averageTime.formattedPrint(),
                 gradient = MaterialTheme.gradients.purpink,
             )
         }
@@ -93,9 +85,8 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                 modifier = Modifier.weight(1f),
             ) {
                 ChipContent(
-                    statsType = "Start date",
-                    statsValue = detailsPageData.startDate.format(format),
-                    statsValueSubText = "",
+                    cardSubHeading = "Start date",
+                    cardHeading = detailsPageData.startDate.format(format),
                     gradient = MaterialTheme.gradients.quepal,
                     statValueTextStyle = MaterialTheme.typography.titleMedium,
                 )
@@ -110,9 +101,8 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                 modifier = Modifier.weight(1f),
             ) {
                 ChipContent(
-                    statsType = "No. of days worked",
-                    statsValue = detailsPageData.numberOfDaysWorked.toString(),
-                    statsValueSubText = "",
+                    cardSubHeading = "No. of days worked",
+                    cardHeading = detailsPageData.numberOfDaysWorked.toString(),
                     gradient = MaterialTheme.gradients.tealLove,
                     statValueTextStyle = MaterialTheme.typography.titleMedium,
                 )
@@ -138,37 +128,6 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             Text("Most used machine")
         }
     }
-}
-
-@Composable
-private fun ColumnScope.ChipContent(
-    statsType: String,
-    statsValue: String,
-    statsValueSubText: String,
-    gradient: Gradient,
-    statValueTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
-) {
-    Text(
-        text = buildAnnotatedString {
-            withStyle(style = statValueTextStyle.toSpanStyle()) {
-                append(statsValue)
-            }
-            withStyle(
-                style = MaterialTheme.typography.headlineSmall.copy(
-                    baselineShift = BaselineShift(multiplier = 0.5f),
-                ).toSpanStyle(),
-            ) {
-                append(" $statsValueSubText")
-            }
-        },
-        color = gradient.onStartColor,
-        modifier = Modifier.removeFontPadding(statValueTextStyle),
-    )
-    Text(
-        text = statsType,
-        color = gradient.onStartColor,
-        style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
-    )
 }
 
 @WtaPreviews

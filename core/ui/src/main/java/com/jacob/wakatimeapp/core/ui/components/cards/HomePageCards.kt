@@ -1,11 +1,8 @@
 package com.jacob.wakatimeapp.core.ui.components.cards
 
 import androidx.annotation.DrawableRes
-import androidx.compose.foundation.Image
 import androidx.compose.foundation.layout.BoxScope
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.padding
-import androidx.compose.foundation.layout.size
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -13,12 +10,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
-import androidx.compose.ui.layout.ContentScale
-import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
-import androidx.compose.ui.unit.Dp
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.models.Time
@@ -40,12 +34,12 @@ fun TimeSpentCard(
 ) = StatsCard(
     gradient = gradient,
     onClick = onClick,
+    iconId = iconId,
     roundedCornerPercent = roundedCornerPercent,
     cardContent = {
         CardContent(
             statsType = statsType,
             statsValue = "${time.hours}H, ${time.minutes}M",
-            iconId = iconId,
             gradient = gradient,
         )
     },
@@ -62,13 +56,13 @@ fun OtherStatsCard(
     gradient = gradient,
     onClick = onClick,
     roundedCornerPercent = 25,
+    iconSize = 70.dp,
+    iconId = iconId,
+    iconOffset = 90.dp,
     cardContent = {
         CardContent(
             statsType = statsType,
             statsValue = language,
-            iconOffset = 90.dp,
-            iconSize = 70.dp,
-            iconId = iconId,
             gradient = gradient,
         )
     },
@@ -78,21 +72,10 @@ fun OtherStatsCard(
 private fun BoxScope.CardContent(
     statsType: String,
     statsValue: String,
-    @DrawableRes iconId: Int,
     statsTypeWeight: Float = 1f,
     statsValueWeight: Float = 0.5f,
-    iconOffset: Dp = 50.dp,
-    iconSize: Dp = 80.dp,
     gradient: Gradient,
 ) {
-    Image(
-        painter = painterResource(id = iconId),
-        contentDescription = "",
-        contentScale = ContentScale.FillBounds,
-        modifier = Modifier
-            .padding(start = iconOffset)
-            .size(iconSize),
-    )
     Row(
         verticalAlignment = Alignment.CenterVertically,
     ) {
