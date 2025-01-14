@@ -3,10 +3,8 @@ package com.jacob.wakatimeapp.details.ui.components
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
-import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
-import androidx.compose.foundation.layout.width
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
@@ -65,7 +63,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
         }
 
         StatsCard(
-            gradient = MaterialTheme.gradients.amin,
+            gradient = MaterialTheme.gradients.purpink,
             roundedCornerPercent = 15,
             iconId = MaterialTheme.assets.icons.time,
             onClick = {},
@@ -77,7 +75,10 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             )
         }
 
-        Row(modifier = Modifier.fillMaxWidth()) {
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        ) {
             StatsChip(
                 gradient = MaterialTheme.gradients.quepal,
                 iconId = MaterialTheme.assets.icons.time,
@@ -92,10 +93,8 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                 )
             }
 
-            Spacer(modifier = Modifier.width(MaterialTheme.spacing.small))
-
             StatsChip(
-                gradient = MaterialTheme.gradients.tealLove,
+                gradient = MaterialTheme.gradients.quepal,
                 iconId = MaterialTheme.assets.icons.time,
                 roundedCornerPercent = 15,
                 modifier = Modifier.weight(1f),
@@ -103,13 +102,78 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                 ChipContent(
                     cardSubHeading = "No. of days worked",
                     cardHeading = detailsPageData.numberOfDaysWorked.toString(),
-                    gradient = MaterialTheme.gradients.tealLove,
+                    gradient = MaterialTheme.gradients.quepal,
                     statValueTextStyle = MaterialTheme.typography.titleMedium,
                 )
             }
         }
 
-        // TODO: ADD PENDING CARDS/CHIPS TO UI
+        // TODO: MERGE BELOW 2 ROWS INTO 1 AND MAKE THEN INTERACTABLE, CHIPS SWAP WHEN CLICKED
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        ) {
+            StatsChip(
+                gradient = MaterialTheme.gradients.shifter,
+                iconId = MaterialTheme.assets.icons.time,
+                roundedCornerPercent = 15,
+                modifier = Modifier.weight(1f),
+            ) {
+                ChipContent(
+                    cardSubHeading = "Longest Streak",
+                    cardHeading = "${detailsPageData.longestStreakInProject.days} Days",
+                    gradient = MaterialTheme.gradients.shifter,
+                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                )
+            }
+
+            StatsChip(
+                gradient = MaterialTheme.gradients.shifter,
+                iconId = MaterialTheme.assets.icons.time,
+                roundedCornerPercent = 15,
+                modifier = Modifier.weight(1f),
+            ) {
+                ChipContent(
+                    cardSubHeading = "Current Streak",
+                    cardHeading = "${detailsPageData.currentStreakInProject.days} Days",
+                    gradient = MaterialTheme.gradients.shifter,
+                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                )
+            }
+        }
+
+        Row(
+            modifier = Modifier.fillMaxWidth(),
+            horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
+        ) {
+            StatsChip(
+                gradient = MaterialTheme.gradients.flare,
+                iconId = MaterialTheme.assets.icons.time,
+                roundedCornerPercent = 15,
+                modifier = Modifier.weight(1f),
+            ) {
+                ChipContent(
+                    cardSubHeading = "Day Most Worked",
+                    cardHeading = detailsPageData.dayMostWorked.format(format),
+                    gradient = MaterialTheme.gradients.flare,
+                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                )
+            }
+
+            StatsChip(
+                gradient = MaterialTheme.gradients.flare,
+                iconId = MaterialTheme.assets.icons.time,
+                roundedCornerPercent = 15,
+                modifier = Modifier.weight(1f),
+            ) {
+                ChipContent(
+                    cardSubHeading = "Most Time in 1 Day",
+                    cardHeading = detailsPageData.maxTimeWorkedInDay.formattedPrint(),
+                    gradient = MaterialTheme.gradients.flare,
+                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                )
+            }
+        }
 
         Row(modifier = Modifier.fillMaxWidth()) {
             // expandable cards
