@@ -12,6 +12,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.text.TextStyle
 import androidx.compose.ui.text.font.FontWeight
 import androidx.compose.ui.text.style.TextAlign
@@ -36,18 +37,26 @@ internal fun ColumnScope.ChipContent(
     cardSubHeading: String,
     cardHeading: String,
     gradient: Gradient,
+    rotationX: Float = 0f,
     statValueTextStyle: TextStyle = MaterialTheme.typography.displayLarge,
 ) {
     Text(
         text = cardHeading,
         color = gradient.onStartColor,
         style = MaterialTheme.typography.titleLarge,
-        modifier = Modifier.removeFontPadding(statValueTextStyle),
+        modifier = Modifier
+            .removeFontPadding(statValueTextStyle)
+            .graphicsLayer {
+                this.rotationX = rotationX
+            },
     )
     Text(
         text = cardSubHeading,
         color = gradient.onStartColor,
         style = MaterialTheme.typography.bodyMedium.copy(fontWeight = FontWeight.Light),
+        modifier = Modifier.graphicsLayer {
+            this.rotationX = rotationX
+        },
     )
 }
 
@@ -59,7 +68,8 @@ internal fun BoxScope.CardContent(
 ) {
     Column(
         horizontalAlignment = Alignment.Start,
-        modifier = Modifier.fillMaxWidth()
+        modifier = Modifier
+            .fillMaxWidth()
             .padding(horizontal = MaterialTheme.spacing.medium)
             .padding(bottom = MaterialTheme.spacing.extraSmall),
     ) {

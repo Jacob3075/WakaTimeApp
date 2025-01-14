@@ -5,6 +5,9 @@ import kotlinx.datetime.Instant
 import kotlinx.datetime.LocalDate
 import kotlinx.datetime.TimeZone
 import kotlinx.datetime.daysUntil
+import kotlinx.datetime.format
+import kotlinx.datetime.format.DateTimeFormat
+import kotlinx.datetime.format.char
 import kotlinx.datetime.minus
 import kotlinx.datetime.plus
 import kotlinx.datetime.toLocalDateTime
@@ -12,12 +15,25 @@ import kotlinx.serialization.Serializable
 import timber.log.Timber
 import kotlin.collections.Map.Entry
 
+private const val EpochYear = 1970
+
 @Serializable
 data class Streak(
     val start: LocalDate,
     val end: LocalDate,
 ) : Comparable<Streak> {
     val days: Int = if (this == ZERO) 0 else start.daysUntil(end) + 1
+
+    private val streakFormat = LocalDate.Format {
+        dayOfMonth()
+        char('/')
+        monthNumber()
+        char('/')
+        yearTwoDigits(EpochYear)
+    }
+
+    fun formattedPrintRange(format: DateTimeFormat<LocalDate>? = null): String =
+        "${start.format(format ?: streakFormat)} to ${end.format(format ?: streakFormat)}"
 
     operator fun plus(other: Streak) = when {
         this == ZERO -> other
