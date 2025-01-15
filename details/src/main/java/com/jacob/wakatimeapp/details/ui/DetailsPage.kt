@@ -1,14 +1,11 @@
 package com.jacob.wakatimeapp.details.ui
 
-import androidx.compose.foundation.ExperimentalFoundationApi
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.layout.statusBarsPadding
-import androidx.compose.foundation.pager.HorizontalPager
-import androidx.compose.foundation.pager.rememberPagerState
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.SnackbarDuration.Long
 import androidx.compose.material3.SnackbarHostState
@@ -24,10 +21,6 @@ import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.details.ui.components.DetailsPageHeader
-import com.jacob.wakatimeapp.details.ui.components.EditorsTab
-import com.jacob.wakatimeapp.details.ui.components.LanguagesTab
-import com.jacob.wakatimeapp.details.ui.components.OperatingSystemsTab
-import com.jacob.wakatimeapp.details.ui.components.TabBar
 import com.jacob.wakatimeapp.details.ui.components.Tabs
 import com.jacob.wakatimeapp.details.ui.components.TimeTab
 import com.ramcosta.composedestinations.annotation.Destination
@@ -85,21 +78,14 @@ private fun DetailsPageScreen(
     }
 }
 
-@OptIn(ExperimentalFoundationApi::class)
 @Composable
 private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded, today: LocalDate) {
-    val pages = listOf(
+    listOf(
         Tabs.Time,
         Tabs.Languages,
         Tabs.Editors,
         Tabs.OperatingSystems,
     ).toImmutableList()
-
-    val pagerState = rememberPagerState(
-        initialPage = 0,
-        initialPageOffsetFraction = 0.0f,
-        pageCount = { pages.size },
-    )
 
     Column {
         Spacer(modifier = Modifier.height(MaterialTheme.spacing.small))
@@ -109,19 +95,7 @@ private fun DetailsPageLoaded(viewState: DetailsPageViewState.Loaded, today: Loc
             modifier = Modifier.padding(horizontal = MaterialTheme.spacing.extraSmall),
         )
 
-        TabBar(pagerState, pages)
-
-        HorizontalPager(
-            state = pagerState,
-            beyondBoundsPageCount = 1,
-        ) { page ->
-            when (pages[page]) {
-                Tabs.Time -> TimeTab(detailsPageData = viewState, today)
-                Tabs.Languages -> LanguagesTab()
-                Tabs.Editors -> EditorsTab()
-                Tabs.OperatingSystems -> OperatingSystemsTab()
-            }
-        }
+        TimeTab(detailsPageData = viewState, today)
     }
 }
 

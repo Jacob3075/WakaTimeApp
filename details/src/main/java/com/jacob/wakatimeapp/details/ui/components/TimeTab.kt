@@ -1,8 +1,10 @@
 package com.jacob.wakatimeapp.details.ui.components
 
 import androidx.compose.foundation.layout.Arrangement
+import androidx.compose.foundation.layout.Spacer
 import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
+import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
 import androidx.compose.foundation.lazy.LazyColumn
 import androidx.compose.foundation.shape.RoundedCornerShape
@@ -41,6 +43,7 @@ internal fun TimeTab(detailsPageData: DetailsPageViewState.Loaded, today: LocalD
             .padding(horizontal = MaterialTheme.spacing.sMedium),
     ) {
         item { RecentTimeSpentChart(detailsPageData, today) }
+        item { Spacer(modifier = Modifier.height(MaterialTheme.spacing.small)) }
         item { QuickStatsCards(detailsPageData) }
         projectHistory(detailsPageData)
     }

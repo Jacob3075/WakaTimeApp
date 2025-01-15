@@ -22,18 +22,19 @@ import androidx.compose.ui.tooling.preview.PreviewParameter
 import androidx.compose.ui.tooling.preview.datasource.CollectionPreviewParameterProvider
 import androidx.hilt.navigation.compose.hiltViewModel
 import com.jacob.wakatimeapp.core.models.Error
+import com.jacob.wakatimeapp.core.models.Streak
 import com.jacob.wakatimeapp.core.models.Time
 import com.jacob.wakatimeapp.core.models.project.Project
 import com.jacob.wakatimeapp.core.ui.WtaDevicePreviews
 import com.jacob.wakatimeapp.core.ui.components.WtaAnimation
-import com.jacob.wakatimeapp.core.ui.components.cards.TimeSpentCard
+import com.jacob.wakatimeapp.core.ui.components.cards.StatsCard
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.home.domain.models.HomePageUserDetails
 import com.jacob.wakatimeapp.home.domain.models.Last7DaysStats
-import com.jacob.wakatimeapp.core.models.Streak
+import com.jacob.wakatimeapp.home.ui.components.CardContent
 import com.jacob.wakatimeapp.home.ui.components.OtherDailyStatsSection
 import com.jacob.wakatimeapp.home.ui.components.RecentProjects
 import com.jacob.wakatimeapp.home.ui.components.UserDetailsSection
@@ -129,13 +130,19 @@ private fun HomePageLoaded(
             photoUrl = homePageViewState.userDetails.photoUrl,
         )
 
-        TimeSpentCard(
-            statsType = "Total Time Spent Today",
-            time = homePageViewState.last7DaysStats.timeSpentToday,
+        StatsCard(
             gradient = MaterialTheme.gradients.facebookMessenger,
+            onClick = {},
             iconId = icons.time,
             roundedCornerPercent = 25,
-            onClick = {},
+            cardContent = {
+                val timeSpentToday = homePageViewState.last7DaysStats.timeSpentToday
+                CardContent(
+                    statsType = "Total Time Spent Today",
+                    statsValue = "${timeSpentToday.hours}H, ${timeSpentToday.minutes}M",
+                    gradient = MaterialTheme.gradients.facebookMessenger,
+                )
+            },
         )
         Spacer(modifier = Modifier.height(spacing.small))
 
