@@ -9,7 +9,7 @@ Uses `Export API` to get all user stats without having to upgrade your account
 | Login                | ![Login Page](/assets/imgs/Login.png)                           | ![Loading extracts from WakaTime](/assets/imgs/Extract.png)                                   |
 |----------------------|-----------------------------------------------------------------|-----------------------------------------------------------------------------------------------|
 | Home Page            | ![Home Page 1](/assets/imgs/HomePage1.png)                      | ![Home Page 2](/assets/imgs/HomePage2.png)                                                    |
-| Search Page          | ![Search Page 1](/assets/imgs/SearchPage1.png)                  | <video src="https://github.com/user-attachments/assets/d5e0292b-1e9d-40e6-b165-513050d5bfae"> |
+| Search Page          | ![Search Page 1](/assets/imgs/SearchPage1.png)                  | <video src="https://github.com/user-attachments/assets/07063fc1-d230-4240-bbc0-cf55d2d750d2"> |
 | Project Details Page | ![Project Details Page 1](/assets/imgs/ProjectDetailsPage1.png) | <video src="https://github.com/user-attachments/assets/d5e0292b-1e9d-40e6-b165-513050d5bfae"> |
 
 ## TODO
