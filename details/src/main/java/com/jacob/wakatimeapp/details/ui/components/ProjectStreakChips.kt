@@ -9,7 +9,9 @@ import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
 import com.jacob.wakatimeapp.core.models.Streak
-import com.jacob.wakatimeapp.core.ui.components.cards.InteractableStatsChip
+import com.jacob.wakatimeapp.core.ui.components.cards.FlippableStatsChip
+import com.jacob.wakatimeapp.core.ui.theme.assets
+import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
 import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.core.ui.theme.spacing
 import com.jacob.wakatimeapp.details.ui.DetailsPageViewState
@@ -20,9 +22,10 @@ internal fun ProjectStreakChips(detailsPageData: DetailsPageViewState.Loaded, mo
         modifier = modifier.fillMaxWidth(),
         horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
     ) {
-        InteractableStatsChip(
+        FlippableStatsChip(
             modifier = Modifier.weight(1f),
             gradient = MaterialTheme.gradients.shifter,
+            iconId = MaterialTheme.assets.icons.longestStreak,
             frontContent = {
                 ChipContent(
                     cardHeading = "${detailsPageData.longestStreakInProject.days} Days",
@@ -31,28 +34,33 @@ internal fun ProjectStreakChips(detailsPageData: DetailsPageViewState.Loaded, mo
                     statValueTextStyle = MaterialTheme.typography.titleMedium,
                 )
             },
-            backContent = { StreakRangeDisplay(detailsPageData.longestStreakInProject) },
+            backContent = {
+                StreakRangeDisplay(
+                    detailsPageData.longestStreakInProject,
+                    MaterialTheme.gradients.shifter,
+                )
+            },
         )
 
-        InteractableStatsChip(
+        FlippableStatsChip(
             modifier = Modifier.weight(1f),
-            gradient = MaterialTheme.gradients.shifter,
+            gradient = MaterialTheme.gradients.reef,
+            iconId = MaterialTheme.assets.icons.streak,
             frontContent = {
                 ChipContent(
                     cardHeading = "${detailsPageData.currentStreakInProject.days} Days",
                     cardSubHeading = "Current Streak",
-                    gradient = MaterialTheme.gradients.shifter,
+                    gradient = MaterialTheme.gradients.reef,
                     statValueTextStyle = MaterialTheme.typography.titleMedium,
                 )
             },
-            backContent = { StreakRangeDisplay(detailsPageData.currentStreakInProject) },
+            backContent = { StreakRangeDisplay(detailsPageData.currentStreakInProject, MaterialTheme.gradients.reef) },
         )
     }
 }
 
 @Composable
-private fun StreakRangeDisplay(streak: Streak) {
-    val gradient = MaterialTheme.gradients.shifter
+private fun StreakRangeDisplay(streak: Streak, gradient: Gradient) {
     Text(
         text = streak.formattedPrintRange(),
         color = gradient.onStartColor,

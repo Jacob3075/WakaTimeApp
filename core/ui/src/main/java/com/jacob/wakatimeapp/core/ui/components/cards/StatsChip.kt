@@ -1,7 +1,6 @@
 package com.jacob.wakatimeapp.core.ui.components.cards
 
 import androidx.annotation.DrawableRes
-import androidx.compose.animation.core.animateFloatAsState
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.clickable
@@ -17,10 +16,6 @@ import androidx.compose.foundation.shape.RoundedCornerShape
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.runtime.Composable
-import androidx.compose.runtime.getValue
-import androidx.compose.runtime.mutableStateOf
-import androidx.compose.runtime.remember
-import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.clip
@@ -30,6 +25,7 @@ import androidx.compose.ui.graphics.graphicsLayer
 import androidx.compose.ui.res.painterResource
 import androidx.compose.ui.unit.dp
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
+import com.jacob.wakatimeapp.core.ui.components.rememberFlippableState
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
@@ -60,6 +56,7 @@ fun StatsChip(
             painter = painterResource(iconId),
             contentDescription = null,
             colorFilter = ColorFilter.tint(gradient.onEndColor),
+            alpha = 0.2f,
             modifier = Modifier
                 .padding(
                     end = MaterialTheme.spacing.small,
@@ -83,41 +80,27 @@ fun StatsChip(
     }
 }
 
-/**
- * [Rotating on Axis in 3D](https://www.youtube.com/watch?v=WdQUDHOwlgE&t=148s)
- * [Resetting Animation for each click](https://stackoverflow.com/questions/78620347/repeat-animation-when-user-clicks-jetpack-compose-android)
- * [Showing the back of the card correctly](https://medium.com/bilue/card-flip-animation-with-jetpack-compose-f60aaaad4ac9)
- */
 @Composable
-fun InteractableStatsChip(
+fun FlippableStatsChip(
     modifier: Modifier,
     gradient: Gradient,
     iconId: Int = MaterialTheme.assets.icons.time,
     frontContent: @Composable ColumnScope.() -> Unit = {},
     backContent: @Composable ColumnScope.() -> Unit = {},
 ) {
-    var isFlipped by remember { mutableStateOf(false) }
-    val rotationXAnimation = animateFloatAsState(targetValue = if (isFlipped) 180f else 0f)
-
-    val contentToShow = remember(rotationXAnimation.value) {
-        if (rotationXAnimation.value < 90f) frontContent else backContent
-    }
-
-    val innerRotation = remember(rotationXAnimation.value) {
-        if (rotationXAnimation.value < 90f) 0f else 180f
-    }
+    val flippableState = rememberFlippableState(frontContent, backContent)
 
     StatsChip(
         gradient = gradient,
         iconId = iconId,
         roundedCornerPercent = 15,
-        onClick = { isFlipped = !isFlipped },
+        onClick = { flippableState.isFlipped.value = !flippableState.isFlipped.value },
         modifier = modifier.graphicsLayer {
-            this.rotationX = rotationXAnimation.value
+            this.rotationX = flippableState.rotationAnimationValue.value
             this.cameraDistance = 8 * this.density
         },
-        rotation = innerRotation,
-        chipContent = { contentToShow() },
+        rotation = flippableState.innerRotation,
+        chipContent = flippableState.contentToShow,
     )
 }
 

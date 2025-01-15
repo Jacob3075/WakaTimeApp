@@ -7,7 +7,6 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
-import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import com.jacob.wakatimeapp.core.models.Time
@@ -16,8 +15,8 @@ import com.jacob.wakatimeapp.core.models.secondarystats.Languages
 import com.jacob.wakatimeapp.core.models.secondarystats.Machines
 import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import com.jacob.wakatimeapp.core.ui.WtaPreviews
-import com.jacob.wakatimeapp.core.ui.components.cards.InteractableStatsChip
-import com.jacob.wakatimeapp.core.ui.components.cards.StatsCard
+import com.jacob.wakatimeapp.core.ui.components.cards.FlippableStatsCard
+import com.jacob.wakatimeapp.core.ui.components.cards.FlippableStatsChip
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
 import com.jacob.wakatimeapp.core.ui.theme.assets
 import com.jacob.wakatimeapp.core.ui.theme.gradients
@@ -49,32 +48,25 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
         Modifier.fillMaxWidth(),
         Arrangement.spacedBy(MaterialTheme.spacing.sMedium),
     ) {
-        // TODO: MERGE BELOW 2 CARDS INTO 1 AND MAKE THEN INTERACTABLE, CARDS SWAP WHEN CLICKED
-        StatsCard(
-            gradient = MaterialTheme.gradients.amin,
-            roundedCornerPercent = 15,
-            iconId = MaterialTheme.assets.icons.time,
-            onClick = {},
-        ) {
-            CardContent(
-                cardSubHeading = "Total Time on Project",
-                cardHeading = detailsPageData.totalTime.formattedPrint(),
-                gradient = MaterialTheme.gradients.amin,
-            )
-        }
-
-        StatsCard(
+        FlippableStatsCard(
             gradient = MaterialTheme.gradients.purpink,
             roundedCornerPercent = 15,
             iconId = MaterialTheme.assets.icons.time,
-            onClick = {},
-        ) {
-            CardContent(
-                cardSubHeading = "Average Time",
-                cardHeading = detailsPageData.averageTime.formattedPrint(),
-                gradient = MaterialTheme.gradients.purpink,
-            )
-        }
+            frontContent = {
+                CardContent(
+                    cardSubHeading = "Total Time on Project",
+                    cardHeading = detailsPageData.totalTime.formattedPrint(),
+                    gradient = MaterialTheme.gradients.purpink,
+                )
+            },
+            backContent = {
+                CardContent(
+                    cardSubHeading = "Average Time",
+                    cardHeading = detailsPageData.averageTime.formattedPrint(),
+                    gradient = MaterialTheme.gradients.purpink,
+                )
+            },
+        )
 
         ProjectStreakChips(detailsPageData)
 
@@ -82,7 +74,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             modifier = Modifier.fillMaxWidth(),
             horizontalArrangement = Arrangement.spacedBy(MaterialTheme.spacing.small),
         ) {
-            InteractableStatsChip(
+            FlippableStatsChip(
                 modifier = Modifier.weight(1f),
                 gradient = MaterialTheme.gradients.quepal,
                 frontContent = {
@@ -102,7 +94,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                     )
                 },
             )
-            InteractableStatsChip(
+            FlippableStatsChip(
                 modifier = Modifier.weight(1f),
                 gradient = MaterialTheme.gradients.flare,
                 frontContent = {
@@ -135,10 +127,10 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             // after clicking/expanding
             // 🟥🟥
             // 🟥🟥
-            Text("Most used language")
-            Text("Most used editor")
-            Text("Most used os")
-            Text("Most used machine")
+//            Text("Most used language")
+//            Text("Most used editor")
+//            Text("Most used os")
+//            Text("Most used machine")
         }
     }
 }
