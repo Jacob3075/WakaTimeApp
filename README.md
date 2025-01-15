@@ -6,10 +6,10 @@ Uses `Export API` to get all user stats without having to upgrade your account
 
 ## Screenshots
 
-| Login                | ![Login Page](/assets/imgs/Login.png)                 | ![Loading extracts from WakaTime](/assets/imgs/Extract.png) |
-|----------------------|-------------------------------------------------------|-------------------------------------------------------------|
-| Home Page            | ![Home Page 1](/assets/imgs/HomePage1.png)            | ![Home Page 2](/assets/imgs/HomePage2.png)                  |
-| Project Details Page | ![Project Details Page 1](/assets/imgs/HomePage1.png) | ![Home Page 2](/assets/vids/ProjectDetails1.webm)           |
+| Login                | ![Login Page](/assets/imgs/Login.png)                 | ![Loading extracts from WakaTime](/assets/imgs/Extract.png)  |
+|----------------------|-------------------------------------------------------|--------------------------------------------------------------|
+| Home Page            | ![Home Page 1](/assets/imgs/HomePage1.png)            | ![Home Page 2](/assets/imgs/HomePage2.png)                   |
+| Project Details Page | ![Project Details Page 1](/assets/imgs/HomePage1.png) | ![Project Details Page 2](/assets/vids/ProjectDetails1.webm) |
 
 ## TODO
 
