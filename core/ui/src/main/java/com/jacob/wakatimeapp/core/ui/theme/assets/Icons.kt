@@ -26,4 +26,19 @@ object Icons {
 
     @DrawableRes
     val placeholder = drawable.place_holder
+
+    @DrawableRes
+    val calendar = drawable.ic_calendar
+
+    @DrawableRes
+    val longestStreakColor = drawable.ic_longest_streak_color
+
+    @DrawableRes
+    val longestStreak = drawable.ic_longest_streak
+
+    @DrawableRes
+    val streakColor = drawable.ic_streak_color
+
+    @DrawableRes
+    val streak = drawable.ic_streak
 }
