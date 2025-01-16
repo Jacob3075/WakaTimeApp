@@ -43,7 +43,7 @@ internal fun ColumnScope.ChipContent(
     Text(
         text = cardHeading,
         color = gradient.onStartColor,
-        style = MaterialTheme.typography.titleLarge,
+        style = statValueTextStyle,
         modifier = Modifier
             .removeFontPadding(statValueTextStyle)
             .graphicsLayer {
@@ -76,15 +76,16 @@ internal fun BoxScope.CardContent(
         Text(
             text = cardHeading,
             textAlign = TextAlign.End,
-            style = MaterialTheme.typography.displayLarge,
+            style = MaterialTheme.typography.displaySmall,
             color = gradient.onEndColor,
-            modifier = Modifier.removeFontPadding(MaterialTheme.typography.displayLarge),
+            modifier = Modifier.removeFontPadding(MaterialTheme.typography.displaySmall),
         )
         Text(
             text = cardSubHeading,
             style = MaterialTheme.typography.cardContent,
             color = gradient.onStartColor,
         )
+
     }
 }
 

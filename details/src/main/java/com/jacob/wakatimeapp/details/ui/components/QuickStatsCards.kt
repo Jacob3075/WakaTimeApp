@@ -77,12 +77,13 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             FlippableStatsChip(
                 modifier = Modifier.weight(1f),
                 gradient = MaterialTheme.gradients.quepal,
+                iconId = MaterialTheme.assets.icons.calendar,
                 frontContent = {
                     ChipContent(
                         cardSubHeading = "Start date",
                         cardHeading = detailsPageData.startDate.format(format),
                         gradient = MaterialTheme.gradients.quepal,
-                        statValueTextStyle = MaterialTheme.typography.titleMedium,
+                        statValueTextStyle = MaterialTheme.typography.titleLarge,
                     )
                 },
                 backContent = {
@@ -90,19 +91,20 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                         cardSubHeading = "No. of days worked",
                         cardHeading = detailsPageData.numberOfDaysWorked.toString(),
                         gradient = MaterialTheme.gradients.quepal,
-                        statValueTextStyle = MaterialTheme.typography.titleMedium,
+                        statValueTextStyle = MaterialTheme.typography.headlineSmall,
                     )
                 },
             )
             FlippableStatsChip(
                 modifier = Modifier.weight(1f),
                 gradient = MaterialTheme.gradients.flare,
+                iconId = MaterialTheme.assets.icons.calendar,
                 frontContent = {
                     ChipContent(
                         cardHeading = detailsPageData.dayMostWorked.format(format),
                         cardSubHeading = "Day Most Worked",
                         gradient = MaterialTheme.gradients.flare,
-                        statValueTextStyle = MaterialTheme.typography.titleMedium,
+                        statValueTextStyle = MaterialTheme.typography.titleLarge,
                     )
                 },
                 backContent = {
@@ -110,7 +112,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                         cardHeading = detailsPageData.maxTimeWorkedInDay.formattedPrint(),
                         cardSubHeading = "Most Time in 1 Day",
                         gradient = MaterialTheme.gradients.flare,
-                        statValueTextStyle = MaterialTheme.typography.titleMedium,
+                        statValueTextStyle = MaterialTheme.typography.headlineSmall,
                     )
                 },
             )

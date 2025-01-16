@@ -8,6 +8,7 @@ import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.unit.sp
 import com.jacob.wakatimeapp.core.models.Streak
 import com.jacob.wakatimeapp.core.ui.components.cards.FlippableStatsChip
 import com.jacob.wakatimeapp.core.ui.theme.assets
@@ -31,7 +32,7 @@ internal fun ProjectStreakChips(detailsPageData: DetailsPageViewState.Loaded, mo
                     cardHeading = "${detailsPageData.longestStreakInProject.days} Days",
                     cardSubHeading = "Longest Streak",
                     gradient = MaterialTheme.gradients.shifter,
-                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                    statValueTextStyle = MaterialTheme.typography.headlineSmall,
                 )
             },
             backContent = {
@@ -51,7 +52,7 @@ internal fun ProjectStreakChips(detailsPageData: DetailsPageViewState.Loaded, mo
                     cardHeading = "${detailsPageData.currentStreakInProject.days} Days",
                     cardSubHeading = "Current Streak",
                     gradient = MaterialTheme.gradients.reef,
-                    statValueTextStyle = MaterialTheme.typography.titleMedium,
+                    statValueTextStyle = MaterialTheme.typography.headlineSmall,
                 )
             },
             backContent = { StreakRangeDisplay(detailsPageData.currentStreakInProject, MaterialTheme.gradients.reef) },
@@ -64,7 +65,9 @@ private fun StreakRangeDisplay(streak: Streak, gradient: Gradient) {
     Text(
         text = streak.formattedPrintRange(),
         color = gradient.onStartColor,
-        style = MaterialTheme.typography.bodyLarge,
+        style = MaterialTheme.typography.titleSmall.copy(
+            fontSize = 18.sp
+        ),
     )
     Text(
         text = "Streak Range",

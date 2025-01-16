@@ -41,22 +41,24 @@ fun List<ProjectPerDay>.toModel(): ImmutableList<Project> {
 
 fun List<DayWithProjects>.toLast7RangeDaysStats(): Last7DaysStats {
     val mostUsedLanguage = flatMap {
-        it.projectsForDay
-            .flatMap { projectPerDay -> projectPerDay.languages.values }
-    }.maxByOrNull { it.time.totalSeconds }
+        it.projectsForDay.map { projectPerDay -> projectPerDay.languages.mostUsed }
+    }.filterNotNull()
+        .maxByOrNull { it.time.totalSeconds }
 
     val mostUsedEditor = flatMap {
-        it.projectsForDay
-            .flatMap { projectPerDay -> projectPerDay.editors.values }
-    }.maxByOrNull { it.time.totalSeconds }
+        it.projectsForDay.map { projectPerDay -> projectPerDay.editors.mostUsed }
+    }.filterNotNull()
+        .maxByOrNull { it.time.totalSeconds }
 
     val mostUsedOperatingSystem = flatMap {
-        it.projectsForDay
-            .flatMap { projectPerDay -> projectPerDay.operatingSystems.values }
-    }.maxByOrNull { it.time.totalSeconds }
+        it.projectsForDay.map { projectPerDay -> projectPerDay.operatingSystems.mostUsed }
+    }.filterNotNull()
+        .maxByOrNull { it.time.totalSeconds }
 
     val todaysStats = maxByOrNull { it.day.date }
-    val projectWorkedOnToday = (todaysStats?.projectsForDay ?: emptyList()).toModel()
+    val projectWorkedOnToday = (todaysStats?.projectsForDay ?: emptyList())
+        .filter { it.grandTotal != Time.ZERO }
+        .toModel()
     return Last7DaysStats(
         timeSpentToday = todaysStats?.day?.grandTotal ?: Time.ZERO,
         projectsWorkedOn = projectWorkedOnToday,
