@@ -1,15 +1,15 @@
 package com.jacob.wakatimeapp.details.ui.components
 
-import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsTypes.EDITOR
-import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsTypes.LANGUAGE
-import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsTypes.MACHINE
-import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsTypes.OS
+import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsAnimationDetails.EDITOR
+import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsAnimationDetails.LANGUAGE
+import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsAnimationDetails.MACHINE
+import com.jacob.wakatimeapp.details.ui.components.SecondaryStatsAnimationDetails.OS
 import org.junit.jupiter.api.Assertions.assertEquals
 import org.junit.jupiter.api.Test
 
 // SecondaryStatsTypes.LANGUAGE, SecondaryStatsTypes.EDITOR,
 // SecondaryStatsTypes.OS, SecondaryStatsTypes.MACHINE
-class SecondaryStatsTypesTest {
+class SecondaryStatsAnimationDetailsTest {
     @Test
     fun `chips should move in correct direction WRT language `() {
         assertEquals(Pair(0, 0), LANGUAGE.directionToMoveWRT(LANGUAGE))

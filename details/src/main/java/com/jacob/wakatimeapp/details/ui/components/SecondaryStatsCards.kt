@@ -8,6 +8,7 @@ import androidx.compose.foundation.layout.aspectRatio
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.offset
+import androidx.compose.material3.MaterialTheme
 import androidx.compose.material3.Surface
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
@@ -30,31 +31,15 @@ import com.jacob.wakatimeapp.core.models.secondarystats.OperatingSystems
 import com.jacob.wakatimeapp.core.models.secondarystats.SecondaryStats
 import com.jacob.wakatimeapp.core.ui.WtaComponentPreviews
 import com.jacob.wakatimeapp.core.ui.theme.WakaTimeAppTheme
+import com.jacob.wakatimeapp.core.ui.theme.colors.Gradient
+import com.jacob.wakatimeapp.core.ui.theme.gradients
 import com.jacob.wakatimeapp.details.domain.models.DetailedProjectStatsUiData
 import kotlinx.collections.immutable.toImmutableMap
 import kotlinx.datetime.LocalDate
 
-/**
- * expandable cards
- * could replace tabs?
- * when clicking on one of the cards will expand that card and shrink the other
- * will expand in both X and Y, show pie chart after expanding
- *
- * before clicking/expanding
- *
- * 🟥 🟦
- *
- * 🟧 🟪
- *
- * after clicking/expanding
- *
- * 🟥🟥
- *
- * 🟥🟥
- */
 @Composable
 fun SecondaryStatsCards(uiData: DetailedProjectStatsUiData, modifier: Modifier = Modifier) {
-    var currentStat by remember { mutableStateOf(SecondaryStatsTypes.NONE) }
+    var currentStat by remember { mutableStateOf(SecondaryStatsAnimationDetails.NONE) }
 
     Column(
         modifier = modifier
@@ -68,41 +53,63 @@ fun SecondaryStatsCards(uiData: DetailedProjectStatsUiData, modifier: Modifier =
         ) {
             SecondaryStatsChip(
                 uiData.languages,
-                SecondaryStatsTypes.LANGUAGE,
+                SecondaryStatsAnimationDetails.LANGUAGE,
                 currentStat,
                 modifier = Modifier.weight(1f),
-            ) { currentStat = SecondaryStatsTypes.LANGUAGE }
+                expand = {
+                    currentStat = secondaryStatsAnimationDetails(currentStat, SecondaryStatsAnimationDetails.LANGUAGE)
+                },
+            )
             SecondaryStatsChip(
                 uiData.editors,
-                SecondaryStatsTypes.EDITOR,
+                SecondaryStatsAnimationDetails.EDITOR,
                 currentStat,
                 modifier = Modifier.weight(1f),
-            ) { currentStat = SecondaryStatsTypes.EDITOR }
+                expand = {
+                    currentStat = secondaryStatsAnimationDetails(currentStat, SecondaryStatsAnimationDetails.EDITOR)
+                },
+            )
         }
         Row(modifier = modifier.weight(1f)) {
             SecondaryStatsChip(
                 uiData.operatingSystems,
-                SecondaryStatsTypes.OS,
+                SecondaryStatsAnimationDetails.OS,
                 currentStat,
                 modifier = Modifier.weight(1f),
-            ) { currentStat = SecondaryStatsTypes.OS }
+                expand = {
+                    currentStat = secondaryStatsAnimationDetails(currentStat, SecondaryStatsAnimationDetails.OS)
+                },
+            )
             SecondaryStatsChip(
                 uiData.machines,
-                SecondaryStatsTypes.MACHINE,
+                SecondaryStatsAnimationDetails.MACHINE,
                 currentStat,
                 modifier = Modifier.weight(1f),
-            ) { currentStat = SecondaryStatsTypes.MACHINE }
+                expand = {
+                    currentStat = secondaryStatsAnimationDetails(currentStat, SecondaryStatsAnimationDetails.MACHINE)
+                },
+            )
         }
     }
+}
+
+private fun secondaryStatsAnimationDetails(
+    currentStat: SecondaryStatsAnimationDetails,
+    secondaryStatsAnimationDetails: SecondaryStatsAnimationDetails,
+) = if (currentStat == SecondaryStatsAnimationDetails.NONE) {
+    secondaryStatsAnimationDetails
+} else {
+    SecondaryStatsAnimationDetails.NONE
 }
 
 @Composable
 private fun SecondaryStatsChip(
     secondaryStats: SecondaryStats<*>,
-    chipType: SecondaryStatsTypes,
-    selectedChip: SecondaryStatsTypes,
+    chipType: SecondaryStatsAnimationDetails,
+    selectedChip: SecondaryStatsAnimationDetails,
     modifier: Modifier = Modifier,
-    onClick: () -> Unit,
+    gradient: Gradient = MaterialTheme.gradients.purpink,
+    expand: () -> Unit,
 ) {
     val finalDirectionToMove = remember(chipType, selectedChip) { chipType.directionToMoveWRT(selectedChip) }
     val xValue = finalDirectionToMove.first * 1000
@@ -115,53 +122,8 @@ private fun SecondaryStatsChip(
         "Most used ${chipType.statName}: ${secondaryStats.mostUsed?.name ?: "N/A"}",
         modifier = modifier
             .offset { offsetAsState }
-            .clickable(onClick = onClick),
+            .clickable(onClick = expand),
     )
-}
-
-class AnimationDirections(val xAxis: Boolean, val yAxis: Boolean)
-
-@Suppress("BooleanLiteralArgument")
-enum class SecondaryStatsTypes(
-    val statName: String,
-    private val index: Int,
-    private val pushDirection: AnimationDirections,
-) {
-    LANGUAGE("Language", 0, AnimationDirections(true, false)),
-    EDITOR("Editor", 1, AnimationDirections(false, false)),
-    OS("Operating System", 2, AnimationDirections(true, true)),
-    MACHINE("Machine", 3, AnimationDirections(false, true)),
-    NONE("None", -1, AnimationDirections(false, false)), ;
-
-    @Suppress("BooleanLiteralArgument")
-    private val directionMap = mapOf(
-        Pair(0, AnimationDirections(false, false)),
-        Pair(1, AnimationDirections(true, false)),
-        Pair(2, AnimationDirections(false, true)),
-        Pair(3, AnimationDirections(true, true)),
-    )
-
-    private fun getDirectionRelativeTo(other: SecondaryStatsTypes): AnimationDirections {
-        if (other == NONE) return directionMap[0]!!
-        if (this == other) return directionMap[0]!!
-
-        return directionMap[this xor other]!!
-    }
-
-    // other.pushDirection defines if the push force is positive or negative along the axis
-    // canMoveAlongAxes defines if the chip should move along that particular axis (eg: won't move along X if both chips are on the same row)
-    // if it can move along an axis, checks if it should move positive or negative
-    fun directionToMoveWRT(other: SecondaryStatsTypes): Pair<Int, Int> {
-        val canMoveAlongAxes = getDirectionRelativeTo(other)
-
-        val finalXAxisMovement = if (canMoveAlongAxes.xAxis) if (other.pushDirection.xAxis) 1 else -1 else 0
-        val finalYAxisMovement = if (canMoveAlongAxes.yAxis) if (other.pushDirection.yAxis) 1 else -1 else 0
-        return Pair(finalXAxisMovement, finalYAxisMovement)
-    }
-
-    private infix fun xor(other: SecondaryStatsTypes): Int {
-        return this.index xor other.index
-    }
 }
 
 @WtaComponentPreviews
