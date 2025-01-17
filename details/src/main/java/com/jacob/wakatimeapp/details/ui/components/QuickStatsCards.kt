@@ -118,22 +118,7 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
             )
         }
 
-        Row(modifier = Modifier.fillMaxWidth()) {
-            // expandable cards
-            // could replace tabs?
-            // when clicking on one of the cards will expand that card and shrink the other
-            // will expand in both X and Y, show pie chart after expanding
-            // before clicking/expanding
-            // 🟥 🟦
-            // 🟧 🟪
-            // after clicking/expanding
-            // 🟥🟥
-            // 🟥🟥
-//            Text("Most used language")
-//            Text("Most used editor")
-//            Text("Most used os")
-//            Text("Most used machine")
-        }
+        SecondaryStatsCards(detailsPageData.uiData)
     }
 }
 
