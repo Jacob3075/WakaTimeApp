@@ -117,8 +117,6 @@ internal fun QuickStatsCards(detailsPageData: DetailsPageViewState.Loaded) {
                 },
             )
         }
-
-        SecondaryStatsCards(detailsPageData.uiData)
     }
 }
 
